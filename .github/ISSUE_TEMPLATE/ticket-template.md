@@ -1,12 +1,3 @@
----
-name: Ticket Template
-about: High level overview of the what the goal of the ticket is.
-title: ''
-labels: ''
-assignees: ''
-
----
-
 ## Summary
 - 
 ## User Story
