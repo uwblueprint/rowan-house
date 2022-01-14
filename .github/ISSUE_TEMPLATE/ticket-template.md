@@ -1,8 +1,8 @@
 ## Summary
 - 
 ## User Story
-`Overarching Goal: As a Rowan House Admin/User I need...`
-1. 
+#### `Overarching Goal: As a Rowan House Admin/User I need...` 
+- 
 ## Solution (Core Elements) 
 - 
 ## User Flow
