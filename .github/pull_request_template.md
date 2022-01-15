@@ -1,8 +1,11 @@
-## Description
+## Implementation Description
 Brief summary of PR
 
 ## Screenshots
 Visual depiction of PR
+
+## What should reviewers focus on?
+- 
 
 ## Testing Procedure
 - What test(s) should we run to make sure your code works?
@@ -17,3 +20,4 @@ Visual depiction of PR
 - [ ] My code follows the style guide
 - [ ] I have updated the documentation or deemed it unnecessary
 - [ ] I have linked the relevant issue in this PR
+- [ ] I have requested a review from the PL, as well as other dev(s) (and designers if necessary)
