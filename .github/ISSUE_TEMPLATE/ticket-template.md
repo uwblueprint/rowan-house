@@ -1,6 +1,6 @@
 ---
-name: Feature Implementation
-about: Creating something new for the website!
+name: Feature Outline
+about: A flow that a user would go through.
 title: ''
 labels: ''
 assignees: ''
@@ -22,5 +22,5 @@ assignees: ''
 - 
 ## Dependencies
 - 
-##  No-Gos 
+## No-Gos 
 -
