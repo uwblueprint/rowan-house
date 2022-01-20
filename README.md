@@ -1,5 +1,5 @@
 # Rowan House Society Course Platform
-
+Welcome to the RHS platform repository!
 
 ## Technical Overview
 **Backend Language:** TypeScript (Express.js on Node.js)<br>
@@ -8,12 +8,12 @@
 **User Auth:** Opt-in<br>
 **File Storage:** Opt-in<br>
 
-The provided frontend is a React application written in TypeScript.
+The frontend is a React application written in TypeScript.
 
 ## Table of Contents
 * 📝 [Documentation](#documentation)
-* ❗❗ [Reporting Issues](#reporting-issues)
-* 👨‍💻 [Getting Started: Users](#getting-started-users)
+* 👨‍💻 [Getting Started](#getting-started)
+* 📂 [File STructure](#file-structure)
 * 🌳 [Version Control Guide](#version-control-guide)
   * 🌿 [Branching](#branching)
   * 🔒 [Commits](#commits)
@@ -39,18 +39,19 @@ docker-compose up --build
 rowan-house
 ├── .github/            # Config for issue/PR templates & GA workflows
 ├── backend/typescript/ # Backend (Node/Apollo/Express?)
-│   ├── graphql/        # 
-│   │   ├── resolvers/  # 
-│   │   ├── types/      # 
-│   │   └── index.ts    # 
-│   ├── middlewares/    # 
-│   │   └── validators/ # 
-│   ├── models/         # 
-│   ├── services/       # 
-│   │   ├── implementations/ # Blah
-│   │   └── interfaces/ # 
-│   ├── testUtils/      # 
-│   ├── utilities/      # 
+│   ├── graphql/        # Main backend funcitonality
+│   │   ├── resolvers/  # Defines Queries and Mutations (uses services)
+│   │   ├── types/      # GraphQL Types (inside gql strings)
+│   │   └── index.ts    # Entry point (called by server.ts)
+│   │                   # - Outlines all Queries and Mutations one can call on
+│   ├── middlewares/    # Defines functions that run before an API call is resolved (e.g ensures auth)
+│   │   └── validators/ # ?
+│   ├── models/         # Defines MongoDB schema and interfaces
+│   ├── services/       # Defines interaction with core serices (e.g. Mongo, Firebase)
+│   │   ├── implementations/ # Service helpers definitions
+│   │   └── interfaces/ # Service helpers declarations
+│   ├── testUtils/      # ?
+│   ├── utilities/      # Helper functions for 3rd party utilities
 │   ├── server.ts       # Entry point (where the 'code' starts)
 │   └── types.ts        # Defines backend types
 ├── db-init/            # ?
@@ -58,19 +59,15 @@ rowan-house
 ├── frontend/           # Frontend (React)
 │   ├── public/         # Everything in here is directly put at the url (e.g. index.html)
 │   └── src/            # Source of frontend
-│       ├── APIClients/ # 
-│       ├── components/ # 
-│       │   ├── auth/   # 
-│       │   ├── common/ # 
-│       │   ├── crud/   # 
-│       │   └── pages/  # 
-│       ├── constants/  # 
-│       ├── contexts/   # 
-│       ├── reducers/   # 
-│       ├── types/      # 
-│       ├── utils/      # 
-│       ├── App.tsx     # 
-│       └── index.tsx   # 
+│       ├── APIClients/ # Helpers for interacting with the backend
+│       ├── components/ # Building blocks for the website (e.g. buttons, pages)
+│       ├── constants/  # Simple constants (e.g. routes)
+│       ├── contexts/   # Global frontend data (a.k.a React contexts)
+│       ├── reducers/   # ?
+│       ├── types/      # Frontend type definitions
+│       ├── utils/      # Helper functions for 3rd party utilities
+│       ├── App.tsx     # "Main page" - Routing Definition
+│       └── index.tsx   # Entry point (called by index.html, uses App.tsx)
 └── hooks/              # Git hooks
 ```
 

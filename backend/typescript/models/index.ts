@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+/* eslint-disable-next-line import/prefer-default-export */
 export const mongo = {
   connect: (): void => {
     mongoose.connect(
