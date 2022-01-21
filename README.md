@@ -38,7 +38,7 @@ docker-compose up --build
 ```bash
 rowan-house
 ├── .github/            # Config for issue/PR templates & GA workflows
-├── backend/typescript/ # Backend (Node/Apollo/Express?)
+├── backend/ # Backend (Node/Apollo/Express?)
 │   ├── graphql/        # Main backend funcitonality
 │   │   ├── resolvers/  # Defines Queries and Mutations (uses services)
 │   │   ├── types/      # GraphQL Types (inside gql strings)
