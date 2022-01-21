@@ -13,6 +13,15 @@ export type UserDTO = {
   role: Role;
 };
 
+export type LessonDTO = {
+  id: string;
+  course: string;
+  title: string;
+  description: string;
+  image: string;
+  content: [Object];
+}
+
 export type CreateUserDTO = Omit<UserDTO, "id"> & { password: string };
 
 export type UpdateUserDTO = Omit<UserDTO, "id">;
