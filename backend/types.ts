@@ -5,6 +5,7 @@ export type Token = {
   refreshToken: string;
 };
 
+//TODO: Update UserDTO to add town
 export type UserDTO = {
   id: string;
   firstName: string;

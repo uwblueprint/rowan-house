@@ -1,5 +1,6 @@
 import { gql } from "apollo-server-express";
 
+//TODO: Update AuthDTO, RegisterUserDTO to add a town property
 const authType = gql`
   type AuthDTO {
     id: ID!

@@ -88,6 +88,7 @@ type RegisterFunction = (
   >
 >;
 
+//TODO: Update parameters here to take in town
 const register = async (
   firstName: string,
   lastName: string,
@@ -97,6 +98,7 @@ const register = async (
 ): Promise<AuthenticatedUser | null> => {
   let user: AuthenticatedUser = null;
   try {
+    //TODO: Add town as a variable here
     const result = await registerFunction({
       variables: { firstName, lastName, email, password },
     });

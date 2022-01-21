@@ -7,6 +7,7 @@ import { HOME_PAGE } from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
 import { AuthenticatedUser } from "../../types/AuthTypes";
 
+//TODO: Update the mutation here to take in town as well
 const REGISTER = gql`
   mutation Signup_Register(
     $firstName: String!
@@ -34,6 +35,7 @@ const REGISTER = gql`
 
 const Signup = (): React.ReactElement => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
+  //TODO: Add state for town
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -42,6 +44,7 @@ const Signup = (): React.ReactElement => {
   const [register] = useMutation<{ register: AuthenticatedUser }>(REGISTER);
 
   const onSignupClick = async () => {
+    //TODO: Pass in town to register function
     const user: AuthenticatedUser = await authAPIClient.register(
       firstName,
       lastName,
@@ -56,6 +59,7 @@ const Signup = (): React.ReactElement => {
     return <Redirect to={HOME_PAGE} />;
   }
 
+  //TODO: Add town input to form
   return (
     <div style={{ textAlign: "center" }}>
       <h1>Signup</h1>
