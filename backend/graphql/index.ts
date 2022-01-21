@@ -9,6 +9,8 @@ import {
 } from "../middlewares/auth";
 import authResolvers from "./resolvers/authResolvers";
 import authType from "./types/authType";
+import courseResolvers from "./resolvers/courseResolvers";
+import courseType from "./types/courseType";
 import entityResolvers from "./resolvers/entityResolvers";
 import entityType from "./types/entityType";
 import userResolvers from "./resolvers/userResolvers";
@@ -27,8 +29,13 @@ const mutation = gql`
 `;
 
 const executableSchema = makeExecutableSchema({
-  typeDefs: [query, mutation, authType, entityType, userType],
-  resolvers: merge(authResolvers, entityResolvers, userResolvers),
+  typeDefs: [query, mutation, authType, courseType, entityType, userType],
+  resolvers: merge(
+    authResolvers,
+    courseResolvers,
+    entityResolvers,
+    userResolvers,
+  ),
 });
 
 const authorizedByAllRoles = () =>
@@ -37,6 +44,8 @@ const authorizedByAdmin = () => isAuthorizedByRole(new Set(["Admin"]));
 
 const graphQLMiddlewares = {
   Query: {
+    course: authorizedByAllRoles(),
+    courses: authorizedByAllRoles(),
     entity: authorizedByAllRoles(),
     entities: authorizedByAllRoles(),
     userById: authorizedByAdmin(),
@@ -44,6 +53,9 @@ const graphQLMiddlewares = {
     users: authorizedByAdmin(),
   },
   Mutation: {
+    createCourse: authorizedByAdmin(),
+    updateCourse: authorizedByAdmin(),
+    deleteCourse: authorizedByAdmin(),
     createEntity: authorizedByAllRoles(),
     updateEntity: authorizedByAllRoles(),
     deleteEntity: authorizedByAllRoles(),
@@ -57,4 +69,3 @@ const graphQLMiddlewares = {
 };
 
 export default applyMiddleware(executableSchema, graphQLMiddlewares);
-
