@@ -15,6 +15,8 @@ import entityResolvers from "./resolvers/entityResolvers";
 import entityType from "./types/entityType";
 import userResolvers from "./resolvers/userResolvers";
 import userType from "./types/userType";
+import lessonType from "./types/lessonType";
+import lessonResolvers from "./resolvers/lessonResolvers";
 
 const query = gql`
   type Query {
@@ -29,12 +31,20 @@ const mutation = gql`
 `;
 
 const executableSchema = makeExecutableSchema({
-  typeDefs: [query, mutation, authType, courseType, entityType, userType],
+  typeDefs: [query,
+    mutation,
+    authType,
+    courseType,
+    entityType,
+    userType,
+    lessonType,
+  ],
   resolvers: merge(
     authResolvers,
     courseResolvers,
     entityResolvers,
     userResolvers,
+    lessonResolvers,
   ),
 });
 
@@ -51,6 +61,7 @@ const graphQLMiddlewares = {
     userById: authorizedByAdmin(),
     userByEmail: authorizedByAdmin(),
     users: authorizedByAdmin(),
+    lesson: authorizedByAllRoles(),
   },
   Mutation: {
     createCourse: authorizedByAdmin(),
@@ -65,7 +76,12 @@ const graphQLMiddlewares = {
     deleteUserByEmail: authorizedByAdmin(),
     logout: isAuthorizedByUserId("userId"),
     resetPassword: isAuthorizedByEmail("email"),
+    createLesson: authorizedByAdmin(),
   },
 };
 
 export default applyMiddleware(executableSchema, graphQLMiddlewares);
+<<<<<<< HEAD
+=======
+
+>>>>>>> fae1648 (add lesson type, model and more)
