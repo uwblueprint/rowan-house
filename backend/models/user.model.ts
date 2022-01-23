@@ -2,13 +2,14 @@ import mongoose, { Schema, Document } from "mongoose";
 
 import { Role } from "../types";
 
-//TODO: Add town to user interface and schema
+//   TODO: Add town to user interface and schema
 export interface User extends Document {
   id: string;
   firstName: string;
   lastName: string;
   authId: string;
   role: Role;
+  town: string;
 }
 
 const UserSchema: Schema = new Schema({
@@ -29,6 +30,10 @@ const UserSchema: Schema = new Schema({
     required: true,
     enum: ["User", "Admin"],
   },
+  town: {
+    type: String,
+    required: true
+  }
 });
 
 export default mongoose.model<User>("User", UserSchema);

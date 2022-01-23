@@ -41,9 +41,9 @@ const login = async (
 type LoginWithGoogleFunction = (
   options?:
     | MutationFunctionOptions<
-        { loginWithGoogle: AuthenticatedUser },
-        OperationVariables
-      >
+      { loginWithGoogle: AuthenticatedUser },
+      OperationVariables
+    >
     | undefined,
 ) => Promise<
   FetchResult<
@@ -76,9 +76,9 @@ const loginWithGoogle = async (
 type RegisterFunction = (
   options?:
     | MutationFunctionOptions<
-        { register: AuthenticatedUser },
-        OperationVariables
-      >
+      { register: AuthenticatedUser },
+      OperationVariables
+    >
     | undefined,
 ) => Promise<
   FetchResult<
@@ -88,7 +88,7 @@ type RegisterFunction = (
   >
 >;
 
-//TODO: Update parameters here to take in town
+//    TODO: Update parameters here to take in town
 const register = async (
   firstName: string,
   lastName: string,
@@ -98,7 +98,7 @@ const register = async (
 ): Promise<AuthenticatedUser | null> => {
   let user: AuthenticatedUser = null;
   try {
-    //TODO: Add town as a variable here
+    //   TODO: Add town as a variable here
     const result = await registerFunction({
       variables: { firstName, lastName, email, password },
     });
@@ -116,11 +116,11 @@ const register = async (
 type LogoutFunction = (
   options?:
     | MutationFunctionOptions<
-        {
-          logout: null;
-        },
-        OperationVariables
-      >
+      {
+        logout: null;
+      },
+      OperationVariables
+    >
     | undefined,
 ) => Promise<
   FetchResult<
@@ -150,11 +150,11 @@ const logout = async (
 type RefreshFunction = (
   options?:
     | MutationFunctionOptions<
-        {
-          refresh: string;
-        },
-        OperationVariables
-      >
+      {
+        refresh: string;
+      },
+      OperationVariables
+    >
     | undefined,
 ) => Promise<
   FetchResult<

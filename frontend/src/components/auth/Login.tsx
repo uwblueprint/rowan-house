@@ -19,7 +19,7 @@ type GoogleErrorResponse = {
   details: string;
 };
 
-//TODO: Update mutation to add town property
+//   TODO: Update mutation to add town property
 const LOGIN = gql`
   mutation Login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
@@ -33,7 +33,7 @@ const LOGIN = gql`
   }
 `;
 
-//TODO: Update mutation to add town property
+//   TODO: Update mutation to add town property
 const LOGIN_WITH_GOOGLE = gql`
   mutation LoginWithGoogle($idToken: String!) {
     loginWithGoogle(idToken: $idToken) {

@@ -1,6 +1,6 @@
 import { gql } from "apollo-server-express";
 
-//TODO: Update UserDTO, CreateUserDTO, UpdateUserDTO to add a town
+//   TODO: Update UserDTO, CreateUserDTO, UpdateUserDTO to add location
 const userType = gql`
   enum Role {
     User
@@ -12,6 +12,7 @@ const userType = gql`
     firstName: String!
     lastName: String!
     email: String!
+    town: String!
     role: Role!
   }
 
@@ -19,6 +20,7 @@ const userType = gql`
     firstName: String!
     lastName: String!
     email: String!
+    town: String!
     role: Role!
     password: String!
   }
@@ -27,6 +29,7 @@ const userType = gql`
     firstName: String!
     lastName: String!
     email: String!
+    town: String!
     role: Role!
   }
 
