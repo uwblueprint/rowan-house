@@ -1,5 +1,8 @@
-// import lesson service?
-import { LessonDTO } from "../../types";
+import LessonService from "../../services/implementations/lessonService";
+import { ILessonService } from "../../services/interfaces/lessonService";
+import { LessonDTO, CreateLessonDTO } from "../../types";
+
+const lessonService: ILessonService = new LessonService();
 
 const lessonResolvers = {
     Query: {

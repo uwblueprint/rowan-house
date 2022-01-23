@@ -1,26 +1,20 @@
 import { v4 as uuidv4 } from "uuid";
 
 import MgLesson, { Lesson } from "../../models/lesson.model";
+import { ILessonService } from "../interfaces/lessonService";
 import {
-  IEntityService,
-  EntityRequestDTO,
-  EntityResponseDTO,
-} from "../interfaces/IEntityService";
-import IFileStorageService from "../interfaces/fileStorageService";
+  LessonDTO,
+  CreateLessonDTO,
+} from "../../types";
 import { getErrorMessage } from "../../utilities/errorUtils";
 import logger from "../../utilities/logger";
 
 const Logger = logger(__filename);
 
-class LessonService implements IEntityService {
-  storageService: IFileStorageService;
-
-  constructor(storageService: IFileStorageService) {
-    this.storageService = storageService;
-  }
+class LessonService implements ILessonService {
 
   /* eslint-disable class-methods-use-this */
-  async getLesson(id: string): Promise<LessonResponseDTO> {
+  async getLessonById(id: string): Promise<LessonDTO> {
     let lesson: Lesson | null;
     try {
       lesson = await MgLesson.findById(id);
@@ -42,18 +36,10 @@ class LessonService implements IEntityService {
     };
   }
 
-  async createEntity(entity: EntityRequestDTO): Promise<EntityResponseDTO> {
-    let newEntity: Entity | null;
-    const fileName = entity.filePath ? uuidv4() : "";
+  async createLesson(lesson: CreateLessonDTO): Promise<LessonDTO> {
+    let newLesson: Lesson;
     try {
-      if (entity.filePath) {
-        await this.storageService.createFile(
-          fileName,
-          entity.filePath,
-          entity.fileContentType,
-        );
-      }
-      newEntity = await MgLesson.create({ ...entity, fileName });
+      newLesson = await MgLesson.create({ ...lesson });
     } catch (error: unknown) {
       Logger.error(
         `Failed to create entity. Reason = ${getErrorMessage(error)}`,
@@ -61,16 +47,15 @@ class LessonService implements IEntityService {
       throw error;
     }
     return {
-      id: newEntity.id,
-      stringField: newEntity.stringField,
-      intField: newEntity.intField,
-      enumField: newEntity.enumField,
-      stringArrayField: newEntity.stringArrayField,
-      boolField: newEntity.boolField,
-      fileName,
+      id: newLesson.id,
+      course: newLesson.course,
+      title: newLesson.title,
+      description: newLesson.description,
+      image: newLesson.image,
+      content: newLesson.content,
     };
   }
 }
 
-export default EntityService;
+export default LessonService;
 
