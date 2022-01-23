@@ -1,5 +1,7 @@
 import { gql } from "apollo-server-express";
 
+// TO DO: Fix content typing
+
 const lessonType = gql`
   type LessonDTO {
     id: ID!
@@ -10,21 +12,13 @@ const lessonType = gql`
     content: [Object]
   }
 
-  input CreateUserDTO {
-    firstName: String!
-    lastName: String!
-    email: String!
-    role: Role!
-    password: String!
+  input CreateLessonDTO {
+    course: ID!
+    title: String
+    description: String
+    image: String
+    content: [Object]
   }
-
-  input UpdateUserDTO {
-    firstName: String!
-    lastName: String!
-    email: String!
-    role: Role!
-  }
-
 `;
 
 export default lessonType;
