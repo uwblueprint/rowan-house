@@ -14,6 +14,14 @@ export type UserDTO = {
   role: Role;
 };
 
+export type CreateUserDTO = Omit<UserDTO, "id"> & { password: string };
+
+export type UpdateUserDTO = Omit<UserDTO, "id">;
+
+export type RegisterUserDTO = Omit<CreateUserDTO, "role">;
+
+export type AuthDTO = Token & UserDTO;
+
 export type LessonDTO = {
   id: string;
   course: string;
@@ -23,13 +31,7 @@ export type LessonDTO = {
   content: [Object];
 }
 
-export type CreateUserDTO = Omit<UserDTO, "id"> & { password: string };
-
-export type UpdateUserDTO = Omit<UserDTO, "id">;
-
-export type RegisterUserDTO = Omit<CreateUserDTO, "role">;
-
-export type AuthDTO = Token & UserDTO;
+export type CreateLessonDTO = Omit<LessonDTO, "id">;
 
 export type LessonDTO = {
   id: string;
