@@ -2,7 +2,6 @@ import mongoose, { Schema, Document } from "mongoose";
 
 import { Role } from "../types";
 
-//   TODO: Add town to user interface and schema
 export interface User extends Document {
   id: string;
   firstName: string;

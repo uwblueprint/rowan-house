@@ -164,7 +164,6 @@ class UserService implements IUserService {
       }
 
       try {
-        //   TODO: Pass in town to MsgUser create command
         newUser = await MgUser.create({
           firstName: user.firstName,
           lastName: user.lastName,
