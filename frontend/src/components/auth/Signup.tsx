@@ -53,8 +53,8 @@ const Signup = (): React.ReactElement => {
       firstName,
       lastName,
       email,
-      password,
       town,
+      password,
       register,
     );
     setAuthenticatedUser(user);
@@ -73,7 +73,7 @@ const Signup = (): React.ReactElement => {
           <input
             type="text"
             value={firstName}
-            onChange={(event) => setFirstName(event.target.value)}
+            onChange={(event) => setFirstName(event.currentTarget.value)}
             placeholder="first name"
           />
         </div>
@@ -81,7 +81,7 @@ const Signup = (): React.ReactElement => {
           <input
             type="text"
             value={lastName}
-            onChange={(event) => setLastName(event.target.value)}
+            onChange={(event) => setLastName(event.currentTarget.value)}
             placeholder="last name"
           />
         </div>
@@ -89,7 +89,7 @@ const Signup = (): React.ReactElement => {
           <input
             type="email"
             value={email}
-            onChange={(event) => setEmail(event.target.value)}
+            onChange={(event) => setEmail(event.currentTarget.value)}
             placeholder="username@domain.com"
           />
         </div>
@@ -97,7 +97,7 @@ const Signup = (): React.ReactElement => {
           <input
             type="password"
             value={password}
-            onChange={(event) => setPassword(event.target.value)}
+            onChange={(event) => setPassword(event.currentTarget.value)}
             placeholder="password"
           />
         </div>
@@ -105,7 +105,7 @@ const Signup = (): React.ReactElement => {
           <input
             type="town"
             value={town}
-            onChange={(event) => setTown(event.target.value)}
+            onChange={(event) => setTown(event.currentTarget.value)}
             placeholder="Lethbridge"
           />
         </div>
