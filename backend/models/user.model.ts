@@ -31,9 +31,8 @@ const UserSchema: Schema = new Schema({
   },
   town: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 });
 
 export default mongoose.model<User>("User", UserSchema);
-
