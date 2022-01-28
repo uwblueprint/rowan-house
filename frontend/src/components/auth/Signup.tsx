@@ -13,6 +13,7 @@ const REGISTER = gql`
     $firstName: String!
     $lastName: String!
     $email: String!
+    $town: String!
     $password: String!
   ) {
     register(
@@ -20,6 +21,7 @@ const REGISTER = gql`
         firstName: $firstName
         lastName: $lastName
         email: $email
+        town: $town
         password: $password
       }
     ) {
@@ -27,6 +29,7 @@ const REGISTER = gql`
       firstName
       lastName
       email
+      town
       role
       accessToken
     }
@@ -39,6 +42,7 @@ const Signup = (): React.ReactElement => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [town, setTown] = useState("");
   const [password, setPassword] = useState("");
 
   const [register] = useMutation<{ register: AuthenticatedUser }>(REGISTER);
@@ -50,6 +54,7 @@ const Signup = (): React.ReactElement => {
       lastName,
       email,
       password,
+      town,
       register,
     );
     setAuthenticatedUser(user);
@@ -94,6 +99,14 @@ const Signup = (): React.ReactElement => {
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             placeholder="password"
+          />
+        </div>
+        <div>
+          <input
+            type="town"
+            value={town}
+            onChange={(event) => setTown(event.target.value)}
+            placeholder="Lethbridge"
           />
         </div>
         <div>

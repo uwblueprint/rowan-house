@@ -93,6 +93,7 @@ const register = async (
   firstName: string,
   lastName: string,
   email: string,
+  town: string,
   password: string,
   registerFunction: RegisterFunction,
 ): Promise<AuthenticatedUser | null> => {
@@ -100,7 +101,7 @@ const register = async (
   try {
     //TODO: Add town as a variable here
     const result = await registerFunction({
-      variables: { firstName, lastName, email, password },
+      variables: { firstName, lastName, email, town, password },
     });
     user = result.data?.register ?? null;
     if (user) {
