@@ -15,6 +15,7 @@ import entityResolvers from "./resolvers/entityResolvers";
 import entityType from "./types/entityType";
 import userResolvers from "./resolvers/userResolvers";
 import userType from "./types/userType";
+import lessonResolvers from "./resolvers/lessonResolvers";
 import lessonType from "./types/lessonType";
 import lessonResolvers from "./resolvers/lessonResolvers";
 
@@ -61,7 +62,7 @@ const graphQLMiddlewares = {
     userById: authorizedByAdmin(),
     userByEmail: authorizedByAdmin(),
     users: authorizedByAdmin(),
-    lesson: authorizedByAllRoles(),
+    lessonById: authorizedByAllRoles(),
   },
   Mutation: {
     createCourse: authorizedByAdmin(),

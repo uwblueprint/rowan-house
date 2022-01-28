@@ -9,7 +9,7 @@ const lessonType = gql`
     title: String
     description: String
     image: String
-    content: [Object]
+    content: [ID!]
   }
 
   input CreateLessonDTO {
@@ -17,7 +17,15 @@ const lessonType = gql`
     title: String
     description: String
     image: String
-    content: [Object]
+    content: [ID!]
+  }
+
+  extend type Query {
+    lessonById(id: ID!): LessonDTO!
+  }
+
+  extend type Mutation {
+    createLesson(lesson: CreateLessonDTO!): LessonDTO!
   }
 `;
 
