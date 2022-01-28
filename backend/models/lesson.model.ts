@@ -10,10 +10,6 @@ export interface Lesson extends Document {
 }
 
 const LessonSchema: Schema = new Schema({
-  id: {
-    type: String,
-    required: true,
-  },
   course: {
     type: String,
     required: true,
