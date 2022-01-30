@@ -41,9 +41,9 @@ const login = async (
 type LoginWithGoogleFunction = (
   options?:
     | MutationFunctionOptions<
-        { loginWithGoogle: AuthenticatedUser },
-        OperationVariables
-      >
+      { loginWithGoogle: AuthenticatedUser },
+      OperationVariables
+    >
     | undefined,
 ) => Promise<
   FetchResult<
@@ -76,9 +76,9 @@ const loginWithGoogle = async (
 type RegisterFunction = (
   options?:
     | MutationFunctionOptions<
-        { register: AuthenticatedUser },
-        OperationVariables
-      >
+      { register: AuthenticatedUser },
+      OperationVariables
+    >
     | undefined,
 ) => Promise<
   FetchResult<
@@ -92,13 +92,14 @@ const register = async (
   firstName: string,
   lastName: string,
   email: string,
+  town: string,
   password: string,
   registerFunction: RegisterFunction,
 ): Promise<AuthenticatedUser | null> => {
   let user: AuthenticatedUser = null;
   try {
     const result = await registerFunction({
-      variables: { firstName, lastName, email, password },
+      variables: { firstName, lastName, email, town, password },
     });
     user = result.data?.register ?? null;
     if (user) {
@@ -114,11 +115,11 @@ const register = async (
 type LogoutFunction = (
   options?:
     | MutationFunctionOptions<
-        {
-          logout: null;
-        },
-        OperationVariables
-      >
+      {
+        logout: null;
+      },
+      OperationVariables
+    >
     | undefined,
 ) => Promise<
   FetchResult<
@@ -148,11 +149,11 @@ const logout = async (
 type RefreshFunction = (
   options?:
     | MutationFunctionOptions<
-        {
-          refresh: string;
-        },
-        OperationVariables
-      >
+      {
+        refresh: string;
+      },
+      OperationVariables
+    >
     | undefined,
 ) => Promise<
   FetchResult<
