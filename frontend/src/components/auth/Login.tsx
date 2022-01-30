@@ -26,7 +26,6 @@ const LOGIN = gql`
       firstName
       lastName
       email
-      town
       role
       accessToken
     }
@@ -40,7 +39,6 @@ const LOGIN_WITH_GOOGLE = gql`
       firstName
       lastName
       email
-      town
       role
       accessToken
     }

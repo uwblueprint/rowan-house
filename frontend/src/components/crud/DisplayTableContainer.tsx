@@ -31,54 +31,55 @@ type TableProps = {
 const createColumns = (
   downloadEntityFile: (fileUUID: string) => void,
 ): Column<EntityData>[] => [
-    {
-      Header: "id",
+  {
+    Header: "id",
 
-      accessor: "id", // accessor is the "key" in the data
-    },
-    {
-      Header: "stringField",
+    accessor: "id", // accessor is the "key" in the data
+  },
+  {
+    Header: "stringField",
 
-      accessor: "stringField", // accessor is the "key" in the data
-    },
+    accessor: "stringField", // accessor is the "key" in the data
+  },
 
-    {
-      Header: "integerField",
+  {
+    Header: "integerField",
 
-      accessor: "intField",
-    },
-    {
-      Header: "stringArrayField",
+    accessor: "intField",
+  },
+  {
+    Header: "stringArrayField",
 
-      accessor: "stringArrayField",
-    },
-    {
-      Header: "enumField",
+    accessor: "stringArrayField",
+  },
+  {
+    Header: "enumField",
 
-      accessor: "enumField",
-    },
-    {
-      Header: "boolField",
+    accessor: "enumField",
+  },
+  {
+    Header: "boolField",
 
-      accessor: "boolField",
-    },
-    {
-      Header: "fileName",
+    accessor: "boolField",
+  },
+  {
+    Header: "fileName",
 
-      accessor: "fileName",
+    accessor: "fileName",
 
-      // eslint-disable-next-line react/display-name, @typescript-eslint/no-explicit-any
-      Cell: ({ cell }: any) =>
-        cell.row.values.fileName ? (
-          <button
-            type="button"
-            onClick={() => downloadEntityFile(cell.row.values.fileName)}
-          >
-            Download
-          </button>
-        ) : null,
-    },
-  ];
+    // eslint-disable-next-line react/display-name, @typescript-eslint/no-explicit-any
+    Cell: ({ cell }: any) =>
+      // TODO: lookup the proper type of the prop
+      cell.row.values.fileName ? (
+        <button
+          type="button"
+          onClick={() => downloadEntityFile(cell.row.values.fileName)}
+        >
+          Download
+        </button>
+      ) : null,
+  },
+];
 
 const DisplayTable = ({ data, downloadEntityFile }: TableProps) => {
   const {

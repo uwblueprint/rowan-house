@@ -41,7 +41,6 @@ class UserService implements IUserService {
       lastName: user.lastName,
       email: firebaseUser.email ?? "",
       role: user.role,
-      town: user.town
     };
   }
 
@@ -67,7 +66,6 @@ class UserService implements IUserService {
       lastName: user.lastName,
       email: firebaseUser.email ?? "",
       role: user.role,
-      town: user.town
     };
   }
 
@@ -131,7 +129,6 @@ class UserService implements IUserService {
             lastName: user.lastName,
             email: firebaseUser.email ?? "",
             role: user.role,
-            town: user.town
           };
         }),
       );
@@ -169,7 +166,6 @@ class UserService implements IUserService {
           lastName: user.lastName,
           authId: firebaseUser.uid,
           role: user.role,
-          town: user.town
         });
       } catch (mongoDbError) {
         // rollback user creation in Firebase
@@ -198,7 +194,6 @@ class UserService implements IUserService {
       lastName: newUser.lastName,
       email: firebaseUser.email ?? "",
       role: newUser.role,
-      town: user.town
     };
   }
 
@@ -257,7 +252,6 @@ class UserService implements IUserService {
       lastName: user.lastName,
       email: updatedFirebaseUser.email ?? "",
       role: user.role,
-      town: user.town
     };
   }
 
@@ -342,4 +336,4 @@ class UserService implements IUserService {
 }
 
 export default UserService;
-
+

@@ -10,7 +10,6 @@ export type UserDTO = {
   firstName: string;
   lastName: string;
   email: string;
-  town: string;
   role: Role;
 };
 
