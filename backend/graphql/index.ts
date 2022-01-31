@@ -17,7 +17,6 @@ import userResolvers from "./resolvers/userResolvers";
 import userType from "./types/userType";
 import lessonResolvers from "./resolvers/lessonResolvers";
 import lessonType from "./types/lessonType";
-import lessonResolvers from "./resolvers/lessonResolvers";
 
 const query = gql`
   type Query {
@@ -32,7 +31,8 @@ const mutation = gql`
 `;
 
 const executableSchema = makeExecutableSchema({
-  typeDefs: [query,
+  typeDefs: [
+    query,
     mutation,
     authType,
     courseType,
@@ -82,7 +82,3 @@ const graphQLMiddlewares = {
 };
 
 export default applyMiddleware(executableSchema, graphQLMiddlewares);
-<<<<<<< HEAD
-=======
-
->>>>>>> fae1648 (add lesson type, model and more)
