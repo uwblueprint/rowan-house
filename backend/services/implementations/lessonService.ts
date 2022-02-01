@@ -58,4 +58,3 @@ class LessonService implements ILessonService {
 }
 
 export default LessonService;
-
