@@ -34,6 +34,16 @@ Once you have these, build and run the system using:
 docker-compose up --build
 ```
 
+To run the linter, use the following commands while the docker containers are running:
+- Mac
+  - `docker exec -it RHS-frontend /bin/bash -c "yarn fix"`
+  - `docker exec -it RHS-backend /bin/bash -c "yarn fix"`
+- Windows
+  - `docker exec -it RHS-frontend bash -c "yarn fix"`
+  - `docker exec -it RHS-backend bash -c "yarn fix"`
+
+Or, if you have yarn installed locally, running `yarn fix` should work as well.
+
 ## File Structure
 ```bash
 rowan-house
