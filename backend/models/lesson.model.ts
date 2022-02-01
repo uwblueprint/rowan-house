@@ -1,5 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 
+// TO DO: Update content type
+
 export interface Lesson extends Document {
   id: string;
   course: string;
@@ -20,14 +22,12 @@ const LessonSchema: Schema = new Schema({
   },
   description: {
     type: String,
-    required: false,
   },
   image: {
     type: String,
-    required: false,
   },
   content: {
-    type: [Object],
+    type: [Schema.Types.Mixed],
     required: true,
   },
 });

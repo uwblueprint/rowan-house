@@ -1,31 +1,33 @@
 import { gql } from "apollo-server-express";
 
-// TO DO: Fix content typing
+// TO DO: Define Content parameters
 
 const lessonType = gql`
-  type LessonDTO {
+  scalar Content
+
+  type LessonResponseDTO {
     id: ID!
     course: ID!
     title: String
     description: String
     image: String
-    content: [ID!]
+    content: [Content!]
   }
 
-  input CreateLessonDTO {
+  input LessonRequestDTO {
     course: ID!
     title: String
     description: String
     image: String
-    content: [ID!]
+    content: [Content!]
   }
 
   extend type Query {
-    lessonById(id: ID!): LessonDTO!
+    lessonById(id: ID!): LessonResponseDTO!
   }
 
   extend type Mutation {
-    createLesson(lesson: CreateLessonDTO!): LessonDTO!
+    createLesson(lesson: LessonRequestDTO!): LessonResponseDTO!
   }
 `;
 

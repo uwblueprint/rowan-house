@@ -1,11 +1,11 @@
 import { v4 as uuidv4 } from "uuid";
 
 import MgLesson, { Lesson } from "../../models/lesson.model";
-import { ILessonService } from "../interfaces/lessonService";
-import {
-  LessonDTO,
-  CreateLessonDTO,
-} from "../../types";
+import { 
+  ILessonService,
+  LessonRequestDTO,
+  LessonResponseDTO,
+} from "../interfaces/ILessonService";
 import { getErrorMessage } from "../../utilities/errorUtils";
 import logger from "../../utilities/logger";
 
@@ -14,7 +14,7 @@ const Logger = logger(__filename);
 class LessonService implements ILessonService {
 
   /* eslint-disable class-methods-use-this */
-  async getLessonById(id: string): Promise<LessonDTO> {
+  async getLessonById(id: string): Promise<LessonResponseDTO> {
     let lesson: Lesson | null;
     try {
       lesson = await MgLesson.findById(id);
@@ -22,7 +22,7 @@ class LessonService implements ILessonService {
         throw new Error(`Lesson id ${id} not found`);
       }
     } catch (error: unknown) {
-      Logger.error(`Failed to get entity. Reason = ${getErrorMessage(error)}`);
+      Logger.error(`Failed to get lesson. Reason = ${getErrorMessage(error)}`);
       throw error;
     }
 
@@ -36,13 +36,13 @@ class LessonService implements ILessonService {
     };
   }
 
-  async createLesson(lesson: CreateLessonDTO): Promise<LessonDTO> {
+  async createLesson(lesson: LessonRequestDTO): Promise<LessonResponseDTO> {
     let newLesson: Lesson;
     try {
-      newLesson = await MgLesson.create({ ...lesson });
+      newLesson = await MgLesson.create(lesson);
     } catch (error: unknown) {
       Logger.error(
-        `Failed to create entity. Reason = ${getErrorMessage(error)}`,
+        `Failed to create lesson. Reason = ${getErrorMessage(error)}`,
       );
       throw error;
     }

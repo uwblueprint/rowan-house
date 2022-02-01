@@ -21,17 +21,6 @@ export type RegisterUserDTO = Omit<CreateUserDTO, "role">;
 
 export type AuthDTO = Token & UserDTO;
 
-export type LessonDTO = {
-  id: string;
-  course: string;
-  title: string;
-  description: string;
-  image: string;
-  content: [Object];
-}
-
-export type CreateLessonDTO = Omit<LessonDTO, "id">;
-
 export type Letters = "A" | "B" | "C" | "D";
 
 export type NodemailerConfig = {
