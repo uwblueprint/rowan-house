@@ -15,6 +15,8 @@ import entityResolvers from "./resolvers/entityResolvers";
 import entityType from "./types/entityType";
 import userResolvers from "./resolvers/userResolvers";
 import userType from "./types/userType";
+import lessonResolvers from "./resolvers/lessonResolvers";
+import lessonType from "./types/lessonType";
 
 const query = gql`
   type Query {
@@ -29,12 +31,21 @@ const mutation = gql`
 `;
 
 const executableSchema = makeExecutableSchema({
-  typeDefs: [query, mutation, authType, courseType, entityType, userType],
+  typeDefs: [
+    query,
+    mutation,
+    authType,
+    courseType,
+    entityType,
+    userType,
+    lessonType,
+  ],
   resolvers: merge(
     authResolvers,
     courseResolvers,
     entityResolvers,
     userResolvers,
+    lessonResolvers,
   ),
 });
 
@@ -51,6 +62,7 @@ const graphQLMiddlewares = {
     userById: authorizedByAdmin(),
     userByEmail: authorizedByAdmin(),
     users: authorizedByAdmin(),
+    lessonById: authorizedByAllRoles(),
   },
   Mutation: {
     createCourse: authorizedByAdmin(),
@@ -65,6 +77,7 @@ const graphQLMiddlewares = {
     deleteUserByEmail: authorizedByAdmin(),
     logout: isAuthorizedByUserId("userId"),
     resetPassword: isAuthorizedByEmail("email"),
+    createLesson: authorizedByAdmin(),
   },
 };
 
