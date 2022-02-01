@@ -8,6 +8,7 @@ export interface User extends Document {
   lastName: string;
   authId: string;
   role: Role;
+  town: string;
 }
 
 const UserSchema: Schema = new Schema({
@@ -28,7 +29,10 @@ const UserSchema: Schema = new Schema({
     required: true,
     enum: ["User", "Admin"],
   },
+  town: {
+    type: String,
+    required: true,
+  },
 });
 
 export default mongoose.model<User>("User", UserSchema);
-

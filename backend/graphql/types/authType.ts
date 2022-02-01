@@ -6,6 +6,7 @@ const authType = gql`
     firstName: String!
     lastName: String!
     email: String!
+    town: String!
     role: Role!
     accessToken: String!
   }
@@ -14,6 +15,7 @@ const authType = gql`
     firstName: String!
     lastName: String!
     email: String!
+    town: String!
     password: String!
   }
 
