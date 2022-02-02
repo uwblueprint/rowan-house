@@ -62,11 +62,7 @@ interface IUserService {
    * @returns a UserDTO with the created user's information
    * @throws Error if user creation fails
    */
-  createUser(
-    user: CreateUserDTO,
-    authId?: string,
-    signUpMethod?: SignUpMethod,
-  ): Promise<UserDTO>;
+  createUser(user: CreateUserDTO): Promise<UserDTO>;
 
   /**
    * Update a user.

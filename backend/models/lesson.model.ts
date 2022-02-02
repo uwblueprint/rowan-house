@@ -8,7 +8,7 @@ export interface Lesson extends Document {
   title: string;
   description: string;
   image: string;
-  content: [Object];
+  content: [Record<string, unknown>];
 }
 
 const LessonSchema: Schema = new Schema({
@@ -33,4 +33,3 @@ const LessonSchema: Schema = new Schema({
 });
 
 export default mongoose.model<Lesson>("Lesson", LessonSchema);
-

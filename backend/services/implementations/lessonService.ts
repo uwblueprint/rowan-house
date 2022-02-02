@@ -1,7 +1,5 @@
-import { v4 as uuidv4 } from "uuid";
-
 import MgLesson, { Lesson } from "../../models/lesson.model";
-import { 
+import {
   ILessonService,
   LessonRequestDTO,
   LessonResponseDTO,
@@ -12,7 +10,6 @@ import logger from "../../utilities/logger";
 const Logger = logger(__filename);
 
 class LessonService implements ILessonService {
-
   /* eslint-disable class-methods-use-this */
   async getLessonById(id: string): Promise<LessonResponseDTO> {
     let lesson: Lesson | null;

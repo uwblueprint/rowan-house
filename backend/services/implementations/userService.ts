@@ -41,7 +41,7 @@ class UserService implements IUserService {
       lastName: user.lastName,
       email: firebaseUser.email ?? "",
       role: user.role,
-      town: user.town
+      town: user.town,
     };
   }
 
@@ -67,7 +67,7 @@ class UserService implements IUserService {
       lastName: user.lastName,
       email: firebaseUser.email ?? "",
       role: user.role,
-      town: user.town
+      town: user.town,
     };
   }
 
@@ -131,7 +131,7 @@ class UserService implements IUserService {
             lastName: user.lastName,
             email: firebaseUser.email ?? "",
             role: user.role,
-            town: user.town
+            town: user.town,
           };
         }),
       );
@@ -143,16 +143,11 @@ class UserService implements IUserService {
     return userDtos;
   }
 
-  async createUser(
-    user: CreateUserDTO,
-    authId?: string,
-    signUpMethod = "PASSWORD",
-  ): Promise<UserDTO> {
+  async createUser(user: CreateUserDTO): Promise<UserDTO> {
     let newUser: User;
     let firebaseUser: firebaseAdmin.auth.UserRecord;
 
     try {
-
       firebaseUser = await firebaseAdmin.auth().createUser({
         email: user.email,
         password: user.password,
@@ -164,7 +159,7 @@ class UserService implements IUserService {
           lastName: user.lastName,
           authId: firebaseUser.uid,
           role: user.role,
-          town: user.town
+          town: user.town,
         });
       } catch (mongoDbError) {
         // rollback user creation in Firebase
@@ -193,7 +188,7 @@ class UserService implements IUserService {
       lastName: newUser.lastName,
       email: firebaseUser.email ?? "",
       role: newUser.role,
-      town: user.town
+      town: user.town,
     };
   }
 
@@ -252,7 +247,7 @@ class UserService implements IUserService {
       lastName: user.lastName,
       email: updatedFirebaseUser.email ?? "",
       role: user.role,
-      town: user.town
+      town: user.town,
     };
   }
 
@@ -337,4 +332,3 @@ class UserService implements IUserService {
 }
 
 export default UserService;
-

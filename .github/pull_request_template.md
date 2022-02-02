@@ -17,7 +17,7 @@ Visual depiction of PR
 - Things you'd want to know when coming back to the code after a few months
 
 ## Checklist
-- [ ] My code follows the style guide
+- [ ] Ensure code follows style guide by running the linters
 - [ ] I have updated the documentation or deemed it unnecessary
 - [ ] I have linked the relevant issue in this PR
 - [ ] I have requested a review from the PL, as well as other dev(s) (and designers if necessary)

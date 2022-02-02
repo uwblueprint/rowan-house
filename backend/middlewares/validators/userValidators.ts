@@ -23,7 +23,7 @@ export const createUserDtoValidator = async (
     return res.status(400).send(getApiValidationError("password", "string"));
   }
   if (!validatePrimitive(req.body.town, "string")) {
-    return res.status(400).send(getApiValidationError("town", "string"))
+    return res.status(400).send(getApiValidationError("town", "string"));
   }
 
   return next();
@@ -47,7 +47,7 @@ export const updateUserDtoValidator = async (
     return res.status(400).send(getApiValidationError("role", "string"));
   }
   if (!validatePrimitive(req.body.town, "string")) {
-    return res.status(400).send(getApiValidationError("town", "string"))
+    return res.status(400).send(getApiValidationError("town", "string"));
   }
   return next();
 };
