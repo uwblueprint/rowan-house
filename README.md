@@ -42,7 +42,7 @@ To run the linter, use the following commands while the docker containers are ru
   - `docker exec -it RHS-frontend bash -c "yarn fix"`
   - `docker exec -it RHS-backend bash -c "yarn fix"`
 
-Or, if you have yarn installed locally, running `yarn fix` should work as well.
+Or, if you have yarn installed locally, running `yarn fix` *should* work as well.
 
 ## File Structure
 ```bash

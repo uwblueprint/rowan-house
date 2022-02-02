@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Redirect } from "react-router-dom";
 import { gql, useMutation } from "@apollo/client";
+import { Input, Stack } from "@chakra-ui/react";
 
 import authAPIClient from "../../APIClients/AuthAPIClient";
 import { HOME_PAGE } from "../../constants/Routes";
@@ -65,47 +66,42 @@ const Signup = (): React.ReactElement => {
     <div style={{ textAlign: "center" }}>
       <h1>Signup</h1>
       <form>
-        <div>
-          <input
+        <Stack spacing={3}>
+          <Input
             type="text"
+            placeholder='first name'
+            size='md'
             value={firstName}
-            onChange={(event) => setFirstName(event.currentTarget.value)}
-            placeholder="first name"
+            onChange={(event: React.FormEvent<HTMLInputElement>) => setFirstName(event.currentTarget.value)}
           />
-        </div>
-        <div>
-          <input
+          <Input
             type="text"
+            placeholder='last name'
+            size='md'
             value={lastName}
-            onChange={(event) => setLastName(event.currentTarget.value)}
-            placeholder="last name"
+            onChange={(event: React.FormEvent<HTMLInputElement>) => setLastName(event.currentTarget.value)}
           />
-        </div>
-        <div>
-          <input
+          <Input
             type="email"
+            placeholder='email'
+            size='md'
             value={email}
-            onChange={(event) => setEmail(event.currentTarget.value)}
-            placeholder="username@domain.com"
+            onChange={(event: React.FormEvent<HTMLInputElement>) => setEmail(event.currentTarget.value)}
           />
-        </div>
-        <div>
-          <input
+          <Input
             type="password"
+            placeholder='password'
+            size='md'
             value={password}
-            onChange={(event) => setPassword(event.currentTarget.value)}
-            placeholder="password"
+            onChange={(event: React.FormEvent<HTMLInputElement>) => setPassword(event.currentTarget.value)}
           />
-        </div>
-        <div>
-          <input
-            type="town"
+          <Input
+            type="text"
+            placeholder='town'
+            size='md'
             value={town}
-            onChange={(event) => setTown(event.currentTarget.value)}
-            placeholder="Lethbridge"
+            onChange={(event: React.FormEvent<HTMLInputElement>) => setTown(event.currentTarget.value)}
           />
-        </div>
-        <div>
           <button
             className="btn btn-primary"
             type="button"
@@ -113,7 +109,7 @@ const Signup = (): React.ReactElement => {
           >
             Sign Up
           </button>
-        </div>
+        </Stack>
       </form>
     </div>
   );
