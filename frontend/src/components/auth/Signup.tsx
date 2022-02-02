@@ -69,38 +69,48 @@ const Signup = (): React.ReactElement => {
         <Stack spacing={3}>
           <Input
             type="text"
-            placeholder='first name'
-            size='md'
+            placeholder="first name"
+            size="md"
             value={firstName}
-            onChange={(event: React.FormEvent<HTMLInputElement>) => setFirstName(event.currentTarget.value)}
+            onChange={(event: React.FormEvent<HTMLInputElement>) =>
+              setFirstName(event.currentTarget.value)
+            }
           />
           <Input
             type="text"
-            placeholder='last name'
-            size='md'
+            placeholder="last name"
+            size="md"
             value={lastName}
-            onChange={(event: React.FormEvent<HTMLInputElement>) => setLastName(event.currentTarget.value)}
+            onChange={(event: React.FormEvent<HTMLInputElement>) =>
+              setLastName(event.currentTarget.value)
+            }
           />
           <Input
             type="email"
-            placeholder='email'
-            size='md'
+            placeholder="email"
+            size="md"
             value={email}
-            onChange={(event: React.FormEvent<HTMLInputElement>) => setEmail(event.currentTarget.value)}
+            onChange={(event: React.FormEvent<HTMLInputElement>) =>
+              setEmail(event.currentTarget.value)
+            }
           />
           <Input
             type="password"
-            placeholder='password'
-            size='md'
+            placeholder="password"
+            size="md"
             value={password}
-            onChange={(event: React.FormEvent<HTMLInputElement>) => setPassword(event.currentTarget.value)}
+            onChange={(event: React.FormEvent<HTMLInputElement>) =>
+              setPassword(event.currentTarget.value)
+            }
           />
           <Input
             type="text"
-            placeholder='town'
-            size='md'
+            placeholder="town"
+            size="md"
             value={town}
-            onChange={(event: React.FormEvent<HTMLInputElement>) => setTown(event.currentTarget.value)}
+            onChange={(event: React.FormEvent<HTMLInputElement>) =>
+              setTown(event.currentTarget.value)
+            }
           />
           <button
             className="btn btn-primary"

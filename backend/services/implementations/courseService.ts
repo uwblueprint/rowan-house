@@ -10,6 +10,7 @@ import MgCourse, { Course } from "../../models/course.model";
 const Logger = logger(__filename);
 
 class CourseService implements ICourseService {
+  /* eslint-disable class-methods-use-this */
   async getCourse(id: string): Promise<CourseResponseDTO> {
     let course: Course | null;
     try {

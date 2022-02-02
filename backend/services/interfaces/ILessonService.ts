@@ -3,7 +3,7 @@ export interface LessonRequestDTO {
   title: string;
   description: string;
   image: string;
-  content: [Object];
+  content: [Record<string, unknown>];
 }
 
 export interface LessonResponseDTO {
@@ -12,7 +12,7 @@ export interface LessonResponseDTO {
   title: string;
   description: string;
   image: string;
-  content: [Object];
+  content: [Record<string, unknown>];
 }
 
 export interface ILessonService {

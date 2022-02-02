@@ -41,9 +41,9 @@ const login = async (
 type RegisterFunction = (
   options?:
     | MutationFunctionOptions<
-      { register: AuthenticatedUser },
-      OperationVariables
-    >
+        { register: AuthenticatedUser },
+        OperationVariables
+      >
     | undefined,
 ) => Promise<
   FetchResult<
@@ -80,11 +80,11 @@ const register = async (
 type LogoutFunction = (
   options?:
     | MutationFunctionOptions<
-      {
-        logout: null;
-      },
-      OperationVariables
-    >
+        {
+          logout: null;
+        },
+        OperationVariables
+      >
     | undefined,
 ) => Promise<
   FetchResult<
@@ -114,11 +114,11 @@ const logout = async (
 type RefreshFunction = (
   options?:
     | MutationFunctionOptions<
-      {
-        refresh: string;
-      },
-      OperationVariables
-    >
+        {
+          refresh: string;
+        },
+        OperationVariables
+      >
     | undefined,
 ) => Promise<
   FetchResult<
@@ -142,5 +142,3 @@ const refresh = async (refreshFunction: RefreshFunction): Promise<boolean> => {
 };
 
 export default { login, logout, register, refresh };
-
-
