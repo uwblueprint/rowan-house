@@ -1,6 +1,7 @@
 name: Deploy backend to Heroku dev environment
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
