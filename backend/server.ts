@@ -9,9 +9,9 @@ import schema from "./graphql";
 
 const CORS_ALLOW_LIST = [
   "http://localhost:3000",
-  "https://uw-blueprint-starter-code.firebaseapp.com",
-  "https://uw-blueprint-starter-code.web.app",
-  /^https:\/\/uw-blueprint-starter-code--pr.*\.web\.app$/,
+  "https://rowan-house-society.firebaseapp.com",
+  "https://rowan-house-society.web.app",
+  /^https:\/\/rowan-house-society--pr.*\.web\.app$/,
 ];
 
 const CORS_OPTIONS: cors.CorsOptions = {
