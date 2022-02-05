@@ -74,15 +74,12 @@ class CourseService implements ICourseService {
     id: string,
     course: CourseRequestDTO,
   ): Promise<CourseResponseDTO | null> {
+    let updatedCourse: Course | null;
     try {
-      const updatedCourse: Course | null = await MgCourse.findByIdAndUpdate(
-        id,
-        course,
-        {
-          new: true,
-          runValidators: true,
-        },
-      );
+      updatedCourse = await MgCourse.findByIdAndUpdate(id, course, {
+        new: true,
+        runValidators: true,
+      });
       if (!updatedCourse) {
         throw new Error(`Course id ${id} not found`);
       }
@@ -94,12 +91,12 @@ class CourseService implements ICourseService {
     }
 
     return {
-      id: course.id,
-      title: course.title,
-      description: course.description,
-      image: course.image,
-      previewImage: course.previewImage,
-      lessons: course.lessons,
+      id: updatedCourse.id,
+      title: updatedCourse.title,
+      description: updatedCourse.description,
+      image: updatedCourse.image,
+      previewImage: updatedCourse.previewImage,
+      lessons: updatedCourse.lessons,
     };
   }
 
