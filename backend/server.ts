@@ -15,6 +15,7 @@ const CORS_ALLOW_LIST = [
 ];
 
 const CORS_OPTIONS: cors.CorsOptions = {
+  // origin: [/.*/],
   origin: CORS_ALLOW_LIST,
   credentials: true,
 };
