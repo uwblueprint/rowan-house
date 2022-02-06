@@ -33,6 +33,9 @@ const server = new ApolloServer({
       "request.credentials": "include",
     },
   },
+  // For deployed backend debugging (also check CORS)
+  // introspection: true,
+  // playground: true,
 });
 
 server.applyMiddleware({
