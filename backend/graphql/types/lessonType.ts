@@ -28,6 +28,8 @@ const lessonType = gql`
 
   extend type Mutation {
     createLesson(lesson: LessonRequestDTO!): LessonResponseDTO!
+    updateLesson(id: ID!, lesson: LessonRequestDTO!): LessonResponseDTO!
+    deleteLesson(id: ID!): ID!
   }
 `;
 

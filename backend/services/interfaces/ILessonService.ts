@@ -31,4 +31,24 @@ export interface ILessonService {
    * @throws Error if creation fails
    */
   createLesson(lesson: LessonRequestDTO): Promise<LessonResponseDTO>;
+
+  /**
+   * create an Lesson with the fields given in the DTO, return created Lesson
+   * @param id lesson id
+   * @param lesson to be updated
+   * @returns the updated Lesson
+   * @throws Error if update fails
+   */
+  updateLesson(
+    id: string,
+    lesson: LessonRequestDTO,
+  ): Promise<LessonResponseDTO | null>;
+
+  /**
+   * create an Lesson with the fields given in the DTO, return created Lesson
+   * @param id of lesson to be deleted
+   * @returns id of lesson deleted
+   * @throws Error if deletion fails
+   */
+  deleteLesson(id: string): Promise<string>;
 }

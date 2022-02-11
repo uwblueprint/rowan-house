@@ -52,6 +52,51 @@ class LessonService implements ILessonService {
       content: newLesson.content,
     };
   }
+
+  async updateLesson(
+    id: string,
+    lesson: LessonRequestDTO,
+  ): Promise<LessonResponseDTO> {
+    let updatedLesson: Lesson | null;
+    try {
+      updatedLesson = await MgLesson.findByIdAndUpdate(id, lesson, {
+        new: true,
+        runValidators: true,
+      });
+      if (!updatedLesson) {
+        throw new Error(`Lesson id ${id} not found`);
+      }
+    } catch (error: unknown) {
+      Logger.error(
+        `Failed to update lesson. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
+
+    return {
+      id: updatedLesson.id,
+      course: updatedLesson.course,
+      title: updatedLesson.title,
+      description: updatedLesson.description,
+      image: updatedLesson.image,
+      content: updatedLesson.content,
+    };
+  }
+
+  async deleteLesson(id: string): Promise<string> {
+    try {
+      const deletedLesson: Lesson | null = await MgLesson.findByIdAndDelete(id);
+      if (!deletedLesson) {
+        throw new Error(`Lesson id ${id} not found`);
+      }
+      return id;
+    } catch (error: unknown) {
+      Logger.error(
+        `Failed to delete lesson. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
+  }
 }
 
 export default LessonService;
