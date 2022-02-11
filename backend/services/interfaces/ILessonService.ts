@@ -14,7 +14,6 @@ export interface LessonUpdateRequestDTO {
   content: [Record<string, unknown>];
 }
 
-
 export interface LessonResponseDTO {
   id: string;
   course: string;

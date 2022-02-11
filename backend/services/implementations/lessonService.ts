@@ -34,7 +34,9 @@ class LessonService implements ILessonService {
     };
   }
 
-  async createLesson(lesson: LessonCreateRequestDTO): Promise<LessonResponseDTO> {
+  async createLesson(
+    lesson: LessonCreateRequestDTO,
+  ): Promise<LessonResponseDTO> {
     let newLesson: Lesson;
     try {
       newLesson = await MgLesson.create(lesson);
