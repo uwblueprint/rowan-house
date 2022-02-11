@@ -1,10 +1,19 @@
-export interface LessonRequestDTO {
+export interface LessonCreateRequestDTO {
   course: string;
   title: string;
   description: string;
   image: string;
   content: [Record<string, unknown>];
 }
+
+export interface LessonUpdateRequestDTO {
+  course: string;
+  title: string;
+  description: string;
+  image: string;
+  content: [Record<string, unknown>];
+}
+
 
 export interface LessonResponseDTO {
   id: string;
@@ -25,15 +34,15 @@ export interface ILessonService {
   getLessonById(id: string): Promise<LessonResponseDTO>;
 
   /**
-   * create an Lesson with the fields given in the DTO, return created Lesson
+   * create a Lesson with the fields given in the DTO, return created Lesson
    * @param lesson to be created
    * @returns the created Lesson
    * @throws Error if creation fails
    */
-  createLesson(lesson: LessonRequestDTO): Promise<LessonResponseDTO>;
+  createLesson(lesson: LessonCreateRequestDTO): Promise<LessonResponseDTO>;
 
   /**
-   * create an Lesson with the fields given in the DTO, return created Lesson
+   * create a Lesson with the fields given in the DTO, return created Lesson
    * @param id lesson id
    * @param lesson to be updated
    * @returns the updated Lesson
@@ -41,11 +50,11 @@ export interface ILessonService {
    */
   updateLesson(
     id: string,
-    lesson: LessonRequestDTO,
+    lesson: LessonUpdateRequestDTO,
   ): Promise<LessonResponseDTO | null>;
 
   /**
-   * create an Lesson with the fields given in the DTO, return created Lesson
+   * create a Lesson with the fields given in the DTO, return created Lesson
    * @param id of lesson to be deleted
    * @returns id of lesson deleted
    * @throws Error if deletion fails

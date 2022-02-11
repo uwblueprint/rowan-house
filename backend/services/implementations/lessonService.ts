@@ -1,8 +1,9 @@
 import MgLesson, { Lesson } from "../../models/lesson.model";
 import {
   ILessonService,
-  LessonRequestDTO,
   LessonResponseDTO,
+  LessonCreateRequestDTO,
+  LessonUpdateRequestDTO,
 } from "../interfaces/ILessonService";
 import { getErrorMessage } from "../../utilities/errorUtils";
 import logger from "../../utilities/logger";
@@ -33,7 +34,7 @@ class LessonService implements ILessonService {
     };
   }
 
-  async createLesson(lesson: LessonRequestDTO): Promise<LessonResponseDTO> {
+  async createLesson(lesson: LessonCreateRequestDTO): Promise<LessonResponseDTO> {
     let newLesson: Lesson;
     try {
       newLesson = await MgLesson.create(lesson);
@@ -55,7 +56,7 @@ class LessonService implements ILessonService {
 
   async updateLesson(
     id: string,
-    lesson: LessonRequestDTO,
+    lesson: LessonUpdateRequestDTO,
   ): Promise<LessonResponseDTO> {
     let updatedLesson: Lesson | null;
     try {
