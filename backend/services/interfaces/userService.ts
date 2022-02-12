@@ -1,10 +1,4 @@
-import {
-  CreateUserDTO,
-  Role,
-  SignUpMethod,
-  UpdateUserDTO,
-  UserDTO,
-} from "../../types";
+import { CreateUserDTO, Role, UpdateUserDTO, UserDTO } from "../../types";
 
 interface IUserService {
   /**
