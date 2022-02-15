@@ -14,7 +14,7 @@ const lessonType = gql`
     content: [Content!]
   }
 
-  input LessonCreateRequestDTO {
+  input CreateLessonRequestDTO {
     course: ID!
     title: String
     description: String
@@ -22,7 +22,7 @@ const lessonType = gql`
     content: [Content!]
   }
 
-  input LessonUpdateRequestDTO {
+  input UpdateLessonRequestDTO {
     course: ID
     title: String
     description: String
@@ -35,8 +35,8 @@ const lessonType = gql`
   }
 
   extend type Mutation {
-    createLesson(lesson: LessonCreateRequestDTO!): LessonResponseDTO!
-    updateLesson(id: ID!, lesson: LessonUpdateRequestDTO!): LessonResponseDTO!
+    createLesson(lesson: CreateLessonRequestDTO!): LessonResponseDTO!
+    updateLesson(id: ID!, lesson: UpdateLessonRequestDTO!): LessonResponseDTO!
     deleteLesson(id: ID!): ID!
   }
 `;
