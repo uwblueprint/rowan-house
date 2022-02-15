@@ -78,6 +78,8 @@ const graphQLMiddlewares = {
     logout: isAuthorizedByUserId("userId"),
     resetPassword: isAuthorizedByEmail("email"),
     createLesson: authorizedByAdmin(),
+    updateLesson: authorizedByAdmin(),
+    deleteLesson: authorizedByAdmin(),
   },
 };
 

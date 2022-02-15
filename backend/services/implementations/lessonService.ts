@@ -1,8 +1,9 @@
 import MgLesson, { Lesson } from "../../models/lesson.model";
 import {
   ILessonService,
-  LessonRequestDTO,
   LessonResponseDTO,
+  CreateLessonRequestDTO,
+  UpdateLessonRequestDTO,
 } from "../interfaces/ILessonService";
 import { getErrorMessage } from "../../utilities/errorUtils";
 import logger from "../../utilities/logger";
@@ -33,7 +34,9 @@ class LessonService implements ILessonService {
     };
   }
 
-  async createLesson(lesson: LessonRequestDTO): Promise<LessonResponseDTO> {
+  async createLesson(
+    lesson: CreateLessonRequestDTO,
+  ): Promise<LessonResponseDTO> {
     let newLesson: Lesson;
     try {
       newLesson = await MgLesson.create(lesson);
@@ -51,6 +54,51 @@ class LessonService implements ILessonService {
       image: newLesson.image,
       content: newLesson.content,
     };
+  }
+
+  async updateLesson(
+    id: string,
+    lesson: UpdateLessonRequestDTO,
+  ): Promise<LessonResponseDTO> {
+    let updatedLesson: Lesson | null;
+    try {
+      updatedLesson = await MgLesson.findByIdAndUpdate(id, lesson, {
+        new: true,
+        runValidators: true,
+      });
+      if (!updatedLesson) {
+        throw new Error(`Lesson id ${id} not found`);
+      }
+    } catch (error: unknown) {
+      Logger.error(
+        `Failed to update lesson. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
+
+    return {
+      id: updatedLesson.id,
+      course: updatedLesson.course,
+      title: updatedLesson.title,
+      description: updatedLesson.description,
+      image: updatedLesson.image,
+      content: updatedLesson.content,
+    };
+  }
+
+  async deleteLesson(id: string): Promise<string> {
+    try {
+      const deletedLesson: Lesson | null = await MgLesson.findByIdAndDelete(id);
+      if (!deletedLesson) {
+        throw new Error(`Lesson id ${id} not found`);
+      }
+      return id;
+    } catch (error: unknown) {
+      Logger.error(
+        `Failed to delete lesson. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
   }
 }
 

@@ -2,7 +2,8 @@ import LessonService from "../../services/implementations/lessonService";
 import {
   ILessonService,
   LessonResponseDTO,
-  LessonRequestDTO,
+  CreateLessonRequestDTO,
+  UpdateLessonRequestDTO,
 } from "../../services/interfaces/ILessonService";
 
 const lessonService: ILessonService = new LessonService();
@@ -19,10 +20,22 @@ const lessonResolvers = {
   Mutation: {
     createLesson: async (
       _parent: undefined,
-      { lesson }: { lesson: LessonRequestDTO },
+      { lesson }: { lesson: CreateLessonRequestDTO },
     ): Promise<LessonResponseDTO> => {
       const newLesson = await lessonService.createLesson(lesson);
       return newLesson;
+    },
+    updateLesson: async (
+      _parent: undefined,
+      { id, lesson }: { id: string; lesson: UpdateLessonRequestDTO },
+    ): Promise<LessonResponseDTO | null> => {
+      return lessonService.updateLesson(id, lesson);
+    },
+    deleteLesson: async (
+      _parent: undefined,
+      { id }: { id: string },
+    ): Promise<string> => {
+      return lessonService.deleteLesson(id);
     },
   },
 };
