@@ -7,6 +7,8 @@ export interface Course extends Document {
   image: string;
   previewImage: string;
   lessons: [string];
+  private: boolean;
+  public: boolean;
 }
 
 const CourseSchema: Schema = new Schema({
@@ -27,6 +29,14 @@ const CourseSchema: Schema = new Schema({
     type: [String],
     required: true,
   },
+  private : {
+    type: Boolean,
+    default: false,
+  } ,
+  public : {
+    type: Boolean,
+    default: false,
+  }
 });
 
 export default model<Course>("Course", CourseSchema);

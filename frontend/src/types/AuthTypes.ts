@@ -3,7 +3,7 @@ export type AuthenticatedUser = {
   firstName: string;
   lastName: string;
   email: string;
-  role: "Admin" | "User";
+  role: "Admin" | "User"| "Staff";
   accessToken: string;
 } | null;
 

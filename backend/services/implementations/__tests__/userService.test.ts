@@ -18,6 +18,12 @@ const testUsers = [
     authId: "321",
     role: "User",
   },
+  {
+    firstName: "Tinker",
+    lastName: "Bell",
+    authId: "231",
+    role: "Staff",
+  },
 ];
 
 jest.mock("firebase-admin", () => {
