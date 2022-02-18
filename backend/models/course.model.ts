@@ -29,14 +29,14 @@ const CourseSchema: Schema = new Schema({
     type: [String],
     required: true,
   },
-  private : {
+  private: {
     type: Boolean,
     default: false,
-  } ,
-  public : {
+  },
+  public: {
     type: Boolean,
     default: false,
-  }
+  },
 });
 
 export default model<Course>("Course", CourseSchema);
