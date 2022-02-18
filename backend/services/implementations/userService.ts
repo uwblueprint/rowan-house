@@ -1,4 +1,5 @@
 import * as firebaseAdmin from "firebase-admin";
+import { Types } from "mongoose";
 
 import IUserService from "../interfaces/userService";
 import MgUser, { User } from "../../models/user.model";
@@ -15,6 +16,50 @@ const getMongoUserByAuthId = async (authId: string): Promise<User> => {
   }
   return user;
 };
+
+/**
+ * Utility method for converting yyyy/mm/dd date
+ *  string to 24-char hex timestamp string
+ *
+ * ObjectID docs:
+ *  https://mongodb.github.io/node-mongodb-native/api-bson-generated/objectid.html
+ * Reference:
+ *  https://kchodorow.com/2011/12/20/querying-for-timestamps-using-objectids/
+ */
+const getDateTime = (date: string): string =>
+  `${Math.floor(new Date(date).getTime() / 1000).toString(16)}0000000000000000`;
+
+interface LimitByDateQuery {
+  $match: {
+    _id: {
+      [key: string]: Types.ObjectId;
+    };
+  };
+}
+
+const buildLimitByDateQuery = (
+  startDate?: string,
+  endDate?: string,
+): LimitByDateQuery => {
+  const matchQuery: LimitByDateQuery = { $match: { _id: {} } };
+
+  if (startDate) {
+    // eslint-disable-next-line no-underscore-dangle
+    matchQuery.$match._id.$gt = Types.ObjectId(getDateTime(startDate));
+  }
+
+  if (endDate) {
+    // eslint-disable-next-line no-underscore-dangle
+    matchQuery.$match._id.$lt = Types.ObjectId(getDateTime(endDate));
+  }
+
+  return matchQuery;
+};
+
+interface UserCountGroupByTown {
+  _id: string;
+  userCount: number;
+}
 
 class UserService implements IUserService {
   /* eslint-disable class-methods-use-this */
@@ -141,6 +186,33 @@ class UserService implements IUserService {
     }
 
     return userDtos;
+  }
+
+  async getUserCountByTown(
+    startDate?: string,
+    endDate?: string,
+  ): Promise<{ [key: string]: number }> {
+    const groupByQuery = { $group: { _id: "$town", userCount: { $sum: 1 } } };
+
+    let query: Array<UserCountGroupByTown>;
+
+    if (!startDate && !endDate) {
+      query = await MgUser.aggregate([groupByQuery]).exec();
+    } else {
+      query = await MgUser.aggregate([
+        buildLimitByDateQuery(startDate, endDate),
+        groupByQuery,
+      ]).exec();
+    }
+
+    return query.reduce(
+      (map: { [key: string]: number }, obj: UserCountGroupByTown) => {
+        // eslint-disable-next-line no-param-reassign, no-underscore-dangle
+        map[obj._id] = obj.userCount;
+        return map;
+      },
+      {},
+    );
   }
 
   async createUser(user: CreateUserDTO): Promise<UserDTO> {

@@ -34,6 +34,13 @@ const userResolvers = {
       const csv = await generateCSV<UserDTO>({ data: users });
       return csv;
     },
+    userCountByTown: async (
+      _parent: undefined,
+      { startDate, endDate }: { startDate?: string; endDate?: string },
+    ): Promise<string> => {
+      const result = await userService.getUserCountByTown(startDate, endDate);
+      return JSON.stringify(result);
+    },
   },
   Mutation: {
     createUser: async (
