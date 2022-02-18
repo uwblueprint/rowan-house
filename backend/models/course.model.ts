@@ -8,7 +8,7 @@ export interface Course extends Document {
   previewImage: string;
   lessons: [string];
   private: boolean;
-  public: boolean;
+  published: boolean;
 }
 
 const CourseSchema: Schema = new Schema({
@@ -33,7 +33,7 @@ const CourseSchema: Schema = new Schema({
     type: Boolean,
     default: false,
   },
-  public: {
+  published: {
     type: Boolean,
     default: false,
   },

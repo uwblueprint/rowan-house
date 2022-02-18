@@ -9,7 +9,7 @@ const courseType = gql`
     previewImage: String
     lessons: [ID!]!
     private: Boolean
-    public: Boolean
+    published: Boolean
   }
 
   input CourseRequestDTO {
@@ -19,7 +19,7 @@ const courseType = gql`
     previewImage: String
     lessons: [ID!]!
     private: Boolean
-    public: Boolean
+    published: Boolean
   }
 
   extend type Query {
