@@ -12,12 +12,22 @@ const courseType = gql`
     published: Boolean!
   }
 
-  input CourseRequestDTO {
+  input CreateCourseRequestDTO {
     title: String!
     description: String
     image: String
     previewImage: String
     lessons: [ID!]!
+    private: Boolean
+    published: Boolean
+  }
+
+  input UpdateCourseRequestDTO {
+    title: String
+    description: String
+    image: String
+    previewImage: String
+    lessons: [ID!]
     private: Boolean
     published: Boolean
   }
@@ -28,8 +38,8 @@ const courseType = gql`
   }
 
   extend type Mutation {
-    createCourse(course: CourseRequestDTO!): CourseResponseDTO!
-    updateCourse(id: ID!, course: CourseRequestDTO!): CourseResponseDTO
+    createCourse(course: CreateCourseRequestDTO!): CourseResponseDTO!
+    updateCourse(id: ID!, course: UpdateCourseRequestDTO!): CourseResponseDTO
     deleteCourse(id: ID!): ID
   }
 `;

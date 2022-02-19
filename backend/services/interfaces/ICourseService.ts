@@ -1,5 +1,14 @@
-export interface CourseRequestDTO {
-  id: string;
+export interface CreateCourseRequestDTO {
+  title: string;
+  description: string;
+  image: string;
+  previewImage: string;
+  lessons: [string];
+  private: boolean;
+  published: boolean;
+}
+
+export interface UpdateCourseRequestDTO {
   title: string;
   description: string;
   image: string;
@@ -43,7 +52,7 @@ export interface ICourseService {
    * @returns the created Course
    * @throws Error if creation fails
    */
-  createCourse(course: CourseRequestDTO): Promise<CourseResponseDTO>;
+  createCourse(course: CreateCourseRequestDTO): Promise<CourseResponseDTO>;
 
   /**
    * update the Course with the given id with fields in the DTO, return updated Course
@@ -54,7 +63,7 @@ export interface ICourseService {
    */
   updateCourse(
     id: string,
-    course: CourseRequestDTO,
+    course: UpdateCourseRequestDTO,
   ): Promise<CourseResponseDTO | null>;
 
   /**

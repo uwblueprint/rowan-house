@@ -1,6 +1,7 @@
 import CourseService from "../../services/implementations/courseService";
 import {
-  CourseRequestDTO,
+  CreateCourseRequestDTO,
+  UpdateCourseRequestDTO,
   CourseResponseDTO,
   ICourseService,
 } from "../../services/interfaces/ICourseService";
@@ -22,14 +23,14 @@ const courseResolvers = {
   Mutation: {
     createCourse: async (
       _parent: undefined,
-      { course }: { course: CourseRequestDTO },
+      { course }: { course: CreateCourseRequestDTO },
     ): Promise<CourseResponseDTO> => {
       const newCourse = await courseService.createCourse(course);
       return newCourse;
     },
     updateCourse: async (
       _parent: undefined,
-      { id, course }: { id: string; course: CourseRequestDTO },
+      { id, course }: { id: string; course: UpdateCourseRequestDTO },
     ): Promise<CourseResponseDTO | null> => {
       return courseService.updateCourse(id, course);
     },
