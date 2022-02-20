@@ -11,10 +11,8 @@ import DisplayPage from "./components/pages/DisplayPage";
 import NotFound from "./components/pages/NotFound";
 import UpdatePage from "./components/pages/UpdatePage";
 import AdminDasboard from "./components/pages/admin/AdminDashboard";
-import CourseDashboard from "./components/pages/course/CourseDashboard";
-import CourseEditor from "./components/pages/course/CourseEditor";
-import CourseEditorOverview from "./components/pages/course/CourseEditorOverview";
-import CourseOverview from "./components/pages/course/CourseOverview";
+import ModuleEditor from "./components/pages/module/ModuleEditor";
+import ModuleEditorOverview from "./components/pages/module/ModuleEditorOverview";
 import * as Routes from "./constants/Routes";
 import AUTHENTICATED_USER_KEY from "./constants/AuthConstants";
 import AuthContext from "./contexts/AuthContext";
@@ -91,23 +89,13 @@ const App = (): React.ReactElement => {
               />
               <PrivateRoute
                 exact
-                path={Routes.COURSE_OVERVIEW_DASHBOARD_BASE_ROUTE}
-                component={CourseDashboard}
+                path={Routes.ADMIN_MODULE_EDITOR_BASE_ROUTE}
+                component={ModuleEditorOverview}
               />
               <PrivateRoute
                 exact
-                path={`${Routes.COURSE_OVERVIEW_DASHBOARD_BASE_ROUTE}/:id`}
-                component={CourseOverview}
-              />
-              <PrivateRoute
-                exact
-                path={Routes.ADMIN_COURSE_EDITOR_BASE_ROUTE}
-                component={CourseEditorOverview}
-              />
-              <PrivateRoute
-                exact
-                path={`${Routes.ADMIN_COURSE_EDITOR_BASE_ROUTE}/:id`}
-                component={CourseEditor}
+                path={`${Routes.ADMIN_MODULE_EDITOR_BASE_ROUTE}/:id`}
+                component={ModuleEditor}
               />
               <Route exact path="*" component={NotFound} />
             </Switch>
