@@ -103,8 +103,8 @@ class CourseService implements ICourseService {
       image: updatedCourse.image,
       previewImage: updatedCourse.previewImage,
       lessons: updatedCourse.lessons,
-      private: course.private,
-      published: course.published,
+      private: updatedCourse.private,
+      published: updatedCourse.published,
     };
   }
 
