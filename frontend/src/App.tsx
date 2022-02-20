@@ -10,6 +10,8 @@ import Default from "./components/pages/Default";
 import DisplayPage from "./components/pages/DisplayPage";
 import NotFound from "./components/pages/NotFound";
 import UpdatePage from "./components/pages/UpdatePage";
+import AdminDasboard from "./components/pages/admin/AdminDashboard";
+import ModuleEditor from "./components/pages/module/ModuleEditor";
 import * as Routes from "./constants/Routes";
 import AUTHENTICATED_USER_KEY from "./constants/AuthConstants";
 import AuthContext from "./contexts/AuthContext";
@@ -78,6 +80,16 @@ const App = (): React.ReactElement => {
                 exact
                 path={Routes.HOOKS_PAGE}
                 component={HooksDemo}
+              />
+              <PrivateRoute
+                exact
+                path={Routes.ADMIN_DASHBOARD_PAGE}
+                component={AdminDasboard}
+              />
+              <PrivateRoute
+                exact
+                path={`${Routes.ADMIN_MODULE_EDITOR_BASE_ROUTE}/:id`}
+                component={ModuleEditor}
               />
               <Route exact path="*" component={NotFound} />
             </Switch>
