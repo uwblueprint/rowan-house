@@ -12,7 +12,6 @@ import NotFound from "./components/pages/NotFound";
 import UpdatePage from "./components/pages/UpdatePage";
 import AdminDasboard from "./components/pages/admin/AdminDashboard";
 import ModuleEditor from "./components/pages/module/ModuleEditor";
-import ModuleEditorOverview from "./components/pages/module/ModuleEditorOverview";
 import * as Routes from "./constants/Routes";
 import AUTHENTICATED_USER_KEY from "./constants/AuthConstants";
 import AuthContext from "./contexts/AuthContext";
@@ -86,11 +85,6 @@ const App = (): React.ReactElement => {
                 exact
                 path={Routes.ADMIN_DASHBOARD_PAGE}
                 component={AdminDasboard}
-              />
-              <PrivateRoute
-                exact
-                path={Routes.ADMIN_MODULE_EDITOR_BASE_ROUTE}
-                component={ModuleEditorOverview}
               />
               <PrivateRoute
                 exact
