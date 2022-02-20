@@ -32,10 +32,12 @@ const CourseSchema: Schema = new Schema({
   private: {
     type: Boolean,
     default: false,
+    required: true,
   },
   published: {
     type: Boolean,
     default: false,
+    required: true,
   },
 });
 
