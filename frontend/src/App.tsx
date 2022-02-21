@@ -100,4 +100,6 @@ const App = (): React.ReactElement => {
   );
 };
 
+// Look at me I'm changing the frontend!
+
 export default App;
