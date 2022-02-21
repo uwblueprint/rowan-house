@@ -5,6 +5,8 @@ import {
   CreateLessonRequestDTO,
   UpdateLessonRequestDTO,
 } from "../../services/interfaces/ILessonService";
+import { GraphQLScalarType, Kind } from 'graphql';
+import { ContentBlock } from "../../types/contentBlockType";
 
 const lessonService: ILessonService = new LessonService();
 

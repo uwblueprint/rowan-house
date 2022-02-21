@@ -1,9 +1,27 @@
 import { gql } from "apollo-server-express";
 
-// TO DO: Define Content parameters
-
 const lessonType = gql`
-  scalar Content
+
+  interface Content {}
+
+  ContentBlock {
+    type: ContentType!
+    content: Content!
+  }
+
+  type Image implements Content {
+    link: String!
+  }
+    
+  type Text implements Content {
+    text: String!
+  }
+
+  type Video implements Content {
+    link: String!
+  }
+  
+  enum ContentType { text, image, video }
 
   type LessonResponseDTO {
     id: ID!
@@ -11,7 +29,7 @@ const lessonType = gql`
     title: String
     description: String
     image: String
-    content: [Content!]
+    content: [ContentBlock!]
   }
 
   input CreateLessonRequestDTO {
@@ -19,7 +37,7 @@ const lessonType = gql`
     title: String
     description: String
     image: String
-    content: [Content!]
+    content: [ContentBlock!]
   }
 
   input UpdateLessonRequestDTO {
@@ -27,7 +45,7 @@ const lessonType = gql`
     title: String
     description: String
     image: String
-    content: [Content!]
+    content: [ContentBlock!]
   }
 
   extend type Query {
@@ -40,5 +58,7 @@ const lessonType = gql`
     deleteLesson(id: ID!): ID!
   }
 `;
+
+
 
 export default lessonType;
