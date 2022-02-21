@@ -82,5 +82,5 @@ const graphQLMiddlewares = {
     deleteLesson: authorizedByAdmin(),
   },
 };
-
+// DUMMY CHANGE
 export default applyMiddleware(executableSchema, graphQLMiddlewares);
