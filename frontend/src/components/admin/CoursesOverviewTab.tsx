@@ -17,7 +17,7 @@ const CoursesOverviewTab = (): React.ReactElement => {
       {
         title: "Module 2",
         description: "Test2",
-        published: true
+        published: false
       },
       {
         title: "Module 3",
