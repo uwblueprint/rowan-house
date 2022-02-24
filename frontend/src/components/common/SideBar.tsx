@@ -1,12 +1,11 @@
 import React from "react";
 
-
-const CoursePreview: React.FC<{}> = ({children}): React.ReactElement => {
-  return (
-    <div>
-      {children}
-    </div>
-  );
+const SideBar = ({
+  children,
+}: {
+  children?: React.ReactNode;
+}): React.ReactElement => {
+  return <div>{children}</div>;
 };
 
-export default CoursePreview;
+export default SideBar;

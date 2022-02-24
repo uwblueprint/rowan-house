@@ -1,14 +1,12 @@
-
-
 export interface ModulePreviewProps {
-  title: String,
-  description?: String,
-  published: Boolean,
+  title: string;
+  description?: string;
+  published: boolean;
 }
-  
+
 export interface CoursePreviewProps {
-  title: String,
-  description?: String,
-  isPrivate: Boolean,
-  modules: Array<ModulePreviewProps>,
+  title: string;
+  description?: string;
+  isPrivate: boolean;
+  modules: Array<ModulePreviewProps>;
 }

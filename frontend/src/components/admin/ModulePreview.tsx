@@ -1,7 +1,11 @@
 import React from "react";
-import { ModulePreviewProps } from "../../types/AdminDashboardTypes"
+import { ModulePreviewProps } from "../../types/AdminDashboardTypes";
 
-const ModulePreview = ({title, description, published}: ModulePreviewProps): React.ReactElement => {
+const ModulePreview = ({
+  title,
+  description,
+  published,
+}: ModulePreviewProps): React.ReactElement => {
   return (
     <div>
       Module Preview
