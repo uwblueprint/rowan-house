@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Redirect, useHistory } from "react-router-dom";
-import { useMutation } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 import {
   Flex,
   Heading,
@@ -17,10 +17,23 @@ import logo from '../logo.png';
 import background from '../signuppage.png';
 
 import authAPIClient from "../../APIClients/AuthAPIClient";
-import { LOGIN } from "../../APIClients/mutations/AuthMutations";
 import { HOME_PAGE, SIGNUP_PAGE } from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
 import { AuthenticatedUser } from "../../types/AuthTypes";
+
+const LOGIN = gql`
+  mutation Login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      id
+      firstName
+      lastName
+      email
+      town
+      role
+      accessToken
+    }
+  }
+`;
 
 const Login = (): React.ReactElement => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
@@ -50,18 +63,18 @@ const Login = (): React.ReactElement => {
   return (
     <Flex>
       <Image
-        // style={{
-        //   alignSelf: 'center',
-        //   height: 150,
-        //   width: 150,
-        //   borderWidth: 1,
-        //   borderRadius: 75
-        // }}
+        style={{
+          alignSelf: 'center',
+          height: 150,
+          width: 150,
+          borderWidth: 1,
+          borderRadius: 75
+        }}
         source={background}
-        // resizeMode="stretch"
+        resizeMode="stretch"
       />
       <Stack>
-          <Image htmlHeight='5' src={logo}/>
+        <Image src={logo}/>
         <Heading>Sign in to access courses</Heading>
         <form>
           <FormControl>
@@ -69,7 +82,7 @@ const Login = (): React.ReactElement => {
             <Input type="email" placeholder="you@rowanhouse.ca" />
           </FormControl>
           <Button
-                  borderRadius={1}
+                  borderRadius={0}
                   type="submit"
                   variant="solid"
                   colorScheme= "purple"
@@ -81,7 +94,7 @@ const Login = (): React.ReactElement => {
       </Stack>
       <Box>
          Don&lsquo;t have an account?{" "}
-         <Link color="purple" href="https://www.figma.com/file/9KqGifATPcKRQytJBqAKeJ/User-Authentication?node-id=316%3A2">
+         <Link color="teal.500" href="https://www.figma.com/file/9KqGifATPcKRQytJBqAKeJ/User-Authentication?node-id=316%3A2">
            Sign Up
          </Link>
       </Box>
