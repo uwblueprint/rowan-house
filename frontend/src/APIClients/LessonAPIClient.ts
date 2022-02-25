@@ -13,7 +13,7 @@ export type LessonRequest = {
 };
 
 export type LessonResponse = {
-  id: string | number;
+  id: string;
   course: string;
   title: string;
   description: string;
@@ -21,7 +21,7 @@ export type LessonResponse = {
   content: [Record<string, any>];
 };
 
-// TO DO: error handling
+// TO DO: error handling and getAllLessons(?)
 
 const getLesson = async (id: string): Promise<LessonResponse> => {
   const bearerToken = `Bearer ${getLocalStorageObjProperty(
@@ -29,7 +29,7 @@ const getLesson = async (id: string): Promise<LessonResponse> => {
     "accessToken",
   )}`;
   try {
-    const { data } = await baseAPIClient.get(`/lesson${id}`, {
+    const { data } = await baseAPIClient.get(`/lesson/${id}`, {
       headers: { Authorization: bearerToken },
     });
     return data;
@@ -62,7 +62,7 @@ const updateLesson = async (
     "accessToken",
   )}`;
   try {
-    const { data } = await baseAPIClient.put(`/lesson${id}`, lesson, {
+    const { data } = await baseAPIClient.put(`/lesson/${id}`, lesson, {
       headers: { Authorization: bearerToken },
     });
     return data;
@@ -77,7 +77,7 @@ const deleteLesson = async (id: string): Promise<string> => {
     "accessToken",
   )}`;
   try {
-    const { data } = await baseAPIClient.delete(`/lesson${id}`, {
+    const { data } = await baseAPIClient.delete(`/lesson/${id}`, {
       headers: { Authorization: bearerToken },
     });
     return data;
