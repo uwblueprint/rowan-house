@@ -21,7 +21,7 @@ export type LessonResponse = {
 
 // TO DO: error handling
 
-const get = async (id: string): Promise<LessonResponse> => {
+const getLesson = async (id: string): Promise<LessonResponse> => {
   const bearerToken = `Bearer ${getLocalStorageObjProperty(
     AUTHENTICATED_USER_KEY,
     "accessToken",
@@ -36,7 +36,7 @@ const get = async (id: string): Promise<LessonResponse> => {
   }
 };
 
-const create = async (lesson: LessonRequest): Promise<LessonResponse> => {
+const createLesson = async (lesson: LessonRequest): Promise<LessonResponse> => {
   const bearerToken = `Bearer ${getLocalStorageObjProperty(
     AUTHENTICATED_USER_KEY,
     "accessToken",
@@ -51,7 +51,7 @@ const create = async (lesson: LessonRequest): Promise<LessonResponse> => {
   }
 };
 
-const update = async (
+const updateLesson = async (
   id: string,
   lesson: LessonRequest,
 ): Promise<LessonResponse> => {
@@ -84,4 +84,4 @@ const deleteLesson = async (id: string): Promise<string> => {
   }
 };
 
-export default { get, create, update, deleteLesson };
+export default { getLesson, createLesson, updateLesson, deleteLesson };
