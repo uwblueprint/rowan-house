@@ -49,6 +49,28 @@ interface IUserService {
   getUsers(): Promise<Array<UserDTO>>;
 
   /**
+   * Get user count by town, limited by date range
+   *  in which user was created
+   *
+   * Same date format: 'yyyy/mm/dd', eg. '1900/01/01'
+   *
+   * Sample return format:
+   * {
+   *  "Toronto": 2,
+   *  "Vancouver": 3,
+   *  "San Francisco": 88,
+   * }
+   *
+   * @param startDate start of date range to query
+   * @param endDate end of date range to query
+   * @throws Error if query fails
+   */
+  getUserCountByTown(
+    startDate?: string,
+    endDate?: string,
+  ): Promise<{ [key: string]: number }>;
+
+  /**
    * Create a user, email verification configurable
    * @param user the user to be created
    * @param authId the user's firebase auth id, optional
