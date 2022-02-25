@@ -18,8 +18,8 @@ const courseType = gql`
     image: String
     previewImage: String
     lessons: [ID!]!
-    private: Boolean!
-    published: Boolean!
+    private: Boolean
+    published: Boolean
   }
 
   extend type Query {
