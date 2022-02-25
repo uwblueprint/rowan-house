@@ -8,6 +8,8 @@ const courseType = gql`
     image: String
     previewImage: String
     lessons: [ID!]!
+    private: Boolean!
+    published: Boolean!
   }
 
   input CourseRequestDTO {
@@ -16,6 +18,8 @@ const courseType = gql`
     image: String
     previewImage: String
     lessons: [ID!]!
+    private: Boolean
+    published: Boolean
   }
 
   extend type Query {

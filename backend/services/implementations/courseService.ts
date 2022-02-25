@@ -30,6 +30,8 @@ class CourseService implements ICourseService {
       image: course.image,
       previewImage: course.previewImage,
       lessons: course.lessons,
+      private: course.private,
+      published: course.published,
     };
   }
 
@@ -43,6 +45,8 @@ class CourseService implements ICourseService {
         image: course.image,
         previewImage: course.previewImage,
         lessons: course.lessons,
+        private: course.private,
+        published: course.published,
       }));
     } catch (error: unknown) {
       Logger.error(`Failed to get courses. Reason = ${getErrorMessage(error)}`);
@@ -67,6 +71,8 @@ class CourseService implements ICourseService {
       image: newCourse.image,
       previewImage: newCourse.previewImage,
       lessons: newCourse.lessons,
+      private: newCourse.private,
+      published: newCourse.published,
     };
   }
 
@@ -97,6 +103,8 @@ class CourseService implements ICourseService {
       image: updatedCourse.image,
       previewImage: updatedCourse.previewImage,
       lessons: updatedCourse.lessons,
+      private: updatedCourse.private,
+      published: updatedCourse.published,
     };
   }
 

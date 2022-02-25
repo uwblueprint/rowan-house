@@ -4,6 +4,7 @@ const userType = gql`
   enum Role {
     User
     Admin
+    Staff
   }
 
   type UserDTO {

@@ -5,6 +5,8 @@ export interface CourseRequestDTO {
   image: string;
   previewImage: string;
   lessons: [string];
+  private: boolean;
+  published: boolean;
 }
 
 export interface CourseResponseDTO {
@@ -14,6 +16,8 @@ export interface CourseResponseDTO {
   image: string;
   previewImage: string;
   lessons: [string];
+  private: boolean;
+  published: boolean;
 }
 
 export interface ICourseService {
