@@ -7,7 +7,7 @@ export type LessonRequest = {
   title: string;
   description: string;
   image: string;
-  content: [Record<string, unknown>];
+  content: [Record<string, any>];
 };
 
 export type LessonResponse = {
@@ -16,7 +16,7 @@ export type LessonResponse = {
   title: string;
   description: string;
   image: string;
-  content: [Record<string, unknown>];
+  content: [Record<string, any>];
 };
 
 // TO DO: error handling
