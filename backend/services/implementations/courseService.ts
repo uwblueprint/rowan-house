@@ -1,7 +1,8 @@
 import { getErrorMessage } from "../../utilities/errorUtils";
 import logger from "../../utilities/logger";
 import {
-  CourseRequestDTO,
+  CreateCourseRequestDTO,
+  UpdateCourseRequestDTO,
   CourseResponseDTO,
   ICourseService,
 } from "../interfaces/ICourseService";
@@ -54,7 +55,9 @@ class CourseService implements ICourseService {
     }
   }
 
-  async createCourse(course: CourseRequestDTO): Promise<CourseResponseDTO> {
+  async createCourse(
+    course: CreateCourseRequestDTO,
+  ): Promise<CourseResponseDTO> {
     let newCourse: Course | null;
     try {
       newCourse = await MgCourse.create(course);
@@ -78,7 +81,7 @@ class CourseService implements ICourseService {
 
   async updateCourse(
     id: string,
-    course: CourseRequestDTO,
+    course: UpdateCourseRequestDTO,
   ): Promise<CourseResponseDTO | null> {
     let updatedCourse: Course | null;
     try {
