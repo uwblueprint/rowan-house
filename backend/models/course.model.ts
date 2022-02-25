@@ -31,7 +31,7 @@ const CourseSchema: Schema = new Schema({
   },
   private: {
     type: Boolean,
-    default: false,
+    default: true,
     required: true,
   },
   published: {
