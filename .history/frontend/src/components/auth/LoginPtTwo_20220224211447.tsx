@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Redirect, useHistory } from "react-router-dom";
-import { useMutation } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 import {
   Flex,
   Heading,
@@ -17,10 +17,23 @@ import logo from '../logo.png';
 import background from '../signuppage.png';
 
 import authAPIClient from "../../APIClients/AuthAPIClient";
-import { LOGIN } from "../../APIClients/mutations/AuthMutations";
 import { HOME_PAGE, SIGNUP_PAGE } from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
 import { AuthenticatedUser } from "../../types/AuthTypes";
+
+const LOGIN = gql`
+  mutation Login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      id
+      firstName
+      lastName
+      email
+      town
+      role
+      accessToken
+    }
+  }
+`;
 
 const Login = (): React.ReactElement => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
@@ -60,11 +73,12 @@ const Login = (): React.ReactElement => {
         <Heading>Sign in to access courses</Heading>
         <form>
           <FormControl>
-            <FormLabel htmlFor='email'>Email address</FormLabel>
+            <FormLabel htmlFor='password'>Password</FormLabel>
             <Input 
-              type="email" 
-              placeholder="you@rowanhouse.ca"
-              onChange={(event) => setEmail(event.target.value)} 
+              type="password" 
+              placeholder="●●●●●"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
               />
           </FormControl>
           <Button
@@ -78,13 +92,12 @@ const Login = (): React.ReactElement => {
                   Continue
           </Button>
         </form>
-          Don&lsquo;t have an account?{" "}
           <Link 
             color="purple" 
             onClick={onSignUpClick}
             href="https://www.figma.com/file/9KqGifATPcKRQytJBqAKeJ/User-Authentication?node-id=316%3A2"
             >
-            Sign Up
+            Forgot your password
           </Link>
         </Box>
       </Stack>
@@ -97,6 +110,46 @@ const Login = (): React.ReactElement => {
         resizeMode="stretch"
       />
     </Flex>
+
+    // <div style={{ textAlign: "center" }}>
+    //   <h1>Login</h1>
+    //   <form>
+    //     <div>
+    //       <input
+    //         type="email"
+    //         value={email}
+    //         onChange={(event) => setEmail(event.target.value)}
+    //         placeholder="username@domain.com"
+    //       />
+    //     </div>
+    //     <div>
+    //       <input
+    //         type="password"
+    //         value={password}
+    //         onChange={(event) => setPassword(event.target.value)}
+    //         placeholder="password"
+    //       />
+    //     </div>
+    //     <div>
+    //       <button
+    //         className="btn btn-primary"
+    //         type="button"
+    //         onClick={onLogInClick}
+    //       >
+    //         Log In
+    //       </button>
+    //     </div>
+    //   </form>
+    //   <div>
+    //     <button
+    //       className="btn btn-primary"
+    //       type="button"
+    //       onClick={onSignUpClick}
+    //     >
+    //       Sign Up
+    //     </button>
+    //   </div>
+    // </div>
   );
 };
 
