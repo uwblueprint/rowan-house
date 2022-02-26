@@ -1,35 +1,35 @@
 export interface LessonProps {
-  course: string
-  module: string
-  title: string
-  description?: string
-  image: string
-  content: Array<Content>
+  course: string;
+  module: string;
+  title: string;
+  description?: string;
+  image: string;
+  content: Array<Content>;
 }
 
 export interface ModuleProps {
-  title: string
-  description?: string
-  image: string
-  previewImage: string
-  published: boolean
-  lessons: Array<string>
+  title: string;
+  description?: string;
+  image: string;
+  previewImage: string;
+  published: boolean;
+  lessons: Array<string>;
 }
 
 export interface ContentTextProps {
-  text: string
+  text: string;
 }
 
 export interface ContentImageProps {
-  link: string
+  link: string;
 }
 
 export enum ContentType {
-  'text',
-  'image',
+  "text",
+  "image",
 }
 
 export type Content = {
-  type: ContentType,
-  content: ContentTextProps | ContentImageProps
-}
+  type: ContentType;
+  content: ContentTextProps | ContentImageProps;
+};

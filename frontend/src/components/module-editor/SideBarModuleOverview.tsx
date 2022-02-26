@@ -1,7 +1,11 @@
 import React from "react";
-import { ModuleProps } from "../../types/ModuleEditorTypes"
+import { ModuleProps } from "../../types/ModuleEditorTypes";
 
-const SideBarModuleOverview = ({module}: {module: ModuleProps}): React.ReactElement => {
+const SideBarModuleOverview = ({
+  module,
+}: {
+  module: ModuleProps;
+}): React.ReactElement => {
   return (
     <div>
       {module.title}
