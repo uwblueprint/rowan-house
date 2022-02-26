@@ -22,6 +22,34 @@ export const dummyLesson: LessonProps = {
       },
     },
     {
+      type: ContentType.image,
+      content: {
+        link:
+          "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
+      },
+    },
+    {
+      type: ContentType.image,
+      content: {
+        link:
+          "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
+      },
+    },
+    {
+      type: ContentType.image,
+      content: {
+        link:
+          "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
+      },
+    },
+    {
+      type: ContentType.image,
+      content: {
+        link:
+          "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
+      },
+    },
+    {
       type: ContentType.text,
       content: {
         text: "Yup!",
@@ -32,7 +60,7 @@ export const dummyLesson: LessonProps = {
 
 const lesson = {
   lesson: dummyLesson,
-  setLesson: (newLesson: LessonProps) => newLesson,
+  setLesson: (newLesson: LessonProps) => {},
 };
 
 export const EditorContext = createContext(lesson);

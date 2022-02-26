@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
+import { Flex } from "@chakra-ui/react";
+
 import { ModuleProps } from "../../types/ModuleEditorTypes";
 import { dummyLesson, EditorContext } from "../../contexts/ModuleEditorContext";
-
 import SideBar from "../module-editor/SideBar";
 import LessonViewer from "../module-editor/LessonViewer";
 
@@ -22,8 +23,10 @@ const ModuleEditor = (): React.ReactElement => {
 
   return (
     <EditorContext.Provider value={{ lesson, setLesson }}>
-      <SideBar module={dummyModule} />
-      <LessonViewer />
+      <Flex>
+        <SideBar module={dummyModule} />
+        <LessonViewer />
+      </Flex>
     </EditorContext.Provider>
   );
 };
