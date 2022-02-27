@@ -8,8 +8,8 @@ const SideBarContentKiosk = (): React.ReactElement => {
 
   return (
     <div>
-      {options.map((x, i) => (
-        <BlockPreview type={x} key={i} />
+      {options.map((option, index) => (
+        <BlockPreview type={option} key={index} />
       ))}
     </div>
   );

@@ -9,8 +9,8 @@ const LessonViewer = (): React.ReactElement => {
 
   return (
     <VStack flex="1" flexFlow="column" alignItems="center" spacing="8">
-      {editorContext.lesson.content.map((x, i) => (
-        <EditableContentBlock content={x} key={i} />
+      {editorContext.lesson.content.map((block, index) => (
+        <EditableContentBlock content={block} key={index} />
       ))}
     </VStack>
   );
