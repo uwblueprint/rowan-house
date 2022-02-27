@@ -35,7 +35,7 @@ const Button = {
       boxShadow: "0px 2px 1px rgba(0, 0, 0, 0.08)",
     },
 
-    'outline-lg': {
+    "outline-lg": {
       borderColor: "background.grey",
       borderWidth: "1px",
       bg: "transparent",
@@ -46,7 +46,7 @@ const Button = {
         bg: "gray.100",
       },
     },
-    'outline-md': {
+    "outline-md": {
       borderColor: "background.grey",
       borderWidth: "1px",
       bg: "transparent",
@@ -57,7 +57,7 @@ const Button = {
         bg: "gray.100",
       },
     },
-    'outline-sm': {
+    "outline-sm": {
       borderColor: "background.grey",
       borderWidth: "1px",
       bg: "transparent",
@@ -69,7 +69,7 @@ const Button = {
         bg: "gray.100",
       },
     },
-    'outline-xs': {
+    "outline-xs": {
       borderColor: "background.grey",
       borderWidth: "1px",
       bg: "transparent",

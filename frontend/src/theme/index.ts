@@ -15,11 +15,11 @@ import * as Components from "./components";
  */
 
 const overrides = {
-    ...styles,
-    components: Components,
-    colors,
-    fonts,
-    fontSizes,
+  ...styles,
+  components: Components,
+  colors,
+  fonts,
+  fontSizes,
 };
 
 export default extendTheme(overrides);
