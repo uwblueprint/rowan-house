@@ -5,8 +5,8 @@ import {
   ContentImageProps,
   ContentType,
 } from "../../types/ModuleEditorTypes";
-import ImageBlock from "../common/content/ImageBlock";
-import TextBlock from "../common/content/TextBlock";
+
+import { TextBlock, ImageBlock } from "../common/content";
 
 const EditableContentBlock = ({
   content,
