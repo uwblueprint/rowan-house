@@ -15,9 +15,9 @@ const EditableContentBlock = ({
 }): React.ReactElement => {
   const SelectContentBlock = (): React.ReactElement => {
     switch (content.type) {
-      case ContentType.text:
+      case ContentType.TEXT:
         return <TextBlock content={content.content as ContentTextProps} />;
-      case ContentType.image:
+      case ContentType.IMAGE:
         return <ImageBlock content={content.content as ContentImageProps} />;
       default:
         throw Error("Unknown content type given to EditableContentBlock");

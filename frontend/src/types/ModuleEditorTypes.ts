@@ -24,9 +24,13 @@ export interface ContentImageProps {
   link: string;
 }
 
-export enum ContentType {
-  "text",
-  "image",
+export class ContentType {
+  static readonly TEXT  = new ContentType('Text', 'text.svg');
+
+  static readonly IMAGE = new ContentType('Image', 'image.svg');
+
+  // private to disallow creating other instances of this type
+  private constructor(public readonly title: string, public readonly preview: string) {}
 }
 
 export type Content = {

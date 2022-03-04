@@ -34,6 +34,15 @@ const Button = {
       fontSize: "xs",
       boxShadow: "0px 2px 1px rgba(0, 0, 0, 0.08)",
     },
+    disabled: {
+      bg: "brand.royal",
+      opacity: "50%",
+      color: "white",
+      padding: "8px 16px",
+      borderRadius: "md",
+      fontSize: "xs",
+      boxShadow: "0px 2px 1px rgba(0, 0, 0, 0.08)",
+    },
 
     "outline-lg": {
       borderColor: "background.grey",
@@ -80,6 +89,15 @@ const Button = {
       _hover: {
         bg: "gray.100",
       },
+    },
+    "outline-disabled": {
+      bg: "brand.royal",
+      opacity: "50%",
+      color: "white",
+      padding: "8px 16px",
+      borderRadius: "md",
+      fontSize: "xs",
+      boxShadow: "0px 2px 1px rgba(0, 0, 0, 0.08)",
     },
   },
   defaultProps: {

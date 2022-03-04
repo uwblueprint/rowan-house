@@ -9,48 +9,48 @@ export const dummyLesson: LessonProps = {
   image: "",
   content: [
     {
-      type: ContentType.text,
+      type: ContentType.TEXT,
       content: {
         text: "Hello!",
       },
     },
     {
-      type: ContentType.image,
+      type: ContentType.IMAGE,
       content: {
         link:
           "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
       },
     },
     {
-      type: ContentType.image,
+      type: ContentType.IMAGE,
       content: {
         link:
           "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
       },
     },
     {
-      type: ContentType.image,
+      type: ContentType.IMAGE,
       content: {
         link:
           "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
       },
     },
     {
-      type: ContentType.image,
+      type: ContentType.IMAGE,
       content: {
         link:
           "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
       },
     },
     {
-      type: ContentType.image,
+      type: ContentType.IMAGE,
       content: {
         link:
           "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
       },
     },
     {
-      type: ContentType.text,
+      type: ContentType.TEXT,
       content: {
         text: "Yup!",
       },

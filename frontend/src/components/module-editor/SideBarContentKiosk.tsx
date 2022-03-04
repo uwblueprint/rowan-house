@@ -4,12 +4,15 @@ import { ContentType } from "../../types/ModuleEditorTypes";
 import BlockPreview from "./BlockPreview";
 
 const SideBarContentKiosk = (): React.ReactElement => {
-  const options = [ContentType.text, ContentType.image];
+  const options = [ContentType.TEXT, ContentType.IMAGE];
 
   return (
     <div>
       {options.map((option, index) => (
-        <BlockPreview type={option} key={index} />
+        <BlockPreview
+          title={option.title}
+          preview={option.preview}
+          key={index}/>
       ))}
     </div>
   );
