@@ -26,17 +26,26 @@ const Login = (): React.ReactElement => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [page, setPage] = useState(0);
   const history = useHistory();
 
   const [login] = useMutation<{ login: AuthenticatedUser }>(LOGIN);
 
   const onLogInClick = async () => {
-    const user: AuthenticatedUser = await authAPIClient.login(
-      email,
-      password,
-      login,
-    );
-    setAuthenticatedUser(user);
+    if (page === 0) {
+      setPage(page+1);
+    }
+    else if (page === 1) {
+      const user: AuthenticatedUser = await authAPIClient.login(
+        email,
+        password,
+        login,
+      );
+      setAuthenticatedUser(user);
+    }
+    else {
+      throw new Error("invalid page number");
+    }
   };
 
   const onSignUpClick = () => {
@@ -49,7 +58,7 @@ const Login = (): React.ReactElement => {
 
   return (
     <Flex
-      width="100wh"
+      width="100vw"
       height="100vh"
       backgroundColor="white"
       justifyContent="center"
@@ -58,15 +67,24 @@ const Login = (): React.ReactElement => {
         <Box>
         <Image htmlHeight='5' src={logo}/>
         <Heading>Sign in to access courses</Heading>
-        <form>
-          <FormControl>
-            <FormLabel htmlFor='email'>Email address</FormLabel>
-            <Input 
-              type="email" 
-              placeholder="you@rowanhouse.ca"
-              onChange={(event) => setEmail(event.target.value)} 
-              />
-          </FormControl>
+
+          {page?           
+            <FormControl>
+              <FormLabel htmlFor='password'>Password</FormLabel>
+              <Input 
+                type="password" 
+                placeholder="●●●●●"
+                onChange={(event) => setPassword(event.target.value)} 
+                />
+            </FormControl> : 
+            <FormControl>
+              <FormLabel htmlFor='email'>Email address</FormLabel>
+              <Input 
+                type="email" 
+                placeholder="you@rowanhouse.ca"
+                onChange={(event) => setEmail(event.target.value)} 
+                />
+            </FormControl>}
           <Button
                   borderRadius={1}
                   type="submit"
@@ -77,7 +95,6 @@ const Login = (): React.ReactElement => {
                 >
                   Continue
           </Button>
-        </form>
           Don&lsquo;t have an account?{" "}
           <Link 
             color="purple" 
