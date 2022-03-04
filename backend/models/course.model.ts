@@ -11,6 +11,11 @@ export interface Course extends Document {
   published: boolean;
 }
 
+export interface CourseVisibilityAttributes {
+  private?: boolean;
+  published?: boolean;
+}
+
 const CourseSchema: Schema = new Schema({
   title: {
     type: String,

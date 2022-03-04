@@ -146,6 +146,21 @@ class AuthService implements IAuthService {
     }
   }
 
+  async getUserRoleByAccessToken(accessToken: string): Promise<Role> {
+    try {
+      const decodedIdToken: firebaseAdmin.auth.DecodedIdToken = await firebaseAdmin
+        .auth()
+        .verifyIdToken(accessToken, true);
+      const userRole = await this.userService.getUserRoleByAuthId(
+        decodedIdToken.uid,
+      );
+      return userRole;
+    } catch (error) {
+      Logger.error(`Failed to get assigned user role`);
+      throw error;
+    }
+  }
+
   async isAuthorizedByUserId(
     accessToken: string,
     requestedUserId: string,
