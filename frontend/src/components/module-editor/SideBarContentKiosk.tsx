@@ -12,7 +12,8 @@ const SideBarContentKiosk = (): React.ReactElement => {
         <BlockPreview
           title={option.title}
           preview={option.preview}
-          key={index}/>
+          key={index}
+        />
       ))}
     </div>
   );
