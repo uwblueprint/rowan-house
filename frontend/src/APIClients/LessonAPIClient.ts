@@ -55,7 +55,7 @@ const createLesson = async (lesson: LessonRequest): Promise<LessonResponse> => {
 
 const updateLesson = async (
   id: string,
-  lesson: LessonRequest,
+  lesson: Partial<LessonRequest>,
 ): Promise<LessonResponse> => {
   const bearerToken = `Bearer ${getLocalStorageObjProperty(
     AUTHENTICATED_USER_KEY,
