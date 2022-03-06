@@ -72,7 +72,7 @@ const createCourse = async (course: CourseRequest): Promise<CourseResponse> => {
 
 const updateCourse = async (
   id: string,
-  course: CourseRequest,
+  course: Partial<CourseRequest>,
 ): Promise<CourseResponse> => {
   const bearerToken = `Bearer ${getLocalStorageObjProperty(
     AUTHENTICATED_USER_KEY,
