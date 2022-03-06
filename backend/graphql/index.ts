@@ -66,9 +66,9 @@ const graphQLMiddlewares = {
     lessonById: authorizedByAllRoles(),
   },
   Mutation: {
-    createCourse: authorizedByAdmin(),
-    updateCourse: authorizedByAdmin(),
-    deleteCourse: authorizedByAdmin(),
+    createCourse: authorizedByAllRoles(),
+    updateCourse: authorizedByAllRoles(),
+    deleteCourse: authorizedByAllRoles(),
     createEntity: authorizedByAllRoles(),
     updateEntity: authorizedByAllRoles(),
     deleteEntity: authorizedByAllRoles(),
