@@ -50,7 +50,7 @@ const executableSchema = makeExecutableSchema({
 });
 
 const authorizedByAllRoles = () =>
-  isAuthorizedByRole(new Set(["User", "Admin"]));
+  isAuthorizedByRole(new Set(["User", "Admin", "Staff"]));
 const authorizedByAdmin = () => isAuthorizedByRole(new Set(["Admin"]));
 
 const graphQLMiddlewares = {
@@ -62,6 +62,7 @@ const graphQLMiddlewares = {
     userById: authorizedByAdmin(),
     userByEmail: authorizedByAdmin(),
     users: authorizedByAdmin(),
+    userCountByTown: authorizedByAdmin(),
     lessonById: authorizedByAllRoles(),
   },
   Mutation: {

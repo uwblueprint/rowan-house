@@ -4,6 +4,7 @@ const userType = gql`
   enum Role {
     User
     Admin
+    Staff
   }
 
   type UserDTO {
@@ -37,6 +38,7 @@ const userType = gql`
     userByEmail(email: String!): UserDTO!
     users: [UserDTO!]!
     usersCSV: String!
+    userCountByTown(startDate: String, endDate: String): String!
   }
 
   extend type Mutation {
