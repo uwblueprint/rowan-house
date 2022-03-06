@@ -26,16 +26,16 @@ const Login = (): React.ReactElement => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [page, setPage] = useState(0);
+  const [isFirstPage, setIsFirstPage] = useState<boolean>(false);
   const history = useHistory();
 
   const [login] = useMutation<{ login: AuthenticatedUser }>(LOGIN);
 
   const onLogInClick = async () => {
-    if (page === 0) {
-      setPage(page+1);
+    if (isFirstPage === false) {
+      setIsFirstPage(true);
     }
-    else if (page === 1) {
+    else if (isFirstPage === true) {
       const user: AuthenticatedUser = await authAPIClient.login(
         email,
         password,
@@ -68,7 +68,7 @@ const Login = (): React.ReactElement => {
         <Image htmlHeight='5' src={logo}/>
         <Heading>Sign in to access courses</Heading>
 
-          {page?           
+          {isFirstPage?           
             <FormControl>
               <FormLabel htmlFor='password'>Password</FormLabel>
               <Input 
@@ -95,14 +95,24 @@ const Login = (): React.ReactElement => {
                 >
                   Continue
           </Button>
-          Don&lsquo;t have an account?{" "}
-          <Link 
+          {isFirstPage?
+            <Link 
             color="purple" 
             onClick={onSignUpClick}
             href="https://www.figma.com/file/9KqGifATPcKRQytJBqAKeJ/User-Authentication?node-id=316%3A2"
             >
-            Sign Up
-          </Link>
+            Forgot your password
+            </Link> :
+            <Box>
+              Don&lsquo;t have an account?{" "}
+              <Link 
+                color="purple" 
+                onClick={onSignUpClick}
+                href="https://www.figma.com/file/9KqGifATPcKRQytJBqAKeJ/User-Authentication?node-id=316%3A2"
+                >
+                Sign Up
+              </Link> 
+            </Box> } 
         </Box>
       </Stack>
       <Image
