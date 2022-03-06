@@ -16,6 +16,7 @@ import IEmailService from "../../services/interfaces/emailService";
 import IUserService from "../../services/interfaces/userService";
 import { Role } from "../../types";
 import { CourseVisibilityAttributes } from "../../models/course.model";
+import { assertNever } from "../../utilities/errorUtils";
 
 const courseService: ICourseService = new CourseService();
 const userService: IUserService = new UserService();
@@ -30,8 +31,10 @@ const getCourseVisibilityAttributes = (
       return { private: false, published: true };
     case "Staff":
       return { published: true };
-    default:
+    case "Admin":
       return {};
+    default:
+      return assertNever(role);
   }
 };
 
