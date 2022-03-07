@@ -1,3 +1,5 @@
+import { CourseVisibilityAttributes } from "../../models/course.model";
+
 export interface CreateCourseRequestDTO {
   title: string;
   description: string;
@@ -40,11 +42,13 @@ export interface ICourseService {
 
   /**
    * retrieve all Courses
-   * @param
+   * @param queryConditions CourseVisibilityAttributes object to filter courses
    * @returns returns array of Courses
    * @throws Error if retrieval fails
    */
-  getCourses(): Promise<CourseResponseDTO[]>;
+  getCourses(
+    queryConditions: CourseVisibilityAttributes,
+  ): Promise<CourseResponseDTO[]>;
 
   /**
    * create an Course with the fields given in the DTO, return created Course

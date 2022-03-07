@@ -6,7 +6,10 @@ import {
   CourseResponseDTO,
   ICourseService,
 } from "../interfaces/ICourseService";
-import MgCourse, { Course } from "../../models/course.model";
+import MgCourse, {
+  Course,
+  CourseVisibilityAttributes,
+} from "../../models/course.model";
 
 const Logger = logger(__filename);
 
@@ -36,9 +39,11 @@ class CourseService implements ICourseService {
     };
   }
 
-  async getCourses(): Promise<CourseResponseDTO[]> {
+  async getCourses(
+    queryConditions: CourseVisibilityAttributes,
+  ): Promise<CourseResponseDTO[]> {
     try {
-      const courses: Array<Course> = await MgCourse.find();
+      const courses: Array<Course> = await MgCourse.find(queryConditions);
       return courses.map((course) => ({
         id: course.id,
         title: course.title,

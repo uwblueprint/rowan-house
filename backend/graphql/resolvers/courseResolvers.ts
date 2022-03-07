@@ -1,3 +1,4 @@
+import { AuthenticationError, ExpressContext } from "apollo-server-express";
 import CourseService from "../../services/implementations/courseService";
 import {
   CreateCourseRequestDTO,
@@ -5,8 +6,37 @@ import {
   CourseResponseDTO,
   ICourseService,
 } from "../../services/interfaces/ICourseService";
+import { getAccessToken } from "../../middlewares/auth";
+import IAuthService from "../../services/interfaces/authService";
+import AuthService from "../../services/implementations/authService";
+import nodemailerConfig from "../../nodemailer.config";
+import EmailService from "../../services/implementations/emailService";
+import UserService from "../../services/implementations/userService";
+import IEmailService from "../../services/interfaces/emailService";
+import IUserService from "../../services/interfaces/userService";
+import { Role } from "../../types";
+import { CourseVisibilityAttributes } from "../../models/course.model";
+import { assertNever } from "../../utilities/errorUtils";
 
 const courseService: ICourseService = new CourseService();
+const userService: IUserService = new UserService();
+const emailService: IEmailService = new EmailService(nodemailerConfig);
+const authService: IAuthService = new AuthService(userService, emailService);
+
+const getCourseVisibilityAttributes = (
+  role: Role,
+): CourseVisibilityAttributes => {
+  switch (role) {
+    case "User":
+      return { private: false, published: true };
+    case "Staff":
+      return { published: true };
+    case "Admin":
+      return {};
+    default:
+      return assertNever(role);
+  }
+};
 
 const courseResolvers = {
   Query: {
@@ -16,8 +46,18 @@ const courseResolvers = {
     ): Promise<CourseResponseDTO> => {
       return courseService.getCourse(id);
     },
-    courses: async (): Promise<CourseResponseDTO[]> => {
-      return courseService.getCourses();
+    courses: async (context: ExpressContext): Promise<CourseResponseDTO[]> => {
+      const accessToken = getAccessToken(context.req);
+      if (!accessToken) {
+        throw new AuthenticationError(
+          "Failed authentication and/or authorization by role",
+        );
+      }
+
+      const role = await authService.getUserRoleByAccessToken(accessToken);
+      const attributes = getCourseVisibilityAttributes(role);
+
+      return courseService.getCourses(attributes);
     },
   },
   Mutation: {
