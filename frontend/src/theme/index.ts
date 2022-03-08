@@ -1,12 +1,11 @@
 import { extendTheme } from "@chakra-ui/react";
 
 import styles from "./styles";
-
 import colors from "./foundations/colors";
 
 import fonts from "./foundations/fonts";
 import fontSizes from "./foundations/fontSizes";
-import * as Components from "./components";
+import { Button, Input } from "./components";
 /**
  * This file is generated for providing a custom theme to Chakra UI
  *
@@ -16,7 +15,7 @@ import * as Components from "./components";
 
 const overrides = {
   ...styles,
-  components: Components,
+  components: { Input, Button },
   colors,
   fonts,
   fontSizes,
