@@ -1,23 +1,22 @@
 export type Role = "User" | "Admin";
 
-export type contentType = "text" |"image" | "video";
+export type ContentType = "text" | "image" | "video";
 export interface ContentBlock {
-    type: contentType;
-    content: {}
-};
+  type: ContentType;
+  content: Record<string, unknown>;
+}
 
 export interface TextBlock extends ContentBlock {
-    content: {text: String;}
-};
+  content: { text: string };
+}
 
 export interface ImageBlock extends ContentBlock {
-    content: {link: String;}
-};
+  content: { link: string };
+}
 
 export interface VideoBlock extends ContentBlock {
-    content: {link: String;}
-};
-
+  content: { link: string };
+}
 
 export type Token = {
   accessToken: string;

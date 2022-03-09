@@ -1,3 +1,4 @@
+import { GraphQLScalarType, Kind } from "graphql";
 import LessonService from "../../services/implementations/lessonService";
 import {
   ILessonService,
@@ -5,8 +6,7 @@ import {
   CreateLessonRequestDTO,
   UpdateLessonRequestDTO,
 } from "../../services/interfaces/ILessonService";
-import { GraphQLScalarType, Kind } from 'graphql';
-import { ContentBlock } from "../../types/contentBlockType";
+import { ContentBlock } from "../../types";
 
 const lessonService: ILessonService = new LessonService();
 

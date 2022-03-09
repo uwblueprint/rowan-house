@@ -1,30 +1,22 @@
 import { gql } from "apollo-server-express";
 
 const lessonType = gql`
-
-  
-
   type Content {
-   
     link: String
     text: String
   }
 
   input ContentInput {
-
     link: String
     text: String
   }
 
-  
   type ContentBlock {
-    
     type: String!
     content: Content!
   }
 
   input ContentBlockInput {
-   
     type: String!
     content: ContentInput!
   }
@@ -64,7 +56,5 @@ const lessonType = gql`
     deleteLesson(id: ID!): ID!
   }
 `;
-
-
 
 export default lessonType;
