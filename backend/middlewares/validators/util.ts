@@ -42,7 +42,7 @@ export const validateArray = (value: any, type: Type): boolean => {
 };
 
 export const validateContent = (content: ContentBlock): boolean => {
-  if (content.type === undefined || content.type === null) return false;
+  if (!content.type) return false;
 
   switch (content.type) {
     case "text": {
