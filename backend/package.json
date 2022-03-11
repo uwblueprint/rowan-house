@@ -29,6 +29,7 @@
     "firebase-admin": "^9.5.0",
     "graphql": "^15.5.0",
     "graphql-middleware": "^6.0.6",
+    "graphql-type-json": "^0.3.2",
     "graphql-upload": "^12.0.0",
     "json2csv": "^5.0.6",
     "lodash": "^4.17.21",

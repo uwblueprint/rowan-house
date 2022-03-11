@@ -39,6 +39,23 @@ export const validateArray = (value: any, type: Type): boolean => {
   );
 };
 
+export const validateObject = (object: {[field: string]: any}, types: {[field: string]: any}): boolean => {
+  return (
+    object !== undefined &&
+    object !== null && 
+    typeof object ==="object" && 
+    Object.entries(object).every(([key, value]) => {
+      if (Array.isArray(value)) {
+        return validateArray(value, types[key]);
+      } else if (typeof object === "object") {
+        return validateObject(object, types[key])
+      } else {
+        return validatePrimitive(value, types[key])
+      }
+    })
+  )
+}
+
 export const validateFileType = (mimetype: string): boolean => {
   return allowableContentTypes.has(mimetype);
 };

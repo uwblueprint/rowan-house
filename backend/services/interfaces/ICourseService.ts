@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import { CourseVisibilityAttributes } from "../../models/course.model";
 
 export interface CreateCourseRequestDTO {
@@ -11,13 +12,56 @@ export interface CreateCourseRequestDTO {
 }
 
 export interface UpdateCourseRequestDTO {
+=======
+export interface ModuleDTO {
+  id: string;
+>>>>>>> Stashed changes
+  title: string;
+  description: string;
+  image: string;
+  preview_image: string;
+  published: Boolean;
+  lessons: string[];
+}
+
+interface Module {
+  title: string;
+  description: string;
+  image: string;
+  preview_image: string;
+  published: Boolean;
+  lessons: string[];
+}
+
+export interface SerializedCourseRequestDTO {
   title: string;
   description: string;
   image: string;
   previewImage: string;
+  modules: ModuleDTO[];
+}
+
+export interface SerializedCourseResponseDTO {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  previewImage: string;
+  modules: ModuleDTO[];
+}
+
+export interface CourseRequestDTO {
+  title: string;
+  description: string;
+  image: string;
+  previewImage: string;
+<<<<<<< Updated upstream
   lessons: [string];
   private: boolean;
   published: boolean;
+=======
+  modules: {[id: string]: Module}
+>>>>>>> Stashed changes
 }
 
 export interface CourseResponseDTO {
@@ -26,9 +70,13 @@ export interface CourseResponseDTO {
   description: string;
   image: string;
   previewImage: string;
+<<<<<<< Updated upstream
   lessons: [string];
   private: boolean;
   published: boolean;
+=======
+  modules: {[id: string]: Module}
+>>>>>>> Stashed changes
 }
 
 export interface ICourseService {

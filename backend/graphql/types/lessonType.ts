@@ -8,6 +8,7 @@ const lessonType = gql`
   type LessonResponseDTO {
     id: ID!
     course: ID!
+    module: ID!
     title: String
     description: String
     image: String
@@ -16,6 +17,7 @@ const lessonType = gql`
 
   input CreateLessonRequestDTO {
     course: ID!
+    module: ID!
     title: String
     description: String
     image: String

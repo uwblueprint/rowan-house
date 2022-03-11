@@ -5,6 +5,7 @@ import mongoose, { Schema, Document } from "mongoose";
 export interface Lesson extends Document {
   id: string;
   course: string;
+  module: string;
   title: string;
   description: string;
   image: string;
@@ -15,6 +16,10 @@ const LessonSchema: Schema = new Schema({
   course: {
     type: String,
     required: true,
+  },
+  module: {
+    type: String,
+    required: true
   },
   title: {
     type: String,
@@ -29,7 +34,7 @@ const LessonSchema: Schema = new Schema({
   content: {
     type: [Schema.Types.Mixed],
     required: true,
-  },
+  }
 });
 
 export default mongoose.model<Lesson>("Lesson", LessonSchema);

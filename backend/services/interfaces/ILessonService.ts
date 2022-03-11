@@ -8,6 +8,7 @@ export interface CreateLessonRequestDTO {
 
 export interface UpdateLessonRequestDTO {
   course: string;
+  module: string;
   title: string;
   description: string;
   image: string;
@@ -17,6 +18,7 @@ export interface UpdateLessonRequestDTO {
 export interface LessonResponseDTO {
   id: string;
   course: string;
+  module: string
   title: string;
   description: string;
   image: string;
