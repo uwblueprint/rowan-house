@@ -1,4 +1,5 @@
 import { AuthenticationError, ExpressContext } from "apollo-server-express";
+import { GraphQLResolveInfo } from "graphql";
 import CourseService from "../../services/implementations/courseService";
 import {
   CreateCourseRequestDTO,
@@ -46,7 +47,11 @@ const courseResolvers = {
     ): Promise<CourseResponseDTO> => {
       return courseService.getCourse(id);
     },
-    courses: async (context: ExpressContext): Promise<CourseResponseDTO[]> => {
+    courses: async (
+      _parent: any,
+      _args: { [key: string]: any },
+      context: ExpressContext,
+    ): Promise<CourseResponseDTO[]> => {
       const accessToken = getAccessToken(context.req);
       if (!accessToken) {
         throw new AuthenticationError(
