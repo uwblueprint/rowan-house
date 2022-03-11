@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import {
   getApiValidationError,
-  validateArray,
   validateObject,
   validatePrimitive,
 } from "./util";
@@ -14,9 +13,9 @@ const VALID_MODULES = {
     image: "string",
     preview_image: "string",
     published: "boolean",
-    lessons: "string"
-  }
-}
+    lessons: "string",
+  },
+};
 
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable-next-line import/prefer-default-export */
@@ -46,9 +45,7 @@ export const courseRequestDtoValidator = async (
       .send(getApiValidationError("previewImage", "string"));
   }
   if (!validateObject(body.modules, VALID_MODULES)) {
-    return res
-      .status(400)
-      .send("modules is not a valid module");
+    return res.status(400).send("modules is not a valid module");
   }
   return next();
 };

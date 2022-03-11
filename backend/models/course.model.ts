@@ -1,12 +1,12 @@
 import { Schema, Document, model } from "mongoose";
 
 export interface Module {
-  title: string
-  description: string
-  image: string
-  preview_image: string
-  published: Boolean
-  lessons: string[]
+  title: string;
+  description: string;
+  image: string;
+  previewImage: string;
+  published: boolean;
+  lessons: string[];
 }
 
 export interface Course extends Document {
@@ -15,8 +15,7 @@ export interface Course extends Document {
   description: string;
   image: string;
   previewImage: string;
-<<<<<<< Updated upstream
-  lessons: [string];
+  modules: { [id: string]: Module };
   private: boolean;
   published: boolean;
 }
@@ -24,9 +23,6 @@ export interface Course extends Document {
 export interface CourseVisibilityAttributes {
   private?: boolean;
   published?: boolean;
-=======
-  modules: {[id: string]: Module}
->>>>>>> Stashed changes
 }
 
 const CourseSchema: Schema = new Schema({
@@ -43,10 +39,15 @@ const CourseSchema: Schema = new Schema({
   previewImage: {
     type: String,
   },
-<<<<<<< Updated upstream
-  lessons: {
-    type: [String],
-    required: true,
+  modules: {
+    type: {
+      title: String,
+      description: String,
+      image: String,
+      preview_image: String,
+      published: Boolean,
+      lessons: [String],
+    },
   },
   private: {
     type: Boolean,
@@ -58,18 +59,6 @@ const CourseSchema: Schema = new Schema({
     default: false,
     required: true,
   },
-=======
-  modules: {
-    type: {
-      title: String,
-      description: String,
-      image: String,
-      preview_image: String,
-      published: Boolean,
-      lessons: [String]
-    }
-  }
->>>>>>> Stashed changes
 });
 
 export default model<Course>("Course", CourseSchema);

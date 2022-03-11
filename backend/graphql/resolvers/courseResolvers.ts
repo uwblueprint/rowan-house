@@ -1,19 +1,16 @@
 import { AuthenticationError, ExpressContext } from "apollo-server-express";
+import { v4 as uuidv4 } from "uuid";
 import CourseService from "../../services/implementations/courseService";
 import {
-<<<<<<< Updated upstream
   CreateCourseRequestDTO,
   UpdateCourseRequestDTO,
-=======
-  SerializedCourseRequestDTO,
->>>>>>> Stashed changes
   CourseResponseDTO,
   ICourseService,
-  CourseRequestDTO,
   SerializedCourseResponseDTO,
   ModuleDTO,
+  SerializedCreateCourseRequestDTO,
+  SerializedUpdateCourseRequestDTO,
 } from "../../services/interfaces/ICourseService";
-<<<<<<< Updated upstream
 import { getAccessToken } from "../../middlewares/auth";
 import IAuthService from "../../services/interfaces/authService";
 import AuthService from "../../services/implementations/authService";
@@ -23,17 +20,69 @@ import UserService from "../../services/implementations/userService";
 import IEmailService from "../../services/interfaces/emailService";
 import IUserService from "../../services/interfaces/userService";
 import { Role } from "../../types";
-import { CourseVisibilityAttributes } from "../../models/course.model";
+import { CourseVisibilityAttributes, Module } from "../../models/course.model";
 import { assertNever } from "../../utilities/errorUtils";
-=======
-import { Module } from "../../models/course.model";
-import { v4 as uuidv4 } from 'uuid';
->>>>>>> Stashed changes
 
 const courseService: ICourseService = new CourseService();
 const userService: IUserService = new UserService();
 const emailService: IEmailService = new EmailService(nodemailerConfig);
 const authService: IAuthService = new AuthService(userService, emailService);
+
+function serializeToModuleDTO(modules: { [id: string]: Module }): ModuleDTO[] {
+  return Object.entries(modules).map(([key, val]) => ({ id: key, ...val }));
+}
+
+function deserializeModuleDTO(
+  moduleDTOs: ModuleDTO[],
+): { [id: string]: Module } {
+  const modules: { [id: string]: Module } = {} as { [id: string]: Module };
+
+  moduleDTOs.forEach((moduleDTO) => {
+    const moduleObj = {
+      title: moduleDTO.title,
+      description: moduleDTO.description,
+      image: moduleDTO.image,
+      previewImage: moduleDTO.previewImage,
+      published: moduleDTO.published,
+      lessons: moduleDTO.lessons,
+    };
+
+    // If no UUID is defined, create one
+    modules[moduleDTO?.id ?? uuidv4()] = moduleObj;
+  });
+
+  return modules;
+}
+
+function serializeCourseResponse(
+  course: CourseResponseDTO,
+): SerializedCourseResponseDTO {
+  if (course?.modules) {
+    return {
+      ...course,
+      modules: serializeToModuleDTO(course.modules),
+    };
+  }
+  return {
+    ...course,
+    modules: [],
+  };
+}
+
+function deserializeCourseRequest(
+  course: SerializedCreateCourseRequestDTO | SerializedUpdateCourseRequestDTO,
+): CreateCourseRequestDTO | UpdateCourseRequestDTO {
+  if (course?.modules) {
+    return {
+      ...course,
+      modules: deserializeModuleDTO(course.modules),
+    };
+  }
+  return {
+    ...course,
+    modules: {},
+  };
+}
 
 const getCourseVisibilityAttributes = (
   role: Role,
@@ -56,10 +105,13 @@ const courseResolvers = {
       _parent: undefined,
       { id }: { id: string },
     ): Promise<SerializedCourseResponseDTO> => {
-      return courseService.getCourse(id).then(course => serializeCourseResponse(course));
+      return courseService
+        .getCourse(id)
+        .then((course) => serializeCourseResponse(course));
     },
-<<<<<<< Updated upstream
-    courses: async (context: ExpressContext): Promise<CourseResponseDTO[]> => {
+    courses: async (
+      context: ExpressContext,
+    ): Promise<SerializedCourseResponseDTO[]> => {
       const accessToken = getAccessToken(context.req);
       if (!accessToken) {
         throw new AuthenticationError(
@@ -70,41 +122,32 @@ const courseResolvers = {
       const role = await authService.getUserRoleByAccessToken(accessToken);
       const attributes = getCourseVisibilityAttributes(role);
 
-      return courseService.getCourses(attributes);
-=======
-    courses: async (): Promise<SerializedCourseResponseDTO[]> => {
-      return courseService.getCourses().then(courses => courses.map(serializeCourseResponse));
->>>>>>> Stashed changes
+      return courseService
+        .getCourses(attributes)
+        .then((courses) => courses.map(serializeCourseResponse));
     },
   },
   Mutation: {
     createCourse: async (
       _parent: undefined,
-<<<<<<< Updated upstream
-      { course }: { course: CreateCourseRequestDTO },
-    ): Promise<CourseResponseDTO> => {
-      const newCourse = await courseService.createCourse(course);
-=======
-      { course }: { course: SerializedCourseRequestDTO },
+      { course }: { course: SerializedCreateCourseRequestDTO },
     ): Promise<SerializedCourseResponseDTO> => {
-      const newCourse = await courseService.createCourse(deserializeCourseRequest(course)).then(serializeCourseResponse);
->>>>>>> Stashed changes
+      const newCourse = await courseService
+        .createCourse(deserializeCourseRequest(course))
+        .then(serializeCourseResponse);
       return newCourse;
     },
     updateCourse: async (
       _parent: undefined,
-<<<<<<< Updated upstream
-      { id, course }: { id: string; course: UpdateCourseRequestDTO },
-    ): Promise<CourseResponseDTO | null> => {
-      return courseService.updateCourse(id, course);
-=======
-      { id, course }: { id: string; course: SerializedCourseRequestDTO },
+      { id, course }: { id: string; course: SerializedUpdateCourseRequestDTO },
     ): Promise<SerializedCourseResponseDTO | null> => {
-      return courseService.updateCourse(id, deserializeCourseRequest(course)).then(course => {
-        if (course) return serializeCourseResponse(course)
-        else return null
-      });
->>>>>>> Stashed changes
+      return courseService
+        .updateCourse(id, deserializeCourseRequest(course))
+        .then((serializedCourse) => {
+          if (serializedCourse)
+            return serializeCourseResponse(serializedCourse);
+          return null;
+        });
     },
     deleteCourse: async (
       _parent: undefined,
@@ -114,58 +157,5 @@ const courseResolvers = {
     },
   },
 };
-
-function serializeToModuleDTO(modules: {[id: string]: Module}): ModuleDTO[] {
-  return Object.entries(modules).map(([key, val]) => ({id: key, ...val}))
-}
-
-function deserializeModuleDTO(moduleDTOs: ModuleDTO[]): {[id: string]: Module} {
-  let modules: {[id: string]: Module} = {} as {[id: string]: Module};
-
-  moduleDTOs.forEach(moduleDTO => {
-    let moduleObj = {
-      title: moduleDTO.title,
-      description: moduleDTO.description,
-      image: moduleDTO.image,
-      preview_image: moduleDTO.preview_image,
-      published: moduleDTO.published,
-      lessons: moduleDTO.lessons
-    }
-
-    // If no UUID is defined, create one
-    modules[moduleDTO?.id ?? uuidv4()] = moduleObj;
-  })
-
-  return modules;
-}
-
-function serializeCourseResponse(course: CourseResponseDTO): SerializedCourseResponseDTO {
-  if (course?.modules) {
-    return {
-      ...course,
-      modules: serializeToModuleDTO(course.modules)
-    }
-  } else {
-    return {
-      ...course,
-      modules: []
-    }
-  }
-}
-
-function deserializeCourseRequest(course: SerializedCourseRequestDTO): CourseRequestDTO {
-  if (course?.modules) {
-    return {
-      ...course,
-      modules: deserializeModuleDTO(course.modules)
-    }
-  } else {
-    return {
-      ...course,
-      modules: {}
-    }
-  }
-
-}
 
 export default courseResolvers;

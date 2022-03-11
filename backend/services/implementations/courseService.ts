@@ -4,17 +4,12 @@ import {
   CreateCourseRequestDTO,
   UpdateCourseRequestDTO,
   CourseResponseDTO,
-  ModuleDTO,
   ICourseService,
 } from "../interfaces/ICourseService";
-<<<<<<< Updated upstream
 import MgCourse, {
   Course,
   CourseVisibilityAttributes,
 } from "../../models/course.model";
-=======
-import MgCourse, { Course, Module } from "../../models/course.model";
->>>>>>> Stashed changes
 
 const Logger = logger(__filename);
 
@@ -38,13 +33,9 @@ class CourseService implements ICourseService {
       description: course.description,
       image: course.image,
       previewImage: course.previewImage,
-<<<<<<< Updated upstream
-      lessons: course.lessons,
+      modules: course.modules,
       private: course.private,
       published: course.published,
-=======
-      modules: course.modules
->>>>>>> Stashed changes
     };
   }
 
@@ -59,13 +50,9 @@ class CourseService implements ICourseService {
         description: course.description,
         image: course.image,
         previewImage: course.previewImage,
-<<<<<<< Updated upstream
-        lessons: course.lessons,
+        modules: course.modules,
         private: course.private,
         published: course.published,
-=======
-        modules: course.modules
->>>>>>> Stashed changes
       }));
     } catch (error: unknown) {
       Logger.error(`Failed to get courses. Reason = ${getErrorMessage(error)}`);
@@ -91,13 +78,9 @@ class CourseService implements ICourseService {
       description: newCourse.description,
       image: newCourse.image,
       previewImage: newCourse.previewImage,
-<<<<<<< Updated upstream
-      lessons: newCourse.lessons,
+      modules: newCourse.modules,
       private: newCourse.private,
       published: newCourse.published,
-=======
-      modules: newCourse.modules
->>>>>>> Stashed changes
     };
   }
 
@@ -127,13 +110,9 @@ class CourseService implements ICourseService {
       description: updatedCourse.description,
       image: updatedCourse.image,
       previewImage: updatedCourse.previewImage,
-<<<<<<< Updated upstream
-      lessons: updatedCourse.lessons,
+      modules: updatedCourse.modules,
       private: updatedCourse.private,
       published: updatedCourse.published,
-=======
-      modules: updatedCourse.modules
->>>>>>> Stashed changes
     };
   }
 

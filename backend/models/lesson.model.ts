@@ -19,7 +19,7 @@ const LessonSchema: Schema = new Schema({
   },
   module: {
     type: String,
-    required: true
+    required: true,
   },
   title: {
     type: String,
@@ -34,7 +34,7 @@ const LessonSchema: Schema = new Schema({
   content: {
     type: [Schema.Types.Mixed],
     required: true,
-  }
+  },
 });
 
 export default mongoose.model<Lesson>("Lesson", LessonSchema);

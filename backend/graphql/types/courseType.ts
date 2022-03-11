@@ -27,13 +27,9 @@ const courseType = gql`
     description: String
     image: String
     previewImage: String
-<<<<<<< Updated upstream
-    lessons: [ID!]!
+    modules: [ModuleDTO]
     private: Boolean!
     published: Boolean!
-=======
-    modules: [ModuleDTO]
->>>>>>> Stashed changes
   }
 
   input CreateCourseRequestDTO {
@@ -41,8 +37,7 @@ const courseType = gql`
     description: String
     image: String
     previewImage: String
-<<<<<<< Updated upstream
-    lessons: [ID!]!
+    modules: [ModuleInputDTO]
     private: Boolean
     published: Boolean
   }
@@ -52,12 +47,9 @@ const courseType = gql`
     description: String
     image: String
     previewImage: String
-    lessons: [ID!]
+    modules: [ModuleInputDTO]
     private: Boolean
     published: Boolean
-=======
-    modules: [ModuleInputDTO]
->>>>>>> Stashed changes
   }
 
   extend type Query {

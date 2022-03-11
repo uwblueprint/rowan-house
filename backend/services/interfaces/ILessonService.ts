@@ -18,7 +18,7 @@ export interface UpdateLessonRequestDTO {
 export interface LessonResponseDTO {
   id: string;
   course: string;
-  module: string
+  module: string;
   title: string;
   description: string;
   image: string;

@@ -81,6 +81,7 @@ class LessonService implements ILessonService {
     return {
       id: updatedLesson.id,
       course: updatedLesson.course,
+      module: updatedLesson.module,
       title: updatedLesson.title,
       description: updatedLesson.description,
       image: updatedLesson.image,

@@ -1,43 +1,61 @@
-<<<<<<< Updated upstream
 import { CourseVisibilityAttributes } from "../../models/course.model";
+
+export interface ModuleDTO {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  previewImage: string;
+  published: boolean;
+  lessons: string[];
+}
 
 export interface CreateCourseRequestDTO {
   title: string;
   description: string;
   image: string;
   previewImage: string;
-  lessons: [string];
+  modules: { [id: string]: Module };
   private: boolean;
   published: boolean;
 }
 
 export interface UpdateCourseRequestDTO {
-=======
-export interface ModuleDTO {
-  id: string;
->>>>>>> Stashed changes
   title: string;
   description: string;
   image: string;
-  preview_image: string;
-  published: Boolean;
-  lessons: string[];
+  previewImage: string;
+  private: boolean;
+  published: boolean;
+  modules: { [id: string]: Module };
 }
 
 interface Module {
   title: string;
   description: string;
   image: string;
-  preview_image: string;
-  published: Boolean;
+  previewImage: string;
+  published: boolean;
   lessons: string[];
 }
 
-export interface SerializedCourseRequestDTO {
+export interface SerializedCreateCourseRequestDTO {
   title: string;
   description: string;
   image: string;
   previewImage: string;
+  private: boolean;
+  published: boolean;
+  modules: ModuleDTO[];
+}
+
+export interface SerializedUpdateCourseRequestDTO {
+  title: string;
+  description: string;
+  image: string;
+  previewImage: string;
+  private: boolean;
+  published: boolean;
   modules: ModuleDTO[];
 }
 
@@ -47,6 +65,8 @@ export interface SerializedCourseResponseDTO {
   description: string;
   image: string;
   previewImage: string;
+  private: boolean;
+  published: boolean;
   modules: ModuleDTO[];
 }
 
@@ -55,13 +75,9 @@ export interface CourseRequestDTO {
   description: string;
   image: string;
   previewImage: string;
-<<<<<<< Updated upstream
-  lessons: [string];
   private: boolean;
   published: boolean;
-=======
-  modules: {[id: string]: Module}
->>>>>>> Stashed changes
+  modules: { [id: string]: Module };
 }
 
 export interface CourseResponseDTO {
@@ -70,13 +86,9 @@ export interface CourseResponseDTO {
   description: string;
   image: string;
   previewImage: string;
-<<<<<<< Updated upstream
-  lessons: [string];
   private: boolean;
   published: boolean;
-=======
-  modules: {[id: string]: Module}
->>>>>>> Stashed changes
+  modules: { [id: string]: Module };
 }
 
 export interface ICourseService {
