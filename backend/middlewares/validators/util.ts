@@ -64,13 +64,7 @@ export const validateContent = (content: ContentBlock): boolean => {
 };
 
 export const validateContentList = (contentList: ContentBlock[]): boolean => {
-  let retVal = true;
-  contentList.forEach((contentBlock) => {
-    if (!validateContent(contentBlock)) {
-      retVal = false;
-    }
-  });
-  return retVal;
+  return contentList.some((contentBlock) => !validateContent(contentBlock));
 };
 
 export const validateFileType = (mimetype: string): boolean => {

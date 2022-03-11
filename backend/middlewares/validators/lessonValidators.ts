@@ -31,7 +31,6 @@ export const lessonRequestDtoValidator = async (
   if (!validatePrimitive(body.image, "string")) {
     return res.status(400).send(getApiValidationError("image", "string"));
   }
-  // content validation
   if (!validateContentList(body.content)) {
     return res.status(400).send("There was an error in the lesson content.");
   }
