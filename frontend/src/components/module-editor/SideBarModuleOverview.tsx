@@ -1,32 +1,69 @@
 import { Button, VStack } from "@chakra-ui/react";
 import React, { useContext } from "react";
+import { useParams } from "react-router-dom";
 
-import { EditorContext } from "../../contexts/ModuleEditorContext";
-import { ModuleProps } from "../../types/ModuleEditorTypes";
+import EditorContext from "../../contexts/ModuleEditorContext";
+import {
+  ContentTypeEnum,
+  ModuleEditorParams,
+} from "../../types/ModuleEditorTypes";
 
-const SideBarModuleOverview = ({
-  module,
-}: {
-  module: ModuleProps;
-}): React.ReactElement => {
-  const editorContext = useContext(EditorContext);
+const SideBarModuleOverview = (): React.ReactElement => {
+  const context = useContext(EditorContext);
+  const { courseID, moduleID }: ModuleEditorParams = useParams();
 
-  const lessons = module.lessons.map((id) => editorContext.lessons[id]);
-  const { setFocusedLesson } = editorContext;
+  if (!context) return <></>;
+
+  const { lessons, course } = context.state;
+  const module = course.modules[moduleID];
+
+  const orderedLessons = module.lessons.map((id) => lessons[id]);
+  // console.log(lessons);
+  console.log(module.lessons);
+  // console.log(orderedLessons);
+
+  const setFocus = (index: number) =>
+    context.dispatch({ type: "set-focus", value: module.lessons[index] });
+
+  const createLesson = (title: string) =>
+    context.dispatch({
+      type: "create-lesson",
+      value: {
+        course: courseID,
+        module: moduleID,
+        title,
+        content: [
+          {
+            type: ContentTypeEnum.TEXT,
+            content: {
+              text: `Welcome to the new lesson '${title}'!`,
+            },
+          },
+        ],
+      },
+    });
 
   return (
     <VStack>
       {module.title}
       {module.description}
       <br />
-      {lessons.map((lesson, index) => (
-        <Button
-          key={index}
-          onClick={() => setFocusedLesson(module.lessons[index])}
-        >
-          {lesson.title}
-        </Button>
-      ))}
+      {orderedLessons.map(
+        (lesson, index) =>
+          lesson && (
+            <Button key={index} onClick={() => setFocus(index)}>
+              {lesson.title}
+            </Button>
+          ),
+      )}
+      <Button
+        onClick={() =>
+          createLesson(`Dummy Lesson ${orderedLessons.length + 1}`)
+        }
+      >
+        Create new Lesson
+      </Button>
+      <p>Should we save? {context.state.hasChanged ? "yes" : "no"}</p>
     </VStack>
   );
 };

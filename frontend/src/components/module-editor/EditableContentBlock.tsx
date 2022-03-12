@@ -1,9 +1,9 @@
 import React from "react";
 import {
-  Content,
+  ContentType,
   ContentTextProps,
   ContentImageProps,
-  ContentType,
+  ContentTypeEnum,
 } from "../../types/ModuleEditorTypes";
 
 import { TextBlock, ImageBlock } from "../common/content";
@@ -11,13 +11,13 @@ import { TextBlock, ImageBlock } from "../common/content";
 const EditableContentBlock = ({
   content,
 }: {
-  content: Content;
+  content: ContentType;
 }): React.ReactElement => {
   const SelectContentBlock = (): React.ReactElement => {
     switch (content.type) {
-      case ContentType.TEXT:
+      case ContentTypeEnum.TEXT:
         return <TextBlock content={content.content as ContentTextProps} />;
-      case ContentType.IMAGE:
+      case ContentTypeEnum.IMAGE:
         return <ImageBlock content={content.content as ContentImageProps} />;
       default:
         throw Error("Unknown content type given to EditableContentBlock");

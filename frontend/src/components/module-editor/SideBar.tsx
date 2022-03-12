@@ -9,16 +9,10 @@ import {
   TabPanel,
 } from "@chakra-ui/react";
 
-import { ModuleProps } from "../../types/ModuleEditorTypes";
 import ModuleOverview from "./SideBarModuleOverview";
 import ContentKiosk from "./SideBarContentKiosk";
 
-type SideBarProps = {
-  module: ModuleProps;
-  setModule: (_module: ModuleProps) => void;
-};
-
-const Sidebar = ({ module, setModule }: SideBarProps): React.ReactElement => {
+const Sidebar = (): React.ReactElement => {
   return (
     <Box w="20%">
       <Flex
@@ -40,7 +34,7 @@ const Sidebar = ({ module, setModule }: SideBarProps): React.ReactElement => {
           </TabList>
           <TabPanels>
             <TabPanel>
-              <ModuleOverview module={module} />
+              <ModuleOverview />
             </TabPanel>
             <TabPanel>
               <ContentKiosk />
