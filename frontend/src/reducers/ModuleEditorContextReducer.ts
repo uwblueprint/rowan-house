@@ -13,25 +13,21 @@ const createLesson = (
   lesson: LessonType,
 ): EditorStateType => {
   const newState = { ...state };
-  // TODO: Generate a new ID for the lesson and ensure no duplicates
-  const lessonID = lesson.title;
-  // Create the new lesson object
-  newState.lessons[lessonID] = lesson;
   // Check to make sure moduleID exists
   console.assert(
     Object.keys(newState.course.modules).includes(lesson.module),
     `Invalid moduleID ${lesson.module}`,
   );
-  const module = newState.course.modules[lesson.module];
+  // TODO: Generate a new ID for the lesson and ensure no duplicates
+  const lessonID = lesson.title;
+  // Create the new lesson object
+  newState.lessons[lessonID] = lesson;
   // Add the lesson ID to the modules
-  module.lessons.push(lessonID);
-  // Verify lengths
-  const moduleLen = Object.keys(module.lessons).length;
-  const numLessons = Object.keys(newState.lessons).length;
-  console.assert(
-    moduleLen === numLessons,
-    `Mismatch between the number of lessons in the module the number currently, ${moduleLen} vs ${numLessons}`,
+  newState.course.modules[lesson.module].lessons = Object.keys(
+    newState.lessons,
   );
+  // Focus on new lesson
+  newState.focusedLesson = lessonID;
   return newState;
 };
 
@@ -52,6 +48,7 @@ const deleteLesson = (state: EditorStateType, id: string) => {
 
   const newState = { ...state };
   delete newState.lessons[id];
+  // TODO: Remove lesson from module
   // TODO: If focused lesson is the lesson to delete, change focused lesson
   return newState;
 };
@@ -121,7 +118,9 @@ export default function EditorContextReducer(
     if (action.type === "init") return { ...action.value };
     return state;
   }
+
   // Update changed boolean
+  // ! Currently triggers on set-focus change which is incorrect
   const newState = { ...state, hasChanged: true };
 
   switch (action.type) {

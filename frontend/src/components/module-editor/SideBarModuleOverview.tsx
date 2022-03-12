@@ -18,9 +18,6 @@ const SideBarModuleOverview = (): React.ReactElement => {
   const module = course.modules[moduleID];
 
   const orderedLessons = module.lessons.map((id) => lessons[id]);
-  // console.log(lessons);
-  console.log(module.lessons);
-  // console.log(orderedLessons);
 
   const setFocus = (index: number) =>
     context.dispatch({ type: "set-focus", value: module.lessons[index] });
