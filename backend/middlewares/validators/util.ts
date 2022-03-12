@@ -43,9 +43,23 @@ export const validateFileType = (mimetype: string): boolean => {
   return allowableContentTypes.has(mimetype);
 };
 
+export const validateLink = (value: string): boolean => {
+  const re = /^(ftp|http|https):\/\/[^ "]+$/;
+  return re.test(value);
+};
+
+export const validateDateString = (value: string): boolean => {
+  try {
+    return new Date(value) < new Date()
+      && new Date(value) > new Date("2000/01/01");
+  } catch (e) {
+    return false;
+  }
+};
+
 export const getApiValidationError = (
   fieldName: string,
-  type: Type,
+  type: Type | "link" | "date",
   isArray = false,
 ): string => {
   return `The ${fieldName} is not a ${type}${isArray ? " Array" : ""}`;

@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import {
   getApiValidationError,
   validateArray,
+  validateLink,
   validatePrimitive,
 } from "./util";
 import { getErrorMessage } from "../../utilities/errorUtils";
@@ -27,11 +28,15 @@ export const courseRequestDtoValidator = async (
   }
   if (!validatePrimitive(body.image, "string")) {
     return res.status(400).send(getApiValidationError("image", "string"));
+  } else if (!validateLink(body.image)) {
+    return res.status(400).send(getApiValidationError("image", "link"));
   }
   if (!validatePrimitive(body.previewImage, "string")) {
     return res
       .status(400)
       .send(getApiValidationError("previewImage", "string"));
+  } else if (!validateLink(body.previewImage)) {
+    return res.status(400).send(getApiValidationError("previewImage", "link"));
   }
   if (!validateArray(body.lessons, "string")) {
     return res
