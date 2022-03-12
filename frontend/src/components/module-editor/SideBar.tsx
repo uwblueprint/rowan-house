@@ -15,9 +15,10 @@ import ContentKiosk from "./SideBarContentKiosk";
 
 type SideBarProps = {
   module: ModuleProps;
+  setModule: (_module: ModuleProps) => void;
 };
 
-const Sidebar = ({ module }: SideBarProps): React.ReactElement => {
+const Sidebar = ({ module, setModule }: SideBarProps): React.ReactElement => {
   return (
     <Box w="20%">
       <Flex

@@ -95,7 +95,7 @@ const App = (): React.ReactElement => {
                 />
                 <PrivateRoute
                   exact
-                  path={`${Routes.ADMIN_MODULE_EDITOR_BASE_ROUTE}/:id`}
+                  path={`${Routes.ADMIN_MODULE_EDITOR_BASE_ROUTE}/:courseID/:moduleID`}
                   component={ModuleEditor}
                 />
                 <Route exact path="*" component={NotFound} />

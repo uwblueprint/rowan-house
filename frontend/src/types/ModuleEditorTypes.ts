@@ -7,6 +7,8 @@ export interface LessonProps {
   content: Array<Content>;
 }
 
+export type LessonsProps = Record<string, LessonProps>;
+
 export interface ModuleProps {
   title: string;
   description?: string;
@@ -14,6 +16,13 @@ export interface ModuleProps {
   previewImage: string;
   published: boolean;
   lessons: Array<string>;
+}
+
+export interface CourseProps {
+  title: string;
+  description?: string;
+  private: boolean;
+  modules: Record<string, ModuleProps>;
 }
 
 export interface ContentTextProps {
