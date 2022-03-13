@@ -13,7 +13,7 @@ const VALID_MODULES = {
     image: "string",
     preview_image: "string",
     published: "boolean",
-    lessons: "string",
+    lessons: "string[]",
   },
 };
 

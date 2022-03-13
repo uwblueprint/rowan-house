@@ -1,13 +1,16 @@
 import { CourseVisibilityAttributes } from "../../models/course.model";
 
-export interface ModuleDTO {
-  id: string;
+interface Module {
   title: string;
   description: string;
   image: string;
   previewImage: string;
   published: boolean;
   lessons: string[];
+}
+
+export interface ModuleDTO extends Module {
+  id: string
 }
 
 export interface CreateCourseRequestDTO {
@@ -30,56 +33,6 @@ export interface UpdateCourseRequestDTO {
   modules: { [id: string]: Module };
 }
 
-interface Module {
-  title: string;
-  description: string;
-  image: string;
-  previewImage: string;
-  published: boolean;
-  lessons: string[];
-}
-
-export interface SerializedCreateCourseRequestDTO {
-  title: string;
-  description: string;
-  image: string;
-  previewImage: string;
-  private: boolean;
-  published: boolean;
-  modules: ModuleDTO[];
-}
-
-export interface SerializedUpdateCourseRequestDTO {
-  title: string;
-  description: string;
-  image: string;
-  previewImage: string;
-  private: boolean;
-  published: boolean;
-  modules: ModuleDTO[];
-}
-
-export interface SerializedCourseResponseDTO {
-  id: string;
-  title: string;
-  description: string;
-  image: string;
-  previewImage: string;
-  private: boolean;
-  published: boolean;
-  modules: ModuleDTO[];
-}
-
-export interface CourseRequestDTO {
-  title: string;
-  description: string;
-  image: string;
-  previewImage: string;
-  private: boolean;
-  published: boolean;
-  modules: { [id: string]: Module };
-}
-
 export interface CourseResponseDTO {
   id: string;
   title: string;
@@ -90,6 +43,19 @@ export interface CourseResponseDTO {
   published: boolean;
   modules: { [id: string]: Module };
 }
+
+export interface SerializedCreateCourseRequestDTO extends Omit<CreateCourseRequestDTO, "modules"> {
+  modules: ModuleDTO[];
+}
+
+export interface SerializedUpdateCourseRequestDTO extends Omit<UpdateCourseRequestDTO, "modules"> {
+  modules: ModuleDTO[];
+}
+
+export interface SerializedCourseResponseDTO extends Omit<CourseResponseDTO, "modules"> {
+  modules: ModuleDTO[];
+}
+
 
 export interface ICourseService {
   /**
