@@ -2,29 +2,16 @@ import React from "react";
 import {
   Box,
   Flex,
-  Square,
   Text,
-  Center,
   Spacer,
-  Tabs,
-  TabList,
-  Tab,
-  TabPanels,
-  TabPanel,
-  VStack,
-  Avatar, 
-  AvatarBadge, 
-  AvatarGroup, 
-  Divider,
-  Heading,
-  Icon,
-  Image
+  Image,
+  Button
 } from "@chakra-ui/react";
 
-import { DownloadIcon, SunIcon } from "@chakra-ui/icons";
 
-import RHSLogo from "../../assets/RHSlogo.png";
-
+import CoursesIcon from "../../assets/Courses.svg";
+import UsersIcon from "../../assets/Users.svg";
+import RHSLogo from "../../assets/RHSLogo-white.png";
 
 
 
@@ -57,14 +44,14 @@ const Sidebar = (): React.ReactElement => {
           width="150px"
           mx={16}
           my={8}
-        />
+          />
       </Flex>
       
       <Flex 
       w="100"
       orientation = "vertical"
       flexDir = "column"
-      pt="90px">
+      pt="72px">
 
         <Flex
         w="100"
@@ -72,7 +59,12 @@ const Sidebar = (): React.ReactElement => {
         orientation = "horizontal"
         flexDir = "row"
         >
-          <Icon as={SunIcon} w="24px" h="24px"/>
+          <Image
+          src={CoursesIcon}
+          alt="Book Icon"
+          width="24px"
+          height="24px"
+          />
           <Text variant="body" pl = "20px">Manage Courses</Text>
         </Flex>
 
@@ -82,7 +74,12 @@ const Sidebar = (): React.ReactElement => {
         orientation = "horizontal"
         flexDir = "row"
         >   
-          <Icon as={SunIcon} w="24px" h="24px"/>
+          <Image
+          src={UsersIcon}
+          alt="Book Icon"
+          width="24px"
+          height="24px"
+          />
           <Text variant="body" pl = "20px">Manage Users</Text>
         </Flex>
         
@@ -99,12 +96,13 @@ const Sidebar = (): React.ReactElement => {
       >
  
         <Flex w="100%" pl="10px" pt="8px" pb="16px" pr="32px">
-          <Avatar height="36px" width="36px"/>
           <Flex flexDir="column" w="100%" pl="24px">
             <Text variant = "caption" opacity="0.7"> Admin</Text>
             <Text variant= "body-bold">Jane Doe</Text>
           </Flex>
-          <Icon as={DownloadIcon} w="24px" h="16px"/>
+          <Button variant="solid">
+            <Text variant="button-sb" color="#2D3748">Sign Out</Text>
+          </Button>
         </Flex>
 
       </Flex>
