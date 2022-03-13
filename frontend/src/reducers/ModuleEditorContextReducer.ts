@@ -23,6 +23,7 @@ const createLesson = (
   // Create the new lesson object
   newState.lessons[lessonID] = lesson;
   // Add the lesson ID to the modules
+  // TODO: Object.keys does not guarantee order - fix in the future
   newState.course.modules[lesson.module].lessons = Object.keys(
     newState.lessons,
   );

@@ -13,17 +13,18 @@ const SideBarModuleOverview = (): React.ReactElement => {
   const { courseID, moduleID }: ModuleEditorParams = useParams();
 
   if (!context) return <></>;
+  const { state, dispatch } = context;
 
-  const { lessons, course } = context.state;
+  const { lessons, course } = state;
   const module = course.modules[moduleID];
 
   const orderedLessons = module.lessons.map((id) => lessons[id]);
 
   const setFocus = (index: number) =>
-    context.dispatch({ type: "set-focus", value: module.lessons[index] });
+    dispatch({ type: "set-focus", value: module.lessons[index] });
 
   const createLesson = (title: string) =>
-    context.dispatch({
+    dispatch({
       type: "create-lesson",
       value: {
         course: courseID,
@@ -60,7 +61,7 @@ const SideBarModuleOverview = (): React.ReactElement => {
       >
         Create new Lesson
       </Button>
-      <p>Should we save? {context.state.hasChanged ? "yes" : "no"}</p>
+      <p>Should we save? {state.hasChanged ? "yes" : "no"}</p>
     </VStack>
   );
 };
