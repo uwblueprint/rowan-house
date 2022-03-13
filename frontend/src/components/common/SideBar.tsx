@@ -1,4 +1,5 @@
 import React from "react";
+<<<<<<< HEAD
 import { Box, Flex, Text, Spacer, Image, Button } from "@chakra-ui/react";
 
 import CoursesIcon from "../../assets/Courses.svg";
@@ -25,12 +26,35 @@ function Tab({icon, text}:TabProps) {
     </Flex>
    )
  }
+=======
+import {
+  Box,
+  Flex,
+  Square,
+  Text,
+  Center,
+  Spacer,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanels,
+  TabPanel,
+  VStack,
+  Avatar, 
+  AvatarBadge, 
+  AvatarGroup, 
+  Divider,
+  Heading
+} from "@chakra-ui/react";
+
+>>>>>>> 15ec4b8 (Landing Page: Navigation Sidebar)
 
 const Sidebar = (): React.ReactElement => {
   return (
     <Box w="20%">
       <Flex
         position="fixed"
+<<<<<<< HEAD
         flex="1"
         p="0.25px"
         w="20%"
@@ -80,6 +104,48 @@ const Sidebar = (): React.ReactElement => {
         </Flex>
 
 >>>>>>> b0e2334 (Sidebar with images)
+=======
+        flex = "1"
+        top="0"
+        left="0"
+        p="4"
+        w="20%"
+        h="100%"
+        minW="min-content"
+        boxShadow="xl"
+        flexFlow="column"
+        flexDir="column"
+        alignItems="center"
+        bg = "brand.royal"
+        color ="white"
+        orientation = "vertical"
+        justify="space=between"
+      >
+
+      <Flex w="100">
+        <Text>for options</Text>
+      </Flex>
+
+      
+
+      <Flex
+      p="0"
+      w="100%"
+      alignItems="inherit"
+      orientation = "horizontal"
+      flexDir="row"
+      >
+        <Divider />
+        <Flex w="100%">
+          <Avatar height="36px" width="36px"/>
+          <Flex flexDir="column" w="100%">
+            <Text variant> Admin</Text>
+            <Heading>Jane Doe</Heading>
+          </Flex>
+          
+        </Flex>
+
+>>>>>>> 15ec4b8 (Landing Page: Navigation Sidebar)
       </Flex>
       </Flex>
     </Box>
