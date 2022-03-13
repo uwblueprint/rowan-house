@@ -1,3 +1,5 @@
+import { ContentBlock, ImageBlock, TextBlock, VideoBlock } from "../../types";
+
 type Type = "string" | "integer" | "boolean";
 
 const allowableContentTypes = new Set([
@@ -37,6 +39,32 @@ export const validateArray = (value: any, type: Type): boolean => {
     Array.isArray(value) &&
     value.every((item) => validatePrimitive(item, type))
   );
+};
+
+export const validateContent = (content: ContentBlock): boolean => {
+  if (!content.type) return false;
+
+  switch (content.type) {
+    case "text": {
+      const text = content as TextBlock;
+      return text.content.text != null;
+    }
+    case "image": {
+      const image = content as ImageBlock;
+      return image.content.link != null;
+    }
+    case "video": {
+      const video = content as VideoBlock;
+      return video.content.link != null;
+    }
+    default: {
+      return false;
+    }
+  }
+};
+
+export const validateContentList = (contentList: ContentBlock[]): boolean => {
+  return contentList.some((contentBlock) => !validateContent(contentBlock));
 };
 
 export const validateFileType = (mimetype: string): boolean => {

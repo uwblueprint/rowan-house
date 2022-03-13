@@ -1,5 +1,9 @@
 import { Request, Response, NextFunction } from "express";
-import { getApiValidationError, validatePrimitive } from "./util";
+import {
+  getApiValidationError,
+  validateContentList,
+  validatePrimitive,
+} from "./util";
 import { getErrorMessage } from "../../utilities/errorUtils";
 
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
@@ -27,7 +31,9 @@ export const lessonRequestDtoValidator = async (
   if (!validatePrimitive(body.image, "string")) {
     return res.status(400).send(getApiValidationError("image", "string"));
   }
-  // TO DO: Write better validator for content
+  if (!validateContentList(body.content)) {
+    return res.status(400).send("There was an error in the lesson content.");
+  }
   if (typeof body.content !== "object") {
     return res.status(400).send("There was an error");
   }

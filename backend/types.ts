@@ -1,5 +1,23 @@
 export type Role = "User" | "Admin" | "Staff";
 
+export type ContentType = "text" | "image" | "video";
+export interface ContentBlock {
+  type: ContentType;
+  content: Record<string, unknown>;
+}
+
+export interface TextBlock extends ContentBlock {
+  content: { text: string };
+}
+
+export interface ImageBlock extends ContentBlock {
+  content: { link: string };
+}
+
+export interface VideoBlock extends ContentBlock {
+  content: { link: string };
+}
+
 export type Token = {
   accessToken: string;
   refreshToken: string;
