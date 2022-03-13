@@ -10,7 +10,7 @@ interface Module {
 }
 
 export interface ModuleDTO extends Module {
-  id: string
+  id: string;
 }
 
 export interface CreateCourseRequestDTO {
@@ -44,18 +44,20 @@ export interface CourseResponseDTO {
   modules: { [id: string]: Module };
 }
 
-export interface SerializedCreateCourseRequestDTO extends Omit<CreateCourseRequestDTO, "modules"> {
+export interface SerializedCreateCourseRequestDTO
+  extends Omit<CreateCourseRequestDTO, "modules"> {
   modules: ModuleDTO[];
 }
 
-export interface SerializedUpdateCourseRequestDTO extends Omit<UpdateCourseRequestDTO, "modules"> {
+export interface SerializedUpdateCourseRequestDTO
+  extends Omit<UpdateCourseRequestDTO, "modules"> {
   modules: ModuleDTO[];
 }
 
-export interface SerializedCourseResponseDTO extends Omit<CourseResponseDTO, "modules"> {
+export interface SerializedCourseResponseDTO
+  extends Omit<CourseResponseDTO, "modules"> {
   modules: ModuleDTO[];
 }
-
 
 export interface ICourseService {
   /**

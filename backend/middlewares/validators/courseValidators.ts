@@ -45,7 +45,7 @@ export const courseRequestDtoValidator = async (
       .send(getApiValidationError("previewImage", "string"));
   }
   if (!validateObject(body.modules, VALID_MODULES)) {
-    return res.status(400).send("modules is not a valid module");
+    return res.status(400).send("Modules object is not valid");
   }
   return next();
 };

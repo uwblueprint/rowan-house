@@ -48,7 +48,7 @@ export const validateObject = (
     object !== null &&
     typeof object === "object" &&
     Object.entries(object).every(([key, value]) => {
-      if (key.slice(-2) == "[]" && Array.isArray(value)) {
+      if (key.slice(-2) === "[]" && Array.isArray(value)) {
         return validateArray(value, types[key.slice(0, -2)]);
       }
       if (typeof object === "object") {
