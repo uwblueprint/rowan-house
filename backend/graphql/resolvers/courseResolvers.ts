@@ -1,5 +1,6 @@
 import { AuthenticationError, ExpressContext } from "apollo-server-express";
 import { v4 as uuidv4 } from "uuid";
+import { GraphQLResolveInfo } from "graphql";
 import CourseService from "../../services/implementations/courseService";
 import {
   CreateCourseRequestDTO,
@@ -110,6 +111,8 @@ const courseResolvers = {
         .then((course) => serializeCourseResponse(course));
     },
     courses: async (
+      _parent: any,
+      _args: { [key: string]: any },
       context: ExpressContext,
     ): Promise<SerializedCourseResponseDTO[]> => {
       const accessToken = getAccessToken(context.req);
