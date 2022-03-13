@@ -6,15 +6,16 @@ import {
   Heading,
   Input,
   Button,
-  Stack,
   Image,
   FormControl,
   FormLabel,
   Link,
-  Box
+  Box,
+  VStack,
+  Center
 } from "@chakra-ui/react";
-import logo from '../logo.png';
-import background from '../signuppage.png';
+import logo from "../logo.png";
+import background from "../signuppage.png";
 
 import authAPIClient from "../../APIClients/AuthAPIClient";
 import { LOGIN } from "../../APIClients/mutations/AuthMutations";
@@ -34,16 +35,14 @@ const Login = (): React.ReactElement => {
   const onLogInClick = async () => {
     if (isFirstPage === false) {
       setIsFirstPage(true);
-    }
-    else if (isFirstPage === true) {
+    } else if (isFirstPage === true) {
       const user: AuthenticatedUser = await authAPIClient.login(
         email,
         password,
         login,
       );
       setAuthenticatedUser(user);
-    }
-    else {
+    } else {
       throw new Error("invalid page number");
     }
   };
@@ -58,71 +57,70 @@ const Login = (): React.ReactElement => {
 
   return (
     <Flex
-      width="100vw"
-      height="100vh"
-      backgroundColor="white"
-      justifyContent="center"
-      alignItems="center">
-      <Stack>
-        <Box>
-        <Image htmlHeight='5' src={logo}/>
-        <Heading>Sign in to access courses</Heading>
-
-          {isFirstPage?           
-            <FormControl>
-              <FormLabel htmlFor='password'>Password</FormLabel>
-              <Input 
-                type="password" 
-                placeholder="●●●●●"
-                onChange={(event) => setPassword(event.target.value)} 
+    >
+        <Center
+          flex='1'
+        >
+          <VStack
+          >
+          <Image htmlHeight="5" src={logo} />
+          <Heading>Sign in to access courses</Heading>
+          <form>
+            {isFirstPage ? (
+              <FormControl>
+                <FormLabel htmlFor="password">Password</FormLabel>
+                <Input
+                  type="password"
+                  placeholder="●●●●●"
+                  onChange={(event) => setPassword(event.target.value)}
                 />
-            </FormControl> : 
-            <FormControl>
-              <FormLabel htmlFor='email'>Email address</FormLabel>
-              <Input 
-                type="email" 
-                placeholder="you@rowanhouse.ca"
-                onChange={(event) => setEmail(event.target.value)} 
+              </FormControl>
+            ) : (
+              <FormControl>
+                <FormLabel htmlFor="email">Email address</FormLabel>
+                <Input
+                  type="email"
+                  placeholder="you@rowanhouse.ca"
+                  onChange={(event) => setEmail(event.target.value)}
                 />
-            </FormControl>}
-          <Button
-                  borderRadius={1}
-                  type="submit"
-                  variant="solid"
-                  colorScheme= "purple"
-                  width="full"
-                  onClick={onLogInClick}
-                >
-                  Continue
-          </Button>
-          {isFirstPage?
-            <Link 
-            color="purple" 
-            onClick={onSignUpClick}
-            href="https://www.figma.com/file/9KqGifATPcKRQytJBqAKeJ/User-Authentication?node-id=316%3A2"
-            >
-            Forgot your password
-            </Link> :
-            <Box>
-              Don&lsquo;t have an account?{" "}
-              <Link 
-                color="purple" 
+              </FormControl>
+            )}
+            <Button width="full" onClick={onLogInClick}>
+              Continue
+            </Button>
+            {isFirstPage ? (
+              <Link
+                color="purple"
                 onClick={onSignUpClick}
                 href="https://www.figma.com/file/9KqGifATPcKRQytJBqAKeJ/User-Authentication?node-id=316%3A2"
+              >
+                Forgot your password
+              </Link>
+            ) : (
+              <Box>
+                Don&lsquo;t have an account?{" "}
+                <Link
+                  color="purple"
+                  onClick={onSignUpClick}
+                  href="https://www.figma.com/file/9KqGifATPcKRQytJBqAKeJ/User-Authentication?node-id=316%3A2"
                 >
-                Sign Up
-              </Link> 
-            </Box> } 
-        </Box>
-      </Stack>
-      <Image
-        style={{
-          height: '100%',
-          width: '50%',
-        }}
-        src={background}
-        resizeMode="stretch"
-      />
+                  Sign Up
+                </Link>
+              </Box>
+            )}
+          </form>
+          </VStack>
+        </Center>
+      <Box>
+        <Image
+          style={{
+            height: "100vh",
+            // marginLeft: "40%",
+          }}
+          src={background}
+          // resizeMode="stretch"
+        />
+      </Box>
     </Flex>
   );
 };
