@@ -53,7 +53,6 @@ const Button = {
       fontSize: "xs",
       boxShadow: "0px 2px 1px rgba(0, 0, 0, 0.08)",
     },
-
     "outline-lg": {
       borderColor: "background.grey",
       borderWidth: "1px",
@@ -113,6 +112,13 @@ const Button = {
       padding: "8px 16px",
       borderRadius: "md",
       fontSize: "xs",
+    },
+    transparent: {
+      bg: "transparent",
+      padding: "0px",
+      margin: "0px",
+      border: "0px",
+      fontWeight: "normal",
     },
   },
   defaultProps: {
