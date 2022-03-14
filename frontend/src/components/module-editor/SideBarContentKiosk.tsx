@@ -1,10 +1,10 @@
 import React from "react";
-import { ContentType } from "../../types/ModuleEditorTypes";
+import { ContentTypeEnum } from "../../types/ModuleEditorTypes";
 
 import BlockPreview from "./BlockPreview";
 
 const SideBarContentKiosk = (): React.ReactElement => {
-  const options = [ContentType.TEXT, ContentType.IMAGE];
+  const options = [ContentTypeEnum.TEXT, ContentTypeEnum.IMAGE];
 
   return (
     <div>
