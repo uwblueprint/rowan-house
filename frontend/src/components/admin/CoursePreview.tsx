@@ -38,7 +38,7 @@ const CoursePreview = ({
           )}
         </Flex>
         <EditActionsKebabMenu
-          handleEditDetailsClick={() => alert("edit details")}
+          handleEditDetailsClick={() => alert("Edit details")}
           deleteFunction={() => true}
           showHorizontal
         />
@@ -48,7 +48,11 @@ const CoursePreview = ({
       </Text>
       <Flex className="module-title" my={6} align="center">
         <Text variant="heading">Modules</Text>
-        <Button ml={6} variant="outline-sm">
+        <Button
+          variant="outline-sm"
+          ml={6}
+          onClick={() => alert("Create new module")}
+        >
           Create New Module
         </Button>
       </Flex>
