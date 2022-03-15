@@ -8,9 +8,11 @@ import {
   Button
 } from "@chakra-ui/react";
 
-import { DownloadIcon, SunIcon } from "@chakra-ui/icons";
+import { DownloadIcon } from '@chakra-ui/icons'
+import RHSLogo from "../../assets/RHSLogo-white.png";
+import CoursesIcon from "../../assets/Courses.svg";
+import UsersIcon from "../../assets/Users.svg";
 
-import RHSLogo from "../../assets/RHSlogo.png";
 
 
 
