@@ -98,9 +98,59 @@ const Sidebar = (): React.ReactElement => {
         orientation = "vertical"
         justify="space=between"
       >
+<<<<<<< HEAD
 
       <Flex w="100">
         <Text>for options</Text>
+=======
+      
+      <Flex>
+        <Image
+          src={RHSLogo}
+          alt="Rowan House logo"
+          width="150px"
+          mx={16}
+          my={8}
+          />
+      </Flex>
+      
+      <Flex 
+      w="100"
+      orientation = "vertical"
+      flexDir = "column"
+      pt="90px">
+
+        <Flex
+        w="100"
+        h="62px"
+        orientation = "horizontal"
+        flexDir = "row"
+        >
+          <Image
+          src={CoursesIcon}
+          alt="Book Icon"
+          width="24px"
+          height="24px"
+          />
+          <Text variant="body" pl = "20px">Manage Courses</Text>
+        </Flex>
+
+        <Flex
+        w="100"
+        h="62px"
+        orientation = "horizontal"
+        flexDir = "row"
+        >   
+          <Image
+          src={UsersIcon}
+          alt="Book Icon"
+          width="24px"
+          height="24px"
+          />
+          <Text variant="body" pl = "20px">Manage Users</Text>
+        </Flex>
+        
+>>>>>>> 9290b0b (Sidebar with images)
       </Flex>
 
       
@@ -119,7 +169,17 @@ const Sidebar = (): React.ReactElement => {
             <Text variant> Admin</Text>
             <Heading>Jane Doe</Heading>
           </Flex>
+<<<<<<< HEAD
           
+=======
+          {/* <Icon as={DownloadIcon} w="24px" h="16px"/> */}
+          <IconButton
+          variant='ghost'
+          colorScheme='white'
+          aria-label='Log out'
+          icon={<DownloadIcon />}
+          />
+>>>>>>> 9290b0b (Sidebar with images)
         </Flex>
 
 >>>>>>> 15ec4b8 (Landing Page: Navigation Sidebar)
