@@ -64,7 +64,25 @@ const Sidebar = (): React.ReactElement => {
             <Text variant="caption" opacity="0.7"> Admin</Text>
             <Text variant="body-bold">Jane Doe</Text>
           </Flex>
+<<<<<<< HEAD
           <Button variant="secondary-filled">Sign Out</Button>
+=======
+<<<<<<< HEAD
+          <Button variant="solid">
+            <Text variant="button-sb" color="#2D3748">Sign Out</Text>
+          </Button>
+=======
+          {/* <Icon as={DownloadIcon} w="24px" h="16px"/> */}
+          <IconButton
+          variant='ghost'
+          colorScheme='white'
+          aria-label='Log out'
+          icon={<DownloadIcon />}
+          />
+>>>>>>> 9290b0b (Sidebar with images)
+        </Flex>
+
+>>>>>>> b0e2334 (Sidebar with images)
       </Flex>
       </Flex>
     </Box>
