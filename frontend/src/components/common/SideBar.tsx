@@ -118,7 +118,7 @@ const Sidebar = (): React.ReactElement => {
       w="100"
       orientation = "vertical"
       flexDir = "column"
-      pt="90px">
+      pt="72px">
 
         <Flex
         w="100"
@@ -162,6 +162,7 @@ const Sidebar = (): React.ReactElement => {
       orientation = "horizontal"
       flexDir="row"
       >
+<<<<<<< HEAD
         <Divider />
         <Flex w="100%">
           <Avatar height="36px" width="36px"/>
@@ -180,6 +181,17 @@ const Sidebar = (): React.ReactElement => {
           icon={<DownloadIcon />}
           />
 >>>>>>> 9290b0b (Sidebar with images)
+=======
+ 
+        <Flex w="100%" pl="10px" pt="8px" pb="16px" pr="32px">
+          <Flex flexDir="column" w="100%" pl="24px">
+            <Text variant = "caption" opacity="0.7"> Admin</Text>
+            <Text variant= "body-bold">Jane Doe</Text>
+          </Flex>
+          <Button variant="solid">
+            <Text variant="button-sb" color="#2D3748">Sign Out</Text>
+          </Button>
+>>>>>>> 6efa86c (Landing Page: Navigation Sidebar)
         </Flex>
 
 >>>>>>> 15ec4b8 (Landing Page: Navigation Sidebar)
