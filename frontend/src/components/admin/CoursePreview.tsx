@@ -2,9 +2,10 @@ import React from "react";
 import { Box, Button, Flex, Tag, Text, SimpleGrid } from "@chakra-ui/react";
 import ModulePreview from "./ModulePreview";
 import { CoursePreviewProps } from "../../types/AdminDashboardTypes";
-import EditActionsKebabMenu from "../common/EditActionsKebabMenu";
+import EditActionsKebabMenu from "./EditActionsKebabMenu";
 
 const CoursePreview = ({
+  courseId,
   title,
   description,
   isPrivate,
@@ -57,9 +58,11 @@ const CoursePreview = ({
         </Button>
       </Flex>
       <SimpleGrid templateColumns="repeat(auto-fit, 240px)" spacing={4}>
-        {modules.map((module, index) => (
+        {modules.map((module) => (
           <ModulePreview
-            key={index}
+            key={module.moduleId}
+            courseId={courseId}
+            moduleId={module.moduleId}
             title={module.title}
             imageLink={module.imageLink}
             published={module.published}
