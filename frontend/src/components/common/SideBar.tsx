@@ -4,10 +4,6 @@ import {
   Flex,
   Text,
   Spacer,
-<<<<<<< HEAD
-=======
-  Avatar, 
->>>>>>> 6efa86c (Landing Page: Navigation Sidebar)
   Image,
   Button
 } from "@chakra-ui/react";
@@ -104,25 +100,9 @@ const Sidebar = (): React.ReactElement => {
             <Text variant = "caption" opacity="0.7"> Admin</Text>
             <Text variant= "body-bold">Jane Doe</Text>
           </Flex>
-<<<<<<< HEAD
-<<<<<<< HEAD
           <Button variant="solid">
             <Text variant="button-sb" color="#2D3748">Sign Out</Text>
           </Button>
-=======
-          {/* <Icon as={DownloadIcon} w="24px" h="16px"/> */}
-          <IconButton
-          variant='ghost'
-          colorScheme='white'
-          aria-label='Log out'
-          icon={<DownloadIcon />}
-          />
->>>>>>> 9290b0b (Sidebar with images)
-=======
-          <Button variant="solid">
-            <Text variant="button-sb" color="#2D3748">Sign Out</Text>
-          </Button>
->>>>>>> 6efa86c (Landing Page: Navigation Sidebar)
         </Flex>
 
       </Flex>
