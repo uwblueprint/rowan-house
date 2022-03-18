@@ -13,12 +13,14 @@ type Module = {
 
 type SerializedModule = Module & {id: string}
 
+type Modules = {[id: string]: Module}
+
 export type CourseRequest = {
   title: string;
   description: string;
   image: string;
   previewImage: string;
-  modules: {[id: string]: Module}
+  modules: Modules
   private: boolean;
   published: boolean;
 };
@@ -29,7 +31,7 @@ export type CourseResponse = {
   description: string;
   image: string;
   previewImage: string;
-  modules: {[id: string]: Module}
+  modules: Modules
   private: boolean;
   published: boolean;
 };
@@ -40,11 +42,11 @@ type SerializedUpdateCourseRequest = Partial<SerializedCreateCourseRequest>
 
 // TO DO: error handling
 
-const serializeModules = (modules: {[id: string]: Module}): SerializedModule[] => {
+const serializeModules = (modules: Modules): SerializedModule[] => {
   return Object.entries(modules).map(([module_id, module]) => ({id: module_id, ...module}))
 }
 
-const deserializeModules = (serModules: SerializedModule[]): {[id: string]: Module} => {
+const deserializeModules = (serModules: SerializedModule[]): Modules => {
   const modules: { [id: string]: Module } = {} as { [id: string]: Module };
 
   serModules.forEach((module) => {
@@ -140,7 +142,7 @@ const updateCourse = async (
     const { data } = await baseAPIClient.put(`/course/${id}`, serializeUpdateCourseRequest(course), {
       headers: { Authorization: bearerToken },
     });
-    return data;
+    return deserializeCourseResponse(data);
   } catch (error) {
     return error;
   }

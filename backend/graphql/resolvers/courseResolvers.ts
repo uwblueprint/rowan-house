@@ -28,13 +28,11 @@ const userService: IUserService = new UserService();
 const emailService: IEmailService = new EmailService(nodemailerConfig);
 const authService: IAuthService = new AuthService(userService, emailService);
 
-function serializeToModuleDTO(modules: { [id: string]: Module }): ModuleDTO[] {
+const serializeToModuleDTO = (modules: { [id: string]: Module }): ModuleDTO[] => {
   return Object.entries(modules).map(([key, val]) => ({ id: key, ...val }));
 }
 
-function deserializeModuleDTO(
-  moduleDTOs: ModuleDTO[],
-): { [id: string]: Module } {
+const deserializeModuleDTO = (moduleDTOs: ModuleDTO[]): { [id: string]: Module } => {
   const modules: { [id: string]: Module } = {} as { [id: string]: Module };
 
   moduleDTOs.forEach((moduleDTO) => {
@@ -54,33 +52,19 @@ function deserializeModuleDTO(
   return modules;
 }
 
-function serializeCourseResponse(
-  course: CourseResponseDTO,
-): SerializedCourseResponseDTO {
-  if (course?.modules) {
-    return {
-      ...course,
-      modules: serializeToModuleDTO(course.modules),
-    };
-  }
+const serializeCourseResponse = (course: CourseResponseDTO,): SerializedCourseResponseDTO => {
   return {
     ...course,
-    modules: [],
+    modules: serializeToModuleDTO(course.modules),
   };
 }
 
-function deserializeCourseRequest(
-  course: SerializedCreateCourseRequestDTO | SerializedUpdateCourseRequestDTO,
-): CreateCourseRequestDTO | UpdateCourseRequestDTO {
-  if (course?.modules) {
-    return {
-      ...course,
-      modules: deserializeModuleDTO(course.modules),
-    };
-  }
+const deserializeCourseRequest = (
+  course: SerializedCreateCourseRequestDTO | SerializedUpdateCourseRequestDTO
+  ): CreateCourseRequestDTO | UpdateCourseRequestDTO => {
   return {
     ...course,
-    modules: {},
+    modules: deserializeModuleDTO(course.modules),
   };
 }
 
@@ -145,10 +129,8 @@ const courseResolvers = {
     ): Promise<SerializedCourseResponseDTO | null> => {
       return courseService
         .updateCourse(id, deserializeCourseRequest(course))
-        .then((serializedCourse) => {
-          if (serializedCourse)
-            return serializeCourseResponse(serializedCourse);
-          return null;
+        .then((course) => {
+          return course ? serializeCourseResponse(course) : null;
         });
     },
     deleteCourse: async (
