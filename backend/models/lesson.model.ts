@@ -1,6 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
-
-// TO DO: Update content type
+import { ContentBlock } from "../types";
 
 export interface Lesson extends Document {
   id: string;
@@ -9,7 +8,7 @@ export interface Lesson extends Document {
   title: string;
   description: string;
   image: string;
-  content: [Record<string, unknown>];
+  content: [ContentBlock];
 }
 
 const LessonSchema: Schema = new Schema({

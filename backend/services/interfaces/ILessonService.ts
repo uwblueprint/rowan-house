@@ -1,9 +1,11 @@
+import { ContentBlock } from "../../types";
+
 export interface CreateLessonRequestDTO {
   course: string;
   title: string;
   description: string;
   image: string;
-  content: [Record<string, unknown>];
+  content: [ContentBlock];
 }
 
 export interface UpdateLessonRequestDTO {
@@ -12,7 +14,7 @@ export interface UpdateLessonRequestDTO {
   title: string;
   description: string;
   image: string;
-  content: [Record<string, unknown>];
+  content: [ContentBlock];
 }
 
 export interface LessonResponseDTO {
@@ -22,7 +24,7 @@ export interface LessonResponseDTO {
   title: string;
   description: string;
   image: string;
-  content: [Record<string, unknown>];
+  content: [ContentBlock];
 }
 
 export interface ILessonService {
