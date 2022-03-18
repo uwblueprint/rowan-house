@@ -1,21 +1,5 @@
 import React from "react";
-<<<<<<< HEAD
 import { Box, Flex, Text, Spacer, Image, Button } from "@chakra-ui/react";
-=======
-import {
-  Box,
-  Flex,
-  Text,
-  Spacer,
-<<<<<<< HEAD
-=======
-  Avatar, 
->>>>>>> 6efa86c (Landing Page: Navigation Sidebar)
-  Image,
-  Button
-} from "@chakra-ui/react";
-
->>>>>>> 3ad9d03 (Landing Page: Navigation Sidebar)
 
 import CoursesIcon from "../../assets/Courses.svg";
 import UsersIcon from "../../assets/Users.svg";
@@ -82,28 +66,17 @@ const Sidebar = (): React.ReactElement => {
           </Flex>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
           <Button variant="secondary-filled">Sign Out</Button>
 =======
 =======
 >>>>>>> 3ad9d03 (Landing Page: Navigation Sidebar)
 <<<<<<< HEAD
+=======
+>>>>>>> 74418b1 (Rebased)
           <Button variant="solid">
             <Text variant="button-sb" color="#2D3748">Sign Out</Text>
           </Button>
-=======
-          {/* <Icon as={DownloadIcon} w="24px" h="16px"/> */}
-          <IconButton
-          variant='ghost'
-          colorScheme='white'
-          aria-label='Log out'
-          icon={<DownloadIcon />}
-          />
->>>>>>> 9290b0b (Sidebar with images)
-=======
-          <Button variant="solid">
-            <Text variant="button-sb" color="#2D3748">Sign Out</Text>
-          </Button>
->>>>>>> 6efa86c (Landing Page: Navigation Sidebar)
         </Flex>
 
 >>>>>>> b0e2334 (Sidebar with images)
