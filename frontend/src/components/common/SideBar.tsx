@@ -4,6 +4,10 @@ import {
   Flex,
   Text,
   Spacer,
+<<<<<<< HEAD
+=======
+  Avatar, 
+>>>>>>> 6efa86c (Landing Page: Navigation Sidebar)
   Image,
   Button
 } from "@chakra-ui/react";
@@ -101,6 +105,7 @@ const Sidebar = (): React.ReactElement => {
             <Text variant= "body-bold">Jane Doe</Text>
           </Flex>
 <<<<<<< HEAD
+<<<<<<< HEAD
           <Button variant="solid">
             <Text variant="button-sb" color="#2D3748">Sign Out</Text>
           </Button>
@@ -113,6 +118,11 @@ const Sidebar = (): React.ReactElement => {
           icon={<DownloadIcon />}
           />
 >>>>>>> 9290b0b (Sidebar with images)
+=======
+          <Button variant="solid">
+            <Text variant="button-sb" color="#2D3748">Sign Out</Text>
+          </Button>
+>>>>>>> 6efa86c (Landing Page: Navigation Sidebar)
         </Flex>
 
       </Flex>
