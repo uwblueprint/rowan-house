@@ -4,14 +4,18 @@ import {
   Flex,
   Text,
   Spacer,
+<<<<<<< HEAD
+=======
+  Avatar, 
+>>>>>>> 6efa86c (Landing Page: Navigation Sidebar)
   Image,
   Button
 } from "@chakra-ui/react";
 
-import { DownloadIcon } from '@chakra-ui/icons'
-import RHSLogo from "../../assets/RHSLogo-white.png";
+
 import CoursesIcon from "../../assets/Courses.svg";
 import UsersIcon from "../../assets/Users.svg";
+import RHSLogo from "../../assets/RHSLogo-white.png";
 
 
 
