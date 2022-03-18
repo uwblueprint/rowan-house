@@ -9,18 +9,18 @@ type Module = {
   previewImage: string;
   published: boolean;
   lessons: string[];
-}
+};
 
-type SerializedModule = Module & {id: string}
+type SerializedModule = Module & { id: string };
 
-type Modules = {[id: string]: Module}
+type Modules = { [id: string]: Module };
 
 export type CourseRequest = {
   title: string;
   description: string;
   image: string;
   previewImage: string;
-  modules: Modules
+  modules: Modules;
   private: boolean;
   published: boolean;
 };
@@ -31,20 +31,27 @@ export type CourseResponse = {
   description: string;
   image: string;
   previewImage: string;
-  modules: Modules
+  modules: Modules;
   private: boolean;
   published: boolean;
 };
 
-type SerializedCourseResponse = Omit<CourseResponse, "modules"> & {modules: SerializedModule[]}
-type SerializedCreateCourseRequest = Omit<CourseRequest, "modules"> & {modules: SerializedModule[]}
-type SerializedUpdateCourseRequest = Partial<SerializedCreateCourseRequest>
+type SerializedCourseResponse = Omit<CourseResponse, "modules"> & {
+  modules: SerializedModule[];
+};
+type SerializedCreateCourseRequest = Omit<CourseRequest, "modules"> & {
+  modules: SerializedModule[];
+};
+type SerializedUpdateCourseRequest = Partial<SerializedCreateCourseRequest>;
 
 // TO DO: error handling
 
 const serializeModules = (modules: Modules): SerializedModule[] => {
-  return Object.entries(modules).map(([module_id, module]) => ({id: module_id, ...module}))
-}
+  return Object.entries(modules).map(([module_id, module]) => ({
+    id: module_id,
+    ...module,
+  }));
+};
 
 const deserializeModules = (serModules: SerializedModule[]): Modules => {
   const modules: { [id: string]: Module } = {} as { [id: string]: Module };
@@ -63,27 +70,36 @@ const deserializeModules = (serModules: SerializedModule[]): Modules => {
   });
 
   return modules;
-}
+};
 
-const serializeCreateCourseRequest = (courseRequest: CourseRequest): SerializedCreateCourseRequest => {
+const serializeCreateCourseRequest = (
+  courseRequest: CourseRequest,
+): SerializedCreateCourseRequest => {
   return {
     ...courseRequest,
-    modules: serializeModules(courseRequest.modules)
+    modules: serializeModules(courseRequest.modules),
   };
-}
+};
 
-const serializeUpdateCourseRequest = (courseRequest: Partial<CourseRequest>): SerializedUpdateCourseRequest => {
+const serializeUpdateCourseRequest = (
+  courseRequest: Partial<CourseRequest>,
+): SerializedUpdateCourseRequest => {
   return {
-    modules: courseRequest.modules === undefined ? undefined : serializeModules(courseRequest.modules)
-  }
-}
+    modules:
+      courseRequest.modules === undefined
+        ? undefined
+        : serializeModules(courseRequest.modules),
+  };
+};
 
-const deserializeCourseResponse = (serCourseResponse : SerializedCourseResponse): CourseResponse => {
+const deserializeCourseResponse = (
+  serCourseResponse: SerializedCourseResponse,
+): CourseResponse => {
   return {
     ...serCourseResponse,
-    modules: deserializeModules(serCourseResponse.modules)
-  }
-}
+    modules: deserializeModules(serCourseResponse.modules),
+  };
+};
 
 const getCourse = async (id: string): Promise<CourseResponse> => {
   const bearerToken = `Bearer ${getLocalStorageObjProperty(
@@ -121,9 +137,13 @@ const createCourse = async (course: CourseRequest): Promise<CourseResponse> => {
     "accessToken",
   )}`;
   try {
-    const { data } = await baseAPIClient.post("/course", serializeCreateCourseRequest(course), {
-      headers: { Authorization: bearerToken },
-    });
+    const { data } = await baseAPIClient.post(
+      "/course",
+      serializeCreateCourseRequest(course),
+      {
+        headers: { Authorization: bearerToken },
+      },
+    );
     return deserializeCourseResponse(data);
   } catch (error) {
     return error;
@@ -139,9 +159,13 @@ const updateCourse = async (
     "accessToken",
   )}`;
   try {
-    const { data } = await baseAPIClient.put(`/course/${id}`, serializeUpdateCourseRequest(course), {
-      headers: { Authorization: bearerToken },
-    });
+    const { data } = await baseAPIClient.put(
+      `/course/${id}`,
+      serializeUpdateCourseRequest(course),
+      {
+        headers: { Authorization: bearerToken },
+      },
+    );
     return deserializeCourseResponse(data);
   } catch (error) {
     return error;

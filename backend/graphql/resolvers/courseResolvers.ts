@@ -28,11 +28,15 @@ const userService: IUserService = new UserService();
 const emailService: IEmailService = new EmailService(nodemailerConfig);
 const authService: IAuthService = new AuthService(userService, emailService);
 
-const serializeToModuleDTO = (modules: { [id: string]: Module }): ModuleDTO[] => {
+const serializeToModuleDTO = (modules: {
+  [id: string]: Module;
+}): ModuleDTO[] => {
   return Object.entries(modules).map(([key, val]) => ({ id: key, ...val }));
-}
+};
 
-const deserializeModuleDTO = (moduleDTOs: ModuleDTO[]): { [id: string]: Module } => {
+const deserializeModuleDTO = (
+  moduleDTOs: ModuleDTO[],
+): { [id: string]: Module } => {
   const modules: { [id: string]: Module } = {} as { [id: string]: Module };
 
   moduleDTOs.forEach((moduleDTO) => {
@@ -50,23 +54,25 @@ const deserializeModuleDTO = (moduleDTOs: ModuleDTO[]): { [id: string]: Module }
   });
 
   return modules;
-}
+};
 
-const serializeCourseResponse = (course: CourseResponseDTO,): SerializedCourseResponseDTO => {
+const serializeCourseResponse = (
+  course: CourseResponseDTO,
+): SerializedCourseResponseDTO => {
   return {
     ...course,
     modules: serializeToModuleDTO(course.modules),
   };
-}
+};
 
 const deserializeCourseRequest = (
-  course: SerializedCreateCourseRequestDTO | SerializedUpdateCourseRequestDTO
-  ): CreateCourseRequestDTO | UpdateCourseRequestDTO => {
+  course: SerializedCreateCourseRequestDTO | SerializedUpdateCourseRequestDTO,
+): CreateCourseRequestDTO | UpdateCourseRequestDTO => {
   return {
     ...course,
     modules: deserializeModuleDTO(course.modules),
   };
-}
+};
 
 const getCourseVisibilityAttributes = (
   role: Role,
@@ -129,8 +135,10 @@ const courseResolvers = {
     ): Promise<SerializedCourseResponseDTO | null> => {
       return courseService
         .updateCourse(id, deserializeCourseRequest(course))
-        .then((course) => {
-          return course ? serializeCourseResponse(course) : null;
+        .then((unserializedCourse) => {
+          return unserializedCourse
+            ? serializeCourseResponse(unserializedCourse)
+            : null;
         });
     },
     deleteCourse: async (
