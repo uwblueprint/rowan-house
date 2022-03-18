@@ -4,14 +4,14 @@ import { useMutation } from "@apollo/client";
 import {
   Flex,
   Heading,
-  Input,
-  Button,
   Image,
   FormControl,
   FormLabel,
   Link,
   Box,
+  Button,
   VStack,
+  Input,
   Center
 } from "@chakra-ui/react";
 import logo from "../logo.png";
@@ -67,15 +67,29 @@ const Login = (): React.ReactElement => {
           <Heading>Sign in to access courses</Heading>
           <form>
             {isFirstPage ? (
+            <>
               <FormControl>
                 <FormLabel htmlFor="password">Password</FormLabel>
                 <Input
+
                   type="password"
                   placeholder="●●●●●"
                   onChange={(event) => setPassword(event.target.value)}
                 />
               </FormControl>
+              <Button variant="outline-lg" width="full" onClick={onLogInClick}>
+                Login
+              </Button>
+                <Link
+                color="purple"
+                onClick={onSignUpClick}
+                href="https://www.figma.com/file/9KqGifATPcKRQytJBqAKeJ/User-Authentication?node-id=316%3A2"
+              >
+                Forgot your password
+              </Link>
+            </>
             ) : (
+            <>
               <FormControl>
                 <FormLabel htmlFor="email">Email address</FormLabel>
                 <Input
@@ -84,29 +98,20 @@ const Login = (): React.ReactElement => {
                   onChange={(event) => setEmail(event.target.value)}
                 />
               </FormControl>
-            )}
-            <Button width="full" onClick={onLogInClick}>
-              Continue
-            </Button>
-            {isFirstPage ? (
-              <Link
-                color="purple"
-                onClick={onSignUpClick}
-                href="https://www.figma.com/file/9KqGifATPcKRQytJBqAKeJ/User-Authentication?node-id=316%3A2"
-              >
-                Forgot your password
-              </Link>
-            ) : (
-              <Box>
-                Don&lsquo;t have an account?{" "}
-                <Link
-                  color="purple"
-                  onClick={onSignUpClick}
-                  href="https://www.figma.com/file/9KqGifATPcKRQytJBqAKeJ/User-Authentication?node-id=316%3A2"
-                >
-                  Sign Up
-                </Link>
-              </Box>
+              <Button variant="outline-lg" width="full" onClick={onLogInClick}>
+                  Continue
+              </Button>
+                <Box>
+                  Don&lsquo;t have an account?{" "}
+                  <Link
+                    color="purple"
+                    onClick={onSignUpClick}
+                    href="https://www.figma.com/file/9KqGifATPcKRQytJBqAKeJ/User-Authentication?node-id=316%3A2"
+                  >
+                    Sign Up
+                  </Link>
+                </Box>
+              </>
             )}
           </form>
           </VStack>
