@@ -1,7 +1,10 @@
 import React from "react";
-import { ContentType } from "../../types/ModuleEditorTypes";
+import { ContentTypeEnum } from "../../types/ModuleEditorTypes";
 
-const BlockPreview = ({ title, preview }: ContentType): React.ReactElement => {
+const BlockPreview = ({
+  title,
+  preview,
+}: ContentTypeEnum): React.ReactElement => {
   return (
     <div>
       {title}

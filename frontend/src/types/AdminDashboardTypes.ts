@@ -1,7 +1,7 @@
 export interface ModulePreviewProps {
   title: string;
-  description?: string;
   published: boolean;
+  imageLink: string;
 }
 
 export interface CoursePreviewProps {

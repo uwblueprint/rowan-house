@@ -1,15 +1,14 @@
 import React from "react";
+import { Flex } from "@chakra-ui/react";
 import SideBar from "../common/SideBar";
 import CoursesOverviewTab from "../admin/CoursesOverviewTab";
-import ManageTab from "../admin/ManageTab";
 
 const AdminDashboard = (): React.ReactElement => {
   return (
-    <div>
+    <Flex>
       <SideBar />
       <CoursesOverviewTab />
-      <ManageTab />
-    </div>
+    </Flex>
   );
 };
 
