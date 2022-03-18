@@ -42,6 +42,7 @@ export const Modal: React.FC<ModalProps> = (props) => {
   } = props;
 
   return (
+    // eslint-disable-next-line react/jsx-props-no-spreading
     <ChakraModal isCentered onClose={onCancel} isOpen={isOpen} {...rest}>
       <ModalOverlay />
       <ModalContent>

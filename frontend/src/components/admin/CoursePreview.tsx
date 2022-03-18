@@ -1,8 +1,19 @@
 import React from "react";
-import { Box, Button, Flex, Tag, Text, SimpleGrid } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Tag,
+  Text,
+  SimpleGrid,
+  useDisclosure,
+} from "@chakra-ui/react";
 import ModulePreview from "./ModulePreview";
 import { CoursePreviewProps } from "../../types/AdminDashboardTypes";
 import EditActionsKebabMenu from "../common/EditActionsKebabMenu";
+import { Modal } from "../common/Modal";
+
+const openModal = () => {};
 
 const CoursePreview = ({
   title,
@@ -10,6 +21,8 @@ const CoursePreview = ({
   isPrivate,
   modules,
 }: CoursePreviewProps): React.ReactElement => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <Box
       className="course-preview"
@@ -39,7 +52,7 @@ const CoursePreview = ({
         </Flex>
         <EditActionsKebabMenu
           handleEditDetailsClick={() => alert("Edit details")}
-          deleteFunction={() => true}
+          deleteFunction={() => onOpen()}
           showHorizontal
         />
       </Flex>
@@ -66,6 +79,12 @@ const CoursePreview = ({
           />
         ))}
       </SimpleGrid>
+      <Modal
+        isOpen={isOpen}
+        onConfirm={() => true}
+        onCancel={onClose}
+        header="Delete Course"
+       />
     </Box>
   );
 };
