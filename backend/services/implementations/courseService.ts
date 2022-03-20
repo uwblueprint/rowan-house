@@ -33,7 +33,7 @@ class CourseService implements ICourseService {
       description: course.description,
       image: course.image,
       previewImage: course.previewImage,
-      lessons: course.lessons,
+      modules: course.modules,
       private: course.private,
       published: course.published,
     };
@@ -50,7 +50,7 @@ class CourseService implements ICourseService {
         description: course.description,
         image: course.image,
         previewImage: course.previewImage,
-        lessons: course.lessons,
+        modules: course.modules,
         private: course.private,
         published: course.published,
       }));
@@ -78,7 +78,7 @@ class CourseService implements ICourseService {
       description: newCourse.description,
       image: newCourse.image,
       previewImage: newCourse.previewImage,
-      lessons: newCourse.lessons,
+      modules: newCourse.modules,
       private: newCourse.private,
       published: newCourse.published,
     };
@@ -110,7 +110,7 @@ class CourseService implements ICourseService {
       description: updatedCourse.description,
       image: updatedCourse.image,
       previewImage: updatedCourse.previewImage,
-      lessons: updatedCourse.lessons,
+      modules: updatedCourse.modules,
       private: updatedCourse.private,
       published: updatedCourse.published,
     };

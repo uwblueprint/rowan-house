@@ -33,11 +33,31 @@ export const validatePrimitive = (value: any, type: Type): boolean => {
 
 export const validateArray = (value: any, type: Type): boolean => {
   return (
-    value !== undefined &&
-    value !== null &&
+    value &&
     typeof value === "object" &&
     Array.isArray(value) &&
     value.every((item) => validatePrimitive(item, type))
+  );
+};
+
+export const validateObject = (
+  object: { [field: string]: any },
+  types: { [field: string]: any },
+): boolean => {
+  return (
+    object &&
+    typeof object === "object" &&
+    Object.entries(object).every(([key, value]) => {
+      // x[] indicates an array of type x, and [] takes up the last two chars
+      // Therefore, slice the last two chars to check if array, then pass in type itself
+      if (key.slice(-2) === "[]" && Array.isArray(value)) {
+        return validateArray(value, types[key.slice(0, -2)]);
+      }
+      if (typeof object === "object") {
+        return validateObject(object, types[key]);
+      }
+      return validatePrimitive(value, types[key]);
+    })
   );
 };
 
