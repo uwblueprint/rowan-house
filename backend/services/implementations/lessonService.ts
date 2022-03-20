@@ -27,6 +27,7 @@ class LessonService implements ILessonService {
     return {
       id: lesson.id,
       course: lesson.course,
+      module: lesson.module,
       title: lesson.title,
       description: lesson.description,
       image: lesson.image,
@@ -49,6 +50,7 @@ class LessonService implements ILessonService {
     return {
       id: newLesson.id,
       course: newLesson.course,
+      module: newLesson.module,
       title: newLesson.title,
       description: newLesson.description,
       image: newLesson.image,
@@ -79,6 +81,7 @@ class LessonService implements ILessonService {
     return {
       id: updatedLesson.id,
       course: updatedLesson.course,
+      module: updatedLesson.module,
       title: updatedLesson.title,
       description: updatedLesson.description,
       image: updatedLesson.image,

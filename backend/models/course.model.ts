@@ -1,12 +1,21 @@
 import { Schema, Document, model } from "mongoose";
 
+export interface Module {
+  title: string;
+  description: string;
+  image: string;
+  previewImage: string;
+  published: boolean;
+  lessons: string[];
+}
+
 export interface Course extends Document {
   id: string;
   title: string;
   description: string;
   image: string;
   previewImage: string;
-  lessons: [string];
+  modules: { [id: string]: Module };
   private: boolean;
   published: boolean;
 }
@@ -30,9 +39,15 @@ const CourseSchema: Schema = new Schema({
   previewImage: {
     type: String,
   },
-  lessons: {
-    type: [String],
-    required: true,
+  modules: {
+    type: {
+      title: String,
+      description: String,
+      image: String,
+      preview_image: String,
+      published: Boolean,
+      lessons: [String],
+    },
   },
   private: {
     type: Boolean,

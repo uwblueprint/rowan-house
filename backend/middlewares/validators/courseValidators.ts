@@ -1,10 +1,21 @@
 import { Request, Response, NextFunction } from "express";
 import {
   getApiValidationError,
-  validateArray,
+  validateObject,
   validatePrimitive,
 } from "./util";
 import { getErrorMessage } from "../../utilities/errorUtils";
+
+const VALID_MODULES = {
+  id: {
+    title: "string",
+    description: "string",
+    image: "string",
+    preview_image: "string",
+    published: "boolean",
+    lessons: "string[]",
+  },
+};
 
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable-next-line import/prefer-default-export */
@@ -33,10 +44,8 @@ export const courseRequestDtoValidator = async (
       .status(400)
       .send(getApiValidationError("previewImage", "string"));
   }
-  if (!validateArray(body.lessons, "string")) {
-    return res
-      .status(400)
-      .send(getApiValidationError("lessons", "string", true));
+  if (!validateObject(body.modules, VALID_MODULES)) {
+    return res.status(400).send("Modules object is not valid");
   }
   return next();
 };

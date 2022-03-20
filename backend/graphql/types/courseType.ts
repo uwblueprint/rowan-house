@@ -1,13 +1,33 @@
 import { gql } from "apollo-server-express";
 
 const courseType = gql`
-  type CourseResponseDTO {
+  type ModuleResponseDTO {
     id: ID!
+    title: String!
+    description: String!
+    image: String!
+    previewImage: String!
+    published: Boolean!
+    lessons: [String]!
+  }
+
+  input ModuleRequestDTO {
+    id: ID
     title: String!
     description: String
     image: String
     previewImage: String
-    lessons: [ID!]!
+    published: Boolean!
+    lessons: [String]
+  }
+
+  type CourseResponseDTO {
+    id: ID!
+    title: String!
+    description: String!
+    image: String!
+    previewImage: String!
+    modules: [ModuleResponseDTO!]!
     private: Boolean!
     published: Boolean!
   }
@@ -17,9 +37,9 @@ const courseType = gql`
     description: String
     image: String
     previewImage: String
-    lessons: [ID!]!
-    private: Boolean
-    published: Boolean
+    modules: [ModuleRequestDTO!]!
+    private: Boolean!
+    published: Boolean!
   }
 
   input UpdateCourseRequestDTO {
@@ -27,7 +47,7 @@ const courseType = gql`
     description: String
     image: String
     previewImage: String
-    lessons: [ID!]
+    modules: [ModuleRequestDTO!]!
     private: Boolean
     published: Boolean
   }
