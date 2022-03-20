@@ -13,14 +13,14 @@ type Module = {
 
 type SerializedModule = Module & { id: string };
 
-type Modules = { [id: string]: Module };
+type ModulesById = { [id: string]: Module };
 
 export type CourseRequest = {
   title: string;
   description: string;
   image: string;
   previewImage: string;
-  modules: Modules;
+  modules: ModulesById;
   private: boolean;
   published: boolean;
 };
@@ -31,7 +31,7 @@ export type CourseResponse = {
   description: string;
   image: string;
   previewImage: string;
-  modules: Modules;
+  modules: ModulesById;
   private: boolean;
   published: boolean;
 };
@@ -46,14 +46,14 @@ type SerializedUpdateCourseRequest = Partial<SerializedCreateCourseRequest>;
 
 // TO DO: error handling
 
-const serializeModules = (modules: Modules): SerializedModule[] => {
+const serializeModules = (modules: ModulesById): SerializedModule[] => {
   return Object.entries(modules).map(([module_id, module]) => ({
     id: module_id,
     ...module,
   }));
 };
 
-const deserializeModules = (serModules: SerializedModule[]): Modules => {
+const deserializeModules = (serModules: SerializedModule[]): ModulesById => {
   const modules: { [id: string]: Module } = {} as { [id: string]: Module };
 
   serModules.forEach((module) => {
