@@ -13,10 +13,12 @@ import jwt from "jsonwebtoken";
 import AUTHENTICATED_USER_KEY from "../constants/AuthConstants";
 import { getLocalStorageObjProperty } from "../utils/LocalStorageUtils";
 
-const httpLink = createUploadLink({
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+const httpLink = (createUploadLink({
   uri: `${process.env.REACT_APP_BACKEND_URL}/graphql`,
   credentials: "include",
-}) as unknown as ApolloLink;
+}) as unknown) as ApolloLink;
 
 const authFromLocalLink = setContext(async (_, { headers }) => {
   const accessToken = getLocalStorageObjProperty(
@@ -30,7 +32,6 @@ const authFromLocalLink = setContext(async (_, { headers }) => {
     },
   };
 });
-
 const injectAccessToken = async (operation: any) => {
   const accessToken = getLocalStorageObjProperty(
     AUTHENTICATED_USER_KEY,

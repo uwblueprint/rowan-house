@@ -6,7 +6,11 @@ import { HeaderGroup, useTable, Column } from "react-table";
 import { useApolloClient, useQuery } from "@apollo/client";
 
 import { EntityResponse } from "../../APIClients/types/EntityClientTypes";
-import { ENTITIES, ENTITIESCSV, FILE } from "../../APIClients/queries/EntityQueries";
+import {
+  ENTITIES,
+  ENTITIESCSV,
+  FILE,
+} from "../../APIClients/queries/EntityQueries";
 import { downloadCSV } from "../../utils/CSVUtils";
 import { downloadFile } from "../../utils/FileUtils";
 
