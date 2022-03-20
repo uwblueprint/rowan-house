@@ -3,9 +3,10 @@ import React, { useState } from "react";
 import BTable from "react-bootstrap/Table";
 import { HeaderGroup, useTable, Column } from "react-table";
 
-import { gql, useApolloClient, useQuery } from "@apollo/client";
+import { useApolloClient, useQuery } from "@apollo/client";
 
-import { EntityResponse } from "../../APIClients/EntityAPIClient";
+import { EntityResponse } from "../../APIClients/types/EntityClientTypes";
+import { ENTITIES, ENTITIESCSV, FILE } from "../../APIClients/queries/EntityQueries";
 import { downloadCSV } from "../../utils/CSVUtils";
 import { downloadFile } from "../../utils/FileUtils";
 
@@ -132,32 +133,6 @@ const DisplayTable = ({ data, downloadEntityFile }: TableProps) => {
     </BTable>
   );
 };
-
-const ENTITIES = gql`
-  query DisplayTableContainer_Entities {
-    entities {
-      id
-      stringField
-      intField
-      enumField
-      stringArrayField
-      boolField
-      fileName
-    }
-  }
-`;
-
-const ENTITIESCSV = gql`
-  query DisplayTableContainer_EntitiesCSV {
-    entitiesCSV
-  }
-`;
-
-const FILE = gql`
-  query DisplayTableContainer_File($fileUUID: ID!) {
-    file(fileUUID: $fileUUID)
-  }
-`;
 
 const DisplayTableContainer: React.FC = (): React.ReactElement | null => {
   const [entities, setEntities] = useState<EntityData[] | null>(null);

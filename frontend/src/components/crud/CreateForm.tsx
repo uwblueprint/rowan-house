@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { JSONSchema7 } from "json-schema";
 import { Form } from "@rjsf/bootstrap-4";
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 
 import {
   EntityRequest,
   EntityResponse,
-} from "../../APIClients/EntityAPIClient";
+} from "../../APIClients/types/EntityClientTypes";
+import { CREATE_ENTITY } from "../../APIClients/mutations/EntityMutations";
 
 const schema: JSONSchema7 = {
   title: "Create Entity",
@@ -57,20 +58,6 @@ const uiSchema = {
     "ui:widget": "select",
   },
 };
-
-const CREATE_ENTITY = gql`
-  mutation CreateForm_CreateEntity($entity: EntityRequestDTO!, $file: Upload) {
-    createEntity(entity: $entity, file: $file) {
-      id
-      stringField
-      intField
-      enumField
-      stringArrayField
-      boolField
-      fileName
-    }
-  }
-`;
 
 const CreateForm = (): React.ReactElement => {
   const [data, setData] = useState<EntityResponse | null>(null);
