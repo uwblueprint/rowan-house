@@ -7,11 +7,9 @@ export const LOGIN = gql`
       firstName
       lastName
       email
+      town
       role
-      approvedLanguagesTranslation
-      approvedLanguagesReview
       accessToken
-      refreshToken
     }
   }
 `;
