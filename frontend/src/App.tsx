@@ -2,6 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useReducer } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
+import { ApolloProvider } from "@apollo/client";
 
 import defaultTheme from "./theme";
 import Login from "./components/auth/Login";
@@ -27,6 +28,8 @@ import EditTeamInfoPage from "./components/pages/EditTeamPage";
 import HooksDemo from "./components/pages/HooksDemo";
 
 import { AuthenticatedUser } from "./types/AuthTypes";
+import client from "./APIClients/BaseAPIClient";
+
 
 const App = (): React.ReactElement => {
   const currentUser: AuthenticatedUser = getLocalStorageObj<AuthenticatedUser>(
@@ -50,6 +53,7 @@ const App = (): React.ReactElement => {
       <SampleContextDispatcherContext.Provider
         value={dispatchSampleContextUpdate}
       >
+        <ApolloProvider client={client}>
         <AuthContext.Provider
           value={{ authenticatedUser, setAuthenticatedUser }}
         >
@@ -103,6 +107,7 @@ const App = (): React.ReactElement => {
             </Router>
           </ChakraProvider>
         </AuthContext.Provider>
+        </ApolloProvider>
       </SampleContextDispatcherContext.Provider>
     </SampleContext.Provider>
   );
