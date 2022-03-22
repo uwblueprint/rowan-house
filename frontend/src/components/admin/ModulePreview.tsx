@@ -1,5 +1,15 @@
 import React from "react";
-import { Box, Flex, Link, Image, Tag, Text, VStack } from "@chakra-ui/react";
+import { useHistory } from "react-router-dom";
+import {
+  Box,
+  Flex,
+  Link,
+  Image,
+  Tag,
+  Text,
+  HStack,
+  VStack,
+} from "@chakra-ui/react";
 import { ModulePreviewProps } from "../../types/AdminDashboardTypes";
 import EditActionsKebabMenu from "./EditActionsKebabMenu";
 import { ADMIN_MODULE_EDITOR_BASE_ROUTE } from "../../constants/Routes";
@@ -17,17 +27,25 @@ const ModulePreview = ({
 }: ModulePreviewProps): React.ReactElement => {
   const EDIT_MODULE_ROUTE = buildEditModuleRoute(courseId, index);
 
+  const history = useHistory();
+  const navigateToEditModuleRoute = () => history.push(EDIT_MODULE_ROUTE);
+
   return (
-    <Box
+    <Flex
       width="240px"
-      minHeight="264px"
+      height="264px"
       className="module-preview"
+      justify="space-between"
+      direction="column"
       borderRadius="6px"
-      border="1px"
-      borderColor="background.lightgrey"
+      border="1px background.lightgrey solid"
       boxShadow="base"
     >
-      <Link href={EDIT_MODULE_ROUTE}>
+      <Link
+        href={EDIT_MODULE_ROUTE}
+        _hover={{ textDecoration: "none", textColor: "text.default" }}
+        flex="1"
+      >
         <Image
           src={image || DEFAULT_IMAGE}
           alt="module-preview"
@@ -35,28 +53,26 @@ const ModulePreview = ({
           width="240px"
           borderTopRadius="6px"
         />
-      </Link>
-      <Flex ml={4} my={2} justify="space-between">
-        <Link
-          href={EDIT_MODULE_ROUTE}
-          py={2}
-          _hover={{ textDecoration: "none", textColor: "text.default" }}
-          flex="1"
+        <HStack
+          align="flex-start"
+          justify="space-between"
+          m={2}
+          flexGrow="1"
         >
-          <VStack align="flex-start" justify="space-between">
+          <VStack align="flex-start" justify="space-between" height="100%" p={2}>
             <Text variant="subheading" noOfLines={2}>
               {title}
             </Text>
             {!published && <Tag colorScheme="cyan">Draft</Tag>}
           </VStack>
-        </Link>
-        <EditActionsKebabMenu
-          handleEditDetailsClick={() => alert("edit details")}
-          deleteFunction={() => true}
-          showHorizontal={false}
-        />
-      </Flex>
-    </Box>
+          <EditActionsKebabMenu
+            handleEditDetailsClick={() => alert("edit details")}
+            deleteFunction={() => true}
+            showHorizontal={false}
+          />
+        </HStack>
+      </Link>
+    </Flex>
   );
 };
 
