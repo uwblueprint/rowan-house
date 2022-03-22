@@ -134,11 +134,10 @@ const refresh = async (refreshFunction: RefreshFunction): Promise<boolean> => {
   try {
     const result = await refreshFunction({ variables: {} });
     const token = result.data?.refresh;
-    if (token) {
-      setLocalStorageObjProperty(AUTHENTICATED_USER_KEY, "accessToken", token);
-    } else {
+    if (!token) {
       return false;
-    }
+    } 
+    setLocalStorageObjProperty(AUTHENTICATED_USER_KEY, "accessToken", token);
     return true;
   } catch (error) {
     return false;
