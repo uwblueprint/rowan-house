@@ -1,21 +1,31 @@
+import { VStack } from "@chakra-ui/react";
 import React from "react";
-import { ContentTypeEnum } from "../../types/ModuleEditorTypes";
+import { Droppable } from "react-beautiful-dnd";
 
+import { ContentTypeEnum } from "../../types/ModuleEditorTypes";
 import BlockPreview from "./BlockPreview";
 
-const SideBarContentKiosk = (): React.ReactElement => {
-  const options = [ContentTypeEnum.TEXT, ContentTypeEnum.IMAGE];
+const options = [
+  ContentTypeEnum.TEXT,
+  ContentTypeEnum.IMAGE,
+];
 
+const SideBarContentKiosk = (): React.ReactElement => {
   return (
-    <div>
-      {options.map((option, index) => (
-        <BlockPreview
-          title={option.title}
-          preview={option.preview}
-          key={index}
-        />
-      ))}
-    </div>
+    <Droppable droppableId="KIOSK" isDropDisabled>
+      {(provided, snapshot) => (
+        <VStack ref={provided.innerRef}>
+          {options.map((option, index) => (
+            <BlockPreview
+              content={option}
+              key={index}
+              index={index}
+            />
+          ))}
+          {provided.placeholder}
+        </VStack>
+      )}
+    </Droppable>
   );
 };
 
