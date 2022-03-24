@@ -3,7 +3,7 @@ import { Redirect, useHistory } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import {
   Flex,
-  Heading,
+  Text,
   Image,
   FormControl,
   FormLabel,
@@ -12,7 +12,7 @@ import {
   Button,
   VStack,
   Input,
-  Center
+  Center,
 } from "@chakra-ui/react";
 import logo from "../logo.png";
 import background from "../signuppage.png";
@@ -27,15 +27,15 @@ const Login = (): React.ReactElement => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isFirstPage, setIsFirstPage] = useState<boolean>(false);
+  const [isSecondPage, setIsSecondPage] = useState<boolean>(false);
   const history = useHistory();
 
   const [login] = useMutation<{ login: AuthenticatedUser }>(LOGIN);
 
   const onLogInClick = async () => {
-    if (isFirstPage === false) {
-      setIsFirstPage(true);
-    } else if (isFirstPage === true) {
+    if (isSecondPage === false) {
+      setIsSecondPage(true);
+    } else if (isSecondPage === true) {
       const user: AuthenticatedUser = await authAPIClient.login(
         email,
         password,
@@ -56,51 +56,61 @@ const Login = (): React.ReactElement => {
   }
 
   return (
-    <Flex
-    >
-        <Center
-          flex='1'
-        >
-          <VStack
-          >
-          <Image htmlHeight="5" src={logo} />
-          <Heading>Sign in to access courses</Heading>
+    <Flex>
+      <Center flex="1">
+        <VStack>
+          <Image height="13vh" marginBottom="0.5rem" src={logo} />
+          <Text variant="display-sm-sb">Sign in to access courses</Text>
           <form>
-            {isFirstPage ? (
-            <>
-              <FormControl>
-                <FormLabel htmlFor="password">Password</FormLabel>
-                <Input
-
-                  type="password"
-                  placeholder="●●●●●"
-                  onChange={(event) => setPassword(event.target.value)}
-                />
-              </FormControl>
-              <Button variant="outline-lg" width="full" onClick={onLogInClick}>
-                Login
-              </Button>
+            {isSecondPage ? (
+              <>
+                <FormControl>
+                  <Text 
+                    variant="caption-md"
+                    marginTop="1.5rem"
+                    > Password</Text>
+                  <Input
+                    type="password"
+                    placeholder="●●●●●"
+                    marginBottom="1rem"
+                    onChange={(event) => setPassword(event.target.value)}
+                  />
+                </FormControl>
+                <Button
+                  variant="sm"
+                  width="full"
+                  onClick={onLogInClick}
+                  marginBottom="2rem"
+                >
+                  Login
+                </Button>
                 <Link
-                color="purple"
-                onClick={onSignUpClick}
-                href="https://www.figma.com/file/9KqGifATPcKRQytJBqAKeJ/User-Authentication?node-id=316%3A2"
-              >
-                Forgot your password
-              </Link>
-            </>
+                  color="purple"
+                  onClick={onSignUpClick}
+                  href="https://www.figma.com/file/9KqGifATPcKRQytJBqAKeJ/User-Authentication?node-id=316%3A2"
+                >
+                  Forgot your password
+                </Link>
+              </>
             ) : (
-            <>
-              <FormControl>
-                <FormLabel htmlFor="email">Email address</FormLabel>
-                <Input
-                  type="email"
-                  placeholder="you@rowanhouse.ca"
-                  onChange={(event) => setEmail(event.target.value)}
-                />
-              </FormControl>
-              <Button variant="outline-lg" width="full" onClick={onLogInClick}>
+              <>
+                <FormControl>
+                <Text variant="caption-md" marginTop="1.5rem">Email Address</Text>
+                  <Input
+                    type="email"
+                    placeholder="you@rowanhouse.ca"
+                    onChange={(event) => setEmail(event.target.value)}
+                    marginBottom="1rem"
+                  />
+                </FormControl>
+                <Button
+                  variant="sm"
+                  width="full"
+                  onClick={onLogInClick}
+                  marginBottom="2rem"
+                >
                   Continue
-              </Button>
+                </Button>
                 <Box>
                   Don&lsquo;t have an account?{" "}
                   <Link
@@ -114,16 +124,14 @@ const Login = (): React.ReactElement => {
               </>
             )}
           </form>
-          </VStack>
-        </Center>
+        </VStack>
+      </Center>
       <Box>
         <Image
           style={{
             height: "100vh",
-            // marginLeft: "40%",
           }}
           src={background}
-          // resizeMode="stretch"
         />
       </Box>
     </Flex>
