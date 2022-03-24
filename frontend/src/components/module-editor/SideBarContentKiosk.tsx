@@ -13,7 +13,7 @@ const options = [
 const SideBarContentKiosk = (): React.ReactElement => {
   return (
     <Droppable droppableId="KIOSK" isDropDisabled>
-      {(provided, snapshot) => (
+      {(provided, _snapshot) => (
         <VStack ref={provided.innerRef}>
           {options.map((option, index) => (
             <BlockPreview

@@ -1,4 +1,5 @@
 import { v4 as uuid } from "uuid";
+import { Box } from "@chakra-ui/react";
 
 export interface LessonType {
   course: string;
@@ -29,30 +30,26 @@ export interface CourseType {
 }
 
 // Content types
-export interface ContentTextProps {
-  text: string;
-}
-
-export interface ContentImageProps {
-  link: string;
-}
-
 export class ContentTypeEnum {
-  static readonly TEXT = new ContentTypeEnum("Text", "text.svg", uuid());
+  static TEXT = new ContentTypeEnum("Text", "text.svg", uuid());
 
-  static readonly IMAGE = new ContentTypeEnum("Image", "image.svg", uuid());
+  static IMAGE = new ContentTypeEnum("Image", "image.svg", uuid());
 
-  // private to disallow creating other instances of this type
-  private constructor(
+  constructor(
     public readonly title: string,
     public readonly preview: string,
     public readonly id: string,
   ) {}
 }
 
+export type ContentProps = {
+  text?: string;
+  link?: string;
+}
+
 export interface ContentType {
   type: ContentTypeEnum;
-  content: ContentTextProps | ContentImageProps;
+  content: ContentProps;
   id: string;
 }
 

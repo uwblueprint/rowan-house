@@ -24,7 +24,7 @@ const BlockPreview = ({content, index}: BlockPreviewProps): React.ReactElement =
     <Draggable key={content.id}
       draggableId={content.id}
       index={index}>
-      {(provided: DraggableProvided, snapshot) => (
+      {(provided: DraggableProvided, _snapshot) => (
         <>
           <div
             className='item'	
@@ -35,7 +35,8 @@ const BlockPreview = ({content, index}: BlockPreviewProps): React.ReactElement =
             >
             <BlockStyle content={content} />
           </div>
-          {snapshot.isDragging && (
+          {_snapshot.isDragging && (
+            // transform: none !important;
             <BlockStyle content={content} />
           )}
         </>

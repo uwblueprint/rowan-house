@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import { VStack } from "@chakra-ui/react";
 import { Droppable } from "react-beautiful-dnd";
-import { v4 as uuid } from "uuid";
 
 import EditorContext from "../../contexts/ModuleEditorContext";
 import EditableContentBlock from "./EditableContentBlock";
@@ -18,10 +17,10 @@ const LessonViewer = (): React.ReactElement => {
 
     return (
       <Droppable droppableId='EDITOR'>
-        {(provided, snapshot) => (
-          <VStack ref={provided.innerRef} flex="1" flexFlow="column" alignItems="center" spacing="8">
+        {(provided, _snapshot) => (
+          <VStack ref={provided.innerRef} flex="1" alignItems="center" spacing="8">
             {lesson?.content.map((block, index) => (
-              <EditableContentBlock content={block} key={index} index={index}/>
+              <EditableContentBlock block={block} key={index} index={index} />
             ))}
             {provided.placeholder}
           </VStack>
