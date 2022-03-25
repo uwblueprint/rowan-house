@@ -3,9 +3,7 @@ import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
 
 import EditorContext from "../../contexts/ModuleEditorContext";
-import {
-  ModuleEditorParams,
-} from "../../types/ModuleEditorTypes";
+import { ModuleEditorParams } from "../../types/ModuleEditorTypes";
 
 const SideBarModuleOverview = (): React.ReactElement => {
   const context = useContext(EditorContext);

@@ -16,7 +16,11 @@ import EditorContext from "../../contexts/ModuleEditorContext";
 import SideBar from "../module-editor/SideBar";
 import LessonViewer from "../module-editor/LessonViewer";
 
-const onDragEnd = (dispatch: React.Dispatch<EditorContextAction>, result: DropResult) => {
+// Copy drag implementation based on https://github.com/atlassian/react-beautiful-dnd/issues/216#issuecomment-423708497
+const onDragEnd = (
+  dispatch: React.Dispatch<EditorContextAction>,
+  result: DropResult,
+) => {
   const { source, destination } = result;
   // dropped outside the list
   if (!destination) {
@@ -32,7 +36,7 @@ const onDragEnd = (dispatch: React.Dispatch<EditorContextAction>, result: DropRe
         },
       });
       break;
-    case 'KIOSK':
+    case "KIOSK":
       dispatch({
         type: "create-block",
         value: {
@@ -42,11 +46,9 @@ const onDragEnd = (dispatch: React.Dispatch<EditorContextAction>, result: DropRe
       });
       break;
     default:
-      console.warn("Unknown drag & drop source/destination");
-      break;
+      throw Error("Unknown drag & drop source/destination");
   }
 };
-
 
 const ModuleEditor = (): React.ReactElement => {
   const { courseID, moduleIndex }: ModuleEditorParams = useParams();

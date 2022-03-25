@@ -1,5 +1,4 @@
 import { v4 as uuid } from "uuid";
-import { Box } from "@chakra-ui/react";
 
 export interface LessonType {
   course: string;
@@ -45,7 +44,7 @@ export class ContentTypeEnum {
 export type ContentProps = {
   text?: string;
   link?: string;
-}
+};
 
 export interface ContentType {
   type: ContentTypeEnum;

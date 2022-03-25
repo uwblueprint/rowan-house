@@ -76,21 +76,22 @@ const createLessonContentBlock = (
         type: ContentTypeEnum.TEXT,
         id: uuid(),
         content: {
-          text: 'Hello!'
+          text: "Hello!",
         },
-      }
+      };
       break;
     case ContentTypeEnum.IMAGE.id:
       block = {
-        type: ContentTypeEnum.TEXT,
+        type: ContentTypeEnum.IMAGE,
         id: uuid(),
         content: {
-          link: 'https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350'
+          link:
+            "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
         },
-      }
+      };
       break;
     default:
-      throw Error('Invalid block id');
+      throw Error("Invalid block id");
   }
   const newState = { ...state };
   newState.lessons[id].content.splice(index, 0, block);
@@ -120,7 +121,7 @@ const reorderLessonContentBlocks = (
   const [block] = newState.lessons[id].content.splice(oldIndex, 1);
   newState.lessons[id].content.splice(newIndex, 0, block);
   return newState;
-}
+};
 
 const updateLessonContentBlock = (
   state: EditorStateType,
