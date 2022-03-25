@@ -119,7 +119,6 @@ const reorderLessonContentBlocks = (
   const newState = { ...state };
   const [block] = newState.lessons[id].content.splice(oldIndex, 1);
   newState.lessons[id].content.splice(newIndex, 0, block);
-  console.log(newState.lessons[id].content);
   return newState;
 }
 

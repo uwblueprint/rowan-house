@@ -32,8 +32,9 @@ const EditableContentBlock = ({
 
   return (
     <Draggable
-		draggableId={block.id}
-		index={index}>
+		  key={block.id}
+      draggableId={block.id}
+      index={index}>
       {(provided, _snapshot) => (
         <VStack
           width='100%'
@@ -58,7 +59,6 @@ const EditableContentBlock = ({
             </Box>
             <Spacer/>
             {SelectContentBlock(block)}
-            <p>{index}</p>
             <Spacer/>
           </Flex>
           <Divider opacity={isHovered? 1:0}/>
