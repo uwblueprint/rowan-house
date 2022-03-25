@@ -1,13 +1,21 @@
 import React from "react";
 import { Box, Flex, Link, Image, Tag, Text, VStack } from "@chakra-ui/react";
 import { ModulePreviewProps } from "../../types/AdminDashboardTypes";
-import EditActionsKebabMenu from "../common/EditActionsKebabMenu";
+import EditActionsKebabMenu from "./EditActionsKebabMenu";
+import { ADMIN_MODULE_EDITOR_BASE_ROUTE } from "../../constants/Routes";
+
+const buildEditModuleRoute = (courseId: string, moduleId: string): string =>
+  `${ADMIN_MODULE_EDITOR_BASE_ROUTE}/${courseId}/${moduleId}`;
 
 const ModulePreview = ({
+  courseId,
+  moduleId,
   title,
   published,
   imageLink,
 }: ModulePreviewProps): React.ReactElement => {
+  const EDIT_MODULE_ROUTE = buildEditModuleRoute(courseId, moduleId);
+
   return (
     <Box
       width="240px"
@@ -18,7 +26,7 @@ const ModulePreview = ({
       borderColor="background.lightgrey"
       boxShadow="base"
     >
-      <Link href="/">
+      <Link href={EDIT_MODULE_ROUTE}>
         <Image
           src={imageLink}
           alt="module-preview"
@@ -28,8 +36,13 @@ const ModulePreview = ({
         />
       </Link>
       <Flex ml={4} my={2} justify="space-between">
-        <Link href="/" py={2} _hover={{ textDecoration: "none" }} flex="1">
-          <VStack spacing={1} align="flex-start">
+        <Link
+          href={EDIT_MODULE_ROUTE}
+          py={2}
+          _hover={{ textDecoration: "none", textColor: "text.default" }}
+          flex="1"
+        >
+          <VStack align="flex-start" justify="space-between">
             <Text variant="subheading" noOfLines={2}>
               {title}
             </Text>
