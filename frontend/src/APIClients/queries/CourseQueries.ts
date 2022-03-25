@@ -8,7 +8,15 @@ export const COURSES = gql`
       description
       image
       previewImage
-      modules
+      modules {
+        id
+        title
+        description
+        image
+        previewImage
+        published
+        lessons
+      }
       private
       published
     }
@@ -22,7 +30,15 @@ export const GET_COURSE = gql`
       description
       image
       previewImage
-      modules
+      modules {
+        id
+        title
+        description
+        image
+        previewImage
+        published
+        lessons
+      }
       private
       published
     }

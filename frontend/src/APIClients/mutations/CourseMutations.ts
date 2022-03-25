@@ -7,7 +7,15 @@ export const CREATE_COURSE = gql`
       description
       image
       previewImage
-      modules
+      modules {
+        id
+        title
+        description
+        image
+        previewImage
+        published
+        lessons
+      }
       private
       published
     }
@@ -21,7 +29,15 @@ export const UPDATE_COURSE = gql`
       description
       image
       previewImage
-      modules
+      modules {
+        id
+        title
+        description
+        image
+        previewImage
+        published
+        lessons
+      }
       private
       published
     }
