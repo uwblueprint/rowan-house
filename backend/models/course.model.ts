@@ -35,7 +35,7 @@ const ModuleSchema: Schema = new Schema({
     default: false,
   },
   lessons: [String],
-})
+});
 
 const CourseSchema: Schema = new Schema({
   title: {
