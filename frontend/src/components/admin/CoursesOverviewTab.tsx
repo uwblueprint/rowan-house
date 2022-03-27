@@ -1,8 +1,7 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
-import { Box, Button, Flex, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, Flex, Spinner, Text, VStack } from "@chakra-ui/react";
 import { SmallAddIcon } from "@chakra-ui/icons";
-import { dummyCourses } from "../../constants/DummyData";
 import CoursePreview from "./CoursePreview";
 import { COURSES } from "../../APIClients/queries/CourseQueries";
 import { CourseResponse } from "../../APIClients/types/CourseClientTypes";
@@ -14,13 +13,12 @@ const CoursesOverviewTab = (): React.ReactElement => {
     courses: Array<CourseResponse>;
   }>(COURSES, {
     onCompleted: (data) => {
-      if (!data) setCourses(dummyCourses);
-      else setCourses(data.courses);
+      setCourses(data.courses);
     },
   });
 
-  if (loading) return <p>Loading...</p>;
   if (error) return <p>Error! {error.message}</p>;
+
   return (
     <Box flex="1">
       <Flex
@@ -39,16 +37,21 @@ const CoursesOverviewTab = (): React.ReactElement => {
         </Button>
       </Flex>
       <VStack spacing={12} mx={9}>
-        {courses?.map((course) => (
-          <CoursePreview
-            key={course.id}
-            courseId={course.id}
-            title={course.title}
-            description={course.description}
-            isPrivate={course.private}
-            modules={course.modules}
-          />
-        ))}
+        {loading && <Spinner size="xl" />}
+        {!courses?.length && !loading ? (
+          <h1>There are no courses.</h1>
+        ) : (
+          courses?.map((course) => (
+            <CoursePreview
+              key={course.id}
+              courseId={course.id}
+              title={course.title}
+              description={course.description}
+              isPrivate={course.private}
+              modules={course.modules}
+            />
+          ))
+        )}
       </VStack>
     </Box>
   );

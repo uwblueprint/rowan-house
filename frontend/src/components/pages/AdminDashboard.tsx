@@ -5,7 +5,7 @@ import CoursesOverviewTab from "../admin/CoursesOverviewTab";
 
 const AdminDashboard = (): React.ReactElement => {
   return (
-    <Flex>
+    <Flex h="100vh">
       <SideBar />
       <CoursesOverviewTab />
     </Flex>
