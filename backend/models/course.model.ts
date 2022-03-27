@@ -26,13 +26,17 @@ export interface CourseVisibilityAttributes {
 }
 
 const ModuleSchema: Schema = new Schema({
-  title: String,
+  title: {
+    type: String,
+    required: true,
+  },
   description: String,
   image: String,
   preview_image: String,
   published: {
     type: Boolean,
     default: false,
+    required: true,
   },
   lessons: [String],
 });
