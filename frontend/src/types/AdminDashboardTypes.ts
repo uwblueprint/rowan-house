@@ -1,7 +1,7 @@
 import { Module } from "../APIClients/types/CourseClientTypes";
 
 export interface ModulePreviewProps {
-  id: string;
+  index: number;
   courseId: string;
   title: string;
   image: string | null;

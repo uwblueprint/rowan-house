@@ -4,12 +4,13 @@ export interface LessonType {
   title: string;
   description?: string;
   image?: string;
-  content: Array<ContentType>;
+  content: ContentType[];
 }
 
 export type LessonsType = Record<string, LessonType>;
 
 export interface ModuleType {
+  id: string;
   title: string;
   description?: string;
   image: string;
@@ -22,7 +23,7 @@ export interface CourseType {
   title: string;
   description?: string;
   private: boolean;
-  modules: Record<string, ModuleType>;
+  modules: ModuleType[];
 }
 
 // Content types
@@ -53,7 +54,7 @@ export interface ContentType {
 
 export interface ModuleEditorParams {
   courseID: string;
-  moduleID: string;
+  moduleIndex: string;
 }
 
 // Context types

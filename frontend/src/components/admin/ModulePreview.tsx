@@ -5,17 +5,17 @@ import EditActionsKebabMenu from "./EditActionsKebabMenu";
 import { ADMIN_MODULE_EDITOR_BASE_ROUTE } from "../../constants/Routes";
 import { DEFAULT_IMAGE } from "../../constants/DummyData";
 
-const buildEditModuleRoute = (courseId: string, moduleId: string): string =>
-  `${ADMIN_MODULE_EDITOR_BASE_ROUTE}/${courseId}/${moduleId}`;
+const buildEditModuleRoute = (courseId: string, index: number): string =>
+  `${ADMIN_MODULE_EDITOR_BASE_ROUTE}/${courseId}/${index}`;
 
 const ModulePreview = ({
-  id,
+  index,
   courseId,
   title,
   published,
   image,
 }: ModulePreviewProps): React.ReactElement => {
-  const EDIT_MODULE_ROUTE = buildEditModuleRoute(courseId, id);
+  const EDIT_MODULE_ROUTE = buildEditModuleRoute(courseId, index);
 
   return (
     <Box

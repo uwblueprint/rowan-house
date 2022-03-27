@@ -14,7 +14,7 @@ import SideBar from "../module-editor/SideBar";
 import LessonViewer from "../module-editor/LessonViewer";
 
 const ModuleEditor = (): React.ReactElement => {
-  const { courseID, moduleID }: ModuleEditorParams = useParams();
+  const { courseID, moduleIndex }: ModuleEditorParams = useParams();
 
   const [state, dispatch] = useReducer(EditorContextReducer, null);
 
@@ -25,16 +25,15 @@ const ModuleEditor = (): React.ReactElement => {
       title: `Course ${courseID}`,
       description: "Hello",
       private: false,
-      modules: {
-        "module-hash-1": {
-          title: "Hello!",
-          description: `I am a module ${moduleID}`,
-          image: "",
-          previewImage: "",
-          published: true,
-          lessons: ["lesson-hash-1", "lesson-hash-2"],
-        },
-      },
+      modules: [{
+        id: "module-hash-1",
+        title: "Hello!",
+        description: `I am a module ${moduleIndex}`,
+        image: "",
+        previewImage: "",
+        published: true,
+        lessons: ["lesson-hash-1", "lesson-hash-2"],
+      }],
     };
 
     // TODO: Retrieve all lessons from the module
@@ -97,10 +96,10 @@ const ModuleEditor = (): React.ReactElement => {
         hasChanged: false,
       },
     });
-  }, [courseID, moduleID]);
+  }, [courseID, moduleIndex]);
 
   if (state) {
-    if (state.course.modules[moduleID] === undefined) {
+    if (state.course.modules[parseInt(moduleIndex, 10)] === undefined) {
       return <p>Module not found!</p>;
     }
 
