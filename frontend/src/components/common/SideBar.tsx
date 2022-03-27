@@ -4,10 +4,6 @@ import {
   Flex,
   Text,
   Spacer,
-<<<<<<< HEAD
-=======
-  Avatar, 
->>>>>>> 6efa86c (Landing Page: Navigation Sidebar)
   Image,
   Button
 } from "@chakra-ui/react";
