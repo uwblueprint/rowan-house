@@ -8,7 +8,6 @@ export type Module = {
   lessons: string[] | null;
 };
 
-
 export type CourseRequest = {
   title: string;
   description?: string;

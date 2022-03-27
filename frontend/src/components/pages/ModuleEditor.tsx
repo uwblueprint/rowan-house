@@ -25,15 +25,17 @@ const ModuleEditor = (): React.ReactElement => {
       title: `Course ${courseID}`,
       description: "Hello",
       private: false,
-      modules: [{
-        id: "module-hash-1",
-        title: "Hello!",
-        description: `I am a module ${moduleIndex}`,
-        image: "",
-        previewImage: "",
-        published: true,
-        lessons: ["lesson-hash-1", "lesson-hash-2"],
-      }],
+      modules: [
+        {
+          id: "module-hash-1",
+          title: "Hello!",
+          description: `I am a module ${moduleIndex}`,
+          image: "",
+          previewImage: "",
+          published: true,
+          lessons: ["lesson-hash-1", "lesson-hash-2"],
+        },
+      ],
     };
 
     // TODO: Retrieve all lessons from the module
