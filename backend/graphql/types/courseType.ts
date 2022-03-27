@@ -4,11 +4,11 @@ const courseType = gql`
   type ModuleResponseDTO {
     id: ID!
     title: String!
-    description: String!
-    image: String!
-    previewImage: String!
+    description: String
+    image: String
+    previewImage: String
     published: Boolean!
-    lessons: [String]!
+    lessons: [String]
   }
 
   input ModuleRequestDTO {
@@ -17,17 +17,17 @@ const courseType = gql`
     description: String
     image: String
     previewImage: String
-    published: Boolean!
+    published: Boolean
     lessons: [String]
   }
 
   type CourseResponseDTO {
     id: ID!
     title: String!
-    description: String!
-    image: String!
-    previewImage: String!
-    modules: [ModuleResponseDTO!]!
+    description: String
+    image: String
+    previewImage: String
+    modules: [ModuleResponseDTO!]
     private: Boolean!
     published: Boolean!
   }
@@ -37,9 +37,9 @@ const courseType = gql`
     description: String
     image: String
     previewImage: String
-    modules: [ModuleRequestDTO!]!
-    private: Boolean!
-    published: Boolean!
+    modules: [ModuleRequestDTO!]
+    private: Boolean
+    published: Boolean
   }
 
   input UpdateCourseRequestDTO {
@@ -47,7 +47,7 @@ const courseType = gql`
     description: String
     image: String
     previewImage: String
-    modules: [ModuleRequestDTO!]!
+    modules: [ModuleRequestDTO!]
     private: Boolean
     published: Boolean
   }

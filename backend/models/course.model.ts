@@ -15,7 +15,7 @@ export interface Course extends Document {
   description: string;
   image: string;
   previewImage: string;
-  modules: { [id: string]: Module };
+  modules: Module[];
   private: boolean;
   published: boolean;
 }
@@ -24,6 +24,18 @@ export interface CourseVisibilityAttributes {
   private?: boolean;
   published?: boolean;
 }
+
+const ModuleSchema: Schema = new Schema({
+  title: String,
+  description: String,
+  image: String,
+  preview_image: String,
+  published: {
+    type: Boolean,
+    default: false,
+  },
+  lessons: [String],
+})
 
 const CourseSchema: Schema = new Schema({
   title: {
@@ -40,14 +52,7 @@ const CourseSchema: Schema = new Schema({
     type: String,
   },
   modules: {
-    type: {
-      title: String,
-      description: String,
-      image: String,
-      preview_image: String,
-      published: Boolean,
-      lessons: [String],
-    },
+    type: [ModuleSchema],
   },
   private: {
     type: Boolean,

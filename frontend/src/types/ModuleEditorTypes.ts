@@ -15,7 +15,7 @@ export interface ModuleType {
   image: string;
   previewImage: string;
   published: boolean;
-  lessons: Array<string>;
+  lessons: string[];
 }
 
 export interface CourseType {
