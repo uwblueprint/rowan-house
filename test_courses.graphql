@@ -1,0 +1,175 @@
+# one
+mutation {
+  createCourse(course: {
+    title: "title",
+    description: "ah",
+    image: "https://miro.medium.com/max/1400/1*TVZkyg15FLcByhAh0jz4kg.png",
+    previewImage: "https://miro.medium.com/max/1400/1*TVZkyg15FLcByhAh0jz4kg.png",
+    modules: [{
+      title: "Module 1",
+      description: "real quick desc",
+      image: "https://miro.medium.com/max/1400/1*TVZkyg15FLcByhAh0jz4kg.png",
+      previewImage: "https://miro.medium.com/max/1400/1*TVZkyg15FLcByhAh0jz4kg.png",
+      published: true,
+      lessons: ["lesson1"]
+    }]
+    private: true,
+    published: false,
+  }) {
+    id
+    title
+    description
+    image
+    previewImage
+    modules {
+      id
+      title
+      description
+      image
+      previewImage
+      published
+      lessons
+    }
+    private
+    published
+  }
+}
+
+# two
+mutation {
+  createCourse(course: {
+    title: "title num 2",
+    modules: [{
+      title: "single module",
+      description: "extremeley good descriptive",
+      image: "https://miro.medium.com/max/1400/1*TVZkyg15FLcByhAh0jz4kg.png",
+      previewImage: "https://miro.medium.com/max/1400/1*TVZkyg15FLcByhAh0jz4kg.png",
+      published: true,
+      lessons: ["lesson1", "lesson2"]
+    }]
+    private: true,
+    published: false,
+  }) {
+    id
+    title
+    description
+    image
+    previewImage
+    modules {
+      id
+      title
+      description
+      image
+      previewImage
+      published
+      lessons
+    }
+    private
+    published
+  }
+}
+
+# three
+mutation {
+  createCourse(course: {
+    title: "title for c3",
+    description: "ah ah ah ah",
+    image: "https://miro.medium.com/max/1400/1*TVZkyg15FLcByhAh0jz4kg.png",
+    previewImage: "https://miro.medium.com/max/1400/1*TVZkyg15FLcByhAh0jz4kg.png",
+    modules: [{
+      title: "This is yet another module",
+      description: "with its own description and all",
+      image: "https://miro.medium.com/max/1400/1*TVZkyg15FLcByhAh0jz4kg.png",
+      previewImage: "https://miro.medium.com/max/1400/1*TVZkyg15FLcByhAh0jz4kg.png",
+      published: false,
+      lessons: ["lesson1", "lessontwo", "lesson3three"]
+    }]
+    private: true,
+    published: true,
+  }) {
+    id
+    title
+    description
+    image
+    previewImage
+    modules {
+      id
+      title
+      description
+      image
+      previewImage
+      published
+      lessons
+    }
+    private
+    published
+  }
+}
+
+# four
+mutation {
+  createCourse(course: {
+    title: "this is the fourth title",
+    description: "time dune",
+    image: "https://miro.medium.com/max/1400/1*TVZkyg15FLcByhAh0jz4kg.png",
+    previewImage: "https://miro.medium.com/max/1400/1*TVZkyg15FLcByhAh0jz4kg.png",
+    modules: []
+    private: false,
+    published: true,
+  }) {
+    id
+    title
+    description
+    image
+    previewImage
+    modules {
+      id
+      title
+      description
+      image
+      previewImage
+      published
+      lessons
+    }
+    private
+    published
+  }
+}
+
+# five
+mutation {
+  createCourse(course: {
+    title: "fifth last but not least title",
+    description: "ahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
+    image: "https://miro.medium.com/max/1400/1*TVZkyg15FLcByhAh0jz4kg.png",
+    previewImage: "https://miro.medium.com/max/1400/1*TVZkyg15FLcByhAh0jz4kg.png",
+    modules: [{
+      title: "this is my last module",
+      description: "with my last description to include",
+      image: "https://miro.medium.com/max/1400/1*TVZkyg15FLcByhAh0jz4kg.png",
+      previewImage: "https://miro.medium.com/max/1400/1*TVZkyg15FLcByhAh0jz4kg.png",
+      published: true,
+      lessons: ["lesson1", "lesson2", "lesson3", "lesson4", "lesson5"]
+    }]
+    private: false,
+    published: false,
+  }) {
+    id
+    title
+    description
+    image
+    previewImage
+    modules {
+      id
+      title
+      description
+      image
+      previewImage
+      published
+      lessons
+    }
+    private
+    published
+  }
+}
+
