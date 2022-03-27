@@ -13,20 +13,18 @@ const createLesson = (
   lesson: LessonType,
 ): EditorStateType => {
   const newState = { ...state };
-  // Check to make sure moduleID exists
-  console.assert(
-    Object.keys(newState.course.modules).includes(lesson.module),
-    `Invalid moduleID ${lesson.module}`,
+  const moduleIndex = state.course.modules.findIndex(
+    (module) => module.id === lesson.module,
   );
+  // Check to make sure moduleID exists
+  console.assert(moduleIndex !== -1, `Invalid moduleID ${lesson.module}`);
   // TODO: Generate a new ID for the lesson and ensure no duplicates
   const lessonID = lesson.title;
   // Create the new lesson object
   newState.lessons[lessonID] = lesson;
   // Add the lesson ID to the modules
   // TODO: Object.keys does not guarantee order - fix in the future
-  newState.course.modules[lesson.module].lessons = Object.keys(
-    newState.lessons,
-  );
+  newState.course.modules[moduleIndex].lessons = Object.keys(newState.lessons);
   // Focus on new lesson
   newState.focusedLesson = lessonID;
   return newState;

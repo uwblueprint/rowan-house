@@ -10,7 +10,8 @@ import {
 
 const SideBarModuleOverview = (): React.ReactElement => {
   const context = useContext(EditorContext);
-  const { courseID, moduleID }: ModuleEditorParams = useParams();
+  const { courseID, moduleIndex }: ModuleEditorParams = useParams();
+  const moduleID = parseInt(moduleIndex, 10);
 
   if (!context) return <></>;
   const { state, dispatch } = context;
@@ -28,7 +29,7 @@ const SideBarModuleOverview = (): React.ReactElement => {
       type: "create-lesson",
       value: {
         course: courseID,
-        module: moduleID,
+        module: course.modules[moduleID].id,
         title,
         content: [
           {

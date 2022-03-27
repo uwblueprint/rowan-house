@@ -3,18 +3,19 @@ import { Box, Flex, Link, Image, Tag, Text, VStack } from "@chakra-ui/react";
 import { ModulePreviewProps } from "../../types/AdminDashboardTypes";
 import EditActionsKebabMenu from "./EditActionsKebabMenu";
 import { ADMIN_MODULE_EDITOR_BASE_ROUTE } from "../../constants/Routes";
+import { DEFAULT_IMAGE } from "../../constants/DummyData";
 
-const buildEditModuleRoute = (courseId: string, moduleId: string): string =>
-  `${ADMIN_MODULE_EDITOR_BASE_ROUTE}/${courseId}/${moduleId}`;
+const buildEditModuleRoute = (courseId: string, index: number): string =>
+  `${ADMIN_MODULE_EDITOR_BASE_ROUTE}/${courseId}/${index}`;
 
 const ModulePreview = ({
+  index,
   courseId,
-  moduleId,
   title,
   published,
-  imageLink,
+  image,
 }: ModulePreviewProps): React.ReactElement => {
-  const EDIT_MODULE_ROUTE = buildEditModuleRoute(courseId, moduleId);
+  const EDIT_MODULE_ROUTE = buildEditModuleRoute(courseId, index);
 
   return (
     <Box
@@ -28,7 +29,7 @@ const ModulePreview = ({
     >
       <Link href={EDIT_MODULE_ROUTE}>
         <Image
-          src={imageLink}
+          src={image || DEFAULT_IMAGE}
           alt="module-preview"
           height="160px"
           width="240px"

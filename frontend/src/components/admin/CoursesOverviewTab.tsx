@@ -5,13 +5,13 @@ import { SmallAddIcon } from "@chakra-ui/icons";
 import { dummyCourses } from "../../constants/DummyData";
 import CoursePreview from "./CoursePreview";
 import { COURSES } from "../../APIClients/queries/CourseQueries";
-import { CoursePreviewProps } from "../../types/AdminDashboardTypes";
+import { CourseResponse } from "../../APIClients/types/CourseClientTypes";
 
 const CoursesOverviewTab = (): React.ReactElement => {
-  const [courses, setCourses] = React.useState<CoursePreviewProps[] | null>();
+  const [courses, setCourses] = React.useState<CourseResponse[] | null>();
 
   const { loading, error } = useQuery<{
-    courses: Array<CoursePreviewProps>;
+    courses: Array<CourseResponse>;
   }>(COURSES, {
     onCompleted: (data) => {
       if (!data) setCourses(dummyCourses);
@@ -41,11 +41,11 @@ const CoursesOverviewTab = (): React.ReactElement => {
       <VStack spacing={12} mx={9}>
         {courses?.map((course) => (
           <CoursePreview
-            key={course.courseId}
-            courseId={course.courseId}
+            key={course.id}
+            courseId={course.id}
             title={course.title}
             description={course.description}
-            isPrivate={course.isPrivate}
+            isPrivate={course.private}
             modules={course.modules}
           />
         ))}

@@ -18,7 +18,7 @@ export interface CreateCourseRequestDTO {
   description: string;
   image: string;
   previewImage: string;
-  modules: { [id: string]: Module };
+  modules: Module[];
   private: boolean;
   published: boolean;
 }
@@ -30,7 +30,7 @@ export interface UpdateCourseRequestDTO {
   previewImage: string;
   private: boolean;
   published: boolean;
-  modules: { [id: string]: Module };
+  modules: Module[];
 }
 
 export interface CourseResponseDTO {
@@ -41,7 +41,7 @@ export interface CourseResponseDTO {
   previewImage: string;
   private: boolean;
   published: boolean;
-  modules: { [id: string]: Module };
+  modules: Module[];
 }
 
 export interface SerializedCreateCourseRequestDTO

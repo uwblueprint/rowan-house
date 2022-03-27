@@ -58,13 +58,13 @@ const CoursePreview = ({
         </Button>
       </Flex>
       <SimpleGrid templateColumns="repeat(auto-fit, 240px)" spacing={4}>
-        {modules.map((module) => (
+        {modules?.map((module, index) => (
           <ModulePreview
-            key={module.moduleId}
+            key={module.id}
+            index={index}
             courseId={courseId}
-            moduleId={module.moduleId}
             title={module.title}
-            imageLink={module.imageLink}
+            image={module.image}
             published={module.published}
           />
         ))}
