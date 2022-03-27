@@ -32,6 +32,7 @@ const Sidebar = (): React.ReactElement => {
       <Flex
         position="fixed"
 <<<<<<< HEAD
+<<<<<<< HEAD
         flex="1"
         p="0.25px"
         w="20%"
@@ -87,17 +88,20 @@ const Sidebar = (): React.ReactElement => {
         left="0"
         p="4"
         w="20%"
+=======
+        flex="1"
+        p="0.25px"
+        w="20%"
+>>>>>>> 7f7fe5e (Fixes pt 1)
         h="100%"
         minW="min-content"
-        boxShadow="xl"
         flexFlow="column"
-        flexDir="column"
-        alignItems="center"
-        bg = "brand.royal"
-        color ="white"
-        orientation = "vertical"
+        align="center"
+        bg="brand.royal"
+        color="white"
         justify="space=between"
       >
+<<<<<<< HEAD
 <<<<<<< HEAD
 
       <Flex w="100">
@@ -126,29 +130,21 @@ const Sidebar = (): React.ReactElement => {
         orientation = "horizontal"
         flexDir = "row"
         >
+=======
+        <Flex>
+>>>>>>> 7f7fe5e (Fixes pt 1)
           <Image
-          src={CoursesIcon}
-          alt="Book Icon"
-          width="24px"
-          height="24px"
+            src={RHSLogo}
+            alt="Rowan House logo"
+            width="10rem"
+            pt="2rem"
           />
-          <Text variant="body" pl = "20px">Manage Courses</Text>
         </Flex>
-
-        <Flex
-        w="100"
-        h="62px"
-        orientation = "horizontal"
-        flexDir = "row"
-        >   
-          <Image
-          src={UsersIcon}
-          alt="Book Icon"
-          width="24px"
-          height="24px"
-          />
-          <Text variant="body" pl = "20px">Manage Users</Text>
+        <Flex w="100%" flexDir="column" pt="72px">
+          <Tab icon={CoursesIcon} text="Manage Courses"/>
+          <Tab icon={UsersIcon} text="Manage Users"/>
         </Flex>
+<<<<<<< HEAD
         
 >>>>>>> 9290b0b (Sidebar with images)
       </Flex>
@@ -195,6 +191,19 @@ const Sidebar = (): React.ReactElement => {
         </Flex>
 
 >>>>>>> 15ec4b8 (Landing Page: Navigation Sidebar)
+=======
+        <Spacer />
+        <Flex
+        w="100%"
+        justify="space-between"
+        p="1.5rem"
+      >
+           <Flex flexDir="column">
+            <Text variant="caption" opacity="0.7"> Admin</Text>
+            <Text variant="body-bold">Jane Doe</Text>
+          </Flex>
+          <Button variant="secondary-filled">Sign Out</Button>
+>>>>>>> 7f7fe5e (Fixes pt 1)
       </Flex>
       </Flex>
     </Box>
