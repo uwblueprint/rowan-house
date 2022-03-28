@@ -6,7 +6,6 @@ import {
   Text,
   Image,
   FormControl,
-  FormLabel,
   Link,
   Box,
   Button,
@@ -14,8 +13,9 @@ import {
   Input,
   Center,
 } from "@chakra-ui/react";
-import logo from "../logo.png";
-import background from "../signuppage.png";
+import { ArrowBackIcon } from '@chakra-ui/icons';
+import RHSLogo from "../../assets/RHSlogo.png";
+import BackgroundImage from "../signuppage.png";
 
 import authAPIClient from "../../APIClients/AuthAPIClient";
 import { LOGIN } from "../../APIClients/mutations/AuthMutations";
@@ -23,27 +23,43 @@ import { HOME_PAGE, SIGNUP_PAGE } from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
 import { AuthenticatedUser } from "../../types/AuthTypes";
 
+enum LoginState {
+  EnterEmail,
+  EnterPassword,
+  ForgetPassword
+}  
+
 const Login = (): React.ReactElement => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isSecondPage, setIsSecondPage] = useState<boolean>(false);
+  const [loginState,  setLoginState] = useState(LoginState.EnterEmail);
   const history = useHistory();
 
   const [login] = useMutation<{ login: AuthenticatedUser }>(LOGIN);
 
+  const getLoginUser = async () => {
+    const user: AuthenticatedUser = await authAPIClient.login(
+      email,
+      password,
+      login,
+    );
+    setAuthenticatedUser(user);
+  }
+
   const onLogInClick = async () => {
-    if (isSecondPage === false) {
-      setIsSecondPage(true);
-    } else if (isSecondPage === true) {
-      const user: AuthenticatedUser = await authAPIClient.login(
-        email,
-        password,
-        login,
-      );
-      setAuthenticatedUser(user);
-    } else {
-      throw new Error("invalid page number");
+    switch (loginState) {
+      case LoginState.EnterEmail:
+        setLoginState(LoginState.EnterPassword);
+        break;
+      case LoginState.EnterPassword:
+        getLoginUser();
+        break;
+      case LoginState.ForgetPassword:
+        // implement send forget password link
+        break;
+      default:
+        throw new Error("Unexpected login state");
     }
   };
 
@@ -51,87 +67,167 @@ const Login = (): React.ReactElement => {
     history.push(SIGNUP_PAGE);
   };
 
+  const onBackClick = (currentLoginState: LoginState) => {
+    switch (currentLoginState) {
+      case LoginState.EnterPassword:
+        return (
+          setLoginState(LoginState.EnterEmail)
+        );
+      case LoginState.ForgetPassword:
+        return (
+          setLoginState(LoginState.EnterPassword)
+        );
+      default:
+        throw new Error("Unexpected Error");
+    }
+  }
+
   if (authenticatedUser) {
     return <Redirect to={HOME_PAGE} />;
+  }
+
+  const getLoginForm = (currentLoginState: LoginState) => {
+    switch (currentLoginState) {
+      case LoginState.EnterEmail: 
+        return (
+          <Box>
+            <Text variant="display-sm-sb">Sign in to access courses</Text>
+            <FormControl>
+            <Text variant="caption-md" marginTop="4vh">Email Address</Text>
+              <Input
+                type="email"
+                value={email}
+                placeholder="you@rowanhouse.ca"
+                onChange={(event) => setEmail(event.target.value)}
+                marginBottom="3vh"
+              />
+            </FormControl>
+            <Button
+              variant="sm"
+              width="full"
+              onClick={onLogInClick}
+              marginBottom="2vh"
+            >
+              Continue
+            </Button>
+            <Center>
+              Don&lsquo;t have an account?&nbsp;
+              <Button
+                variant="link"
+                color="purple"
+                onClick={onSignUpClick}
+              >
+                Sign Up
+              </Button>
+            </Center>
+          </Box>
+        )
+      case LoginState.EnterPassword: 
+        return (
+          <Box>
+            <Text variant="display-sm-sb">Sign in to access courses</Text>
+            <FormControl>
+            <Box 
+              display="flex"
+              marginTop="3vh"
+              >
+              <Button
+                onClick={() => onBackClick}
+                variant="link"
+                >
+                <ArrowBackIcon />
+                <Text variant="button">Back</Text>
+              </Button>
+            </Box>
+            <Text variant="caption-md" marginTop="1.5vh"> Password</Text>
+            <Input
+              type="password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              marginBottom="3vh"
+            />
+            </FormControl>
+            <Button
+              variant="sm"
+              width="full"
+              onClick={onLogInClick}
+              marginBottom="2vh"
+            >
+              Login
+            </Button>
+            <Center>
+              <Button
+                variant="link"
+                color="purple"
+                onClick={onSignUpClick}
+              >
+                Forgot your password
+              </Button>
+            </Center>
+          </Box>
+        );
+      case LoginState.ForgetPassword: 
+        return (
+          <Box>
+            <Text variant="display-sm-sb">Forgot your password?</Text>
+            <Box 
+              display="flex"
+              marginTop="3vh"
+              >
+              <Button
+                onClick={() => onBackClick}
+                variant="link"
+                >
+                <ArrowBackIcon />
+                <Text variant="button">Back</Text>
+              </Button>
+            </Box>
+            <FormControl>
+            <Text variant="caption-md" marginTop="1.5vh">Email Address</Text>
+              <Input
+                type="email"
+                placeholder="you@rowanhouse.ca"
+                onChange={(event) => setEmail(event.target.value)}
+                marginBottom="3vh"
+              />
+            </FormControl>
+            <Button
+              variant="sm"
+              width="full"
+              onClick={onLogInClick}
+              marginBottom="2vh"
+            >
+              Continue
+            </Button>
+            <Center>
+              Remembered your password?{" "}
+              <Button
+                variant="sm"
+                color="purple"
+                onClick={onSignUpClick}
+              >
+                Sign in
+              </Button>
+            </Center>
+          </Box>
+        );
+      default:
+        throw new Error("Unexpected login state");
+    }
   }
 
   return (
     <Flex>
       <Center flex="1">
         <VStack>
-          <Image height="13vh" marginBottom="0.5rem" src={logo} />
-          <Text variant="display-sm-sb">Sign in to access courses</Text>
-          <form>
-            {isSecondPage ? (
-              <>
-                <FormControl>
-                  <Text 
-                    variant="caption-md"
-                    marginTop="1.5rem"
-                    > Password</Text>
-                  <Input
-                    type="password"
-                    placeholder="●●●●●"
-                    marginBottom="1rem"
-                    onChange={(event) => setPassword(event.target.value)}
-                  />
-                </FormControl>
-                <Button
-                  variant="sm"
-                  width="full"
-                  onClick={onLogInClick}
-                  marginBottom="2rem"
-                >
-                  Login
-                </Button>
-                <Link
-                  color="purple"
-                  onClick={onSignUpClick}
-                  href="https://www.figma.com/file/9KqGifATPcKRQytJBqAKeJ/User-Authentication?node-id=316%3A2"
-                >
-                  Forgot your password
-                </Link>
-              </>
-            ) : (
-              <>
-                <FormControl>
-                <Text variant="caption-md" marginTop="1.5rem">Email Address</Text>
-                  <Input
-                    type="email"
-                    placeholder="you@rowanhouse.ca"
-                    onChange={(event) => setEmail(event.target.value)}
-                    marginBottom="1rem"
-                  />
-                </FormControl>
-                <Button
-                  variant="sm"
-                  width="full"
-                  onClick={onLogInClick}
-                  marginBottom="2rem"
-                >
-                  Continue
-                </Button>
-                <Box>
-                  Don&lsquo;t have an account?{" "}
-                  <Link
-                    color="purple"
-                    onClick={onSignUpClick}
-                    href="https://www.figma.com/file/9KqGifATPcKRQytJBqAKeJ/User-Authentication?node-id=316%3A2"
-                  >
-                    Sign Up
-                  </Link>
-                </Box>
-              </>
-            )}
-          </form>
+          <Image height="13vh" marginBottom="2.5vh" src={RHSLogo} />
+          {getLoginForm(loginState)}
         </VStack>
       </Center>
       <Box>
         <Image
-          style={{
-            height: "100vh",
-          }}
-          src={background}
+          height="100vh"
+          src={BackgroundImage}
         />
       </Box>
     </Flex>
