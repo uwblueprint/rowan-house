@@ -1,14 +1,29 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Modal, ModalProps } from "./Modal";
 
-// to control modals:
-// const { isOpen, onOpen, onClose } = useDisclosure();
+export interface DeleteModalProps extends ModalProps {
+  name: string;
+}
 
-// eslint-disable-next-line import/prefer-default-export
-export const DeleteModal: React.FC<ModalProps> = (props) => {
-  const {} = props;
+const DeleteModal: React.FC<DeleteModalProps> = (props) => {
+  const { name } = props;
 
   return (
-      <div></div>
+      <Modal
+          size="sm"
+          header={`Delete ${name}`}
+          bodyText={`Are you sure? You can't undo this action afterwards.`}
+          // confirmButtonColorScheme="red"
+         // cancelButtonColorScheme="white"
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...props}
+      />
   );
 };
+
+DeleteModal.propTypes = {
+  name: PropTypes.string.isRequired
+}
+
+export default DeleteModal;

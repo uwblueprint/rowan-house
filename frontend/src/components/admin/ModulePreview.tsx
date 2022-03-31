@@ -1,13 +1,31 @@
 import React from "react";
-import { Box, Flex, Link, Image, Tag, Text, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Link,
+  Image,
+  Tag,
+  Text,
+  VStack,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { ModulePreviewProps } from "../../types/AdminDashboardTypes";
 import EditActionsKebabMenu from "../common/EditActionsKebabMenu";
+import { Modal } from "../common/Modal";
+import DeleteModal from '../common/DeleteModal'
 
 const ModulePreview = ({
   title,
   published,
   imageLink,
 }: ModulePreviewProps): React.ReactElement => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const onDeleteClick = () => {
+    console.log("OPENING DELETE MODAL");
+    onOpen();
+  };
+
   return (
     <Box
       width="240px"
@@ -37,11 +55,17 @@ const ModulePreview = ({
           </VStack>
         </Link>
         <EditActionsKebabMenu
-          handleEditDetailsClick={() => alert("edit details")}
-          deleteFunction={() => true}
+          handleEditDetailsClick={() => alert("edit detailss")}
+          deleteFunction={onDeleteClick}
           showHorizontal={false}
         />
       </Flex>
+      <DeleteModal
+        isOpen={isOpen}
+        onConfirm={() => true}
+        onCancel={onClose}
+        name="Course"
+      />
     </Box>
   );
 };

@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 import React from "react";
 import {
   Button,
@@ -10,22 +11,23 @@ import {
   Text,
   Spacer,
 } from "@chakra-ui/react";
+import PropTypes from "prop-types";
 
 export interface ModalProps {
   isOpen: boolean;
+  // eslint-disable-next-line @typescript-eslint/ban-types
   onCancel: () => void;
+  // eslint-disable-next-line @typescript-eslint/ban-types
   onConfirm: () => void;
   header?: string;
   bodyText?: string;
   cancelText?: string;
   confirmText?: string;
   alignButtonsRight?: boolean;
+  cancelButtonColorScheme?: string;
   confirmButtonColorScheme?: string;
   size?: string;
 }
-
-// to control modals:
-// const { isOpen, onOpen, onClose } = useDisclosure();
 
 export const Modal: React.FC<ModalProps> = (props) => {
   const {
@@ -37,6 +39,7 @@ export const Modal: React.FC<ModalProps> = (props) => {
     cancelText = "Cancel",
     confirmText = "Confirm",
     alignButtonsRight = true,
+    cancelButtonColorScheme,
     confirmButtonColorScheme,
     ...rest
   } = props;
@@ -49,10 +52,13 @@ export const Modal: React.FC<ModalProps> = (props) => {
         {header && <ModalHeader>{header}</ModalHeader>}
         <ModalBody>
           {bodyText && <Text>{bodyText}</Text>}
-          {props.children}
+          {/* eslint-disable-next-line react/destructuring-assignment */}
+          {/* {props.children} */}
         </ModalBody>
         <ModalFooter>
-          <Button onClick={onCancel}>{cancelText}</Button>
+          <Button colorScheme={cancelButtonColorScheme} onClick={onCancel}>
+            {cancelText}
+          </Button>
           {!alignButtonsRight && <Spacer />}
           <Button
             variant={confirmButtonColorScheme ? "solid" : "default"}
@@ -65,4 +71,20 @@ export const Modal: React.FC<ModalProps> = (props) => {
       </ModalContent>
     </ChakraModal>
   );
+};
+
+Modal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onCancel: PropTypes.any.isRequired,
+  onConfirm: PropTypes.any.isRequired,
+  header: PropTypes.string,
+  bodyText: PropTypes.string,
+  cancelText: PropTypes.string,
+  confirmText: PropTypes.string,
+  alignButtonsRight: PropTypes.bool,
+  cancelButtonColorScheme: PropTypes.string,
+  confirmButtonColorScheme: PropTypes.string,
+  size: PropTypes.string,
+  // eslint-disable-next-line react/forbid-prop-types
+  // children: PropTypes.any,
 };

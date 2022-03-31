@@ -12,8 +12,7 @@ import ModulePreview from "./ModulePreview";
 import { CoursePreviewProps } from "../../types/AdminDashboardTypes";
 import EditActionsKebabMenu from "../common/EditActionsKebabMenu";
 import { Modal } from "../common/Modal";
-
-const openModal = () => {};
+import DeleteModal from '../common/DeleteModal'
 
 const CoursePreview = ({
   title,
@@ -22,6 +21,11 @@ const CoursePreview = ({
   modules,
 }: CoursePreviewProps): React.ReactElement => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const onDeleteClick = () => {
+    console.log("OPENING DELETE MODAL");
+    onOpen();
+  };
 
   return (
     <Box
@@ -51,8 +55,8 @@ const CoursePreview = ({
           )}
         </Flex>
         <EditActionsKebabMenu
-          handleEditDetailsClick={() => alert("Edit details")}
-          deleteFunction={() => onOpen()}
+          handleEditDetailsClick={() => alert("Edit detailsssss")}
+          deleteFunction={() => alert("Edit details")}
           showHorizontal
         />
       </Flex>
@@ -79,12 +83,12 @@ const CoursePreview = ({
           />
         ))}
       </SimpleGrid>
-      <Modal
+      <DeleteModal
         isOpen={isOpen}
         onConfirm={() => true}
         onCancel={onClose}
-        header="Delete Course"
-       />
+        name="Course"
+      />
     </Box>
   );
 };
