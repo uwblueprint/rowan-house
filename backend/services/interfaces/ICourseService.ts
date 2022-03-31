@@ -63,10 +63,14 @@ export interface ICourseService {
   /**
    * retrieve the Course with the given id
    * @param id course id
+   * @param queryConditions CourseVisibilityAttributes object to filter courses
    * @returns requested Course
    * @throws Error if retrieval fails
    */
-  getCourse(id: string): Promise<CourseResponseDTO>;
+  getCourse(
+    id: string,
+    queryConditions: CourseVisibilityAttributes,
+  ): Promise<CourseResponseDTO>;
 
   /**
    * retrieve all Courses

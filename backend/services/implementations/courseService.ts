@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { getErrorMessage } from "../../utilities/errorUtils";
 import logger from "../../utilities/logger";
 import {
@@ -13,22 +14,58 @@ import MgCourse, {
 
 const Logger = logger(__filename);
 
+const getModuleQueryCondition = (filterForPublished: boolean) => {
+  return filterForPublished
+    ? [
+        {
+          $project: {
+            title: true,
+            description: true,
+            image: true,
+            previewImage: true,
+            private: true,
+            published: true,
+            modules: {
+              $filter: {
+                input: "$modules",
+                cond: { this: { $eq: ["published", true] } },
+              },
+            },
+          },
+        },
+      ]
+    : [];
+};
+
 class CourseService implements ICourseService {
   /* eslint-disable class-methods-use-this */
-  async getCourse(id: string): Promise<CourseResponseDTO> {
+  async getCourse(
+    id: string,
+    queryConditions: CourseVisibilityAttributes,
+  ): Promise<CourseResponseDTO> {
     let course: Course | null;
+    const filterModulesByPermissions = getModuleQueryCondition(
+      queryConditions.published ?? false,
+    );
+
     try {
-      course = await MgCourse.findById(id);
-      if (!course) {
+      const courseQueryResult: Array<Course> | null = await MgCourse.aggregate([
+        { $match: { _id: Types.ObjectId(id), ...queryConditions } },
+        ...filterModulesByPermissions,
+      ]).exec();
+
+      if (!courseQueryResult || courseQueryResult.length === 0) {
         throw new Error(`Course id ${id} not found`);
       }
+
+      [course] = courseQueryResult;
     } catch (error: unknown) {
       Logger.error(`Failed to get course. Reason = ${getErrorMessage(error)}`);
       throw error;
     }
 
     return {
-      id: course.id,
+      id: course._id.toHexString(),
       title: course.title,
       description: course.description,
       image: course.image,
@@ -42,18 +79,28 @@ class CourseService implements ICourseService {
   async getCourses(
     queryConditions: CourseVisibilityAttributes,
   ): Promise<CourseResponseDTO[]> {
+    const filterCoursesByPermissions = { $match: queryConditions };
+    const filterModulesByPermissions = getModuleQueryCondition(
+      queryConditions.published ?? false,
+    );
+
     try {
-      const courses: Array<Course> = await MgCourse.find(queryConditions);
-      return courses.map((course) => ({
-        id: course.id,
-        title: course.title,
-        description: course.description,
-        image: course.image,
-        previewImage: course.previewImage,
-        modules: course.modules,
-        private: course.private,
-        published: course.published,
-      }));
+      const courses: Array<Course> = await MgCourse.aggregate([
+        filterCoursesByPermissions,
+        ...filterModulesByPermissions,
+      ]).exec();
+      return courses.map((course) => {
+        return {
+          id: course._id.toHexString(),
+          title: course.title,
+          description: course.description,
+          image: course.image,
+          previewImage: course.previewImage,
+          modules: course.modules,
+          private: course.private,
+          published: course.published,
+        };
+      });
     } catch (error: unknown) {
       Logger.error(`Failed to get courses. Reason = ${getErrorMessage(error)}`);
       throw error;

@@ -1,4 +1,4 @@
-import { Schema, Document, model } from "mongoose";
+import { Schema, Document, model, Types } from "mongoose";
 
 export interface Module {
   title: string;
@@ -10,7 +10,7 @@ export interface Module {
 }
 
 export interface Course extends Document {
-  id: string;
+  _id: Types.ObjectId;
   title: string;
   description: string;
   image: string;
