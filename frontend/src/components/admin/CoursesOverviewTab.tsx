@@ -17,6 +17,22 @@ const CoursesOverviewTab = (): React.ReactElement => {
     },
   });
 
+  const displayCoursePreviews = () => {
+    if (!courses?.length) {
+      return <h1>There are no courses.</h1>;
+    }
+    return courses?.map((course) => (
+      <CoursePreview
+        key={course.id}
+        courseId={course.id}
+        title={course.title}
+        description={course.description}
+        isPrivate={course.private}
+        modules={course.modules}
+      />
+    ));
+  };
+
   if (error) return <p>Error! {error.message}</p>;
 
   return (
@@ -37,21 +53,7 @@ const CoursesOverviewTab = (): React.ReactElement => {
         </Button>
       </Flex>
       <VStack spacing={12} mx={9}>
-        {loading && <Spinner size="xl" />}
-        {!courses?.length && !loading ? (
-          <h1>There are no courses.</h1>
-        ) : (
-          courses?.map((course) => (
-            <CoursePreview
-              key={course.id}
-              courseId={course.id}
-              title={course.title}
-              description={course.description}
-              isPrivate={course.private}
-              modules={course.modules}
-            />
-          ))
-        )}
+        {loading ? <Spinner size="xl" /> : displayCoursePreviews()}
       </VStack>
     </Box>
   );
