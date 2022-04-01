@@ -3,10 +3,7 @@ import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
 
 import EditorContext from "../../contexts/ModuleEditorContext";
-import {
-  ContentTypeEnum,
-  ModuleEditorParams,
-} from "../../types/ModuleEditorTypes";
+import { ModuleEditorParams } from "../../types/ModuleEditorTypes";
 
 const SideBarModuleOverview = (): React.ReactElement => {
   const context = useContext(EditorContext);
@@ -31,14 +28,7 @@ const SideBarModuleOverview = (): React.ReactElement => {
         course: courseID,
         module: course.modules[moduleID].id,
         title,
-        content: [
-          {
-            type: ContentTypeEnum.TEXT,
-            content: {
-              text: `Welcome to the new lesson '${title}'!`,
-            },
-          },
-        ],
+        content: [],
       },
     });
 

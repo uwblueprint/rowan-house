@@ -11,3 +11,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Used only for Drag & Drop. Copy drag implementation based on https://codesandbox.io/s/40p81qy7v0 */
+.clone ~ div {
+  transform: none !important;
+}

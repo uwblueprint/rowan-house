@@ -1,3 +1,5 @@
+import { v4 as uuid } from "uuid";
+
 export interface LessonType {
   course: string;
   module: string;
@@ -27,29 +29,27 @@ export interface CourseType {
 }
 
 // Content types
-export interface ContentTextProps {
-  text: string;
-}
-
-export interface ContentImageProps {
-  link: string;
-}
-
 export class ContentTypeEnum {
-  static readonly TEXT = new ContentTypeEnum("Text", "text.svg");
+  static TEXT = new ContentTypeEnum("Text", "text.svg", uuid());
 
-  static readonly IMAGE = new ContentTypeEnum("Image", "image.svg");
+  static IMAGE = new ContentTypeEnum("Image", "image.svg", uuid());
 
-  // private to disallow creating other instances of this type
-  private constructor(
+  constructor(
     public readonly title: string,
     public readonly preview: string,
+    public readonly id: string,
   ) {}
 }
 
+export type ContentProps = {
+  text?: string;
+  link?: string;
+};
+
 export interface ContentType {
   type: ContentTypeEnum;
-  content: ContentTextProps | ContentImageProps;
+  content: ContentProps;
+  id: string;
 }
 
 export interface ModuleEditorParams {
@@ -92,14 +92,18 @@ export type EditorContextAction =
       value: string;
     }
   | {
-      type: "create-lesson-block";
+      type: "create-block";
+      value: { index: number; blockID: string };
+    }
+  | {
+      type: "reorder-blocks";
+      value: { oldIndex: number; newIndex: number };
+    }
+  | {
+      type: "update-block";
       value: { index: number; block: ContentType };
     }
   | {
-      type: "update-lesson-block";
-      value: { index: number; block: ContentType };
-    }
-  | {
-      type: "delete-lesson-block";
+      type: "delete-block";
       value: number;
     };

@@ -1,10 +1,11 @@
 import React from "react";
-import { ContentTextProps } from "../../../types/ModuleEditorTypes";
+
+import { ContentProps } from "../../../types/ModuleEditorTypes";
 
 const TextBlock = ({
   content,
 }: {
-  content: ContentTextProps;
+  content: ContentProps;
 }): React.ReactElement => {
   return <p>{content.text}</p>;
 };
