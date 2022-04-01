@@ -36,9 +36,7 @@ const Sidebar = (): React.ReactElement => {
         color="white"
         justify="space-between"
       >
-        <Flex>
-          <Image src={RHSLogo} alt="Rowan House logo" width="10rem" pt="2rem" />
-        </Flex>
+        <Image src={RHSLogo} alt="Rowan House logo" maxW="10rem" pt="2rem" width="" />
         <Flex w="100%" flexDir="column" pt="4.5rem">
           <Tab bg="brand.purple" icon={CoursesIcon} text="Manage Courses" />
           <Tab bg="brand.royal" icon={UsersIcon} text="Manage Users" />
