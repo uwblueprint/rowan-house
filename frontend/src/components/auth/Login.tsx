@@ -93,7 +93,7 @@ const Login = (): React.ReactElement => {
           <Box>
             <Text variant="display-sm-sb">Sign in to access courses</Text>
             <FormControl>
-            <Text variant="caption-md" marginTop="4vh">Email Address</Text>
+            <Text variant="caption-md" marginTop="4vh" marginBottom="1vh">Email Address</Text>
               <Input
                 type="email"
                 value={email}
@@ -116,6 +116,7 @@ const Login = (): React.ReactElement => {
                 variant="link"
                 color="purple"
                 onClick={onSignUpClick}
+                textDecorationLine="underline"
               >
                 Sign Up
               </Button>
@@ -139,7 +140,7 @@ const Login = (): React.ReactElement => {
                 <Text variant="button">Back</Text>
               </Button>
             </Box>
-            <Text variant="caption-md" marginTop="1.5vh"> Password</Text>
+            <Text variant="caption-md" marginTop="1.5vh" marginBottom="1vh"> Password</Text>
             <Input
               type="password"
               value={password}
@@ -159,9 +160,10 @@ const Login = (): React.ReactElement => {
               <Button
                 variant="link"
                 color="purple"
-                onClick={onSignUpClick}
+                onClick={(event) => setLoginState(LoginState.ForgetPassword)}
+                textDecorationLine="underline"
               >
-                Forgot your password
+                Forgot your password?
               </Button>
             </Center>
           </Box>
@@ -183,7 +185,7 @@ const Login = (): React.ReactElement => {
               </Button>
             </Box>
             <FormControl>
-            <Text variant="caption-md" marginTop="1.5vh">Email Address</Text>
+            <Text variant="caption-md" marginTop="1.5vh" marginBottom="1vh">Email Address</Text>
               <Input
                 type="email"
                 placeholder="you@rowanhouse.ca"
@@ -200,10 +202,11 @@ const Login = (): React.ReactElement => {
               Continue
             </Button>
             <Center>
-              Remembered your password?{" "}
+              Remembered your password?&nbsp;
               <Button
-                variant="sm"
+                variant="link"
                 color="purple"
+                textDecorationLine="underline"
                 onClick={onSignUpClick}
               >
                 Sign in
