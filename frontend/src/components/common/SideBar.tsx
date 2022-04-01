@@ -5,25 +5,21 @@ import UsersIcon from "../../assets/Users.svg";
 import RHSLogo from "../../assets/RHSLogo-white.png";
 
 interface TabProps {
-    icon:string
-    text:string
+  icon: string;
+  text: string;
+  bg: string;
 }
 
-function Tab({icon, text}:TabProps) {
-   return(
-    <Flex padding="1rem 2rem">
-      <Image
-        src={icon}
-        alt={text}
-        width="1.5rem"
-        height="1.5rem"
-        />
+function Tab({ icon, text, bg }: TabProps) {
+  return (
+    <Flex padding="1rem 2rem" bg={bg} align="center">
+      <Image src={icon} alt={text} width="1.5rem" height="1.5rem" />
       <Text variant="body" pl="1.5rem">
         {text}
       </Text>
     </Flex>
-   )
- }
+  );
+}
 
 const Sidebar = (): React.ReactElement => {
   return (
@@ -41,29 +37,22 @@ const Sidebar = (): React.ReactElement => {
         justify="space-between"
       >
         <Flex>
-          <Image
-            src={RHSLogo}
-            alt="Rowan House logo"
-            width="10rem"
-            pt="2rem"
-          />
+          <Image src={RHSLogo} alt="Rowan House logo" width="10rem" pt="2rem" />
         </Flex>
         <Flex w="100%" flexDir="column" pt="4.5rem">
-          <Tab icon={CoursesIcon} text="Manage Courses"/>
-          <Tab icon={UsersIcon} text="Manage Users"/>
+          <Tab bg="brand.purple" icon={CoursesIcon} text="Manage Courses" />
+          <Tab bg="brand.royal" icon={UsersIcon} text="Manage Users" />
         </Flex>
         <Spacer />
-        <Flex
-        w="100%"
-        justify="space-between"
-        p="1.5rem"
-        >
-           <Flex flexDir="column">
-            <Text variant="caption" opacity="0.7"> Admin</Text>
+        <Flex w="100%" justify="space-between" p="1.5rem" align="center">
+          <Flex flexDir="column">
+            <Text variant="caption" opacity="0.7">
+              Admin
+            </Text>
             <Text variant="body-bold">Jane Doe</Text>
           </Flex>
-          <Button variant="secondary-filled">Sign Out</Button>
-      </Flex>
+          <Button variant="secondary-filled">Sign out</Button>
+        </Flex>
       </Flex>
     </Box>
   );
