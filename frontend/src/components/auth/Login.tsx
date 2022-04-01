@@ -133,7 +133,7 @@ const Login = (): React.ReactElement => {
               marginTop="3vh"
               >
               <Button
-                onClick={() => onBackClick}
+                onClick={() => onBackClick(loginState)}
                 variant="link"
                 >
                 <ArrowBackIcon />
@@ -177,7 +177,7 @@ const Login = (): React.ReactElement => {
               marginTop="3vh"
               >
               <Button
-                onClick={() => onBackClick}
+                onClick={() => onBackClick(loginState)}
                 variant="link"
                 >
                 <ArrowBackIcon />
