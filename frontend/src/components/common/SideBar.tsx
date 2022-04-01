@@ -26,8 +26,7 @@ const Sidebar = (): React.ReactElement => {
     <Box w="20%">
       <Flex
         position="fixed"
-        flex="1"
-        w="20%"
+        w="inherit"
         h="100vh"
         minW="min-content"
         flexFlow="column"
@@ -36,7 +35,7 @@ const Sidebar = (): React.ReactElement => {
         color="white"
         justify="space-between"
       >
-        <Image src={RHSLogo} alt="Rowan House logo" maxW="10rem" pt="2rem" width="" />
+        <Image src={RHSLogo} alt="Rowan House logo" width="10rem" pt="2rem"/>
         <Flex w="100%" flexDir="column" pt="4.5rem">
           <Tab bg="brand.purple" icon={CoursesIcon} text="Manage Courses" />
           <Tab bg="brand.royal" icon={UsersIcon} text="Manage Users" />
