@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
 import {
-  AspectRatio,
   Box,
   Button,
   Flex,
-  Image,
+  Link,
+  HStack,
+  IconButton,
   Tabs,
   TabList,
   Tab,
@@ -12,11 +13,13 @@ import {
   TabPanel,
   Text,
 } from "@chakra-ui/react";
-import { CheckIcon } from "@chakra-ui/icons";
+import { ChevronLeftIcon, EditIcon } from "@chakra-ui/icons";
 
 import ModuleOverview from "./SideBarModuleOverview";
 import ContentKiosk from "./SideBarContentKiosk";
+import { ReactComponent as SaveIcon } from "../../assets/Save.svg";
 import { DEFAULT_IMAGE } from "../../constants/DummyData";
+import { ADMIN_DASHBOARD_PAGE } from "../../constants/Routes";
 import EditorContext from "../../contexts/ModuleEditorContext";
 
 const Sidebar = (): React.ReactElement => {
@@ -35,12 +38,40 @@ const Sidebar = (): React.ReactElement => {
         boxShadow="xl"
         flexFlow="column"
       >
-        <Box>
-          <AspectRatio ratio={4 / 3}>
-            <Image objectFit="cover" src={DEFAULT_IMAGE} />
-          </AspectRatio>
+        <Box opacity="0.75" backgroundColor="black">
+          <Box
+            h="240px"
+            backgroundPosition="center"
+            backgroundImage={DEFAULT_IMAGE}
+            backgroundSize="cover"
+            bgRepeat="no-repeat"
+            opacity="1"
+            p={4}
+          >
+            <HStack justify="space-between">
+              <Link href={ADMIN_DASHBOARD_PAGE}>
+                <IconButton
+                  aria-label="back"
+                  icon={<ChevronLeftIcon />}
+                  variant="unstyled"
+                  color="white"
+                  size="lg"
+                />
+              </Link>
+              <IconButton
+                aria-label="back"
+                icon={<EditIcon />}
+                variant="unstyled"
+                color="white"
+                size="lg"
+              />
+            </HStack>
+            <Text variant="display-sm-sb" color="white">
+              {state.course.title}
+            </Text>
+          </Box>
         </Box>
-        <Tabs variant="unstyle" h="100%">
+        <Tabs variant="unstyle">
           <Box
             bg="background.light"
             borderRadius="md"
@@ -51,7 +82,7 @@ const Sidebar = (): React.ReactElement => {
           >
             <TabList>
               <Tab
-                style={{ paddingInline: "35px" }}
+                style={{ paddingInline: "35px", height: "32px" }}
                 _selected={{
                   color: "white",
                   bg: "brand.royal",
@@ -61,7 +92,7 @@ const Sidebar = (): React.ReactElement => {
                 Overview
               </Tab>
               <Tab
-                style={{ paddingInline: "23px" }}
+                style={{ paddingInline: "23px", height: "32px" }}
                 _selected={{
                   color: "white",
                   bg: "brand.royal",
@@ -83,14 +114,16 @@ const Sidebar = (): React.ReactElement => {
         </Tabs>
         {state.hasChanged && (
           <Button
+            position="fixed"
+            bottom="0"
             variant="unstyled"
             bg="#5FCA89"
             py="14px"
-            leftIcon={<CheckIcon />}
+            color="white"
+            leftIcon={<SaveIcon />}
             borderRadius="0"
             pl="35px"
             textAlign="left"
-            color="white"
           >
             Save Changes
           </Button>

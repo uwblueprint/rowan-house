@@ -35,10 +35,10 @@ const SideBarModuleOverview = (): React.ReactElement => {
     });
 
   return (
-    <Flex direction="column" h="inherit">
+    <VStack h="50%" position="absolute">
       {/* {module.title}
       {module.description} */}
-      <Flex direction="column">
+      <VStack className="tabScroll" overflowY="scroll">
         {orderedLessons.map((lesson, index) =>
           state.lessons[focusedLesson] === lesson ? (
             lesson && (
@@ -52,6 +52,8 @@ const SideBarModuleOverview = (): React.ReactElement => {
                 bg="background.light"
                 textAlign="left"
                 pl="30px"
+                h="55px"
+                w="100%"
               >
                 {lesson.title}
               </Button>
@@ -63,6 +65,8 @@ const SideBarModuleOverview = (): React.ReactElement => {
               variant="unstyled"
               textAlign="left"
               pl="35px"
+              h="55px"
+              w="100%"
             >
               {lesson.title}
             </Button>
@@ -77,12 +81,12 @@ const SideBarModuleOverview = (): React.ReactElement => {
           leftIcon={<AddIcon />}
           textAlign="left"
           pl="35px"
+          h="55px"
         >
           New Lesson
         </Button>
-      </Flex>
-      <Spacer />
-    </Flex>
+      </VStack>
+    </VStack>
   );
 };
 

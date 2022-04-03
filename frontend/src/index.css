@@ -16,3 +16,7 @@ code {
 .clone ~ div {
   transform: none !important;
 }
+
+.tabScroll::-webkit-scrollbar {
+  display: none;
+}
