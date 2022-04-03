@@ -3,6 +3,9 @@ import { useParams } from "react-router-dom";
 import { Flex } from "@chakra-ui/react";
 import { DropResult, DragDropContext } from "react-beautiful-dnd";
 import { v4 as uuid } from "uuid";
+import { useQuery, useLazyQuery } from '@apollo/client';
+import { GET_COURSE } from '../../APIClients/queries/CourseQueries';
+import { GET_LESSON } from '../../APIClients/queries/LessonQueries';
 
 import {
   ContentTypeEnum,
@@ -54,6 +57,12 @@ const ModuleEditor = (): React.ReactElement => {
   const { courseID, moduleIndex }: ModuleEditorParams = useParams();
 
   const [state, dispatch] = useReducer(EditorContextReducer, null);
+  const {loading: courseLoading, error: courseError, data: courseData, refetch: courseRefetch} = useQuery(GET_COURSE, {
+    variables: {
+      id: courseID
+    }
+  });
+  const {loading: lessonLoading, error: lessonError, data: lessonData} = useLazyQuery(GET_LESSON);
 
   // Runs once at the beginning
   useEffect(() => {
@@ -129,17 +138,20 @@ const ModuleEditor = (): React.ReactElement => {
     // TODO: Safely select a lesson in focus (or null if none exist)
     const dummyfocusedLesson = Object.keys(dummyLessons)[0];
 
-    // Save to context
-    dispatch({
-      type: "init",
-      value: {
-        course: dummyCourse,
-        lessons: dummyLessons,
-        focusedLesson: dummyfocusedLesson,
-        hasChanged: false,
-      },
-    });
-  }, [courseID, moduleIndex]);
+    if (courseData) {
+      // Save to context
+      const dummyLessons: LessonsType = {}
+      dispatch({
+        type: "init",
+        value: {
+          course: courseData.course,
+          lessons: dummyLessons,
+          focusedLesson: dummyfocusedLesson,
+          hasChanged: false,
+        },
+      });
+    }
+  }, [courseData]);
 
   if (state) {
     if (state.course.modules[parseInt(moduleIndex, 10)] === undefined) {
