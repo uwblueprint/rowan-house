@@ -27,7 +27,6 @@ enum LoginState {
   EnterEmail,
   EnterPassword,
   ForgetPassword,
-  SignUp
 }  
 
 const Login = (): React.ReactElement => {
@@ -208,7 +207,7 @@ const Login = (): React.ReactElement => {
                 variant="link"
                 color="purple"
                 textDecorationLine="underline"
-                onClick={onSignUpClick}
+                onClick={(event) => setLoginState(LoginState.EnterEmail)}
               >
                 Sign in
               </Button>
