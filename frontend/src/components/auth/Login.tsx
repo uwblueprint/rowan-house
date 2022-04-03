@@ -26,7 +26,8 @@ import { AuthenticatedUser } from "../../types/AuthTypes";
 enum LoginState {
   EnterEmail,
   EnterPassword,
-  ForgetPassword
+  ForgetPassword,
+  SignUp
 }  
 
 const Login = (): React.ReactElement => {
