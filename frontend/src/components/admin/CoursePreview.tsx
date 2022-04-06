@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactElement, useState } from "react";
 import {
   Box,
   Button,
@@ -10,20 +10,37 @@ import {
 } from "@chakra-ui/react";
 import ModulePreview from "./ModulePreview";
 import { CoursePreviewProps } from "../../types/AdminDashboardTypes";
-import EditActionsKebabMenu from "../common/EditActionsKebabMenu";
-import { Modal } from "../common/Modal";
-import DeleteModal from '../common/DeleteModal'
+import EditActionsKebabMenu from "./EditActionsKebabMenu";
+import DeleteModal from "../common/DeleteModal";
+import EditModal from "../common/EditModal";
+
+enum ModalType {
+  EDIT = "edit",
+  DELETE = "delete",
+}
 
 const CoursePreview = ({
+  courseId,
   title,
   description,
   isPrivate,
   modules,
 }: CoursePreviewProps): React.ReactElement => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [modalType, setModalType] = useState(ModalType.EDIT); // determines which modal is shown when isOpen is true
+  const [name, setName] = useState("");
+  const [visibility, setVisibility] = useState(false);
 
   const onDeleteClick = () => {
-    console.log("OPENING DELETE MODAL");
+    console.log("OPENING DELETE MODAL"); 
+    setModalType(ModalType.DELETE);
+    onOpen();
+  };
+  const onEditClick = () => {
+    console.log("OPENING EDIT MODAL");
+    setName(title);
+    // TODO: set attributes
+    setModalType(ModalType.EDIT);
     onOpen();
   };
 
@@ -55,8 +72,8 @@ const CoursePreview = ({
           )}
         </Flex>
         <EditActionsKebabMenu
-          handleEditDetailsClick={() => alert("Edit detailsssss")}
-          deleteFunction={() => alert("Edit details")}
+          handleEditDetailsClick={onEditClick}
+          deleteFunction={onDeleteClick}
           showHorizontal
         />
       </Flex>
@@ -74,21 +91,36 @@ const CoursePreview = ({
         </Button>
       </Flex>
       <SimpleGrid templateColumns="repeat(auto-fit, 240px)" spacing={4}>
-        {modules.map((module, index) => (
+        {modules?.map((module, index) => (
           <ModulePreview
-            key={index}
+            key={module.id}
+            index={index}
+            courseId={courseId}
             title={module.title}
-            imageLink={module.imageLink}
+            image={module.image}
             published={module.published}
           />
         ))}
       </SimpleGrid>
-      <DeleteModal
-        isOpen={isOpen}
-        onConfirm={() => true}
-        onCancel={onClose}
-        name="Course"
-      />
+      {modalType === ModalType.DELETE && (
+        <DeleteModal
+          name="Course"
+          isOpen={isOpen}
+          onConfirm={onClose}
+          onCancel={onClose}
+        />
+      )}
+      {modalType === ModalType.EDIT && (
+        <EditModal
+          type="Course"
+          name={name}
+          description={description || ""}
+          visibility={visibility}
+          isOpen={isOpen}
+          onConfirm={onClose}
+          onCancel={onClose}
+        />
+      )}
     </Box>
   );
 };

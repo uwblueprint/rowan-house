@@ -1,59 +1,60 @@
+import { v4 as uuid } from "uuid";
+
 export interface LessonType {
   course: string;
   module: string;
   title: string;
   description?: string;
   image?: string;
-  content: Array<ContentType>;
+  content: ContentType[];
 }
 
 export type LessonsType = Record<string, LessonType>;
 
 export interface ModuleType {
+  id: string;
   title: string;
   description?: string;
   image: string;
   previewImage: string;
   published: boolean;
-  lessons: Array<string>;
+  lessons: string[];
 }
 
 export interface CourseType {
   title: string;
   description?: string;
   private: boolean;
-  modules: Record<string, ModuleType>;
+  modules: ModuleType[];
 }
 
 // Content types
-export interface ContentTextProps {
-  text: string;
-}
-
-export interface ContentImageProps {
-  link: string;
-}
-
 export class ContentTypeEnum {
-  static readonly TEXT = new ContentTypeEnum("Text", "text.svg");
+  static TEXT = new ContentTypeEnum("Text", "text.svg", uuid());
 
-  static readonly IMAGE = new ContentTypeEnum("Image", "image.svg");
+  static IMAGE = new ContentTypeEnum("Image", "image.svg", uuid());
 
-  // private to disallow creating other instances of this type
-  private constructor(
+  constructor(
     public readonly title: string,
     public readonly preview: string,
+    public readonly id: string,
   ) {}
 }
 
+export type ContentProps = {
+  text?: string;
+  link?: string;
+};
+
 export interface ContentType {
   type: ContentTypeEnum;
-  content: ContentTextProps | ContentImageProps;
+  content: ContentProps;
+  id: string;
 }
 
 export interface ModuleEditorParams {
   courseID: string;
-  moduleID: string;
+  moduleIndex: string;
 }
 
 // Context types
@@ -91,14 +92,18 @@ export type EditorContextAction =
       value: string;
     }
   | {
-      type: "create-lesson-block";
+      type: "create-block";
+      value: { index: number; blockID: string };
+    }
+  | {
+      type: "reorder-blocks";
+      value: { oldIndex: number; newIndex: number };
+    }
+  | {
+      type: "update-block";
       value: { index: number; block: ContentType };
     }
   | {
-      type: "update-lesson-block";
-      value: { index: number; block: ContentType };
-    }
-  | {
-      type: "delete-lesson-block";
+      type: "delete-block";
       value: number;
     };

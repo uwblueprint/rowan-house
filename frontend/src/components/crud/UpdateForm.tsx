@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { JSONSchema7 } from "json-schema";
 import { Form } from "@rjsf/bootstrap-4";
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 
 import {
   EntityRequest,
   EntityResponse,
-} from "../../APIClients/EntityAPIClient";
+} from "../../APIClients/types/EntityClientTypes";
+import { UPDATE_ENTITY } from "../../APIClients/mutations/EntityMutations";
 
 const schema: JSONSchema7 = {
   title: "Update Entity",
@@ -63,24 +64,6 @@ const uiSchema = {
     "ui:widget": "select",
   },
 };
-
-const UPDATE_ENTITY = gql`
-  mutation UpdateForm_UpdateEntity(
-    $id: ID!
-    $entity: EntityRequestDTO!
-    $file: Upload
-  ) {
-    updateEntity(id: $id, entity: $entity, file: $file) {
-      id
-      stringField
-      intField
-      enumField
-      stringArrayField
-      boolField
-      fileName
-    }
-  }
-`;
 
 const UpdateForm = (): React.ReactElement => {
   const [data, setData] = useState<EntityResponse | null>(null);

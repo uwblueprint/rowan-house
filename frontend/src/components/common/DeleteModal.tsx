@@ -15,7 +15,7 @@ const DeleteModal: React.FC<DeleteModalProps> = (props) => {
       header={`Delete ${name}`}
       bodyText={`Are you sure? You can't undo this action afterwards.`}
       // confirmButtonColorScheme="red"
-      // cancelButtonColorScheme="white"
+      cancelButtonColorScheme="ghost"
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
     />

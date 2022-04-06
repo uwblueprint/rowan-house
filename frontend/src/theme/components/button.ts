@@ -113,6 +113,14 @@ const Button = {
       borderRadius: "md",
       fontSize: "xs",
     },
+    "secondary-filled": {
+      bg: "white",
+      color: "black",
+      padding: "8px 16px",
+      borderRadius: "md",
+      fontSize: "xs",
+      height: "32px",
+    },
     transparent: {
       bg: "transparent",
       padding: "0px",

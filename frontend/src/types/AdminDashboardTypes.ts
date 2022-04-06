@@ -1,12 +1,17 @@
+import { Module } from "../APIClients/types/CourseClientTypes";
+
 export interface ModulePreviewProps {
+  index: number;
+  courseId: string;
   title: string;
+  image: string | null;
   published: boolean;
-  imageLink: string;
 }
 
 export interface CoursePreviewProps {
+  courseId: string;
   title: string;
-  description?: string;
+  description: string | null;
   isPrivate: boolean;
-  modules: Array<ModulePreviewProps>;
+  modules: Module[] | null;
 }

@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { TextInput } from "./TextInput";
 import { Modal, ModalProps } from "./Modal";
 import { SwitchInput } from "./SwitchInput";
+import { TextArea } from "./TextArea";
 
 export interface EditModalProps extends ModalProps {
   type: string;
@@ -34,7 +35,7 @@ const EditModal: React.FC<EditModalProps> = (props) => {
 
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
-    <Modal size="lg" header={`Edit ${type}`} {...props}>
+    <Modal size="lg" header={`Edit ${type} Details`} {...props}>
       <VStack>
         <TextInput
           name={`${type} Name:`}
@@ -45,7 +46,7 @@ const EditModal: React.FC<EditModalProps> = (props) => {
           // onChange={(e) => setEmail(e.target.value)}
           isRequired
         />
-        <TextInput
+        <TextArea
           name={`${type} Description:`}
           label={`${type} Description:`}
           defaultValue={description}

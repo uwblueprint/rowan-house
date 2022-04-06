@@ -1,10 +1,13 @@
 import React, { useEffect, useReducer } from "react";
 import { useParams } from "react-router-dom";
 import { Flex } from "@chakra-ui/react";
+import { DropResult, DragDropContext } from "react-beautiful-dnd";
+import { v4 as uuid } from "uuid";
 
 import {
   ContentTypeEnum,
   CourseType,
+  EditorContextAction,
   LessonsType,
   ModuleEditorParams,
 } from "../../types/ModuleEditorTypes";
@@ -13,8 +16,42 @@ import EditorContext from "../../contexts/ModuleEditorContext";
 import SideBar from "../module-editor/SideBar";
 import LessonViewer from "../module-editor/LessonViewer";
 
+// Copy drag implementation based on https://github.com/atlassian/react-beautiful-dnd/issues/216#issuecomment-423708497
+const onDragEnd = (
+  dispatch: React.Dispatch<EditorContextAction>,
+  result: DropResult,
+) => {
+  const { source, destination } = result;
+  // dropped outside the list
+  if (!destination) {
+    return;
+  }
+  switch (source.droppableId) {
+    case destination.droppableId:
+      dispatch({
+        type: "reorder-blocks",
+        value: {
+          oldIndex: source.index,
+          newIndex: destination.index,
+        },
+      });
+      break;
+    case "KIOSK":
+      dispatch({
+        type: "create-block",
+        value: {
+          blockID: result.draggableId,
+          index: destination.index,
+        },
+      });
+      break;
+    default:
+      throw Error("Unknown drag & drop source/destination");
+  }
+};
+
 const ModuleEditor = (): React.ReactElement => {
-  const { courseID, moduleID }: ModuleEditorParams = useParams();
+  const { courseID, moduleIndex }: ModuleEditorParams = useParams();
 
   const [state, dispatch] = useReducer(EditorContextReducer, null);
 
@@ -25,16 +62,17 @@ const ModuleEditor = (): React.ReactElement => {
       title: `Course ${courseID}`,
       description: "Hello",
       private: false,
-      modules: {
-        "module-hash-1": {
+      modules: [
+        {
+          id: "module-hash-1",
           title: "Hello!",
-          description: `I am a module ${moduleID}`,
+          description: `I am a module ${moduleIndex}`,
           image: "",
           previewImage: "",
           published: true,
           lessons: ["lesson-hash-1", "lesson-hash-2"],
         },
-      },
+      ],
     };
 
     // TODO: Retrieve all lessons from the module
@@ -48,12 +86,14 @@ const ModuleEditor = (): React.ReactElement => {
         content: [
           {
             type: ContentTypeEnum.TEXT,
+            id: uuid(),
             content: {
               text: "Hello!",
             },
           },
           {
             type: ContentTypeEnum.IMAGE,
+            id: uuid(),
             content: {
               link:
                 "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
@@ -61,6 +101,7 @@ const ModuleEditor = (): React.ReactElement => {
           },
           {
             type: ContentTypeEnum.TEXT,
+            id: uuid(),
             content: {
               text: "Yup!",
             },
@@ -76,6 +117,7 @@ const ModuleEditor = (): React.ReactElement => {
         content: [
           {
             type: ContentTypeEnum.TEXT,
+            id: uuid(),
             content: {
               text: "Welcome to lesson 2!",
             },
@@ -97,18 +139,20 @@ const ModuleEditor = (): React.ReactElement => {
         hasChanged: false,
       },
     });
-  }, [courseID, moduleID]);
+  }, [courseID, moduleIndex]);
 
   if (state) {
-    if (state.course.modules[moduleID] === undefined) {
+    if (state.course.modules[parseInt(moduleIndex, 10)] === undefined) {
       return <p>Module not found!</p>;
     }
 
     return (
       <EditorContext.Provider value={{ state, dispatch }}>
         <Flex>
-          <SideBar />
-          <LessonViewer />
+          <DragDropContext onDragEnd={(result) => onDragEnd(dispatch, result)}>
+            <SideBar />
+            <LessonViewer />
+          </DragDropContext>
         </Flex>
       </EditorContext.Provider>
     );

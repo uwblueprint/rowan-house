@@ -4,6 +4,7 @@ import { ContentBlock } from "../types";
 export interface Lesson extends Document {
   id: string;
   course: string;
+  module: string;
   title: string;
   description: string;
   image: string;
@@ -12,6 +13,10 @@ export interface Lesson extends Document {
 
 const LessonSchema: Schema = new Schema({
   course: {
+    type: String,
+    required: true,
+  },
+  module: {
     type: String,
     required: true,
   },

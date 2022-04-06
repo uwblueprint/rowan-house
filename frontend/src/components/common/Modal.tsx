@@ -10,6 +10,7 @@ import {
   ModalBody,
   Text,
   Spacer,
+  ModalCloseButton,
 } from "@chakra-ui/react";
 import PropTypes from "prop-types";
 
@@ -52,18 +53,25 @@ export const Modal: React.FC<ModalProps> = (props) => {
       <ModalOverlay />
       <ModalContent>
         {header && <ModalHeader>{header}</ModalHeader>}
+        <ModalCloseButton />
         <ModalBody>
           {bodyText && <Text>{bodyText}</Text>}
           {/* eslint-disable-next-line react/destructuring-assignment */}
           {props.children}
         </ModalBody>
         <ModalFooter>
-          <Button colorScheme={cancelButtonColorScheme} onClick={onCancel}>
+          <Button
+            colorScheme={cancelButtonColorScheme}
+            mr={3}
+            onClick={onCancel}
+            variant="outline"
+          >
             {cancelText}
           </Button>
           {!alignButtonsRight && <Spacer />}
           <Button
             variant={confirmButtonColorScheme ? "solid" : "default"}
+            mr={3}
             colorScheme={confirmButtonColorScheme}
             onClick={onConfirm}
           >

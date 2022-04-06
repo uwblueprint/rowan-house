@@ -1,11 +1,24 @@
 import { CourseVisibilityAttributes } from "../../models/course.model";
 
+interface Module {
+  title: string;
+  description: string;
+  image: string;
+  previewImage: string;
+  published: boolean;
+  lessons: string[];
+}
+
+export interface ModuleDTO extends Module {
+  id: string;
+}
+
 export interface CreateCourseRequestDTO {
   title: string;
   description: string;
   image: string;
   previewImage: string;
-  lessons: [string];
+  modules: Module[];
   private: boolean;
   published: boolean;
 }
@@ -15,9 +28,9 @@ export interface UpdateCourseRequestDTO {
   description: string;
   image: string;
   previewImage: string;
-  lessons: [string];
   private: boolean;
   published: boolean;
+  modules: Module[];
 }
 
 export interface CourseResponseDTO {
@@ -26,9 +39,24 @@ export interface CourseResponseDTO {
   description: string;
   image: string;
   previewImage: string;
-  lessons: [string];
   private: boolean;
   published: boolean;
+  modules: Module[];
+}
+
+export interface SerializedCreateCourseRequestDTO
+  extends Omit<CreateCourseRequestDTO, "modules"> {
+  modules: ModuleDTO[];
+}
+
+export interface SerializedUpdateCourseRequestDTO
+  extends Omit<UpdateCourseRequestDTO, "modules"> {
+  modules: ModuleDTO[];
+}
+
+export interface SerializedCourseResponseDTO
+  extends Omit<CourseResponseDTO, "modules"> {
+  modules: ModuleDTO[];
 }
 
 export interface ICourseService {

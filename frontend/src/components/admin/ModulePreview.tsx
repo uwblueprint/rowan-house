@@ -10,9 +10,14 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { ModulePreviewProps } from "../../types/AdminDashboardTypes";
-import EditActionsKebabMenu from "../common/EditActionsKebabMenu";
-import EditModal from "../common/EditModal";
+import EditActionsKebabMenu from "./EditActionsKebabMenu";
+import EditModuleModal from "../common/EditModuleModal";
 import DeleteModal from "../common/DeleteModal";
+import { ADMIN_MODULE_EDITOR_BASE_ROUTE } from "../../constants/Routes";
+import { DEFAULT_IMAGE } from "../../constants/DummyData";
+
+const buildEditModuleRoute = (courseId: string, index: number): string =>
+  `${ADMIN_MODULE_EDITOR_BASE_ROUTE}/${courseId}/${index}`;
 
 enum ModalType {
   EDIT = "edit",
@@ -20,9 +25,11 @@ enum ModalType {
 }
 
 const ModulePreview = ({
+  index,
+  courseId,
   title,
   published,
-  imageLink,
+  image,
 }: ModulePreviewProps): React.ReactElement => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [modalType, setModalType] = useState(ModalType.EDIT); // determines which modal is shown when isOpen is true
@@ -30,6 +37,7 @@ const ModulePreview = ({
   const [description, setDescription] = useState("");
   const [visibility, setVisibility] = useState(false);
 
+  const EDIT_MODULE_ROUTE = buildEditModuleRoute(courseId, index);
 
   const onDeleteClick = () => {
     console.log("OPENING DELETE MODAL"); 
@@ -54,9 +62,9 @@ const ModulePreview = ({
       borderColor="background.lightgrey"
       boxShadow="base"
     >
-      <Link href="/">
+      <Link href={EDIT_MODULE_ROUTE}>
         <Image
-          src={imageLink}
+          src={image || DEFAULT_IMAGE}
           alt="module-preview"
           height="160px"
           width="240px"
@@ -64,8 +72,13 @@ const ModulePreview = ({
         />
       </Link>
       <Flex ml={4} my={2} justify="space-between">
-        <Link href="/" py={2} _hover={{ textDecoration: "none" }} flex="1">
-          <VStack spacing={1} align="flex-start">
+        <Link
+          href={EDIT_MODULE_ROUTE}
+          py={2}
+          _hover={{ textDecoration: "none", textColor: "text.default" }}
+          flex="1"
+        >
+          <VStack align="flex-start" justify="space-between">
             <Text variant="subheading" noOfLines={2}>
               {title}
             </Text>
@@ -82,12 +95,12 @@ const ModulePreview = ({
         <DeleteModal
           name="Module"
           isOpen={isOpen}
-          onConfirm={() => true}
+          onConfirm={onClose}
           onCancel={onClose}
         />
       )}
       {modalType === ModalType.EDIT && (
-        <EditModal
+        <EditModuleModal
           type="Module"
           name={name}
           description={description}

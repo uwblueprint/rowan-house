@@ -15,7 +15,7 @@ import { Button, Input, Text } from "./components";
 
 const overrides = {
   ...styles,
-  components: { Input, Button, Text },
+  components: { Button, Text },
   colors,
   fonts,
   fontSizes,

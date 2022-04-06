@@ -2,6 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useReducer } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
+import { ApolloProvider } from "@apollo/client";
 
 import defaultTheme from "./theme";
 import Login from "./components/auth/Login";
@@ -27,6 +28,7 @@ import EditTeamInfoPage from "./components/pages/EditTeamPage";
 import HooksDemo from "./components/pages/HooksDemo";
 
 import { AuthenticatedUser } from "./types/AuthTypes";
+import client from "./APIClients/BaseAPIClient";
 
 const App = (): React.ReactElement => {
   const currentUser: AuthenticatedUser = getLocalStorageObj<AuthenticatedUser>(
@@ -50,59 +52,61 @@ const App = (): React.ReactElement => {
       <SampleContextDispatcherContext.Provider
         value={dispatchSampleContextUpdate}
       >
-        <AuthContext.Provider
-          value={{ authenticatedUser, setAuthenticatedUser }}
-        >
-          <ChakraProvider theme={defaultTheme}>
-            <Router>
-              <Switch>
-                <Route exact path={Routes.LOGIN_PAGE} component={Login} />
-                <Route exact path={Routes.SIGNUP_PAGE} component={Signup} />
-                <PrivateRoute
-                  exact
-                  path={Routes.HOME_PAGE}
-                  component={Default}
-                />
-                <PrivateRoute
-                  exact
-                  path={Routes.CREATE_ENTITY_PAGE}
-                  component={CreatePage}
-                />
-                <PrivateRoute
-                  exact
-                  path={Routes.UPDATE_ENTITY_PAGE}
-                  component={UpdatePage}
-                />
-                <PrivateRoute
-                  exact
-                  path={Routes.DISPLAY_ENTITY_PAGE}
-                  component={DisplayPage}
-                />
-                <PrivateRoute
-                  exact
-                  path={Routes.EDIT_TEAM_PAGE}
-                  component={EditTeamInfoPage}
-                />
-                <PrivateRoute
-                  exact
-                  path={Routes.HOOKS_PAGE}
-                  component={HooksDemo}
-                />
-                <PrivateRoute
-                  exact
-                  path={Routes.ADMIN_DASHBOARD_PAGE}
-                  component={AdminDasboard}
-                />
-                <PrivateRoute
-                  exact
-                  path={`${Routes.ADMIN_MODULE_EDITOR_BASE_ROUTE}/:courseID/:moduleID`}
-                  component={ModuleEditor}
-                />
-                <Route exact path="*" component={NotFound} />
-              </Switch>
-            </Router>
-          </ChakraProvider>
-        </AuthContext.Provider>
+        <ApolloProvider client={client}>
+          <AuthContext.Provider
+            value={{ authenticatedUser, setAuthenticatedUser }}
+          >
+            <ChakraProvider theme={defaultTheme}>
+              <Router>
+                <Switch>
+                  <Route exact path={Routes.LOGIN_PAGE} component={Login} />
+                  <Route exact path={Routes.SIGNUP_PAGE} component={Signup} />
+                  <PrivateRoute
+                    exact
+                    path={Routes.HOME_PAGE}
+                    component={Default}
+                  />
+                  <PrivateRoute
+                    exact
+                    path={Routes.CREATE_ENTITY_PAGE}
+                    component={CreatePage}
+                  />
+                  <PrivateRoute
+                    exact
+                    path={Routes.UPDATE_ENTITY_PAGE}
+                    component={UpdatePage}
+                  />
+                  <PrivateRoute
+                    exact
+                    path={Routes.DISPLAY_ENTITY_PAGE}
+                    component={DisplayPage}
+                  />
+                  <PrivateRoute
+                    exact
+                    path={Routes.EDIT_TEAM_PAGE}
+                    component={EditTeamInfoPage}
+                  />
+                  <PrivateRoute
+                    exact
+                    path={Routes.HOOKS_PAGE}
+                    component={HooksDemo}
+                  />
+                  <PrivateRoute
+                    exact
+                    path={Routes.ADMIN_DASHBOARD_PAGE}
+                    component={AdminDasboard}
+                  />
+                  <PrivateRoute
+                    exact
+                    path={`${Routes.ADMIN_MODULE_EDITOR_BASE_ROUTE}/:courseID/:moduleIndex`}
+                    component={ModuleEditor}
+                  />
+                  <Route exact path="*" component={NotFound} />
+                </Switch>
+              </Router>
+            </ChakraProvider>
+          </AuthContext.Provider>
+        </ApolloProvider>
       </SampleContextDispatcherContext.Provider>
     </SampleContext.Provider>
   );

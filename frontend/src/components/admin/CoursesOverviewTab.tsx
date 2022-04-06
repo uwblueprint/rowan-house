@@ -1,42 +1,46 @@
 import React from "react";
-import { Box, Button, Flex, Text, VStack } from "@chakra-ui/react";
+import { useQuery } from "@apollo/client";
+import { Box, Button, Flex, Spinner, Text, VStack } from "@chakra-ui/react";
 import { SmallAddIcon } from "@chakra-ui/icons";
 import CoursePreview from "./CoursePreview";
-
-import { CoursePreviewProps } from "../../types/AdminDashboardTypes";
-
-const DEFAULT_IMAGE =
-  "https://res.cloudinary.com/practicaldev/image/fetch/s--JIe3p0M4--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://dev-to-uploads.s3.amazonaws.com/i/093ewdrgyf1kedlhzs51.png";
+import { COURSES } from "../../APIClients/queries/CourseQueries";
+import { CourseResponse } from "../../APIClients/types/CourseClientTypes";
 
 const CoursesOverviewTab = (): React.ReactElement => {
-  const dummyCourses: Array<CoursePreviewProps> = [
-    {
-      title: "Hello!",
-      description: "I am a course",
-      isPrivate: false,
-      modules: [
-        {
-          title: "Module 1",
-          published: true,
-          imageLink: DEFAULT_IMAGE,
-        },
-        {
-          title: "Module 2",
-          published: false,
-          imageLink: DEFAULT_IMAGE,
-        },
-        {
-          title: "Module 3",
-          published: true,
-          imageLink: DEFAULT_IMAGE,
-        },
-      ],
+  const [courses, setCourses] = React.useState<CourseResponse[] | null>();
+
+  const { loading, error } = useQuery<{
+    courses: Array<CourseResponse>;
+  }>(COURSES, {
+    onCompleted: (data) => {
+      setCourses(data.courses);
     },
-  ];
+  });
+
+  const displayCoursePreviews = () => {
+    if (!courses?.length) {
+      return <h1>There are no courses.</h1>;
+    }
+    return courses?.map((course) => (
+      <CoursePreview
+        key={course.id}
+        courseId={course.id}
+        title={course.title}
+        description={course.description}
+        isPrivate={course.private}
+        modules={course.modules}
+      />
+    ));
+  };
+
+  if (error) return <p>Error! {error.message}</p>;
 
   return (
-    <Box my={6} mx={9} flex="1">
+    <Box flex="1">
       <Flex
+        my={6}
+        // px instead of mx to extend border completely in container
+        px={9}
         justify="space-between"
         borderBottom="1px"
         borderColor="background.lightgrey"
@@ -48,16 +52,8 @@ const CoursesOverviewTab = (): React.ReactElement => {
           Create New Course
         </Button>
       </Flex>
-      <VStack spacing={12} mt={6}>
-        {dummyCourses.map((x, i) => (
-          <CoursePreview
-            key={i}
-            title={x.title}
-            description={x.description}
-            isPrivate={x.isPrivate}
-            modules={x.modules}
-          />
-        ))}
+      <VStack spacing={12} mx={9}>
+        {loading ? <Spinner size="xl" /> : displayCoursePreviews()}
       </VStack>
     </Box>
   );

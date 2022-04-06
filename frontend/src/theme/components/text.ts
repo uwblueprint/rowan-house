@@ -53,7 +53,7 @@ const Text = {
       lineHeight: "150%",
     },
     "caption-md": {
-      fontWeight: "bold",
+      fontWeight: "medium",
       size: "16px",
       lineHeight: "150%",
     },
