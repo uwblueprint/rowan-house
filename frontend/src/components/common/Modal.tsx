@@ -27,6 +27,7 @@ export interface ModalProps {
   cancelButtonColorScheme?: string;
   confirmButtonColorScheme?: string;
   size?: string;
+  children?: React.ReactNode;
 }
 
 export const Modal: React.FC<ModalProps> = (props) => {
@@ -41,6 +42,7 @@ export const Modal: React.FC<ModalProps> = (props) => {
     alignButtonsRight = true,
     cancelButtonColorScheme,
     confirmButtonColorScheme,
+    children,
     ...rest
   } = props;
 
@@ -53,7 +55,7 @@ export const Modal: React.FC<ModalProps> = (props) => {
         <ModalBody>
           {bodyText && <Text>{bodyText}</Text>}
           {/* eslint-disable-next-line react/destructuring-assignment */}
-          {/* {props.children} */}
+          {props.children}
         </ModalBody>
         <ModalFooter>
           <Button colorScheme={cancelButtonColorScheme} onClick={onCancel}>
@@ -85,6 +87,5 @@ Modal.propTypes = {
   cancelButtonColorScheme: PropTypes.string,
   confirmButtonColorScheme: PropTypes.string,
   size: PropTypes.string,
-  // eslint-disable-next-line react/forbid-prop-types
-  // children: PropTypes.any,
+  children: PropTypes.node,
 };

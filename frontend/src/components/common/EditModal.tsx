@@ -1,5 +1,6 @@
-import { Flex, Box } from "@chakra-ui/react";
+import { Flex, Box, VStack } from "@chakra-ui/react";
 import React from "react";
+import PropTypes from "prop-types";
 import { TextInput } from "./TextInput";
 import { Modal, ModalProps } from "./Modal";
 import { SwitchInput } from "./SwitchInput";
@@ -34,10 +35,10 @@ const EditModal: React.FC<EditModalProps> = (props) => {
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
     <Modal size="lg" header={`Edit ${type}`} {...props}>
-      <Flex>
+      <VStack>
         <TextInput
           name={`${type} Name:`}
-          label="name"
+          label={`${type} Name:`}
           defaultValue={name}
           // isInvalid={emailError != ""}
           // errorMessage={emailError}
@@ -46,19 +47,28 @@ const EditModal: React.FC<EditModalProps> = (props) => {
         />
         <TextInput
           name={`${type} Description:`}
-          label="description"
+          label={`${type} Description:`}
           defaultValue={description}
           // onChange={(e) => setEmail(e.target.value)}
           isRequired
         />
         <SwitchInput
           name={`Visibility: ${visibility ? "Public" : "Private"}`}
+          enabledName="Public"
+          disabledName="Private"
           isEnabled={visibility}
         />
         <Box width={8} />
-      </Flex>
+      </VStack>
     </Modal>
   );
+};
+
+EditModal.propTypes = {
+  name: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  visibility: PropTypes.bool.isRequired
 };
 
 export default EditModal;

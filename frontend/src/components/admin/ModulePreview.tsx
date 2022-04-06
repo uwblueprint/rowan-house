@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Flex,
@@ -11,8 +11,13 @@ import {
 } from "@chakra-ui/react";
 import { ModulePreviewProps } from "../../types/AdminDashboardTypes";
 import EditActionsKebabMenu from "../common/EditActionsKebabMenu";
-import { Modal } from "../common/Modal";
-import DeleteModal from '../common/DeleteModal'
+import EditModal from "../common/EditModal";
+import DeleteModal from "../common/DeleteModal";
+
+enum ModalType {
+  EDIT = "edit",
+  DELETE = "delete",
+}
 
 const ModulePreview = ({
   title,
@@ -20,9 +25,22 @@ const ModulePreview = ({
   imageLink,
 }: ModulePreviewProps): React.ReactElement => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [modalType, setModalType] = useState(ModalType.EDIT); // determines which modal is shown when isOpen is true
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [visibility, setVisibility] = useState(false);
+
 
   const onDeleteClick = () => {
-    console.log("OPENING DELETE MODAL");
+    console.log("OPENING DELETE MODAL"); 
+    setModalType(ModalType.DELETE);
+    onOpen();
+  };
+  const onEditClick = () => {
+    console.log("OPENING EDIT MODAL");
+    setName(title);
+    // TODO: set attributes
+    setModalType(ModalType.EDIT);
     onOpen();
   };
 
@@ -55,17 +73,30 @@ const ModulePreview = ({
           </VStack>
         </Link>
         <EditActionsKebabMenu
-          handleEditDetailsClick={() => alert("edit detailss")}
+          handleEditDetailsClick={onEditClick}
           deleteFunction={onDeleteClick}
           showHorizontal={false}
         />
       </Flex>
-      <DeleteModal
-        isOpen={isOpen}
-        onConfirm={() => true}
-        onCancel={onClose}
-        name="Course"
-      />
+      {modalType === ModalType.DELETE && (
+        <DeleteModal
+          name="Module"
+          isOpen={isOpen}
+          onConfirm={() => true}
+          onCancel={onClose}
+        />
+      )}
+      {modalType === ModalType.EDIT && (
+        <EditModal
+          type="Module"
+          name={name}
+          description={description}
+          visibility={visibility}
+          isOpen={isOpen}
+          onConfirm={() => true}
+          onCancel={onClose}
+        />
+      )}
     </Box>
   );
 };

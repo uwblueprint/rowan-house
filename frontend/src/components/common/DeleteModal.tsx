@@ -10,20 +10,20 @@ const DeleteModal: React.FC<DeleteModalProps> = (props) => {
   const { name } = props;
 
   return (
-      <Modal
-          size="sm"
-          header={`Delete ${name}`}
-          bodyText={`Are you sure? You can't undo this action afterwards.`}
-          // confirmButtonColorScheme="red"
-         // cancelButtonColorScheme="white"
+    <Modal
+      size="sm"
+      header={`Delete ${name}`}
+      bodyText={`Are you sure? You can't undo this action afterwards.`}
+      // confirmButtonColorScheme="red"
+      // cancelButtonColorScheme="white"
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
-      />
+    />
   );
 };
 
 DeleteModal.propTypes = {
-  name: PropTypes.string.isRequired
-}
+  name: PropTypes.string.isRequired,
+};
 
 export default DeleteModal;

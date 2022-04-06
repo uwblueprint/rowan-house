@@ -7,6 +7,7 @@ import {
   InputProps,
   FormHelperText,
 } from "@chakra-ui/react";
+import PropTypes from "prop-types";
 import { WarningIcon } from "@chakra-ui/icons";
 
 export interface TextInputProps extends InputProps {
@@ -48,4 +49,13 @@ export const TextInput: React.FC<TextInputProps> = ({
       )}
     </FormControl>
   );
+};
+
+TextInput.propTypes = {
+  name: PropTypes.string.isRequired,
+  label: PropTypes.string,
+  placeholder: PropTypes.string,
+  errorMessage: PropTypes.string,
+  helperText: PropTypes.string,
+  isInvalid: PropTypes.bool,
 };
