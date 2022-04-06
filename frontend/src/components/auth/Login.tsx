@@ -81,7 +81,7 @@ const Login = (): React.ReactElement => {
         throw new Error("Unexpected Error");
     }
   }
-
+  
   if (authenticatedUser) {
     return <Redirect to={HOME_PAGE} />;
   }
@@ -114,11 +114,11 @@ const Login = (): React.ReactElement => {
               Don&lsquo;t have an account?&nbsp;
               <Button
                 variant="link"
-                color="purple"
+                color="brand.royal"
                 onClick={onSignUpClick}
                 textDecorationLine="underline"
               >
-                Sign Up
+                Sign up
               </Button>
             </Center>
           </Box>
@@ -136,8 +136,8 @@ const Login = (): React.ReactElement => {
                 onClick={() => onBackClick(loginState)}
                 variant="link"
                 >
-                <ArrowBackIcon />
-                <Text variant="button">Back</Text>
+                <ArrowBackIcon color="brand.royal" />
+                <Text variant="button" color="brand.royal">Back</Text>
               </Button>
             </Box>
             <Text variant="caption-md" marginTop="1.5vh" marginBottom="1vh"> Password</Text>
@@ -159,7 +159,7 @@ const Login = (): React.ReactElement => {
             <Center>
               <Button
                 variant="link"
-                color="purple"
+                color="brand.royal"
                 onClick={(event) => setLoginState(LoginState.ForgetPassword)}
                 textDecorationLine="underline"
               >
@@ -180,8 +180,8 @@ const Login = (): React.ReactElement => {
                 onClick={() => onBackClick(loginState)}
                 variant="link"
                 >
-                <ArrowBackIcon />
-                <Text variant="button">Back</Text>
+                <ArrowBackIcon color="brand.royal" />
+                <Text variant="button" color="brand.royal">Back</Text>
               </Button>
             </Box>
             <FormControl>
@@ -205,7 +205,7 @@ const Login = (): React.ReactElement => {
               Remembered your password?&nbsp;
               <Button
                 variant="link"
-                color="purple"
+                color="brand.royal"
                 textDecorationLine="underline"
                 onClick={(event) => setLoginState(LoginState.EnterEmail)}
               >

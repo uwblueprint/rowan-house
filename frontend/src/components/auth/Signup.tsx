@@ -119,11 +119,11 @@ const Signup = (): React.ReactElement => {
             Have an account?&nbsp;
             <Button
               variant="link"
-              color="purple"
+              color="brand.royal"
               onClick={onSignInClick}
               textDecorationLine="underline"
             >
-              Sign In
+              Sign in
             </Button>
           </Center>
         </Box>
