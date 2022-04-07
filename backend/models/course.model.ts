@@ -1,6 +1,7 @@
 import { Schema, Document, model, Types } from "mongoose";
 
 export interface Module {
+  _id: Types.ObjectId;
   title: string;
   description: string;
   image: string;
@@ -10,19 +11,18 @@ export interface Module {
 }
 
 export interface Course extends Document {
-  _id: Types.ObjectId;
+  id: string;
   title: string;
   description: string;
   image: string;
   previewImage: string;
   modules: Module[];
   private: boolean;
-  published: boolean;
 }
 
 export interface CourseVisibilityAttributes {
-  private?: boolean;
-  published?: boolean;
+  includePrivateCourses: boolean;
+  includeOnlyPublishedModules: boolean;
 }
 
 const ModuleSchema: Schema = new Schema({
@@ -61,11 +61,6 @@ const CourseSchema: Schema = new Schema({
   private: {
     type: Boolean,
     default: true,
-    required: true,
-  },
-  published: {
-    type: Boolean,
-    default: false,
     required: true,
   },
 });

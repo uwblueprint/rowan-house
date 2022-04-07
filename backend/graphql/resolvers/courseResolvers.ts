@@ -28,11 +28,20 @@ const getCourseVisibilityAttributes = (
 ): CourseVisibilityAttributes => {
   switch (role) {
     case "User":
-      return { private: false, published: true };
+      return {
+        includePrivateCourses: false,
+        includeOnlyPublishedModules: true,
+      };
     case "Staff":
-      return { published: true };
+      return {
+        includePrivateCourses: false,
+        includeOnlyPublishedModules: false,
+      };
     case "Admin":
-      return {};
+      return {
+        includePrivateCourses: true,
+        includeOnlyPublishedModules: false,
+      };
     default:
       return assertNever(role);
   }

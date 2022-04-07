@@ -14,28 +14,24 @@ import MgCourse, {
 
 const Logger = logger(__filename);
 
-const getModuleQueryCondition = (filterForPublished: boolean) => {
-  return filterForPublished
-    ? [
-        {
-          $project: {
-            title: true,
-            description: true,
-            image: true,
-            previewImage: true,
-            private: true,
-            published: true,
-            modules: {
-              $filter: {
-                input: "$modules",
-                cond: { this: { $eq: ["published", true] } },
-              },
-            },
-          },
+const publishedModulesOnlyQuery = [
+  {
+    $project: {
+      title: true,
+      description: true,
+      image: true,
+      previewImage: true,
+      private: true,
+      modules: {
+        $filter: {
+          input: "$modules",
+          as: "module",
+          cond: { $eq: ["$$module.published", true] },
         },
-      ]
-    : [];
-};
+      },
+    },
+  },
+];
 
 class CourseService implements ICourseService {
   /* eslint-disable class-methods-use-this */
@@ -44,61 +40,77 @@ class CourseService implements ICourseService {
     queryConditions: CourseVisibilityAttributes,
   ): Promise<CourseResponseDTO> {
     let course: Course | null;
-    const filterModulesByPermissions = getModuleQueryCondition(
-      queryConditions.published ?? false,
-    );
 
     try {
-      const courseQueryResult: Array<Course> | null = await MgCourse.aggregate([
-        { $match: { _id: Types.ObjectId(id), ...queryConditions } },
-        ...filterModulesByPermissions,
-      ]).exec();
+      const queryAttributes = queryConditions.includePrivateCourses
+        ? { _id: Types.ObjectId(id) }
+        : { _id: Types.ObjectId(id), private: false };
 
-      if (!courseQueryResult || courseQueryResult.length === 0) {
-        throw new Error(`Course id ${id} not found`);
+      if (queryConditions.includeOnlyPublishedModules) {
+        const courseQueryResult: Array<Course> | null = await MgCourse.aggregate(
+          [{ $match: queryAttributes }, ...publishedModulesOnlyQuery],
+        ).exec();
+
+        if (!courseQueryResult || courseQueryResult.length === 0) {
+          throw new Error(`Course id ${id} not found`);
+        }
+
+        [course] = courseQueryResult;
+      } else {
+        course = await MgCourse.findOne(queryAttributes);
       }
-
-      [course] = courseQueryResult;
     } catch (error: unknown) {
       Logger.error(`Failed to get course. Reason = ${getErrorMessage(error)}`);
       throw error;
     }
 
+    if (!course) throw new Error(`Could not find course with id ${id}`);
+
     return {
-      id: course._id.toHexString(),
+      // eslint-disable-next-line no-underscore-dangle
+      id: course._id.toString(),
       title: course.title,
       description: course.description,
       image: course.image,
       previewImage: course.previewImage,
       modules: course.modules,
       private: course.private,
-      published: course.published,
     };
   }
 
   async getCourses(
     queryConditions: CourseVisibilityAttributes,
   ): Promise<CourseResponseDTO[]> {
-    const filterCoursesByPermissions = { $match: queryConditions };
-    const filterModulesByPermissions = getModuleQueryCondition(
-      queryConditions.published ?? false,
-    );
-
     try {
-      const courses: Array<Course> = await MgCourse.aggregate([
-        filterCoursesByPermissions,
-        ...filterModulesByPermissions,
-      ]).exec();
+      let courses: Array<Course> | null;
+
+      if (queryConditions.includeOnlyPublishedModules) {
+        const filterQueryObject = queryConditions.includePrivateCourses
+          ? []
+          : [{ $match: { private: false } }];
+
+        courses = await MgCourse.aggregate([
+          ...filterQueryObject,
+          ...publishedModulesOnlyQuery,
+        ]).exec();
+      } else {
+        courses = await MgCourse.find(
+          queryConditions.includePrivateCourses ? {} : { private: false },
+        );
+      }
+
+      if (!courses) throw new Error("Courses query failed");
+
       return courses.map((course) => {
         return {
-          id: course._id.toHexString(),
+          // eslint-disable-next-line no-underscore-dangle
+          id: course._id.toString(),
           title: course.title,
           description: course.description,
           image: course.image,
           previewImage: course.previewImage,
           modules: course.modules,
           private: course.private,
-          published: course.published,
         };
       });
     } catch (error: unknown) {
@@ -127,7 +139,6 @@ class CourseService implements ICourseService {
       previewImage: newCourse.previewImage,
       modules: newCourse.modules,
       private: newCourse.private,
-      published: newCourse.published,
     };
   }
 
@@ -159,7 +170,6 @@ class CourseService implements ICourseService {
       previewImage: updatedCourse.previewImage,
       modules: updatedCourse.modules,
       private: updatedCourse.private,
-      published: updatedCourse.published,
     };
   }
 
