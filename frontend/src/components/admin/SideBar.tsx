@@ -1,27 +1,35 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import { Box, Flex, Text, Spacer, Image, Button } from "@chakra-ui/react";
-import CoursesIcon from "../../assets/Courses.svg";
-import UsersIcon from "../../assets/Users.svg";
+import { ReactComponent as CoursesIcon } from "../../assets/Courses.svg";
+import { ReactComponent as UsersIcon } from "../../assets/Users.svg";
 import RHSLogo from "../../assets/RHSLogo-white.png";
+import { AdminPage, SidebarProps } from "../../types/AdminDashboardTypes";
+import { MANAGE_COURSES_PAGE, MANAGE_USERS_PAGE } from "../../constants/Routes";
 
-interface TabProps {
-  icon: string;
-  text: string;
-  bg: string;
-}
+const Sidebar = ({
+  currentPage,
+}: SidebarProps): React.ReactElement => {
+  const history = useHistory();
 
-function Tab({ icon, text, bg }: TabProps) {
-  return (
-    <Flex padding="1rem 2rem" bg={bg} align="center">
-      <Image src={icon} alt={text} width="1.5rem" height="1.5rem" />
-      <Text variant="body" pl="1.5rem">
-        {text}
-      </Text>
-    </Flex>
-  );
-}
+  const getTabColour = (tab: AdminPage) =>
+    tab === currentPage ? "brand.purple" : "brand.royal";
 
-const Sidebar = (): React.ReactElement => {
+  const setNewPage = (newTab: AdminPage) => {
+    if (newTab !== currentPage) {
+      switch (newTab) {
+        case AdminPage.ManageCourses:
+          history.push(MANAGE_COURSES_PAGE);
+          break;
+        case AdminPage.ManageUsers:
+          history.push(MANAGE_USERS_PAGE);
+          break;
+        default:
+          throw new Error("Unexpected admin dashboard page");
+      }
+    }
+  }
+
   return (
     <Box w="20%">
       <Flex
@@ -35,10 +43,28 @@ const Sidebar = (): React.ReactElement => {
         color="white"
         justify="space-between"
       >
-        <Image src={RHSLogo} alt="Rowan House logo" width="10rem" pt="2rem" />
+        <Image src={RHSLogo} alt="Rowan House logo" w="10rem" pt="2rem" />
         <Flex w="100%" flexDir="column" pt="4.5rem">
-          <Tab bg="brand.purple" icon={CoursesIcon} text="Manage Courses" />
-          <Tab bg="brand.royal" icon={UsersIcon} text="Manage Users" />
+          <Button
+            variant="transparent"
+            isFullWidth
+            iconSpacing={5}
+            bg={getTabColour(AdminPage.ManageCourses)}
+            leftIcon={<CoursesIcon />}
+            onClick={() => setNewPage(AdminPage.ManageCourses)}
+          >
+            Manage Courses
+          </Button>
+          <Button
+            variant="transparent"
+            isFullWidth
+            iconSpacing={5}
+            bg={getTabColour(AdminPage.ManageUsers)}
+            leftIcon={<UsersIcon />}
+            onClick={() => setNewPage(AdminPage.ManageUsers)}
+          >
+            Manage Users
+          </Button>
         </Flex>
         <Spacer />
         <Flex w="100%" justify="space-between" p="1.5rem" align="center">

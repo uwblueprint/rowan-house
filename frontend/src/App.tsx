@@ -13,7 +13,6 @@ import Default from "./components/pages/Default";
 import DisplayPage from "./components/pages/DisplayPage";
 import NotFound from "./components/pages/NotFound";
 import UpdatePage from "./components/pages/UpdatePage";
-import AdminDasboard from "./components/pages/AdminDashboard";
 import ModuleEditor from "./components/pages/ModuleEditor";
 import * as Routes from "./constants/Routes";
 import AUTHENTICATED_USER_KEY from "./constants/AuthConstants";
@@ -26,9 +25,10 @@ import sampleContextReducer from "./reducers/SampleContextReducer";
 import SampleContextDispatcherContext from "./contexts/SampleContextDispatcherContext";
 import EditTeamInfoPage from "./components/pages/EditTeamPage";
 import HooksDemo from "./components/pages/HooksDemo";
-
 import { AuthenticatedUser } from "./types/AuthTypes";
 import client from "./APIClients/BaseAPIClient";
+import ManageUsersPage from "./components/pages/ManageUsersPage";
+import ManageCoursesPage from "./components/pages/ManageCoursesPage";
 
 const App = (): React.ReactElement => {
   const currentUser: AuthenticatedUser = getLocalStorageObj<AuthenticatedUser>(
@@ -93,8 +93,13 @@ const App = (): React.ReactElement => {
                   />
                   <PrivateRoute
                     exact
-                    path={Routes.ADMIN_DASHBOARD_PAGE}
-                    component={AdminDasboard}
+                    path={Routes.MANAGE_COURSES_PAGE}
+                    component={ManageCoursesPage}
+                  />
+                  <PrivateRoute
+                    exact
+                    path={Routes.MANAGE_USERS_PAGE}
+                    component={ManageUsersPage}
                   />
                   <PrivateRoute
                     exact

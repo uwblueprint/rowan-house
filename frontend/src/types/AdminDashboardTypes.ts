@@ -15,3 +15,20 @@ export interface CoursePreviewProps {
   isPrivate: boolean;
   modules: Module[] | null;
 }
+
+export enum AdminPage {
+  ManageCourses,
+  ManageUsers,
+}
+
+export interface SidebarProps {
+  currentPage: AdminPage;
+}
+
+export interface UserCardProps {
+  firstName: string;
+  lastName: string;
+  role: string;
+  email: string;
+  location: string;
+}
