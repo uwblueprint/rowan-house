@@ -23,18 +23,21 @@ const PageTab = ({
   return (
     <Button
       isFullWidth
+      h="auto"
       iconSpacing={5}
       justifyContent="flex-start"
       boxShadow="0px"
       bg={bgColor}
-      py={4}
       pl={7}
+      py={4}
       m={0}
       borderRadius="0px"
       leftIcon={icon}
       onClick={onClickTab}
     >
-      <Text variant="body">{pageName}</Text>
+      <Text variant="body" h="min-content">
+        {pageName}
+      </Text>
     </Button>
   );
 };
@@ -61,7 +64,7 @@ const Sidebar = ({ currentPage }: SidebarProps): React.ReactElement => {
   };
 
   return (
-    <Box w="20%">
+    <Flex w="20%">
       <Flex
         position="fixed"
         w="inherit"
@@ -71,10 +74,9 @@ const Sidebar = ({ currentPage }: SidebarProps): React.ReactElement => {
         align="center"
         bg="brand.royal"
         color="white"
-        justify="space-between"
       >
         <Image src={RHSLogo} alt="Rowan House logo" w="10rem" pt="2rem" />
-        <Flex w="100%" flexDir="column" pt="4.5rem">
+        <Flex w="100%" flexDir="column" pt="4.5rem" flex="1">
           <PageTab
             pageName="Manage Courses"
             bgColor={getTabColor(AdminPage.ManageCourses)}
@@ -88,7 +90,6 @@ const Sidebar = ({ currentPage }: SidebarProps): React.ReactElement => {
             onClickTab={() => setNewPage(AdminPage.ManageUsers)}
           />
         </Flex>
-        <Spacer />
         <Flex w="100%" justify="space-between" p="1.5rem" align="center">
           <Flex flexDir="column">
             <Text variant="caption" opacity="0.7">
@@ -99,7 +100,7 @@ const Sidebar = ({ currentPage }: SidebarProps): React.ReactElement => {
           <Button variant="secondary-filled">Sign out</Button>
         </Flex>
       </Flex>
-    </Box>
+    </Flex>
   );
 };
 

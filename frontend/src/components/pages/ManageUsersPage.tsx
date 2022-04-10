@@ -1,24 +1,15 @@
 import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
-import {
-  Box,
-  Button,
-  Flex,
-  HStack,
-  Input,
-  InputGroup,
-  InputRightElement,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Text,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, Button, Flex, HStack, Text } from "@chakra-ui/react";
 import { DownloadIcon, SearchIcon } from "@chakra-ui/icons";
-import { AdminPage, UserCardProps } from "../../types/AdminDashboardTypes";
+import {
+  AdminPage,
+  UserCardProps,
+  UsersByEmail,
+} from "../../types/AdminDashboardTypes";
 import UserCard from "../admin/UserCard";
 import SideBar from "../admin/SideBar";
+import SearchUsersBar from "../admin/SearchUsersBar";
 import { UserResponse } from "../../APIClients/types/UserClientTypes";
 import { USERS } from "../../APIClients/queries/UserQueries";
 
@@ -40,17 +31,11 @@ const NoUserSelectedCard = (): React.ReactElement => {
   );
 };
 
-interface UsersByEmail {
-  [email: string]: UserResponse;
-}
-
 const ManageUsersPage = (): React.ReactElement => {
-  const [searchEmail, setSearchEmail] = useState<string>("");
-
-  const { isOpen, onClose } = useDisclosure();
-  const [selectableUserName, setSelectableUserName] = useState<string | null>();
-
-  const [selectedUser, setSelectedUser] = useState<UserCardProps | null>();
+  const [
+    spotlightedUser,
+    setSpotlightedUser,
+  ] = useState<UserCardProps | null>();
 
   // Never expose this
   const [users, setUsers] = useState<UsersByEmail>({});
@@ -74,22 +59,6 @@ const ManageUsersPage = (): React.ReactElement => {
     },
   });
 
-  const getUserResultOrNull = (email: string): string | null =>
-    email in users
-      ? `${users[email].firstName} ${users[email].lastName}`
-      : null;
-
-  const handleSearchSubmit = (event: React.SyntheticEvent) => {
-    event.preventDefault();
-    setSelectableUserName(getUserResultOrNull(searchEmail));
-  };
-
-  const handleOnSelectUser = () => {
-    setSelectedUser(users[searchEmail]);
-    setSelectableUserName(null);
-    setSearchEmail("");
-  };
-
   return (
     <Flex h="100vh">
       <SideBar currentPage={AdminPage.ManageUsers} />
@@ -107,40 +76,10 @@ const ManageUsersPage = (): React.ReactElement => {
             <Text variant="display-lg" mr={9}>
               Users
             </Text>
-            <Menu isOpen={searchEmail !== ""}>
-              <MenuButton tabIndex={-1} />
-              <InputGroup w="500px">
-                <Input
-                  value={searchEmail}
-                  placeholder="Search users by email"
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    const { value } = event.target;
-                    setSelectableUserName(getUserResultOrNull(value));
-                    setSearchEmail(value);
-                  }}
-                  onSubmit={handleSearchSubmit}
-                />
-                <InputRightElement as="button" onClick={handleSearchSubmit}>
-                  <SearchIcon />
-                </InputRightElement>
-              </InputGroup>
-              <MenuList
-                w="500px"
-                bg="#F0F1F2"
-                p={0}
-                m={2}
-                borderRadius="6px"
-                boxShadow="0px 8px 20px rgba(0, 0, 0, 0.15), 0px 0px 1px rgba(0, 0, 0, 0.9)"
-              >
-                {selectableUserName ? (
-                  <MenuItem pl={7} py={2} onClick={handleOnSelectUser}>
-                    {selectableUserName}
-                  </MenuItem>
-                ) : (
-                  <MenuItem isDisabled>No user found</MenuItem>
-                )}
-              </MenuList>
-            </Menu>
+            <SearchUsersBar
+              users={users}
+              onUserSelect={(email: string) => setSpotlightedUser(users[email])}
+            />
           </HStack>
           <Button variant="md" leftIcon={<DownloadIcon />}>
             Download Data
@@ -150,13 +89,13 @@ const ManageUsersPage = (): React.ReactElement => {
           <Text variant="heading" mb={2}>
             User Information
           </Text>
-          {selectedUser ? (
+          {spotlightedUser ? (
             <UserCard
-              firstName={selectedUser.firstName}
-              lastName={selectedUser.lastName}
-              role={selectedUser.role}
-              email={selectedUser.email}
-              town={selectedUser.town}
+              firstName={spotlightedUser.firstName}
+              lastName={spotlightedUser.lastName}
+              role={spotlightedUser.role}
+              email={spotlightedUser.email}
+              town={spotlightedUser.town}
             />
           ) : (
             <NoUserSelectedCard />

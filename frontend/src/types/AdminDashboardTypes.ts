@@ -1,4 +1,5 @@
 import { Module } from "../APIClients/types/CourseClientTypes";
+import { UserResponse } from "../APIClients/types/UserClientTypes";
 
 export interface ModulePreviewProps {
   index: number;
@@ -31,4 +32,13 @@ export interface UserCardProps {
   role: string;
   email: string;
   town: string;
+}
+
+export interface UsersByEmail {
+  [email: string]: UserResponse;
+}
+
+export interface SearchUsersBarProps {
+  users: UsersByEmail;
+  onUserSelect: (email: string) => void;
 }

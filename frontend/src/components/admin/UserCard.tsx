@@ -11,7 +11,7 @@ const UserCard = ({
 }: UserCardProps): React.ReactElement => {
   const renderField = (fieldName: string, value: string) => {
     return (
-      <Box my={5}>
+      <Box my={5} w="200px">
         <Text variant="display-md">{fieldName}</Text>
         <Text variant="body">{value}</Text>
       </Box>
@@ -46,11 +46,11 @@ const UserCard = ({
       borderColor="background.lightgrey"
       borderRadius="6px"
     >
-      <VStack align="center" spacing={8} ml={15} mr={33}>
+      <VStack align="center" spacing={8} ml="60px" mr="132px">
         {renderDefaultUserIcon(firstName, lastName)}
         <Button variant="outline-md">Edit Role</Button>
       </VStack>
-      <SimpleGrid columns={[3, 2]} flex="1">
+      <SimpleGrid minChildWidth="200px" flex="1">
         {renderField("First Name", firstName)}
         {renderField("Last Name", lastName)}
         {renderField("Role", role)}
