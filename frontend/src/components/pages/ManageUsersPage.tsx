@@ -1,7 +1,21 @@
 import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
-import { Box, Button, Flex, HStack, Input, InputGroup, InputRightElement, Text, VStack } from "@chakra-ui/react";
-import { SmallAddIcon, SearchIcon } from "@chakra-ui/icons";
+import {
+  Box,
+  Button,
+  Flex,
+  HStack,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Text,
+  useDisclosure,
+} from "@chakra-ui/react";
+import { DownloadIcon, SearchIcon } from "@chakra-ui/icons";
 import { AdminPage, UserCardProps } from "../../types/AdminDashboardTypes";
 import UserCard from "../admin/UserCard";
 import SideBar from "../admin/SideBar";
@@ -17,28 +31,29 @@ const NoUserSelectedCard = (): React.ReactElement => {
       borderColor="background.lightgrey"
       borderRadius="6px"
     >
-      <SearchIcon h="100px" w="100px" color="text.grey"/>
+      <SearchIcon h="100px" w="100px" color="text.grey" />
       <Text variant="display-md">No User Selected</Text>
       <Text variant="body">
         Use the search bar above to view specific user details
       </Text>
     </Box>
   );
+};
+
+interface UsersByEmail {
+  [email: string]: UserResponse;
 }
 
 const ManageUsersPage = (): React.ReactElement => {
   const [searchEmail, setSearchEmail] = useState<string>("");
 
-  const [selectedUser, setSelectedUser] = useState<UserCardProps | null>({
-    firstName: "yes",
-    lastName: "no",
-    role: "User",
-    email: "test@user.com",
-    location: "Vancouver, BC",
-  });
-  
+  const { isOpen, onClose } = useDisclosure();
+  const [selectableUserName, setSelectableUserName] = useState<string | null>();
+
+  const [selectedUser, setSelectedUser] = useState<UserCardProps | null>();
+
   // Never expose this
-  const [users, setUsers] = useState<UserResponse[]>([]);
+  const [users, setUsers] = useState<UsersByEmail>({});
 
   // TODO manage access to this query and page
   useQuery<{
@@ -46,10 +61,34 @@ const ManageUsersPage = (): React.ReactElement => {
   }>(USERS, {
     fetchPolicy: "cache-and-network",
     onCompleted: (data) => {
-      setUsers(data.users);
-      console.log(users);
+      const userProfiles = data.users.reduce(
+        (map: UsersByEmail, user: UserResponse) => {
+          // eslint-disable-next-line no-param-reassign
+          map[user.email] = user;
+          return map;
+        },
+        {},
+      );
+
+      setUsers(userProfiles);
     },
   });
+
+  const getUserResultOrNull = (email: string): string | null =>
+    email in users
+      ? `${users[email].firstName} ${users[email].lastName}`
+      : null;
+
+  const handleSearchSubmit = (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    setSelectableUserName(getUserResultOrNull(searchEmail));
+  };
+
+  const handleOnSelectUser = () => {
+    setSelectedUser(users[searchEmail]);
+    setSelectableUserName(null);
+    setSearchEmail("");
+  };
 
   return (
     <Flex h="100vh">
@@ -64,38 +103,64 @@ const ManageUsersPage = (): React.ReactElement => {
           borderBottom="1px"
           borderColor="background.lightgrey"
         >
-          <HStack spacing={9}>
-            <Text variant="display-lg">
+          <HStack>
+            <Text variant="display-lg" mr={9}>
               Users
             </Text>
-            <InputGroup w="500px">
-              <Input
-                value={searchEmail}
-                placeholder="Search users by email"
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => setSearchEmail(event.target.value)}
-              />
-              <InputRightElement>
-                <SearchIcon />
-              </InputRightElement>
-            </InputGroup>
+            <Menu isOpen={searchEmail !== ""}>
+              <MenuButton tabIndex={-1} />
+              <InputGroup w="500px">
+                <Input
+                  value={searchEmail}
+                  placeholder="Search users by email"
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    const { value } = event.target;
+                    setSelectableUserName(getUserResultOrNull(value));
+                    setSearchEmail(value);
+                  }}
+                  onSubmit={handleSearchSubmit}
+                />
+                <InputRightElement as="button" onClick={handleSearchSubmit}>
+                  <SearchIcon />
+                </InputRightElement>
+              </InputGroup>
+              <MenuList
+                w="500px"
+                bg="#F0F1F2"
+                p={0}
+                m={2}
+                borderRadius="6px"
+                boxShadow="0px 8px 20px rgba(0, 0, 0, 0.15), 0px 0px 1px rgba(0, 0, 0, 0.9)"
+              >
+                {selectableUserName ? (
+                  <MenuItem pl={7} py={2} onClick={handleOnSelectUser}>
+                    {selectableUserName}
+                  </MenuItem>
+                ) : (
+                  <MenuItem isDisabled>No user found</MenuItem>
+                )}
+              </MenuList>
+            </Menu>
           </HStack>
-          <Button variant="md" leftIcon={<SmallAddIcon />}>
+          <Button variant="md" leftIcon={<DownloadIcon />}>
             Download Data
           </Button>
         </Flex>
         <Box px={9}>
-          <Text variant="heading" mb={2}>User Information</Text>
-          {
-            selectedUser ?
-              <UserCard
-                firstName={selectedUser.firstName}
-                lastName={selectedUser.lastName}
-                role={selectedUser.role}
-                email={selectedUser.email}
-                location={selectedUser.location}
-              />
-              : <NoUserSelectedCard />
-          }
+          <Text variant="heading" mb={2}>
+            User Information
+          </Text>
+          {selectedUser ? (
+            <UserCard
+              firstName={selectedUser.firstName}
+              lastName={selectedUser.lastName}
+              role={selectedUser.role}
+              email={selectedUser.email}
+              town={selectedUser.town}
+            />
+          ) : (
+            <NoUserSelectedCard />
+          )}
         </Box>
       </Box>
     </Flex>

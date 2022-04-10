@@ -7,12 +7,42 @@ import RHSLogo from "../../assets/RHSLogo-white.png";
 import { AdminPage, SidebarProps } from "../../types/AdminDashboardTypes";
 import { MANAGE_COURSES_PAGE, MANAGE_USERS_PAGE } from "../../constants/Routes";
 
-const Sidebar = ({
-  currentPage,
-}: SidebarProps): React.ReactElement => {
+interface PageTabProps {
+  pageName: string;
+  bgColor: string;
+  icon: React.ReactElement;
+  onClickTab: () => void;
+}
+
+const PageTab = ({
+  pageName,
+  bgColor,
+  icon,
+  onClickTab,
+}: PageTabProps): React.ReactElement => {
+  return (
+    <Button
+      isFullWidth
+      iconSpacing={5}
+      justifyContent="flex-start"
+      boxShadow="0px"
+      bg={bgColor}
+      py={4}
+      pl={7}
+      m={0}
+      borderRadius="0px"
+      leftIcon={icon}
+      onClick={onClickTab}
+    >
+      <Text variant="body">{pageName}</Text>
+    </Button>
+  );
+};
+
+const Sidebar = ({ currentPage }: SidebarProps): React.ReactElement => {
   const history = useHistory();
 
-  const getTabColour = (tab: AdminPage) =>
+  const getTabColor = (tab: AdminPage) =>
     tab === currentPage ? "brand.purple" : "brand.royal";
 
   const setNewPage = (newTab: AdminPage) => {
@@ -28,7 +58,7 @@ const Sidebar = ({
           throw new Error("Unexpected admin dashboard page");
       }
     }
-  }
+  };
 
   return (
     <Box w="20%">
@@ -45,26 +75,18 @@ const Sidebar = ({
       >
         <Image src={RHSLogo} alt="Rowan House logo" w="10rem" pt="2rem" />
         <Flex w="100%" flexDir="column" pt="4.5rem">
-          <Button
-            variant="transparent"
-            isFullWidth
-            iconSpacing={5}
-            bg={getTabColour(AdminPage.ManageCourses)}
-            leftIcon={<CoursesIcon />}
-            onClick={() => setNewPage(AdminPage.ManageCourses)}
-          >
-            Manage Courses
-          </Button>
-          <Button
-            variant="transparent"
-            isFullWidth
-            iconSpacing={5}
-            bg={getTabColour(AdminPage.ManageUsers)}
-            leftIcon={<UsersIcon />}
-            onClick={() => setNewPage(AdminPage.ManageUsers)}
-          >
-            Manage Users
-          </Button>
+          <PageTab
+            pageName="Manage Courses"
+            bgColor={getTabColor(AdminPage.ManageCourses)}
+            icon={<CoursesIcon />}
+            onClickTab={() => setNewPage(AdminPage.ManageCourses)}
+          />
+          <PageTab
+            pageName="Manage Users"
+            bgColor={getTabColor(AdminPage.ManageUsers)}
+            icon={<UsersIcon />}
+            onClickTab={() => setNewPage(AdminPage.ManageUsers)}
+          />
         </Flex>
         <Spacer />
         <Flex w="100%" justify="space-between" p="1.5rem" align="center">

@@ -30,5 +30,5 @@ export interface UserCardProps {
   lastName: string;
   role: string;
   email: string;
-  location: string;
+  town: string;
 }

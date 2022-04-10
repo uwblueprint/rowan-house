@@ -14,4 +14,3 @@ export type UserResponse = {
   town: string;
   role: string;
 };
-  

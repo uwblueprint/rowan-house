@@ -7,36 +7,36 @@ const UserCard = ({
   lastName,
   role,
   email,
-  location,
+  town,
 }: UserCardProps): React.ReactElement => {
   const renderField = (fieldName: string, value: string) => {
-      return (
-        <Box my={5}>
-          <Text variant="display-md">{fieldName}</Text>
-          <Text variant="body">{value}</Text>
-        </Box>
-      );
-  }
+    return (
+      <Box my={5}>
+        <Text variant="display-md">{fieldName}</Text>
+        <Text variant="body">{value}</Text>
+      </Box>
+    );
+  };
 
   const renderDefaultUserIcon = (first: string, last: string) => {
     const initials = (first.charAt(0) + last.charAt(0)).toUpperCase();
 
     return (
-        <Text
-          h="145px"
-          w="145px"
-          lineHeight="145px"
-          textAlign="center"
-          bg="#DA7635"
-          borderRadius="50%"
-          color="white"
-          fontSize="64px"
-          fontWeight="medium"
-        >
-          {initials}
-        </Text>
+      <Text
+        h="145px"
+        w="145px"
+        lineHeight="145px"
+        textAlign="center"
+        bg="#DA7635"
+        borderRadius="50%"
+        color="white"
+        fontSize="64px"
+        fontWeight="medium"
+      >
+        {initials}
+      </Text>
     );
-  }
+  };
 
   return (
     <Flex
@@ -55,7 +55,7 @@ const UserCard = ({
         {renderField("Last Name", lastName)}
         {renderField("Role", role)}
         {renderField("Email", email)}
-        {renderField("Location", location)}
+        {renderField("Location", town)}
       </SimpleGrid>
     </Flex>
   );
