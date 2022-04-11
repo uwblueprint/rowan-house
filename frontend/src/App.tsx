@@ -1,6 +1,11 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useReducer } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import {
+  Redirect,
+  BrowserRouter as Router,
+  Route,
+  Switch,
+} from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
 import { ApolloProvider } from "@apollo/client";
 
@@ -90,6 +95,11 @@ const App = (): React.ReactElement => {
                     exact
                     path={Routes.HOOKS_PAGE}
                     component={HooksDemo}
+                  />
+                  <Redirect
+                    from={Routes.ADMIN_DASHBOARD_BASE}
+                    to={Routes.MANAGE_COURSES_PAGE}
+                    exact
                   />
                   <PrivateRoute
                     exact

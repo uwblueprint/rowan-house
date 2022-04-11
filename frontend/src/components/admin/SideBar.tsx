@@ -1,6 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { Box, Flex, Text, Spacer, Image, Button } from "@chakra-ui/react";
+import { Flex, Text, Image, Button } from "@chakra-ui/react";
 import { ReactComponent as CoursesIcon } from "../../assets/Courses.svg";
 import { ReactComponent as UsersIcon } from "../../assets/Users.svg";
 import RHSLogo from "../../assets/RHSLogo-white.png";

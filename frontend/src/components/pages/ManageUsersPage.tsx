@@ -1,17 +1,10 @@
 import React, { useState } from "react";
-import { useQuery } from "@apollo/client";
 import { Box, Button, Flex, HStack, Text } from "@chakra-ui/react";
 import { DownloadIcon, SearchIcon } from "@chakra-ui/icons";
-import {
-  AdminPage,
-  UserCardProps,
-  UsersByEmail,
-} from "../../types/AdminDashboardTypes";
+import { AdminPage, UserCardProps } from "../../types/AdminDashboardTypes";
 import UserCard from "../admin/UserCard";
 import SideBar from "../admin/SideBar";
 import SearchUsersBar from "../admin/SearchUsersBar";
-import { UserResponse } from "../../APIClients/types/UserClientTypes";
-import { USERS } from "../../APIClients/queries/UserQueries";
 
 const NoUserSelectedCard = (): React.ReactElement => {
   return (
@@ -37,28 +30,6 @@ const ManageUsersPage = (): React.ReactElement => {
     setSpotlightedUser,
   ] = useState<UserCardProps | null>();
 
-  // Never expose this
-  const [users, setUsers] = useState<UsersByEmail>({});
-
-  // TODO manage access to this query and page
-  useQuery<{
-    users: Array<UserResponse>;
-  }>(USERS, {
-    fetchPolicy: "cache-and-network",
-    onCompleted: (data) => {
-      const userProfiles = data.users.reduce(
-        (map: UsersByEmail, user: UserResponse) => {
-          // eslint-disable-next-line no-param-reassign
-          map[user.email] = user;
-          return map;
-        },
-        {},
-      );
-
-      setUsers(userProfiles);
-    },
-  });
-
   return (
     <Flex h="100vh">
       <SideBar currentPage={AdminPage.ManageUsers} />
@@ -77,8 +48,7 @@ const ManageUsersPage = (): React.ReactElement => {
               Users
             </Text>
             <SearchUsersBar
-              users={users}
-              onUserSelect={(email: string) => setSpotlightedUser(users[email])}
+              onUserSelect={(user: UserCardProps) => setSpotlightedUser(user)}
             />
           </HStack>
           <Button variant="md" leftIcon={<DownloadIcon />}>
@@ -91,6 +61,7 @@ const ManageUsersPage = (): React.ReactElement => {
           </Text>
           {spotlightedUser ? (
             <UserCard
+              id={spotlightedUser.id}
               firstName={spotlightedUser.firstName}
               lastName={spotlightedUser.lastName}
               role={spotlightedUser.role}

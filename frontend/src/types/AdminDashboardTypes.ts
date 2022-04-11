@@ -26,19 +26,8 @@ export interface SidebarProps {
   currentPage: AdminPage;
 }
 
-export interface UserCardProps {
-  firstName: string;
-  lastName: string;
-  role: string;
-  email: string;
-  town: string;
-}
-
-export interface UsersByEmail {
-  [email: string]: UserResponse;
-}
+export type UserCardProps = UserResponse;
 
 export interface SearchUsersBarProps {
-  users: UsersByEmail;
-  onUserSelect: (email: string) => void;
+  onUserSelect: (user: UserCardProps) => void;
 }

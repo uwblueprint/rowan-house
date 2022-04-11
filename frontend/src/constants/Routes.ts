@@ -14,6 +14,8 @@ export const UPDATE_ENTITY_PAGE = "/entity/update";
 
 export const HOOKS_PAGE = "/hooks";
 
+export const ADMIN_DASHBOARD_BASE = "/admin";
+
 export const MANAGE_COURSES_PAGE = "/admin/courses";
 
 export const MANAGE_USERS_PAGE = "/admin/users";
