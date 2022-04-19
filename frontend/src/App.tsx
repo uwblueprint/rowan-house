@@ -1,6 +1,11 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useReducer } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import {
+  Redirect,
+  BrowserRouter as Router,
+  Route,
+  Switch,
+} from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
 import { ApolloProvider } from "@apollo/client";
 
@@ -13,7 +18,6 @@ import Default from "./components/pages/Default";
 import DisplayPage from "./components/pages/DisplayPage";
 import NotFound from "./components/pages/NotFound";
 import UpdatePage from "./components/pages/UpdatePage";
-import AdminDasboard from "./components/pages/AdminDashboard";
 import ModuleEditor from "./components/pages/ModuleEditor";
 import * as Routes from "./constants/Routes";
 import AUTHENTICATED_USER_KEY from "./constants/AuthConstants";
@@ -26,9 +30,10 @@ import sampleContextReducer from "./reducers/SampleContextReducer";
 import SampleContextDispatcherContext from "./contexts/SampleContextDispatcherContext";
 import EditTeamInfoPage from "./components/pages/EditTeamPage";
 import HooksDemo from "./components/pages/HooksDemo";
-
 import { AuthenticatedUser } from "./types/AuthTypes";
 import client from "./APIClients/BaseAPIClient";
+import ManageUsersPage from "./components/pages/ManageUsersPage";
+import ManageCoursesPage from "./components/pages/ManageCoursesPage";
 
 const App = (): React.ReactElement => {
   const currentUser: AuthenticatedUser = getLocalStorageObj<AuthenticatedUser>(
@@ -91,10 +96,20 @@ const App = (): React.ReactElement => {
                     path={Routes.HOOKS_PAGE}
                     component={HooksDemo}
                   />
+                  <Redirect
+                    from={Routes.ADMIN_DASHBOARD_BASE}
+                    to={Routes.MANAGE_COURSES_PAGE}
+                    exact
+                  />
                   <PrivateRoute
                     exact
-                    path={Routes.ADMIN_DASHBOARD_PAGE}
-                    component={AdminDasboard}
+                    path={Routes.MANAGE_COURSES_PAGE}
+                    component={ManageCoursesPage}
+                  />
+                  <PrivateRoute
+                    exact
+                    path={Routes.MANAGE_USERS_PAGE}
+                    component={ManageUsersPage}
                   />
                   <PrivateRoute
                     exact

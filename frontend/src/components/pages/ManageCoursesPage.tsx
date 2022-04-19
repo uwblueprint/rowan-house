@@ -2,11 +2,13 @@ import React from "react";
 import { useQuery } from "@apollo/client";
 import { Box, Button, Flex, Spinner, Text, VStack } from "@chakra-ui/react";
 import { SmallAddIcon } from "@chakra-ui/icons";
-import CoursePreview from "./CoursePreview";
+import CoursePreview from "../admin/CoursePreview";
 import { COURSES } from "../../APIClients/queries/CourseQueries";
 import { CourseResponse } from "../../APIClients/types/CourseClientTypes";
+import { AdminPage } from "../../types/AdminDashboardTypes";
+import SideBar from "../admin/SideBar";
 
-const CoursesOverviewTab = (): React.ReactElement => {
+const ManageCoursesPage = (): React.ReactElement => {
   const [courses, setCourses] = React.useState<CourseResponse[] | null>();
 
   const { loading, error } = useQuery<{
@@ -36,27 +38,30 @@ const CoursesOverviewTab = (): React.ReactElement => {
   if (error) return <p>Error! {error.message}</p>;
 
   return (
-    <Box flex="1">
-      <Flex
-        my={6}
-        // px instead of mx to extend border completely in container
-        px={9}
-        justify="space-between"
-        borderBottom="1px"
-        borderColor="background.lightgrey"
-      >
-        <Text variant="display-lg" pb={6}>
-          Courses
-        </Text>
-        <Button variant="md" leftIcon={<SmallAddIcon />}>
-          Create New Course
-        </Button>
-      </Flex>
-      <VStack spacing={12} mx={9}>
-        {loading ? <Spinner size="xl" /> : displayCoursePreviews()}
-      </VStack>
-    </Box>
+    <Flex h="100vh">
+      <SideBar currentPage={AdminPage.ManageCourses} />
+      <Box flex="1">
+        <Flex
+          my={6}
+          // px instead of mx to extend border completely in container
+          px={9}
+          justify="space-between"
+          borderBottom="1px"
+          borderColor="background.lightgrey"
+        >
+          <Text variant="display-lg" pb={6}>
+            Courses
+          </Text>
+          <Button variant="md" leftIcon={<SmallAddIcon />}>
+            Create New Course
+          </Button>
+        </Flex>
+        <VStack spacing={12} mx={9}>
+          {loading ? <Spinner size="xl" /> : displayCoursePreviews()}
+        </VStack>
+      </Box>
+    </Flex>
   );
 };
 
-export default CoursesOverviewTab;
+export default ManageCoursesPage;
