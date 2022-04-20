@@ -1,14 +1,4 @@
-import {
-  Flex,
-  Box,
-  Switch,
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
-  Input,
-  InputProps,
-  FormHelperText,
-} from "@chakra-ui/react";
+import { Switch, FormControl, FormLabel, InputProps } from "@chakra-ui/react";
 import PropTypes from "prop-types";
 
 import React, { useState } from "react";
@@ -20,8 +10,6 @@ export interface SwitchProps extends InputProps {
   disabledName?: string;
 }
 
-
-
 export const SwitchInput: React.FC<SwitchProps> = ({
   name,
   isEnabled,
@@ -31,7 +19,7 @@ export const SwitchInput: React.FC<SwitchProps> = ({
   const [enabled, setEnabled] = useState(isEnabled);
   const toggleLabel = () => {
     setEnabled(!enabled);
-  }
+  };
   return (
     <FormControl display="flex" alignItems="center">
       <FormLabel>{enabled ? enabledName : disabledName}</FormLabel>

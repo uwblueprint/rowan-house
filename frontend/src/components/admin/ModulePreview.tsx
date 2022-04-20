@@ -40,14 +40,13 @@ const ModulePreview = ({
   const EDIT_MODULE_ROUTE = buildEditModuleRoute(courseId, index);
 
   const onDeleteClick = () => {
-    console.log("OPENING DELETE MODAL"); 
     setModalType(ModalType.DELETE);
     onOpen();
   };
   const onEditClick = () => {
-    console.log("OPENING EDIT MODAL");
     setName(title);
-    // TODO: set attributes
+    // description??
+    setVisibility(published);
     setModalType(ModalType.EDIT);
     onOpen();
   };
@@ -108,6 +107,9 @@ const ModulePreview = ({
           isOpen={isOpen}
           onConfirm={() => true}
           onCancel={onClose}
+          setName={setName}
+          setDescription={setDescription}
+          setVisibility={setVisibility}
         />
       )}
     </Box>

@@ -3,7 +3,6 @@ import {
   FormControl,
   FormLabel,
   FormErrorMessage,
-  Input,
   InputProps,
   FormHelperText,
   Textarea,
@@ -29,18 +28,13 @@ export const TextArea: React.FC<TextAreaProps> = ({
   helperText,
   isInvalid,
   isRequired,
-  ...rest
 }) => {
   return (
     <FormControl id={name} isRequired={isRequired} isInvalid={isInvalid} mb={5}>
       <FormLabel fontWeight={400} color={isInvalid ? "red.500" : "blackAlpha"}>
         {label}
       </FormLabel>
-      <Textarea
-        placeholder={placeholder}
-        errorBorderColor="red.600"
-        // {...rest}
-      />
+      <Textarea placeholder={placeholder} errorBorderColor="red.600" />
       {errorMessage && (
         <FormErrorMessage>
           <WarningIcon mr={2} /> {errorMessage}

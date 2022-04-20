@@ -12,7 +12,7 @@ import ModulePreview from "./ModulePreview";
 import { CoursePreviewProps } from "../../types/AdminDashboardTypes";
 import EditActionsKebabMenu from "./EditActionsKebabMenu";
 import DeleteModal from "../common/DeleteModal";
-import EditModal from "../common/EditModal";
+import EditCourseModal from "../common/EditCourseModal";
 
 enum ModalType {
   EDIT = "edit",
@@ -29,17 +29,17 @@ const CoursePreview = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [modalType, setModalType] = useState(ModalType.EDIT); // determines which modal is shown when isOpen is true
   const [name, setName] = useState("");
+  const [desc, setDesc] = useState("");
   const [visibility, setVisibility] = useState(false);
 
   const onDeleteClick = () => {
-    console.log("OPENING DELETE MODAL"); 
     setModalType(ModalType.DELETE);
     onOpen();
   };
   const onEditClick = () => {
-    console.log("OPENING EDIT MODAL");
     setName(title);
-    // TODO: set attributes
+    setDesc(description || "");
+    setVisibility(!isPrivate);
     setModalType(ModalType.EDIT);
     onOpen();
   };
@@ -111,7 +111,7 @@ const CoursePreview = ({
         />
       )}
       {modalType === ModalType.EDIT && (
-        <EditModal
+        <EditCourseModal
           type="Course"
           name={name}
           description={description || ""}
@@ -119,6 +119,9 @@ const CoursePreview = ({
           isOpen={isOpen}
           onConfirm={onClose}
           onCancel={onClose}
+          setName={setName}
+          setDescription={setDesc}
+          setVisibility={setVisibility}
         />
       )}
     </Box>

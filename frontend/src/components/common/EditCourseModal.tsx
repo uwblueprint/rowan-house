@@ -6,31 +6,25 @@ import { Modal, ModalProps } from "./Modal";
 import { SwitchInput } from "./SwitchInput";
 import { TextArea } from "./TextArea";
 
-export interface EditModalProps extends ModalProps {
+export interface EditCourseModalProps extends ModalProps {
   type: string;
   name: string;
   description: string;
   visibility: boolean;
-  // setEmail: (value: string) => void;
-  // setRole: (value: RoleType) => void;
-  // currentEmail: string;
-  // currentRole: RoleType;
-  // emailError: string;
-  // roleError: string;
+  setName: (value: string) => void;
+  setDescription: (value: string) => void;
+  setVisibility: (value: boolean) => void;
 }
 
-const EditModal: React.FC<EditModalProps> = (props) => {
+const EditCourseModal: React.FC<EditCourseModalProps> = (props) => {
   const {
     type,
     name,
     description,
     visibility,
-    // setEmail,
-    // setRole,
-    // currentEmail,
-    // currentRole,
-    // emailError,
-    // roleError,
+    setName,
+    setDescription,
+    setVisibility,
   } = props;
 
   return (
@@ -41,16 +35,14 @@ const EditModal: React.FC<EditModalProps> = (props) => {
           name={`${type} Name:`}
           label={`${type} Name:`}
           defaultValue={name}
-          // isInvalid={emailError != ""}
-          // errorMessage={emailError}
-          // onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setName(e.target.value)}
           isRequired
         />
         <TextArea
           name={`${type} Description:`}
           label={`${type} Description:`}
           defaultValue={description}
-          // onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setDescription(e.target.value)}
           isRequired
         />
         <SwitchInput
@@ -58,6 +50,7 @@ const EditModal: React.FC<EditModalProps> = (props) => {
           enabledName="Public"
           disabledName="Private"
           isEnabled={visibility}
+          onChange={(e) => setVisibility(e.target.checked)}
         />
         <Box width={8} />
       </VStack>
@@ -65,11 +58,11 @@ const EditModal: React.FC<EditModalProps> = (props) => {
   );
 };
 
-EditModal.propTypes = {
+EditCourseModal.propTypes = {
   name: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   visibility: PropTypes.bool.isRequired
 };
 
-export default EditModal;
+export default EditCourseModal;

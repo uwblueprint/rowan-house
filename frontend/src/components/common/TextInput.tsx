@@ -28,19 +28,13 @@ export const TextInput: React.FC<TextInputProps> = ({
   helperText,
   isInvalid,
   isRequired,
-  ...rest
 }) => {
   return (
     <FormControl id={name} isRequired={isRequired} isInvalid={isInvalid} mb={5}>
       <FormLabel fontWeight={400} color={isInvalid ? "red.500" : "blackAlpha"}>
         {label}
       </FormLabel>
-      <Input
-        type={name}
-        placeholder={placeholder}
-        errorBorderColor="red.600"
-        // {...rest}
-      />
+      <Input type={name} placeholder={placeholder} errorBorderColor="red.600" />
       {errorMessage && (
         <FormErrorMessage>
           <WarningIcon mr={2} /> {errorMessage}

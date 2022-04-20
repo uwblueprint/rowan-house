@@ -11,12 +11,9 @@ export interface EditModuleModalProps extends ModalProps {
   name: string;
   description: string;
   visibility: boolean;
-  // setEmail: (value: string) => void;
-  // setRole: (value: RoleType) => void;
-  // currentEmail: string;
-  // currentRole: RoleType;
-  // emailError: string;
-  // roleError: string;
+  setName: (value: string) => void;
+  setDescription: (value: string) => void;
+  setVisibility: (value: boolean) => void;
 }
 
 const EditModuleModal: React.FC<EditModuleModalProps> = (props) => {
@@ -25,12 +22,9 @@ const EditModuleModal: React.FC<EditModuleModalProps> = (props) => {
     name,
     description,
     visibility,
-    // setEmail,
-    // setRole,
-    // currentEmail,
-    // currentRole,
-    // emailError,
-    // roleError,
+    setName,
+    setDescription,
+    setVisibility,
   } = props;
 
   return (
@@ -38,31 +32,30 @@ const EditModuleModal: React.FC<EditModuleModalProps> = (props) => {
     <Modal size="xl" header={`Edit ${type}`} {...props}>
       <Flex>
         <Image boxSize="210px" mr={3} src="/sample.jpg" />
-      <VStack>
-        <TextInput
-          name={`${type} Name:`}
-          label={`${type} Name:`}
-          defaultValue={name}
-          // isInvalid={emailError != ""}
-          // errorMessage={emailError}
-          // onChange={(e) => setEmail(e.target.value)}
-          isRequired
-        />
-        <TextArea
-          name={`${type} Description:`}
-          label={`${type} Description:`}
-          defaultValue={description}
-          // onChange={(e) => setEmail(e.target.value)}
-          isRequired
-        />
-        <SwitchInput
-          name={`Visibility: ${visibility ? "Public" : "Private"}`}
-          enabledName="Public"
-          disabledName="Private"
-          isEnabled={visibility}
-        />
-        <Box width={8} />
-      </VStack>
+        <VStack>
+          <TextInput
+            name={`${type} Name:`}
+            label={`${type} Name:`}
+            defaultValue={name}
+            onChange={(e) => setName(e.target.value)}
+            isRequired
+          />
+          <TextArea
+            name={`${type} Description:`}
+            label={`${type} Description:`}
+            defaultValue={description}
+            onChange={(e) => setDescription(e.target.value)}
+            isRequired
+          />
+          <SwitchInput
+            name={`Visibility: ${visibility ? "Public" : "Private"}`}
+            enabledName="Public"
+            disabledName="Private"
+            isEnabled={visibility}
+            onChange={(e) => setVisibility(e.target.checked)}
+          />
+          <Box width={8} />
+        </VStack>
       </Flex>
     </Modal>
   );
@@ -72,7 +65,7 @@ EditModuleModal.propTypes = {
   name: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
-  visibility: PropTypes.bool.isRequired
+  visibility: PropTypes.bool.isRequired,
 };
 
 export default EditModuleModal;
