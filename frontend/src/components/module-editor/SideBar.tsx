@@ -6,7 +6,6 @@ import {
   Flex,
   Link,
   HStack,
-  IconButton,
   Tabs,
   TabList,
   Tab,
@@ -56,21 +55,9 @@ const Sidebar = (): React.ReactElement => {
           >
             <HStack justify="space-between">
               <Link href={ADMIN_DASHBOARD_PAGE}>
-                <IconButton
-                  aria-label="back"
-                  icon={<ChevronLeftIcon />}
-                  variant="unstyled"
-                  color="white"
-                  size="lg"
-                />
+                <ChevronLeftIcon color="white" h={6} w={6} />
               </Link>
-              <IconButton
-                aria-label="back"
-                icon={<EditIcon />}
-                variant="unstyled"
-                color="white"
-                size="lg"
-              />
+              <EditIcon color="white" h={5} w={5} />
             </HStack>
             <Text variant="display-sm-sb" color="white">
               {state.course.modules[Number(moduleIndex)].title}
@@ -127,7 +114,7 @@ const Sidebar = (): React.ReactElement => {
             leftIcon={<SaveIcon />}
             borderRadius="0"
             pl="35px"
-            w="inherit"
+            minW="inherit"
             h="55px"
             justifyContent="left"
           >
