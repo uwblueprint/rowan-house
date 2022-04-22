@@ -72,11 +72,11 @@ export const isAuthorizedByUserId = (userIdField: string) => {
       accessToken &&
       (await authService.isAuthorizedByUserId(accessToken, args[userIdField]));
 
-    // if (!authorized) {
-    //   throw new AuthenticationError(
-    //     "Failed authentication and/or authorization by userId",
-    //   );
-    // }
+    if (!authorized) {
+      throw new AuthenticationError(
+        "Failed authentication and/or authorization by userId",
+      );
+    }
 
     return resolve(parent, args, context, info);
   };

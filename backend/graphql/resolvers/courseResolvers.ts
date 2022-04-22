@@ -60,6 +60,7 @@ const courseResolvers = {
 
       const role = await authService.getUserRoleByAccessToken(accessToken);
       const attributes = getCourseVisibilityAttributes(role);
+
       return courseService.getCourses(attributes);
     },
   },
