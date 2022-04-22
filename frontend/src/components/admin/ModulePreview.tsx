@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { ModulePreviewProps } from "../../types/AdminDashboardTypes";
 import EditActionsKebabMenu from "./EditActionsKebabMenu";
-import EditModuleModal from "../common/EditModuleModal";
+import EditModuleModal from "./EditModuleModal";
 import DeleteModal from "../common/DeleteModal";
 import { ADMIN_MODULE_EDITOR_BASE_ROUTE } from "../../constants/Routes";
 import { DEFAULT_IMAGE } from "../../constants/DummyData";

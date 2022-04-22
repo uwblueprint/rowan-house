@@ -1,10 +1,10 @@
 import { Flex, Box, VStack } from "@chakra-ui/react";
 import React from "react";
 import PropTypes from "prop-types";
-import { TextInput } from "./TextInput";
-import { Modal, ModalProps } from "./Modal";
-import { SwitchInput } from "./SwitchInput";
-import { TextArea } from "./TextArea";
+import { TextInput } from "../common/TextInput";
+import { Modal, ModalProps } from "../common/Modal";
+import { SwitchInput } from "../common/SwitchInput";
+import { TextArea } from "../common/TextArea";
 
 export interface EditCourseModalProps extends ModalProps {
   type: string;

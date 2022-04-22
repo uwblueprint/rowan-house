@@ -52,15 +52,14 @@ const courseResolvers = {
       context: ExpressContext,
     ): Promise<CourseResponseDTO[]> => {
       const accessToken = getAccessToken(context.req);
-      // if (!accessToken) {
-      //   throw new AuthenticationError(
-      //     "Failed authentication and/or authorization by role",
-      //   );
-      // }
+      if (!accessToken) {
+        throw new AuthenticationError(
+          "Failed authentication and/or authorization by role",
+        );
+      }
 
-      // const role = await authService.getUserRoleByAccessToken(accessToken);
-      //  const attributes = getCourseVisibilityAttributes(role);
-      const attributes = getCourseVisibilityAttributes("Admin");
+      const role = await authService.getUserRoleByAccessToken(accessToken);
+      const attributes = getCourseVisibilityAttributes(role);
       return courseService.getCourses(attributes);
     },
   },

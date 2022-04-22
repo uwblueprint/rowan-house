@@ -12,7 +12,7 @@ import ModulePreview from "./ModulePreview";
 import { CoursePreviewProps } from "../../types/AdminDashboardTypes";
 import EditActionsKebabMenu from "./EditActionsKebabMenu";
 import DeleteModal from "../common/DeleteModal";
-import EditCourseModal from "../common/EditCourseModal";
+import EditCourseModal from "./EditCourseModal";
 
 enum ModalType {
   EDIT = "edit",
