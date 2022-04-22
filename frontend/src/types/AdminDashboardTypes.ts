@@ -1,4 +1,5 @@
 import { Module } from "../APIClients/types/CourseClientTypes";
+import { UserResponse } from "../APIClients/types/UserClientTypes";
 
 export interface ModulePreviewProps {
   index: number;
@@ -14,4 +15,19 @@ export interface CoursePreviewProps {
   description: string | null;
   isPrivate: boolean;
   modules: Module[] | null;
+}
+
+export enum AdminPage {
+  ManageCourses,
+  ManageUsers,
+}
+
+export interface SidebarProps {
+  currentPage: AdminPage;
+}
+
+export type UserCardProps = UserResponse;
+
+export interface SearchUsersBarProps {
+  onUserSelect: (user: UserCardProps) => void;
 }
