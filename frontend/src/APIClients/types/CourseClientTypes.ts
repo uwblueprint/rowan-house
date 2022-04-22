@@ -15,7 +15,6 @@ export type CourseRequest = {
   previewImage?: string;
   modules?: Module[];
   private?: boolean;
-  published?: boolean;
 };
 
 export type CourseResponse = {
@@ -26,5 +25,4 @@ export type CourseResponse = {
   previewImage: string | null;
   modules: Module[] | null;
   private: boolean;
-  published: boolean;
 };

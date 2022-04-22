@@ -28,11 +28,20 @@ const getCourseVisibilityAttributes = (
 ): CourseVisibilityAttributes => {
   switch (role) {
     case "User":
-      return { private: false, published: true };
+      return {
+        includePrivateCourses: false,
+        includeOnlyPublishedModules: true,
+      };
     case "Staff":
-      return { published: true };
+      return {
+        includePrivateCourses: false,
+        includeOnlyPublishedModules: false,
+      };
     case "Admin":
-      return {};
+      return {
+        includePrivateCourses: true,
+        includeOnlyPublishedModules: false,
+      };
     default:
       return assertNever(role);
   }
@@ -43,11 +52,22 @@ const courseResolvers = {
     course: async (
       _parent: undefined,
       { id }: { id: string },
+      context: ExpressContext,
     ): Promise<CourseResponseDTO> => {
-      return courseService.getCourse(id);
+      const accessToken = getAccessToken(context.req);
+      if (!accessToken) {
+        throw new AuthenticationError(
+          "Failed authentication and/or authorization by role",
+        );
+      }
+
+      const role = await authService.getUserRoleByAccessToken(accessToken);
+      const attributes = getCourseVisibilityAttributes(role);
+
+      return courseService.getCourse(id, attributes);
     },
     courses: async (
-      _parent: any,
+      _parent: undefined,
       _args: { [key: string]: any },
       context: ExpressContext,
     ): Promise<CourseResponseDTO[]> => {

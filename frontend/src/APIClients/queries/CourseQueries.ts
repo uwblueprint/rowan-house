@@ -18,7 +18,6 @@ export const COURSES = gql`
         lessons
       }
       private
-      published
     }
   }
 `;
@@ -40,7 +39,6 @@ export const GET_COURSE = gql`
         lessons
       }
       private
-      published
     }
   }
 `;
