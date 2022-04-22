@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { useParams } from "react-router-dom";
 import {
   Box,
   Button,
@@ -18,35 +19,40 @@ import { ChevronLeftIcon, EditIcon } from "@chakra-ui/icons";
 import ModuleOverview from "./SideBarModuleOverview";
 import ContentKiosk from "./SideBarContentKiosk";
 import { ReactComponent as SaveIcon } from "../../assets/Save.svg";
-import { DEFAULT_IMAGE } from "../../constants/DummyData";
 import { ADMIN_DASHBOARD_PAGE } from "../../constants/Routes";
 import EditorContext from "../../contexts/ModuleEditorContext";
+import { ModuleEditorParams } from "../../types/ModuleEditorTypes";
 
 const Sidebar = (): React.ReactElement => {
+  const { moduleIndex }: ModuleEditorParams = useParams();
+
   const context = useContext(EditorContext);
 
   if (!context) return <></>;
   const { state } = context;
-
-  // const { lessons, course, focusedLesson } = state;
   return (
-    <Box w="20%" minW="min-content">
+    <Box w="20%" minW="300px">
       <Flex
         position="fixed"
         w="inherit"
+        minW="300px"
         h="100vh"
         boxShadow="xl"
         flexFlow="column"
       >
-        <Box opacity="0.75" backgroundColor="black">
-          <Box
+        <Box opacity="0.9" backgroundColor="black">
+          <Flex
             h="240px"
             backgroundPosition="center"
-            backgroundImage={DEFAULT_IMAGE}
+            backgroundImage={
+              state.course.modules[Number(moduleIndex)].previewImage
+            }
             backgroundSize="cover"
             bgRepeat="no-repeat"
             opacity="1"
-            p={4}
+            direction="column"
+            justifyContent="space-between"
+            p="35px"
           >
             <HStack justify="space-between">
               <Link href={ADMIN_DASHBOARD_PAGE}>
@@ -67,11 +73,11 @@ const Sidebar = (): React.ReactElement => {
               />
             </HStack>
             <Text variant="display-sm-sb" color="white">
-              {state.course.title}
+              {state.course.modules[Number(moduleIndex)].title}
             </Text>
-          </Box>
+          </Flex>
         </Box>
-        <Tabs variant="unstyle">
+        <Tabs variant="unstyled">
           <Box
             bg="background.light"
             borderRadius="md"
@@ -116,14 +122,14 @@ const Sidebar = (): React.ReactElement => {
           <Button
             position="fixed"
             bottom="0"
-            variant="unstyled"
             bg="#5FCA89"
-            py="14px"
             color="white"
             leftIcon={<SaveIcon />}
             borderRadius="0"
             pl="35px"
-            textAlign="left"
+            w="inherit"
+            h="55px"
+            justifyContent="left"
           >
             Save Changes
           </Button>

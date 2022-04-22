@@ -70,7 +70,8 @@ const ModuleEditor = (): React.ReactElement => {
           title: "Hello!",
           description: `I am a module ${moduleIndex}`,
           image: "",
-          previewImage: "",
+          previewImage:
+            "https://res.cloudinary.com/practicaldev/image/fetch/s--JIe3p0M4--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://dev-to-uploads.s3.amazonaws.com/i/093ewdrgyf1kedlhzs51.png",
           published: true,
           lessons: ["lesson-hash-1", "lesson-hash-2"],
         },
@@ -97,7 +98,8 @@ const ModuleEditor = (): React.ReactElement => {
             type: ContentTypeEnum.IMAGE,
             id: uuid(),
             content: {
-              link: "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
+              link:
+                "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
             },
           },
           {
@@ -159,12 +161,13 @@ const ModuleEditor = (): React.ReactElement => {
             {showSideBar ? <SideBar /> : null}
             <IconButton
               aria-label="Show sideBar"
-              borderTopStartRadius="0"
-              borderBottomLeftRadius="0"
+              borderRadius="0"
               bg="white"
-              color="grey"
+              color="black"
               alignSelf="center"
-              size="xs"
+              size="s"
+              w="20px"
+              height="45px"
               onClick={() => setShowSideBar(!showSideBar)}
             >
               {sideBarIcon}

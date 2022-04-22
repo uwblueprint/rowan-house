@@ -1,4 +1,4 @@
-import { Box, Button, Flex, VStack, Spacer } from "@chakra-ui/react";
+import { Button, VStack } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
@@ -35,10 +35,8 @@ const SideBarModuleOverview = (): React.ReactElement => {
     });
 
   return (
-    <VStack h="50%" position="absolute">
-      {/* {module.title}
-      {module.description} */}
-      <VStack className="tabScroll" overflowY="scroll">
+    <VStack h="50%" position="absolute" width="100%" pb="55px">
+      <VStack className="tabScroll" overflowY="scroll" width="inherit">
         {orderedLessons.map((lesson, index) =>
           state.lessons[focusedLesson] === lesson ? (
             lesson && (
@@ -52,7 +50,7 @@ const SideBarModuleOverview = (): React.ReactElement => {
                 bg="background.light"
                 textAlign="left"
                 pl="30px"
-                h="55px"
+                minH="55px"
                 w="100%"
               >
                 {lesson.title}
@@ -65,7 +63,7 @@ const SideBarModuleOverview = (): React.ReactElement => {
               variant="unstyled"
               textAlign="left"
               pl="35px"
-              h="55px"
+              minH="55px"
               w="100%"
             >
               {lesson.title}
@@ -81,7 +79,8 @@ const SideBarModuleOverview = (): React.ReactElement => {
           leftIcon={<AddIcon />}
           textAlign="left"
           pl="35px"
-          h="55px"
+          minH="55px"
+          w="100%"
         >
           New Lesson
         </Button>
