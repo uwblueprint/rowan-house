@@ -17,7 +17,6 @@ export const dummyCourses: Array<CourseResponse> = [
     image: null,
     previewImage: null,
     private: false,
-    published: false,
     modules: [
       {
         id: "a1",
@@ -60,7 +59,6 @@ export const dummyCourses: Array<CourseResponse> = [
     image: null,
     previewImage: null,
     private: false,
-    published: false,
     modules: [
       {
         id: "b1",
