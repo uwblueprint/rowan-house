@@ -13,7 +13,7 @@ import {
   Input,
   Center,
 } from "@chakra-ui/react";
-import { ArrowBackIcon } from '@chakra-ui/icons';
+import { ArrowBackIcon } from "@chakra-ui/icons";
 import RHSLogo from "../../assets/RHSlogo.png";
 import BackgroundImage from "../signuppage.png";
 
@@ -26,14 +26,14 @@ import { AuthenticatedUser } from "../../types/AuthTypes";
 enum LoginState {
   EnterEmail,
   EnterPassword,
-  ForgetPassword
-}  
+  ForgetPassword,
+}
 
 const Login = (): React.ReactElement => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loginState,  setLoginState] = useState(LoginState.EnterEmail);
+  const [loginState, setLoginState] = useState(LoginState.EnterEmail);
   const history = useHistory();
 
   const [login] = useMutation<{ login: AuthenticatedUser }>(LOGIN);
@@ -45,7 +45,7 @@ const Login = (): React.ReactElement => {
       login,
     );
     setAuthenticatedUser(user);
-  }
+  };
 
   const onLogInClick = async () => {
     switch (loginState) {
@@ -70,17 +70,13 @@ const Login = (): React.ReactElement => {
   const onBackClick = (currentLoginState: LoginState) => {
     switch (currentLoginState) {
       case LoginState.EnterPassword:
-        return (
-          setLoginState(LoginState.EnterEmail)
-        );
+        return setLoginState(LoginState.EnterEmail);
       case LoginState.ForgetPassword:
-        return (
-          setLoginState(LoginState.EnterPassword)
-        );
+        return setLoginState(LoginState.EnterPassword);
       default:
         throw new Error("Unexpected Error");
     }
-  }
+  };
 
   if (authenticatedUser) {
     return <Redirect to={HOME_PAGE} />;
@@ -88,12 +84,14 @@ const Login = (): React.ReactElement => {
 
   const getLoginForm = (currentLoginState: LoginState) => {
     switch (currentLoginState) {
-      case LoginState.EnterEmail: 
+      case LoginState.EnterEmail:
         return (
           <Box>
             <Text variant="display-sm-sb">Sign in to access courses</Text>
             <FormControl>
-            <Text variant="caption-md" marginTop="4vh" marginBottom="1vh">Email Address</Text>
+              <Text variant="caption-md" marginTop="4vh" marginBottom="1vh">
+                Email Address
+              </Text>
               <Input
                 type="email"
                 value={email}
@@ -122,31 +120,28 @@ const Login = (): React.ReactElement => {
               </Button>
             </Center>
           </Box>
-        )
-      case LoginState.EnterPassword: 
+        );
+      case LoginState.EnterPassword:
         return (
           <Box>
             <Text variant="display-sm-sb">Sign in to access courses</Text>
             <FormControl>
-            <Box 
-              display="flex"
-              marginTop="3vh"
-              >
-              <Button
-                onClick={() => onBackClick(loginState)}
-                variant="link"
-                >
-                <ArrowBackIcon />
-                <Text variant="button">Back</Text>
-              </Button>
-            </Box>
-            <Text variant="caption-md" marginTop="1.5vh" marginBottom="1vh"> Password</Text>
-            <Input
-              type="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              marginBottom="3vh"
-            />
+              <Box display="flex" marginTop="3vh">
+                <Button onClick={() => onBackClick(loginState)} variant="link">
+                  <ArrowBackIcon />
+                  <Text variant="button">Back</Text>
+                </Button>
+              </Box>
+              <Text variant="caption-md" marginTop="1.5vh" marginBottom="1vh">
+                {" "}
+                Password
+              </Text>
+              <Input
+                type="password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                marginBottom="3vh"
+              />
             </FormControl>
             <Button
               variant="sm"
@@ -168,24 +163,20 @@ const Login = (): React.ReactElement => {
             </Center>
           </Box>
         );
-      case LoginState.ForgetPassword: 
+      case LoginState.ForgetPassword:
         return (
           <Box>
             <Text variant="display-sm-sb">Forgot your password?</Text>
-            <Box 
-              display="flex"
-              marginTop="3vh"
-              >
-              <Button
-                onClick={() => onBackClick(loginState)}
-                variant="link"
-                >
+            <Box display="flex" marginTop="3vh">
+              <Button onClick={() => onBackClick(loginState)} variant="link">
                 <ArrowBackIcon />
                 <Text variant="button">Back</Text>
               </Button>
             </Box>
             <FormControl>
-            <Text variant="caption-md" marginTop="1.5vh" marginBottom="1vh">Email Address</Text>
+              <Text variant="caption-md" marginTop="1.5vh" marginBottom="1vh">
+                Email Address
+              </Text>
               <Input
                 type="email"
                 placeholder="you@rowanhouse.ca"
@@ -217,7 +208,7 @@ const Login = (): React.ReactElement => {
       default:
         throw new Error("Unexpected login state");
     }
-  }
+  };
 
   return (
     <Flex>
@@ -228,10 +219,7 @@ const Login = (): React.ReactElement => {
         </VStack>
       </Center>
       <Box>
-        <Image
-          height="100vh"
-          src={BackgroundImage}
-        />
+        <Image height="100vh" src={BackgroundImage} />
       </Box>
     </Flex>
   );

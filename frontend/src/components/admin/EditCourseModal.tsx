@@ -62,7 +62,7 @@ EditCourseModal.propTypes = {
   name: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
-  visibility: PropTypes.bool.isRequired
+  visibility: PropTypes.bool.isRequired,
 };
 
 export default EditCourseModal;

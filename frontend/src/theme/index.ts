@@ -5,7 +5,7 @@ import colors from "./foundations/colors";
 
 import fonts from "./foundations/fonts";
 import fontSizes from "./foundations/fontSizes";
-import { Button, Input, Text } from "./components";
+import { Button, Text } from "./components";
 /**
  * This file is generated for providing a custom theme to Chakra UI
  *

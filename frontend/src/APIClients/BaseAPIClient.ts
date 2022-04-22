@@ -15,10 +15,10 @@ import { getLocalStorageObjProperty } from "../utils/LocalStorageUtils";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-const httpLink = (createUploadLink({
+const httpLink = createUploadLink({
   uri: `${process.env.REACT_APP_BACKEND_URL}/graphql`,
   credentials: "include",
-}) as unknown) as ApolloLink;
+}) as unknown as ApolloLink;
 
 const authFromLocalLink = setContext(async (_, { headers }) => {
   const accessToken = getLocalStorageObjProperty(
