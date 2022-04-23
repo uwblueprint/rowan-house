@@ -1,8 +1,23 @@
-import React from "react";
-import { Box, Button, Flex, Tag, Text, SimpleGrid } from "@chakra-ui/react";
+import React, { useState } from "react";
+import {
+  Box,
+  Button,
+  Flex,
+  Tag,
+  Text,
+  SimpleGrid,
+  useDisclosure,
+} from "@chakra-ui/react";
 import ModulePreview from "./ModulePreview";
 import { CoursePreviewProps } from "../../types/AdminDashboardTypes";
 import EditActionsKebabMenu from "./EditActionsKebabMenu";
+import DeleteModal from "../common/DeleteModal";
+import EditCourseModal from "./EditCourseModal";
+
+enum ModalType {
+  EDIT = "edit",
+  DELETE = "delete",
+}
 
 const CoursePreview = ({
   courseId,
@@ -11,6 +26,24 @@ const CoursePreview = ({
   isPrivate,
   modules,
 }: CoursePreviewProps): React.ReactElement => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [modalType, setModalType] = useState(ModalType.EDIT); // determines which modal is shown when isOpen is true
+  const [name, setName] = useState("");
+  const [desc, setDesc] = useState("");
+  const [visibility, setVisibility] = useState(false);
+
+  const onDeleteClick = () => {
+    setModalType(ModalType.DELETE);
+    onOpen();
+  };
+  const onEditClick = () => {
+    setName(title);
+    setDesc(description || "");
+    setVisibility(!isPrivate);
+    setModalType(ModalType.EDIT);
+    onOpen();
+  };
+
   return (
     <Box
       className="course-preview"
@@ -39,8 +72,8 @@ const CoursePreview = ({
           )}
         </Flex>
         <EditActionsKebabMenu
-          handleEditDetailsClick={() => alert("Edit details")}
-          deleteFunction={() => true}
+          handleEditDetailsClick={() => onEditClick()}
+          deleteFunction={() => onDeleteClick()}
           showHorizontal
         />
       </Flex>
@@ -69,6 +102,28 @@ const CoursePreview = ({
           />
         ))}
       </SimpleGrid>
+      {modalType === ModalType.DELETE && (
+        <DeleteModal
+          name="Course"
+          isOpen={isOpen}
+          onConfirm={onClose}
+          onCancel={onClose}
+        />
+      )}
+      {modalType === ModalType.EDIT && (
+        <EditCourseModal
+          type="Course"
+          name={name}
+          description={description || ""}
+          visibility={visibility}
+          isOpen={isOpen}
+          onConfirm={onClose}
+          onCancel={onClose}
+          setName={setName}
+          setDescription={setDesc}
+          setVisibility={setVisibility}
+        />
+      )}
     </Box>
   );
 };

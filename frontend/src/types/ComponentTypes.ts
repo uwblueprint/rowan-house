@@ -1,5 +1,5 @@
 export interface EditActionsKebabMenuProps {
   handleEditDetailsClick: () => void;
-  deleteFunction: () => boolean;
+  deleteFunction: () => void;
   showHorizontal: boolean;
 }

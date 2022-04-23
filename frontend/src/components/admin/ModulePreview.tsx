@@ -1,12 +1,28 @@
-import React from "react";
-import { Box, Flex, Link, Image, Tag, Text, VStack } from "@chakra-ui/react";
+import React, { useState } from "react";
+import {
+  Box,
+  Flex,
+  Link,
+  Image,
+  Tag,
+  Text,
+  VStack,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { ModulePreviewProps } from "../../types/AdminDashboardTypes";
 import EditActionsKebabMenu from "./EditActionsKebabMenu";
+import DeleteModal from "../common/DeleteModal";
+import EditModuleModal from "./EditModuleModal";
 import { ADMIN_MODULE_EDITOR_BASE_ROUTE } from "../../constants/Routes";
 import { DEFAULT_IMAGE } from "../../constants/DummyData";
 
 const buildEditModuleRoute = (courseId: string, index: number): string =>
   `${ADMIN_MODULE_EDITOR_BASE_ROUTE}/${courseId}/${index}`;
+
+enum ModalType {
+  EDIT = "edit",
+  DELETE = "delete",
+}
 
 const ModulePreview = ({
   index,
@@ -16,6 +32,24 @@ const ModulePreview = ({
   image,
 }: ModulePreviewProps): React.ReactElement => {
   const EDIT_MODULE_ROUTE = buildEditModuleRoute(courseId, index);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [modalType, setModalType] = useState(ModalType.EDIT); // determines which modal is shown when isOpen is true
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [visibility, setVisibility] = useState(false);
+
+
+  const onDeleteClick = () => {
+    setModalType(ModalType.DELETE);
+    onOpen();
+  };
+  const onEditClick = () => {
+    setName(title);
+    // description??
+    setVisibility(published);
+    setModalType(ModalType.EDIT);
+    onOpen();
+  };
 
   return (
     <Box
@@ -51,11 +85,33 @@ const ModulePreview = ({
           </VStack>
         </Link>
         <EditActionsKebabMenu
-          handleEditDetailsClick={() => alert("edit details")}
-          deleteFunction={() => true}
+          handleEditDetailsClick={onEditClick}
+          deleteFunction={onDeleteClick}
           showHorizontal={false}
         />
       </Flex>
+      {modalType === ModalType.DELETE && (
+        <DeleteModal
+          name="Module"
+          isOpen={isOpen}
+          onConfirm={() => true}
+          onCancel={onClose}
+        />
+      )}
+      {modalType === ModalType.EDIT && (
+        <EditModuleModal
+          type="Module"
+          name={name}
+          description={description}
+          visibility={visibility}
+          isOpen={isOpen}
+          onConfirm={() => true}
+          onCancel={onClose}
+          setName={setName}
+          setDescription={setDescription}
+          setVisibility={setVisibility}
+        />
+      )}
     </Box>
   );
 };
