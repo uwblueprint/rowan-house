@@ -1,55 +1,71 @@
-import { Flex, Box, VStack } from "@chakra-ui/react";
-import React from "react";
+import { Box, VStack } from "@chakra-ui/react";
+import React, { useState } from "react";
+import { useMutation } from "@apollo/client";
+
 import { TextInput } from "../common/TextInput";
-import { Modal, ModalProps } from "../common/Modal";
+import { Modal } from "../common/Modal";
 import { SwitchInput } from "../common/SwitchInput";
 import { TextArea } from "../common/TextArea";
+import { CourseResponse } from "../../APIClients/types/CourseClientTypes";
+import { UPDATE_COURSE } from "../../APIClients/mutations/CourseMutations";
 
-export interface EditCourseModalProps extends ModalProps {
-  type: string;
-  name: string;
-  description: string;
-  visibility: boolean;
-  setName: (value: string) => void;
-  setDescription: (value: string) => void;
-  setVisibility: (value: boolean) => void;
+export interface EditCourseModalProps {
+  course: CourseResponse;
+  onClose: () => void;
+  isOpen: boolean;
 }
 
 const EditCourseModal: React.FC<EditCourseModalProps> = (props) => {
-  const {
-    type,
-    name,
-    description,
-    visibility,
-    setName,
-    setDescription,
-    setVisibility,
-  } = props;
+  const { course, onClose, isOpen } = props;
+  const [title, setTitle] = useState(course.title ?? "");
+  const [description, setDescription] = useState(course.description ?? "");
+  const [isPrivate, setIsPrivate] = useState(course.private ?? false);
+  const [updateCourse] = useMutation<CourseResponse>(UPDATE_COURSE);
+
+  const onConfirmClick = () => {
+    const { image, previewImage, modules } = course;
+    const newCourse = {
+      image,
+      previewImage,
+      modules,
+      title,
+      description,
+      private: isPrivate,
+    };
+    updateCourse({ variables: { id: course.id, course: newCourse } });
+    onClose();
+  };
 
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
-    <Modal size="lg" header={`Edit ${type}`} {...props}>
+    <Modal
+      size="lg"
+      header="Edit Course"
+      onConfirm={onConfirmClick}
+      onCancel={onClose}
+      isOpen={isOpen}
+    >
       <VStack>
         <TextInput
-          name={`${type} Name:`}
-          label={`${type} Name:`}
-          defaultValue={name}
-          onChange={(e) => setName(e.target.value)}
+          name="Course Name:"
+          label="Course Name:"
+          defaultValue={title}
+          onChange={(e) => setTitle(e.target.value)}
           isRequired
         />
-        <TextInput
-          name={`${type} Description:`}
-          label={`${type} Description:`}
+        <TextArea
+          name="Course Description:"
+          label="Course Description:"
           defaultValue={description}
           onChange={(e) => setDescription(e.target.value)}
           isRequired
         />
         <SwitchInput
-          name={`Visibility: ${visibility ? "Public" : "Private"}`}
+          name={`Visibility: ${!isPrivate ? "Public" : "Private"}`}
           enabledName="Public"
           disabledName="Private"
-          isEnabled={visibility}
-          onChange={(e) => setVisibility(e.target.checked)}
+          isEnabled={!isPrivate}
+          onChange={(e) => setIsPrivate(!e.target.checked)}
         />
         <Box width={8} />
       </VStack>

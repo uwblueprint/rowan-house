@@ -9,12 +9,12 @@ import {
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
-import { ModulePreviewProps } from "../../types/AdminDashboardTypes";
 import EditActionsKebabMenu from "./EditActionsKebabMenu";
 import DeleteModal from "../common/DeleteModal";
 import EditModuleModal from "./EditModuleModal";
 import { ADMIN_MODULE_EDITOR_BASE_ROUTE } from "../../constants/Routes";
 import { DEFAULT_IMAGE } from "../../constants/DummyData";
+import { Module } from "../../APIClients/types/CourseClientTypes";
 
 const buildEditModuleRoute = (courseId: string, index: number): string =>
   `${ADMIN_MODULE_EDITOR_BASE_ROUTE}/${courseId}/${index}`;
@@ -24,29 +24,28 @@ enum ModalType {
   DELETE = "delete",
 }
 
+interface ModulePreviewProps {
+  module: Module;
+  courseId: string;
+  index: number;
+}
+
 const ModulePreview = ({
-  index,
+  module,
   courseId,
-  title,
-  published,
-  image,
+  index,
 }: ModulePreviewProps): React.ReactElement => {
   const EDIT_MODULE_ROUTE = buildEditModuleRoute(courseId, index);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [modalType, setModalType] = useState(ModalType.EDIT); // determines which modal is shown when isOpen is true
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [visibility, setVisibility] = useState(false);
 
+  const { title, image, published } = module;
 
   const onDeleteClick = () => {
     setModalType(ModalType.DELETE);
     onOpen();
   };
   const onEditClick = () => {
-    setName(title);
-    // description??
-    setVisibility(published);
     setModalType(ModalType.EDIT);
     onOpen();
   };
@@ -94,22 +93,16 @@ const ModulePreview = ({
         <DeleteModal
           name="Module"
           isOpen={isOpen}
-          onConfirm={() => true}
+          onConfirm={onClose}
           onCancel={onClose}
         />
       )}
       {modalType === ModalType.EDIT && (
         <EditModuleModal
-          type="Module"
-          name={name}
-          description={description}
-          visibility={visibility}
+          module={module}
           isOpen={isOpen}
-          onConfirm={() => true}
+          onConfirm={onClose}
           onCancel={onClose}
-          setName={setName}
-          setDescription={setDescription}
-          setVisibility={setVisibility}
         />
       )}
     </Box>

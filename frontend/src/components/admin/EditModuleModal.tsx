@@ -1,59 +1,52 @@
-import { Flex, Box, VStack, Image } from "@chakra-ui/react";
-import React from "react";
+import { Flex, VStack, Image } from "@chakra-ui/react";
+import React, { useState } from "react";
 import { TextInput } from "../common/TextInput";
 import { Modal, ModalProps } from "../common/Modal";
 import { SwitchInput } from "../common/SwitchInput";
 import { TextArea } from "../common/TextArea";
+import { DEFAULT_IMAGE } from "../../constants/DummyData";
+import { Module } from "../../APIClients/types/CourseClientTypes";
 
 export interface EditModuleModalProps extends ModalProps {
-  type: string;
-  name: string;
-  description: string;
-  visibility: boolean;
-  setName: (value: string) => void;
-  setDescription: (value: string) => void;
-  setVisibility: (value: boolean) => void;
+  module: Module;
 }
 
 const EditModuleModal: React.FC<EditModuleModalProps> = (props) => {
-  const {
-    type,
-    name,
-    description,
-    visibility,
-    setName,
-    setDescription,
-    setVisibility,
-  } = props;
+  const { module } = props;
+  const [title, setTitle] = useState(module.title ?? "");
+  const [isPublished, setVisibility] = useState(module.published ?? false);
+  const [description, setDescription] = useState(module.description ?? "");
 
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
-    <Modal size="xl" header={`Edit ${type}`} {...props}>
+    <Modal size="xl" header="Edit Module" {...props}>
       <Flex>
-        <Image boxSize="210px" mr={3} src="/sample.jpg" />
-        <VStack>
+        <VStack flex="1" pr="1rem">
+          <Image src={DEFAULT_IMAGE} borderRadius=".5rem" />
+          <SwitchInput
+            name="Published Status"
+            enabledName="Published"
+            disabledName="Draft"
+            isEnabled={isPublished}
+            isSpaced={false}
+            onChange={(e) => setVisibility(e.target.checked)}
+          />
+        </VStack>
+        <VStack flex="1">
           <TextInput
-            name={`${type} Name:`}
-            label={`${type} Name:`}
-            defaultValue={name}
-            onChange={(e) => setName(e.target.value)}
+            name="Module Name:"
+            label="Module Name:"
+            defaultValue={title}
+            onChange={(e) => setTitle(e.target.value)}
             isRequired
           />
           <TextArea
-            name={`${type} Description:`}
-            label={`${type} Description:`}
+            name="Module Description:"
+            label="Module Description:"
             defaultValue={description}
             onChange={(e) => setDescription(e.target.value)}
             isRequired
           />
-          <SwitchInput
-            name={`Visibility: ${visibility ? "Public" : "Private"}`}
-            enabledName="Public"
-            disabledName="Private"
-            isEnabled={visibility}
-            onChange={(e) => setVisibility(e.target.checked)}
-          />
-          <Box width={8} />
         </VStack>
       </Flex>
     </Modal>

@@ -9,37 +9,30 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import ModulePreview from "./ModulePreview";
-import { CoursePreviewProps } from "../../types/AdminDashboardTypes";
 import EditActionsKebabMenu from "./EditActionsKebabMenu";
 import DeleteModal from "../common/DeleteModal";
 import EditCourseModal from "./EditCourseModal";
+import { CourseResponse } from "../../APIClients/types/CourseClientTypes";
 
 enum ModalType {
   EDIT = "edit",
   DELETE = "delete",
 }
 
-const CoursePreview = ({
-  courseId,
-  title,
-  description,
-  isPrivate,
-  modules,
-}: CoursePreviewProps): React.ReactElement => {
+interface CoursePreviewProps {
+  course: CourseResponse;
+}
+
+const CoursePreview = ({ course }: CoursePreviewProps): React.ReactElement => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [modalType, setModalType] = useState(ModalType.EDIT); // determines which modal is shown when isOpen is true
-  const [name, setName] = useState("");
-  const [desc, setDesc] = useState("");
-  const [visibility, setVisibility] = useState(false);
+  const { title, description, modules, id, private: isPrivate } = course;
 
   const onDeleteClick = () => {
     setModalType(ModalType.DELETE);
     onOpen();
   };
   const onEditClick = () => {
-    setName(title);
-    setDesc(description || "");
-    setVisibility(!isPrivate);
     setModalType(ModalType.EDIT);
     onOpen();
   };
@@ -95,10 +88,8 @@ const CoursePreview = ({
           <ModulePreview
             key={module.id}
             index={index}
-            courseId={courseId}
-            title={module.title}
-            image={module.image}
-            published={module.published}
+            courseId={id}
+            module={module}
           />
         ))}
       </SimpleGrid>
@@ -111,18 +102,7 @@ const CoursePreview = ({
         />
       )}
       {modalType === ModalType.EDIT && (
-        <EditCourseModal
-          type="Course"
-          name={name}
-          description={description || ""}
-          visibility={visibility}
-          isOpen={isOpen}
-          onConfirm={onClose}
-          onCancel={onClose}
-          setName={setName}
-          setDescription={setDesc}
-          setVisibility={setVisibility}
-        />
+        <EditCourseModal course={course} isOpen={isOpen} onClose={onClose} />
       )}
     </Box>
   );

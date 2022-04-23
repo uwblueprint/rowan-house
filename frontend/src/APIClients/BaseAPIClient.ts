@@ -106,6 +106,7 @@ errorLink -> refreshDirectionalLink
 const client = new ApolloClient({
   link: errorLink.concat(refreshDirectionalLink),
   cache: new InMemoryCache({
+    addTypename: false,
     typePolicies: {
       Query: {
         fields: {

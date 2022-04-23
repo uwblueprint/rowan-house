@@ -22,29 +22,23 @@ export interface ModalProps {
   bodyText?: string;
   cancelText?: string;
   confirmText?: string;
-  alignButtonsRight?: boolean;
-  cancelButtonColorScheme?: string;
-  confirmButtonColorScheme?: string;
+  spreadButtons?: boolean;
   size?: string;
   children?: React.ReactNode;
 }
 
-export const Modal: React.FC<ModalProps> = (props) => {
-  const {
-    isOpen,
-    onCancel,
-    onConfirm,
-    header,
-    bodyText,
-    cancelText = "Cancel",
-    confirmText = "Confirm",
-    alignButtonsRight = true,
-    cancelButtonColorScheme,
-    confirmButtonColorScheme,
-    children,
-    ...rest
-  } = props;
-
+export const Modal: React.FC<ModalProps> = ({
+  isOpen,
+  onCancel,
+  onConfirm,
+  header,
+  bodyText,
+  cancelText = "Cancel",
+  confirmText = "Confirm",
+  spreadButtons = false,
+  children,
+  ...rest
+}) => {
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
     <ChakraModal isCentered onClose={onCancel} isOpen={isOpen} {...rest}>
@@ -54,19 +48,15 @@ export const Modal: React.FC<ModalProps> = (props) => {
         <ModalBody>
           {bodyText && <Text>{bodyText}</Text>}
           {/* eslint-disable-next-line react/destructuring-assignment */}
-          {props.children}
+          {children}
         </ModalBody>
         <ModalFooter>
-          <Button colorScheme={cancelButtonColorScheme} onClick={onCancel}>
-            {cancelText}
-          </Button>
-          {!alignButtonsRight && <Spacer />}
-          <Button
-            variant={confirmButtonColorScheme ? "solid" : "default"}
-            colorScheme={confirmButtonColorScheme}
-            onClick={onConfirm}
-          >
+          <Button onClick={onConfirm} mr="1rem">
             {confirmText}
+          </Button>
+          {spreadButtons && <Spacer />}
+          <Button variant="outline" onClick={onCancel}>
+            {cancelText}
           </Button>
         </ModalFooter>
       </ModalContent>

@@ -1,4 +1,4 @@
-export type Module = {
+export interface Module {
   id: string;
   title: string;
   description: string | null;
@@ -6,18 +6,18 @@ export type Module = {
   previewImage: string | null;
   published: boolean;
   lessons: string[] | null;
-};
+}
 
-export type CourseRequest = {
+export interface CourseRequest {
   title: string;
   description?: string;
   image?: string;
   previewImage?: string;
   modules?: Module[];
   private?: boolean;
-};
+}
 
-export type CourseResponse = {
+export interface CourseResponse {
   id: string;
   title: string;
   description: string | null;
@@ -25,4 +25,4 @@ export type CourseResponse = {
   previewImage: string | null;
   modules: Module[] | null;
   private: boolean;
-};
+}

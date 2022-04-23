@@ -24,14 +24,7 @@ const ManageCoursesPage = (): React.ReactElement => {
       return <h1>There are no courses.</h1>;
     }
     return courses?.map((course) => (
-      <CoursePreview
-        key={course.id}
-        courseId={course.id}
-        title={course.title}
-        description={course.description}
-        isPrivate={course.private}
-        modules={course.modules}
-      />
+      <CoursePreview key={course.id} course={course} />
     ));
   };
 
