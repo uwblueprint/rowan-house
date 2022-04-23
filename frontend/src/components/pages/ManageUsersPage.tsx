@@ -9,7 +9,7 @@ import SearchUsersBar from "../admin/SearchUsersBar";
 const NoUserSelectedCard = (): React.ReactElement => {
   return (
     <Box
-      align="center"
+      alignItems="center"
       py={20}
       border="1px"
       borderColor="background.lightgrey"
@@ -25,10 +25,8 @@ const NoUserSelectedCard = (): React.ReactElement => {
 };
 
 const ManageUsersPage = (): React.ReactElement => {
-  const [
-    spotlightedUser,
-    setSpotlightedUser,
-  ] = useState<UserCardProps | null>();
+  const [spotlightedUser, setSpotlightedUser] =
+    useState<UserCardProps | null>();
 
   return (
     <Flex h="100vh">

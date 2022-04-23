@@ -17,12 +17,9 @@ const Logout = (): React.ReactElement => {
 
   const onLogOutClick = async () => {
     try {
-      await authAPIClient.logout(
-        String(authenticatedUser?.id),
-        logout,
-      );
+      await authAPIClient.logout(String(authenticatedUser?.id), logout);
     } catch (e) {
-      console.warn(`Error when logging out: ${e}`)
+      console.warn(`Error when logging out: ${e}`);
       setAuthenticatedUser(null);
     }
   };

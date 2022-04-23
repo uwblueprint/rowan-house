@@ -15,10 +15,10 @@ import jwt from "jsonwebtoken";
 import AUTHENTICATED_USER_KEY from "../constants/AuthConstants";
 import { getLocalStorageObjProperty } from "../utils/LocalStorageUtils";
 
-const httpLink = (createUploadLink({
+const httpLink = createUploadLink({
   uri: `${process.env.REACT_APP_BACKEND_URL}/graphql`,
   credentials: "include",
-}) as unknown) as ApolloLink;
+}) as unknown as ApolloLink;
 
 const authFromLocalLink = setContext(async (_, { headers }) => {
   const accessToken = getLocalStorageObjProperty(
@@ -43,13 +43,17 @@ const injectAccessToken = async (operation: Operation) => {
   });
   const decodedToken = jwt.decode(String(accessToken));
   const currTime = Math.round(new Date().getTime() / 1000);
-  if (typeof(decodedToken) === 'object' && decodedToken?.exp <= currTime) {
+  if (
+    typeof decodedToken === "object" &&
+    decodedToken?.exp &&
+    decodedToken?.exp <= currTime
+  ) {
     localStorage.clear();
     window.location.reload();
     throw Error("Token expired, sign out");
   }
   if (!decodedToken) {
-    console.warn('null access token - failed to inject into API call');
+    console.warn("null access token - failed to inject into API call");
   }
 };
 

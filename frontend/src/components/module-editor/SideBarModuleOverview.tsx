@@ -35,56 +35,54 @@ const SideBarModuleOverview = (): React.ReactElement => {
     });
 
   return (
-    <VStack h="50%" position="absolute" width="100%" pb="55px">
-      <VStack className="tabScroll" overflowY="scroll" width="inherit">
-        {orderedLessons.map((lesson, index) =>
-          state.lessons[focusedLesson] === lesson ? (
-            lesson && (
-              <Button
-                key={index}
-                onClick={() => setFocus(index)}
-                variant="unstyled"
-                borderLeftColor="brand.royal"
-                borderLeftWidth="5px"
-                borderRadius="0"
-                bg="background.light"
-                textAlign="left"
-                pl="30px"
-                minH="55px"
-                w="100%"
-              >
-                {lesson.title}
-              </Button>
-            )
-          ) : (
+    <VStack>
+      {orderedLessons.map((lesson, index) =>
+        state.lessons[focusedLesson] === lesson ? (
+          lesson && (
             <Button
               key={index}
               onClick={() => setFocus(index)}
               variant="unstyled"
+              borderLeftColor="brand.royal"
+              borderLeftWidth="5px"
+              borderRadius="0"
+              bg="background.light"
               textAlign="left"
-              pl="35px"
+              pl="30px"
               minH="55px"
               w="100%"
             >
               {lesson.title}
             </Button>
-          ),
-        )}
-        <Button
-          onClick={() =>
-            createLesson(`Dummy Lesson ${orderedLessons.length + 1}`)
-          }
-          color="brand.royal"
-          variant="unstyled"
-          leftIcon={<AddIcon />}
-          textAlign="left"
-          pl="35px"
-          minH="55px"
-          w="100%"
-        >
-          New Lesson
-        </Button>
-      </VStack>
+          )
+        ) : (
+          <Button
+            key={index}
+            onClick={() => setFocus(index)}
+            variant="unstyled"
+            textAlign="left"
+            pl="35px"
+            minH="55px"
+            w="100%"
+          >
+            {lesson.title}
+          </Button>
+        ),
+      )}
+      <Button
+        onClick={() =>
+          createLesson(`Dummy Lesson ${orderedLessons.length + 1}`)
+        }
+        color="brand.royal"
+        variant="unstyled"
+        leftIcon={<AddIcon />}
+        textAlign="left"
+        pl="35px"
+        minH="55px"
+        w="100%"
+      >
+        New Lesson
+      </Button>
     </VStack>
   );
 };

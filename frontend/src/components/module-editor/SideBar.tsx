@@ -6,6 +6,7 @@ import {
   Flex,
   Link,
   HStack,
+  Spacer,
   Tabs,
   TabList,
   Tab,
@@ -18,7 +19,7 @@ import { ChevronLeftIcon, EditIcon } from "@chakra-ui/icons";
 import ModuleOverview from "./SideBarModuleOverview";
 import ContentKiosk from "./SideBarContentKiosk";
 import { ReactComponent as SaveIcon } from "../../assets/Save.svg";
-import { ADMIN_DASHBOARD_PAGE } from "../../constants/Routes";
+import { MANAGE_COURSES_PAGE } from "../../constants/Routes";
 import EditorContext from "../../contexts/ModuleEditorContext";
 import { ModuleEditorParams } from "../../types/ModuleEditorTypes";
 
@@ -34,8 +35,9 @@ const Sidebar = (): React.ReactElement => {
       <Flex
         position="fixed"
         w="inherit"
-        minW="300px"
+        minW="inherit"
         h="100vh"
+        overflow="hidden"
         boxShadow="xl"
         flexFlow="column"
       >
@@ -54,7 +56,7 @@ const Sidebar = (): React.ReactElement => {
             p="35px"
           >
             <HStack justify="space-between">
-              <Link href={ADMIN_DASHBOARD_PAGE}>
+              <Link href={MANAGE_COURSES_PAGE}>
                 <ChevronLeftIcon color="white" h={6} w={6} />
               </Link>
               <EditIcon color="white" h={5} w={5} />
@@ -64,7 +66,7 @@ const Sidebar = (): React.ReactElement => {
             </Text>
           </Flex>
         </Box>
-        <Tabs variant="unstyled">
+        <Tabs variant="unstyled" height="100%" overflowY="hidden">
           <Box
             bg="background.light"
             borderRadius="md"
@@ -96,25 +98,35 @@ const Sidebar = (): React.ReactElement => {
               </Tab>
             </TabList>
           </Box>
-          <TabPanels>
-            <TabPanel p="0">
+          <TabPanels height="100%" overflowY="hidden">
+            <TabPanel
+              p="0"
+              pb="200px"
+              height="100%"
+              overflowY="auto"
+              className="tabScroll"
+            >
               <ModuleOverview />
             </TabPanel>
-            <TabPanel>
+            <TabPanel
+              pb="200px"
+              height="100%"
+              overflowY="auto"
+              className="tabScroll"
+            >
               <ContentKiosk />
             </TabPanel>
           </TabPanels>
         </Tabs>
+        <Spacer />
         {state.hasChanged && (
           <Button
-            position="fixed"
-            bottom="0"
             bg="#5FCA89"
             color="white"
             leftIcon={<SaveIcon />}
             borderRadius="0"
             pl="35px"
-            minW="inherit"
+            width="100%"
             h="55px"
             justifyContent="left"
           >
