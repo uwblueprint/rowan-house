@@ -6,7 +6,6 @@ import {
   Text,
   Image,
   FormControl,
-  Link,
   Box,
   Button,
   VStack,
@@ -27,7 +26,7 @@ enum LoginState {
   EnterEmail,
   EnterPassword,
   ForgetPassword,
-}  
+}
 
 const Login = (): React.ReactElement => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
@@ -76,8 +75,8 @@ const Login = (): React.ReactElement => {
       default:
         throw new Error("Unexpected Error");
     }
-  }
-  
+  };
+
   if (authenticatedUser) {
     return <Redirect to={HOME_PAGE} />;
   }
@@ -126,25 +125,24 @@ const Login = (): React.ReactElement => {
           <Box>
             <Text variant="display-sm-sb">Sign in to access courses</Text>
             <FormControl>
-            <Box 
-              display="flex"
-              marginTop="3vh"
-              >
-              <Button
-                onClick={() => onBackClick(loginState)}
-                variant="link"
-                >
-                <ArrowBackIcon color="brand.royal" />
-                <Text variant="button" color="brand.royal">Back</Text>
-              </Button>
-            </Box>
-            <Text variant="caption-md" marginTop="1.5vh" marginBottom="1vh"> Password</Text>
-            <Input
-              type="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              marginBottom="3vh"
-            />
+              <Box display="flex" marginTop="3vh">
+                <Button onClick={() => onBackClick(loginState)} variant="link">
+                  <ArrowBackIcon color="brand.royal" />
+                  <Text variant="button" color="brand.royal">
+                    Back
+                  </Text>
+                </Button>
+              </Box>
+              <Text variant="caption-md" marginTop="1.5vh" marginBottom="1vh">
+                {" "}
+                Password
+              </Text>
+              <Input
+                type="password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                marginBottom="3vh"
+              />
             </FormControl>
             <Button
               variant="sm"
@@ -158,7 +156,7 @@ const Login = (): React.ReactElement => {
               <Button
                 variant="link"
                 color="brand.royal"
-                onClick={(event) => setLoginState(LoginState.ForgetPassword)}
+                onClick={() => setLoginState(LoginState.ForgetPassword)}
                 textDecorationLine="underline"
               >
                 Forgot your password?
@@ -170,16 +168,12 @@ const Login = (): React.ReactElement => {
         return (
           <Box>
             <Text variant="display-sm-sb">Forgot your password?</Text>
-            <Box 
-              display="flex"
-              marginTop="3vh"
-              >
-              <Button
-                onClick={() => onBackClick(loginState)}
-                variant="link"
-                >
+            <Box display="flex" marginTop="3vh">
+              <Button onClick={() => onBackClick(loginState)} variant="link">
                 <ArrowBackIcon color="brand.royal" />
-                <Text variant="button" color="brand.royal">Back</Text>
+                <Text variant="button" color="brand.royal">
+                  Back
+                </Text>
               </Button>
             </Box>
             <FormControl>
@@ -207,7 +201,7 @@ const Login = (): React.ReactElement => {
                 variant="link"
                 color="brand.royal"
                 textDecorationLine="underline"
-                onClick={(event) => setLoginState(LoginState.EnterEmail)}
+                onClick={() => setLoginState(LoginState.EnterEmail)}
               >
                 Sign in
               </Button>
