@@ -18,7 +18,7 @@ export interface EditModuleModalProps {
   module?: ModuleResponse;
 }
 
-const refetchQueries = {refetchQueries: [ { query: COURSES } ]}
+const refetchQueries = {refetchQueries: [ { query: COURSES } ]};
 
 const EditModuleModal = ({ module, formatCourseRequest, isOpen, onClose }: EditModuleModalProps) => {  
   const [title, setTitle] = useState(module?.title ?? "");

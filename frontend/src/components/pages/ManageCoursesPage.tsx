@@ -11,21 +11,15 @@ import EditCourseModal from "../admin/EditCourseModal";
 
 const ManageCoursesPage = (): React.ReactElement => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [courses, setCourses] = React.useState<CourseResponse[] | null>();
 
-  const { loading, error } = useQuery<{
-    courses: Array<CourseResponse>;
-  }>(COURSES, {
-    onCompleted: (data) => {
-      setCourses(data.courses);
-    },
-  });
+  const { data, loading, error } = useQuery<{courses: Array<CourseResponse>}>(COURSES);
+  const { courses } = data ?? {courses: []};
 
   const displayCoursePreviews = () => {
-    if (!courses?.length) {
+    if (!courses.length) {
       return <h1>There are no courses.</h1>;
     }
-    return courses?.map((course) => (
+    return courses.map((course) => (
       <CoursePreview key={course.id} course={course} />
     ));
   };

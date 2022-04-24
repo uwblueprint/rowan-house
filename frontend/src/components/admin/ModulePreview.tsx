@@ -32,10 +32,10 @@ interface ModulePreviewProps {
   module: ModuleResponse;
   courseId: string;
   index: number;
-  formatCourseRequest: (module: ModuleRequest, index: number) => [string, CourseRequest];
+  formatCourseRequest: (index: number, module?: ModuleRequest) => [string, CourseRequest];
 }
 
-const refetchQueries = {refetchQueries: [ { query: COURSES } ]}
+const refetchQueries = {refetchQueries: [ { query: COURSES } ]};
 
 const ModulePreview = ({
   module,
@@ -57,7 +57,8 @@ const ModulePreview = ({
   };
 
   const onDeleteModule = () => {
-    updateCourse();
+    const [id, course] = formatCourseRequest(index);
+    updateCourse({ variables: { id, course } });
     onClose();
   }
 
@@ -113,7 +114,7 @@ const ModulePreview = ({
           module={module}
           isOpen={isOpen}
           onClose={onClose}
-          formatCourseRequest={(m) => formatCourseRequest(m, index)}
+          formatCourseRequest={(m) => formatCourseRequest(index, m)}
         />
       )}
     </Box>

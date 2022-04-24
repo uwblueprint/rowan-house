@@ -16,7 +16,7 @@ export interface EditCourseModalProps {
   course?: CourseResponse;
 }
 
-const refetchQueries = {refetchQueries: [ { query: COURSES } ]}
+const refetchQueries = {refetchQueries: [ { query: COURSES } ]};
 
 const EditCourseModal = ({ course, onClose, isOpen }: EditCourseModalProps) => {
   const [title, setTitle] = useState(course?.title ?? "");

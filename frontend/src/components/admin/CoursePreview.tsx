@@ -29,7 +29,7 @@ interface CoursePreviewProps {
   course: CourseResponse;
 }
 
-const refetchQueries = {refetchQueries: [ { query: COURSES } ]}
+const refetchQueries = {refetchQueries: [ { query: COURSES } ]};
 
 const CoursePreview = ({ course }: CoursePreviewProps): React.ReactElement => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -48,18 +48,23 @@ const CoursePreview = ({ course }: CoursePreviewProps): React.ReactElement => {
     onClose();
   }
 
-  const formatCourseRequest = (newModule: ModuleRequest, moduleIndex: number): [string, CourseRequest] => {
+  const formatCourseRequest = (moduleIndex: number, newModule?: ModuleRequest): [string, CourseRequest] => {
     if (!course.modules)
       throw Error("Attempted to edit module when course does not contain modules");
     let newModules = [];
     // Copy other modules by reference due to the immutability of the data
-    if (moduleIndex >= 0 && moduleIndex < course.modules.length)
-      newModules = course.modules.map((oldModule, index) => moduleIndex === index ? newModule : oldModule);
-    else
-      newModules = [... course.modules, newModule];
+    if (newModule) {
+      // If module index isn't valid, append the new module
+      if (moduleIndex >= 0 && moduleIndex < course.modules.length)
+        newModules = course.modules.map((oldModule, index) => moduleIndex === index ? newModule : oldModule);
+      else
+        newModules = [... course.modules, newModule];
+    // If no new module has been passed, remove the module
+    } else {
+      newModules = course.modules.filter((_, index) => moduleIndex !== index);
+    }
 
-    const temp = {...course, modules: newModules}
-    const {id, ...newCourse} = temp;
+    const {id, ...newCourse} = {...course, modules: newModules};
     return [id, newCourse];
   }
 
@@ -132,7 +137,7 @@ const CoursePreview = ({ course }: CoursePreviewProps): React.ReactElement => {
         <EditCourseModal course={course} isOpen={isOpen} onClose={onClose} />
       )}
       {modalType === ModalType.CREATE_MODULE && (
-        <EditModuleModal isOpen={isOpen} onClose={onClose} formatCourseRequest={(m) => formatCourseRequest(m, -1)}/>
+        <EditModuleModal isOpen={isOpen} onClose={onClose} formatCourseRequest={(m) => formatCourseRequest(-1, m)}/>
       )}
     </Box>
   );
