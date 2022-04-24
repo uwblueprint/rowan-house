@@ -7,32 +7,30 @@ import { Modal } from "../common/Modal";
 import { SwitchInput } from "../common/SwitchInput";
 import { TextArea } from "../common/TextArea";
 import { DEFAULT_IMAGE } from "../../constants/DummyData";
-import { CourseResponse, Module } from "../../APIClients/types/CourseClientTypes";
+import { CourseRequest, CourseResponse, ModuleResponse, ModuleRequest } from "../../APIClients/types/CourseClientTypes";
 import { UPDATE_COURSE } from "../../APIClients/mutations/CourseMutations";
 import { COURSES } from "../../APIClients/queries/CourseQueries";
 
 export interface EditModuleModalProps {
   onClose: () => void;
   isOpen: boolean;
-  module: Module;
-  formatCourseRequest: (module: Module) => CourseResponse;
+  formatCourseRequest: (module: ModuleRequest) => [string, CourseRequest];
+  module?: ModuleResponse;
 }
 
-const refetchQueries = {refetchQueries: [{ query: COURSES }]};
+const refetchQueries = {refetchQueries: [ { query: COURSES } ]}
 
 const EditModuleModal = ({ module, formatCourseRequest, isOpen, onClose }: EditModuleModalProps) => {  
-  const [title, setTitle] = useState(module.title ?? "");
-  const [isPublished, setVisibility] = useState(module.published ?? false);
-  const [description, setDescription] = useState(module.description ?? "");
+  const [title, setTitle] = useState(module?.title ?? "");
+  const [isPublished, setVisibility] = useState(module?.published ?? false);
+  const [description, setDescription] = useState(module?.description ?? "");
   
   const [updateCourse] = useMutation<CourseResponse>(UPDATE_COURSE, refetchQueries);
 
   const onUpdateModule = () => {
     const newModule = {...module, title, description, published: isPublished};
-    const course = formatCourseRequest(newModule);
-    const {id, ...newCourse} = course;
-    console.log(newCourse);
-    updateCourse({ variables: { id, course: newCourse } });
+    const [id, course] = formatCourseRequest(newModule);
+    updateCourse({ variables: { id, course } });
     onClose();
   };
 

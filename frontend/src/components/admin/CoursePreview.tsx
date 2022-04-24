@@ -8,41 +8,59 @@ import {
   SimpleGrid,
   useDisclosure,
 } from "@chakra-ui/react";
+import { useMutation } from "@apollo/client";
+
 import ModulePreview from "./ModulePreview";
 import EditActionsKebabMenu from "./EditActionsKebabMenu";
 import DeleteModal from "../common/DeleteModal";
 import EditCourseModal from "./EditCourseModal";
-import { CourseResponse, Module } from "../../APIClients/types/CourseClientTypes";
+import { CourseRequest, CourseResponse, ModuleRequest } from "../../APIClients/types/CourseClientTypes";
+import EditModuleModal from "./EditModuleModal";
+import { DELETE_COURSE } from "../../APIClients/mutations/CourseMutations";
+import { COURSES } from "../../APIClients/queries/CourseQueries";
 
 enum ModalType {
   EDIT = "edit",
   DELETE = "delete",
+  CREATE_MODULE = "create-module"
 }
 
 interface CoursePreviewProps {
   course: CourseResponse;
 }
 
+const refetchQueries = {refetchQueries: [ { query: COURSES } ]}
+
 const CoursePreview = ({ course }: CoursePreviewProps): React.ReactElement => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [modalType, setModalType] = useState(ModalType.EDIT); // determines which modal is shown when isOpen is true
   const { title, description, modules, private: isPrivate } = course;
 
-  const onDeleteClick = () => {
-    setModalType(ModalType.DELETE);
-    onOpen();
-  };
-  const onEditClick = () => {
-    setModalType(ModalType.EDIT);
-    onOpen();
-  };
+  const [deleteCourse] = useMutation(DELETE_COURSE, refetchQueries);
 
-  const formatCourseRequest = (newModule: Module, moduleIndex: number) => {
+  const onClick = (type: ModalType) => {
+    setModalType(type);
+    onOpen();
+  };
+  const onDelete = () => {
+    const { id } = course;
+    deleteCourse({ variables: { id } });
+    onClose();
+  }
+
+  const formatCourseRequest = (newModule: ModuleRequest, moduleIndex: number): [string, CourseRequest] => {
     if (!course.modules)
       throw Error("Attempted to edit module when course does not contain modules");
+    let newModules = [];
     // Copy other modules by reference due to the immutability of the data
-    const newModules = course.modules.map((oldModule, index) => moduleIndex === index ? newModule : oldModule);
-    return {...course, modules: newModules};
+    if (moduleIndex >= 0 && moduleIndex < course.modules.length)
+      newModules = course.modules.map((oldModule, index) => moduleIndex === index ? newModule : oldModule);
+    else
+      newModules = [... course.modules, newModule];
+
+    const temp = {...course, modules: newModules}
+    const {id, ...newCourse} = temp;
+    return [id, newCourse];
   }
 
   return (
@@ -73,8 +91,8 @@ const CoursePreview = ({ course }: CoursePreviewProps): React.ReactElement => {
           )}
         </Flex>
         <EditActionsKebabMenu
-          handleEditDetailsClick={() => onEditClick()}
-          deleteFunction={() => onDeleteClick()}
+          handleEditDetailsClick={() => onClick(ModalType.EDIT)}
+          deleteFunction={() => onClick(ModalType.DELETE)}
           showHorizontal
         />
       </Flex>
@@ -86,7 +104,7 @@ const CoursePreview = ({ course }: CoursePreviewProps): React.ReactElement => {
         <Button
           variant="outline-sm"
           ml={6}
-          onClick={() => alert("Create new module")}
+          onClick={() => onClick(ModalType.CREATE_MODULE)}
         >
           Create New Module
         </Button>
@@ -106,12 +124,15 @@ const CoursePreview = ({ course }: CoursePreviewProps): React.ReactElement => {
         <DeleteModal
           name="Course"
           isOpen={isOpen}
-          onConfirm={onClose}
+          onConfirm={onDelete}
           onCancel={onClose}
         />
       )}
       {modalType === ModalType.EDIT && (
         <EditCourseModal course={course} isOpen={isOpen} onClose={onClose} />
+      )}
+      {modalType === ModalType.CREATE_MODULE && (
+        <EditModuleModal isOpen={isOpen} onClose={onClose} formatCourseRequest={(m) => formatCourseRequest(m, -1)}/>
       )}
     </Box>
   );

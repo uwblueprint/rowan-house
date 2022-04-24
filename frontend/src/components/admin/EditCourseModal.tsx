@@ -16,7 +16,7 @@ export interface EditCourseModalProps {
   course?: CourseResponse;
 }
 
-const refetchQueries = {refetchQueries: [{ query: COURSES }]};
+const refetchQueries = {refetchQueries: [ { query: COURSES } ]}
 
 const EditCourseModal = ({ course, onClose, isOpen }: EditCourseModalProps) => {
   const [title, setTitle] = useState(course?.title ?? "");
@@ -45,6 +45,8 @@ const EditCourseModal = ({ course, onClose, isOpen }: EditCourseModalProps) => {
       };
       console.log(newCourse);
       updateCourse({ variables: { id: course.id, course: newCourse } });
+    } else {
+      throw Error("Attempted to update course that doesn't exist")
     }
     onClose();
   };

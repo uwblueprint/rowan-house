@@ -1,14 +1,16 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
-import { Box, Button, Flex, Spinner, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, Flex, Spinner, Text, useDisclosure, VStack } from "@chakra-ui/react";
 import { SmallAddIcon } from "@chakra-ui/icons";
 import CoursePreview from "../admin/CoursePreview";
 import { COURSES } from "../../APIClients/queries/CourseQueries";
 import { CourseResponse } from "../../APIClients/types/CourseClientTypes";
 import { AdminPage } from "../../types/AdminDashboardTypes";
 import SideBar from "../admin/SideBar";
+import EditCourseModal from "../admin/EditCourseModal";
 
 const ManageCoursesPage = (): React.ReactElement => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [courses, setCourses] = React.useState<CourseResponse[] | null>();
 
   const { loading, error } = useQuery<{
@@ -45,7 +47,7 @@ const ManageCoursesPage = (): React.ReactElement => {
           <Text variant="display-lg" pb={6}>
             Courses
           </Text>
-          <Button variant="md" leftIcon={<SmallAddIcon />}>
+          <Button variant="md" leftIcon={<SmallAddIcon />} onClick={onOpen}>
             Create New Course
           </Button>
         </Flex>
@@ -53,6 +55,7 @@ const ManageCoursesPage = (): React.ReactElement => {
           {loading ? <Spinner size="xl" /> : displayCoursePreviews()}
         </VStack>
       </Box>
+      {isOpen && <EditCourseModal isOpen={isOpen} onClose={onClose} />}
     </Flex>
   );
 };

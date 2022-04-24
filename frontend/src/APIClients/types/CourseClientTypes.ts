@@ -1,4 +1,14 @@
-export interface Module {
+export interface ModuleRequest {
+  id?: string;
+  title: string;
+  description?: string | null;
+  image?: string | null;
+  previewImage?: string | null;
+  published?: boolean;
+  lessons?: string[] | null;
+}
+
+export interface ModuleResponse {
   id: string;
   title: string;
   description: string | null;
@@ -10,10 +20,10 @@ export interface Module {
 
 export interface CourseRequest {
   title: string;
-  description?: string;
-  image?: string;
-  previewImage?: string;
-  modules?: Module[];
+  description?: string | null;
+  image?: string | null;
+  previewImage?: string | null;
+  modules?: ModuleRequest[] | null;
   private?: boolean;
 }
 
@@ -23,6 +33,6 @@ export interface CourseResponse {
   description: string | null;
   image: string | null;
   previewImage: string | null;
-  modules: Module[] | null;
+  modules: ModuleResponse[] | null;
   private: boolean;
 }

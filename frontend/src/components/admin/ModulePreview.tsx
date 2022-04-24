@@ -9,12 +9,16 @@ import {
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
+import { useMutation } from "@apollo/client";
+
 import EditActionsKebabMenu from "./EditActionsKebabMenu";
 import DeleteModal from "../common/DeleteModal";
 import EditModuleModal from "./EditModuleModal";
 import { ADMIN_MODULE_EDITOR_BASE_ROUTE } from "../../constants/Routes";
 import { DEFAULT_IMAGE } from "../../constants/DummyData";
-import { CourseResponse, Module } from "../../APIClients/types/CourseClientTypes";
+import { ModuleRequest, CourseRequest, ModuleResponse, CourseResponse } from "../../APIClients/types/CourseClientTypes";
+import { UPDATE_COURSE } from "../../APIClients/mutations/CourseMutations";
+import { COURSES } from "../../APIClients/queries/CourseQueries";
 
 const buildEditModuleRoute = (courseId: string, index: number): string =>
   `${ADMIN_MODULE_EDITOR_BASE_ROUTE}/${courseId}/${index}`;
@@ -25,11 +29,13 @@ enum ModalType {
 }
 
 interface ModulePreviewProps {
-  module: Module;
+  module: ModuleResponse;
   courseId: string;
   index: number;
-  formatCourseRequest: (module: Module, index: number) => CourseResponse;
+  formatCourseRequest: (module: ModuleRequest, index: number) => [string, CourseRequest];
 }
+
+const refetchQueries = {refetchQueries: [ { query: COURSES } ]}
 
 const ModulePreview = ({
   module,
@@ -40,17 +46,20 @@ const ModulePreview = ({
   const EDIT_MODULE_ROUTE = buildEditModuleRoute(courseId, index);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [modalType, setModalType] = useState(ModalType.EDIT); // determines which modal is shown when isOpen is true
-  
+
+  const [updateCourse] = useMutation<CourseResponse>(UPDATE_COURSE, refetchQueries);
+
   const { title, image, published } = module;
 
-  const onDeleteClick = () => {
-    setModalType(ModalType.DELETE);
+  const onClick = (type: ModalType) => {
+    setModalType(type);
     onOpen();
   };
-  const onEditClick = () => {
-    setModalType(ModalType.EDIT);
-    onOpen();
-  };
+
+  const onDeleteModule = () => {
+    updateCourse();
+    onClose();
+  }
 
   return (
     <Box
@@ -86,16 +95,16 @@ const ModulePreview = ({
           </VStack>
         </Link>
         <EditActionsKebabMenu
-          handleEditDetailsClick={onEditClick}
-          deleteFunction={onDeleteClick}
+          handleEditDetailsClick={() => onClick(ModalType.EDIT)}
+          deleteFunction={() => onClick(ModalType.DELETE)}
           showHorizontal={false}
         />
       </Flex>
       {modalType === ModalType.DELETE && (
         <DeleteModal
-          name="Module"
           isOpen={isOpen}
-          onConfirm={onClose}
+          name="Module"
+          onConfirm={onDeleteModule}
           onCancel={onClose}
         />
       )}
