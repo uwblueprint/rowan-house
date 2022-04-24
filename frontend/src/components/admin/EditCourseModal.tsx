@@ -7,32 +7,45 @@ import { Modal } from "../common/Modal";
 import { SwitchInput } from "../common/SwitchInput";
 import { TextArea } from "../common/TextArea";
 import { CourseResponse } from "../../APIClients/types/CourseClientTypes";
-import { UPDATE_COURSE } from "../../APIClients/mutations/CourseMutations";
+import { CREATE_COURSE, UPDATE_COURSE } from "../../APIClients/mutations/CourseMutations";
+import { COURSES } from "../../APIClients/queries/CourseQueries";
 
 export interface EditCourseModalProps {
-  course: CourseResponse;
   onClose: () => void;
   isOpen: boolean;
+  course?: CourseResponse;
 }
 
-const EditCourseModal: React.FC<EditCourseModalProps> = (props) => {
-  const { course, onClose, isOpen } = props;
-  const [title, setTitle] = useState(course.title ?? "");
-  const [description, setDescription] = useState(course.description ?? "");
-  const [isPrivate, setIsPrivate] = useState(course.private ?? false);
-  const [updateCourse] = useMutation<CourseResponse>(UPDATE_COURSE);
+const refetchQueries = {refetchQueries: [{ query: COURSES }]};
 
-  const onConfirmClick = () => {
-    const { image, previewImage, modules } = course;
-    const newCourse = {
-      image,
-      previewImage,
-      modules,
-      title,
-      description,
-      private: isPrivate,
-    };
-    updateCourse({ variables: { id: course.id, course: newCourse } });
+const EditCourseModal = ({ course, onClose, isOpen }: EditCourseModalProps) => {
+  const [title, setTitle] = useState(course?.title ?? "");
+  const [description, setDescription] = useState(course?.description ?? "");
+  const [isPrivate, setIsPrivate] = useState(course?.private ?? false); 
+
+  const [updateCourse] = useMutation<CourseResponse>(UPDATE_COURSE, refetchQueries);
+  const [createCourse] = useMutation<CourseResponse>(CREATE_COURSE, refetchQueries);
+
+  const onCreateCourse = () => {
+    const newCourse = { title, description, private: isPrivate };
+    createCourse({ variables: { course: newCourse } });
+    onClose();
+  };
+
+  const onUpdateCourse = () => {
+    if (course) {
+      const { image, previewImage, modules } = course;
+      const newCourse = {
+        image,
+        previewImage,
+        modules,
+        title,
+        description,
+        private: isPrivate,
+      };
+      console.log(newCourse);
+      updateCourse({ variables: { id: course.id, course: newCourse } });
+    }
     onClose();
   };
 
@@ -41,31 +54,28 @@ const EditCourseModal: React.FC<EditCourseModalProps> = (props) => {
     <Modal
       size="lg"
       header="Edit Course"
-      onConfirm={onConfirmClick}
+      onConfirm={course ? onUpdateCourse : onCreateCourse}
       onCancel={onClose}
       isOpen={isOpen}
     >
       <VStack>
         <TextInput
-          name="Course Name:"
           label="Course Name:"
           defaultValue={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={setTitle}
           isRequired
         />
         <TextArea
-          name="Course Description:"
           label="Course Description:"
           defaultValue={description}
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={setDescription}
           isRequired
         />
         <SwitchInput
-          name={`Visibility: ${!isPrivate ? "Public" : "Private"}`}
           enabledName="Public"
           disabledName="Private"
           isEnabled={!isPrivate}
-          onChange={(e) => setIsPrivate(!e.target.checked)}
+          onChange={(val) => setIsPrivate(!val)}
         />
         <Box width={8} />
       </VStack>

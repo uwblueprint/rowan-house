@@ -5,7 +5,7 @@ export interface DeleteModalProps extends ModalProps {
   name: string;
 }
 
-const DeleteModal: React.FC<DeleteModalProps> = (props) => {
+const DeleteModal = (props: DeleteModalProps) => {
   const { name } = props;
 
   return (

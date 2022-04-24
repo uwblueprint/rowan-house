@@ -12,7 +12,7 @@ import ModulePreview from "./ModulePreview";
 import EditActionsKebabMenu from "./EditActionsKebabMenu";
 import DeleteModal from "../common/DeleteModal";
 import EditCourseModal from "./EditCourseModal";
-import { CourseResponse } from "../../APIClients/types/CourseClientTypes";
+import { CourseResponse, Module } from "../../APIClients/types/CourseClientTypes";
 
 enum ModalType {
   EDIT = "edit",
@@ -26,7 +26,7 @@ interface CoursePreviewProps {
 const CoursePreview = ({ course }: CoursePreviewProps): React.ReactElement => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [modalType, setModalType] = useState(ModalType.EDIT); // determines which modal is shown when isOpen is true
-  const { title, description, modules, id, private: isPrivate } = course;
+  const { title, description, modules, private: isPrivate } = course;
 
   const onDeleteClick = () => {
     setModalType(ModalType.DELETE);
@@ -36,6 +36,14 @@ const CoursePreview = ({ course }: CoursePreviewProps): React.ReactElement => {
     setModalType(ModalType.EDIT);
     onOpen();
   };
+
+  const formatCourseRequest = (newModule: Module, moduleIndex: number) => {
+    if (!course.modules)
+      throw Error("Attempted to edit module when course does not contain modules");
+    // Copy other modules by reference due to the immutability of the data
+    const newModules = course.modules.map((oldModule, index) => moduleIndex === index ? newModule : oldModule);
+    return {...course, modules: newModules};
+  }
 
   return (
     <Box
@@ -87,9 +95,10 @@ const CoursePreview = ({ course }: CoursePreviewProps): React.ReactElement => {
         {modules?.map((module, index) => (
           <ModulePreview
             key={module.id}
-            index={index}
-            courseId={id}
+            courseId={course.id}
             module={module}
+            index={index}
+            formatCourseRequest={formatCourseRequest}
           />
         ))}
       </SimpleGrid>

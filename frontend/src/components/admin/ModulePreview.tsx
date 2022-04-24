@@ -14,7 +14,7 @@ import DeleteModal from "../common/DeleteModal";
 import EditModuleModal from "./EditModuleModal";
 import { ADMIN_MODULE_EDITOR_BASE_ROUTE } from "../../constants/Routes";
 import { DEFAULT_IMAGE } from "../../constants/DummyData";
-import { Module } from "../../APIClients/types/CourseClientTypes";
+import { CourseResponse, Module } from "../../APIClients/types/CourseClientTypes";
 
 const buildEditModuleRoute = (courseId: string, index: number): string =>
   `${ADMIN_MODULE_EDITOR_BASE_ROUTE}/${courseId}/${index}`;
@@ -28,17 +28,19 @@ interface ModulePreviewProps {
   module: Module;
   courseId: string;
   index: number;
+  formatCourseRequest: (module: Module, index: number) => CourseResponse;
 }
 
 const ModulePreview = ({
   module,
   courseId,
   index,
+  formatCourseRequest,
 }: ModulePreviewProps): React.ReactElement => {
   const EDIT_MODULE_ROUTE = buildEditModuleRoute(courseId, index);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [modalType, setModalType] = useState(ModalType.EDIT); // determines which modal is shown when isOpen is true
-
+  
   const { title, image, published } = module;
 
   const onDeleteClick = () => {
@@ -101,8 +103,8 @@ const ModulePreview = ({
         <EditModuleModal
           module={module}
           isOpen={isOpen}
-          onConfirm={onClose}
-          onCancel={onClose}
+          onClose={onClose}
+          formatCourseRequest={(m) => formatCourseRequest(m, index)}
         />
       )}
     </Box>

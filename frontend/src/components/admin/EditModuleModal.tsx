@@ -1,50 +1,70 @@
 import { Flex, VStack, Image } from "@chakra-ui/react";
 import React, { useState } from "react";
+import { useMutation } from "@apollo/client";
+
 import { TextInput } from "../common/TextInput";
-import { Modal, ModalProps } from "../common/Modal";
+import { Modal } from "../common/Modal";
 import { SwitchInput } from "../common/SwitchInput";
 import { TextArea } from "../common/TextArea";
 import { DEFAULT_IMAGE } from "../../constants/DummyData";
-import { Module } from "../../APIClients/types/CourseClientTypes";
+import { CourseResponse, Module } from "../../APIClients/types/CourseClientTypes";
+import { UPDATE_COURSE } from "../../APIClients/mutations/CourseMutations";
+import { COURSES } from "../../APIClients/queries/CourseQueries";
 
-export interface EditModuleModalProps extends ModalProps {
+export interface EditModuleModalProps {
+  onClose: () => void;
+  isOpen: boolean;
   module: Module;
+  formatCourseRequest: (module: Module) => CourseResponse;
 }
 
-const EditModuleModal: React.FC<EditModuleModalProps> = (props) => {
-  const { module } = props;
+const refetchQueries = {refetchQueries: [{ query: COURSES }]};
+
+const EditModuleModal = ({ module, formatCourseRequest, isOpen, onClose }: EditModuleModalProps) => {  
   const [title, setTitle] = useState(module.title ?? "");
   const [isPublished, setVisibility] = useState(module.published ?? false);
   const [description, setDescription] = useState(module.description ?? "");
+  
+  const [updateCourse] = useMutation<CourseResponse>(UPDATE_COURSE, refetchQueries);
+
+  const onUpdateModule = () => {
+    const newModule = {...module, title, description, published: isPublished};
+    const course = formatCourseRequest(newModule);
+    const {id, ...newCourse} = course;
+    console.log(newCourse);
+    updateCourse({ variables: { id, course: newCourse } });
+    onClose();
+  };
 
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
-    <Modal size="xl" header="Edit Module" {...props}>
+    <Modal
+      size="xl" header="Edit Module"
+      onConfirm={onUpdateModule}
+      onCancel={onClose}
+      isOpen={isOpen}>
       <Flex>
         <VStack flex="1" pr="1rem">
           <Image src={DEFAULT_IMAGE} borderRadius=".5rem" />
           <SwitchInput
-            name="Published Status"
             enabledName="Published"
             disabledName="Draft"
             isEnabled={isPublished}
             isSpaced={false}
-            onChange={(e) => setVisibility(e.target.checked)}
+            onChange={setVisibility}
           />
         </VStack>
         <VStack flex="1">
           <TextInput
-            name="Module Name:"
             label="Module Name:"
             defaultValue={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={setTitle}
             isRequired
           />
           <TextArea
-            name="Module Description:"
             label="Module Description:"
             defaultValue={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={setDescription}
             isRequired
           />
         </VStack>

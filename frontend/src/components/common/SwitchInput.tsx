@@ -3,31 +3,36 @@ import {
   Switch,
   FormControl,
   FormLabel,
-  InputProps,
 } from "@chakra-ui/react";
 
 import React, { useState } from "react";
 
-export interface SwitchProps extends InputProps {
-  isEnabled?: boolean;
-  enabledName?: string;
-  disabledName?: string;
+export interface SwitchProps {
+  onChange: (result: boolean) => void;
+  isEnabled: boolean;
+  enabledName: string;
+  disabledName: string;
+  prefix?: string;
   isSpaced?: boolean;
 }
 
-export const SwitchInput: React.FC<SwitchProps> = ({
+export const SwitchInput = ({
+  onChange,
   isEnabled,
   enabledName,
   disabledName,
+  prefix = "",
   isSpaced = true,
-}) => {
+}: SwitchProps) => {
   const [enabled, setEnabled] = useState(isEnabled);
   const toggleLabel = () => {
     setEnabled(!enabled);
+    onChange(!enabled);
   };
+
   return (
     <FormControl display="flex" alignItems="center">
-      <FormLabel>{enabled ? enabledName : disabledName}</FormLabel>
+      <FormLabel>{prefix && `${prefix} `}{enabled ? enabledName : disabledName}</FormLabel>
       {isSpaced && <Spacer />}
       <Switch defaultIsChecked={isEnabled} onChange={toggleLabel} />
     </FormControl>

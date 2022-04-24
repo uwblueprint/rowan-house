@@ -27,7 +27,7 @@ export interface ModalProps {
   children?: React.ReactNode;
 }
 
-export const Modal: React.FC<ModalProps> = ({
+export const Modal = ({
   isOpen,
   onCancel,
   onConfirm,
@@ -38,7 +38,7 @@ export const Modal: React.FC<ModalProps> = ({
   spreadButtons = false,
   children,
   ...rest
-}) => {
+}: ModalProps) => {
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
     <ChakraModal isCentered onClose={onCancel} isOpen={isOpen} {...rest}>

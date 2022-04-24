@@ -4,26 +4,31 @@ import {
   FormLabel,
   FormErrorMessage,
   Input,
-  InputProps,
   FormHelperText,
 } from "@chakra-ui/react";
 import { WarningIcon } from "@chakra-ui/icons";
 
-export interface TextInputProps extends InputProps {
+export interface TextInputProps {
+  onChange: (result: string) => void; 
   label?: string;
   placeholder?: string;
   errorMessage?: string;
   helperText?: string;
   isInvalid?: boolean;
+  defaultValue?: string;
+  isRequired?: boolean;
 }
 
-export const TextInput: React.FC<TextInputProps> = ({
+export const TextInput = ({
+  onChange,
   label,
   placeholder,
   errorMessage,
   helperText,
   isInvalid,
-}) => {
+  defaultValue="",
+  isRequired=false,
+}: TextInputProps) => {
   return (
     <FormControl id={label} isInvalid={isInvalid} mb={5}>
       <FormLabel fontWeight={400} color={isInvalid ? "red.500" : "blackAlpha"}>
@@ -33,6 +38,9 @@ export const TextInput: React.FC<TextInputProps> = ({
         type={label}
         placeholder={placeholder}
         errorBorderColor="red.600"
+        onChange={(e) => onChange(e.target.value)}
+        defaultValue={defaultValue}
+        isRequired={isRequired}
       />
       {errorMessage && (
         <FormErrorMessage>

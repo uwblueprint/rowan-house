@@ -3,29 +3,32 @@ import {
   FormControl,
   FormLabel,
   FormErrorMessage,
-  InputProps,
   FormHelperText,
   Textarea,
 } from "@chakra-ui/react";
 import { WarningIcon } from "@chakra-ui/icons";
 
-export interface TextAreaProps extends InputProps {
+export interface TextAreaProps {
+  onChange: (result: string) => void; 
   label?: string;
   placeholder?: string;
   errorMessage?: string;
   helperText?: string;
   isInvalid?: boolean;
+  defaultValue?: string;
   isRequired?: boolean;
 }
 
-export const TextArea: React.FC<TextAreaProps> = ({
+export const TextArea = ({
+  onChange,
   label,
   placeholder,
   errorMessage,
   helperText,
   isInvalid,
-  isRequired,
-}) => {
+  defaultValue="",
+  isRequired=false,
+}: TextAreaProps) => {
   return (
     <FormControl
       id={label}
@@ -36,7 +39,12 @@ export const TextArea: React.FC<TextAreaProps> = ({
       <FormLabel fontWeight={400} color={isInvalid ? "red.500" : "blackAlpha"}>
         {label}
       </FormLabel>
-      <Textarea placeholder={placeholder} errorBorderColor="red.600" />
+      <Textarea
+        placeholder={placeholder}
+        errorBorderColor="red.600"
+        defaultValue={defaultValue}
+        onChange={(e) => onChange(e.target.value)}
+      />
       {errorMessage && (
         <FormErrorMessage>
           <WarningIcon mr={2} /> {errorMessage}
