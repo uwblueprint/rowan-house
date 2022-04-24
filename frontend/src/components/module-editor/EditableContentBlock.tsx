@@ -8,11 +8,13 @@ import { TextBlock, ImageBlock } from "../common/content";
 /* eslint-disable react/jsx-props-no-spreading */
 
 const SelectContentBlock = (block: ContentType): React.ReactElement => {
-  switch (block.type) {
+  const { type, content } = block;
+
+  switch (type) {
     case ContentTypeEnum.TEXT:
-      return <TextBlock content={block.content} />;
+      return <TextBlock content={content} />;
     case ContentTypeEnum.IMAGE:
-      return <ImageBlock content={block.content} />;
+      return <ImageBlock content={content} />;
     default:
       throw Error("Unknown content type given to EditableContentBlock");
   }

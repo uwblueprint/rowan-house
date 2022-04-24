@@ -85,8 +85,7 @@ const createLessonContentBlock = (
         type: ContentTypeEnum.IMAGE,
         id: uuid(),
         content: {
-          link:
-            "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
+          link: "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
         },
       };
       break;

@@ -1,4 +1,5 @@
 import { Button, VStack } from "@chakra-ui/react";
+import { AddIcon } from "@chakra-ui/icons";
 import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
 
@@ -13,8 +14,9 @@ const SideBarModuleOverview = (): React.ReactElement => {
   if (!context) return <></>;
   const { state, dispatch } = context;
 
-  const { lessons, course } = state;
+  const { lessons, course, focusedLesson } = state;
   const module = course.modules[moduleID];
+  if (!focusedLesson) return <></>;
 
   const orderedLessons = module.lessons.map((id) => lessons[id]);
 
@@ -34,25 +36,53 @@ const SideBarModuleOverview = (): React.ReactElement => {
 
   return (
     <VStack>
-      {module.title}
-      {module.description}
-      <br />
-      {orderedLessons.map(
-        (lesson, index) =>
+      {orderedLessons.map((lesson, index) =>
+        state.lessons[focusedLesson] === lesson ? (
           lesson && (
-            <Button key={index} onClick={() => setFocus(index)}>
+            <Button
+              key={index}
+              onClick={() => setFocus(index)}
+              variant="unstyled"
+              borderLeftColor="brand.royal"
+              borderLeftWidth="5px"
+              borderRadius="0"
+              bg="background.light"
+              textAlign="left"
+              pl="30px"
+              minH="55px"
+              w="100%"
+            >
               {lesson.title}
             </Button>
-          ),
+          )
+        ) : (
+          <Button
+            key={index}
+            onClick={() => setFocus(index)}
+            variant="unstyled"
+            textAlign="left"
+            pl="35px"
+            minH="55px"
+            w="100%"
+          >
+            {lesson.title}
+          </Button>
+        ),
       )}
       <Button
         onClick={() =>
           createLesson(`Dummy Lesson ${orderedLessons.length + 1}`)
         }
+        color="brand.royal"
+        variant="unstyled"
+        leftIcon={<AddIcon />}
+        textAlign="left"
+        pl="35px"
+        minH="55px"
+        w="100%"
       >
-        Create new Lesson
+        New Lesson
       </Button>
-      <p>Should we save? {state.hasChanged ? "yes" : "no"}</p>
     </VStack>
   );
 };

@@ -29,7 +29,6 @@ const courseType = gql`
     previewImage: String
     modules: [ModuleResponseDTO!]
     private: Boolean!
-    published: Boolean!
   }
 
   input CreateCourseRequestDTO {
@@ -39,7 +38,6 @@ const courseType = gql`
     previewImage: String
     modules: [ModuleRequestDTO!]
     private: Boolean
-    published: Boolean
   }
 
   input UpdateCourseRequestDTO {
@@ -49,7 +47,6 @@ const courseType = gql`
     previewImage: String
     modules: [ModuleRequestDTO!]
     private: Boolean
-    published: Boolean
   }
 
   extend type Query {

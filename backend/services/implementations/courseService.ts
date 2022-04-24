@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { getErrorMessage } from "../../utilities/errorUtils";
 import logger from "../../utilities/logger";
 import {
@@ -13,29 +14,67 @@ import MgCourse, {
 
 const Logger = logger(__filename);
 
+const publishedModulesOnlyQuery = [
+  {
+    $project: {
+      title: true,
+      description: true,
+      image: true,
+      previewImage: true,
+      private: true,
+      modules: {
+        $filter: {
+          input: "$modules",
+          as: "module",
+          cond: { $eq: ["$$module.published", true] },
+        },
+      },
+    },
+  },
+];
+
 class CourseService implements ICourseService {
   /* eslint-disable class-methods-use-this */
-  async getCourse(id: string): Promise<CourseResponseDTO> {
+  async getCourse(
+    id: string,
+    queryConditions: CourseVisibilityAttributes,
+  ): Promise<CourseResponseDTO> {
     let course: Course | null;
+
     try {
-      course = await MgCourse.findById(id);
-      if (!course) {
-        throw new Error(`Course id ${id} not found`);
+      const queryAttributes = queryConditions.includePrivateCourses
+        ? { _id: Types.ObjectId(id) }
+        : { _id: Types.ObjectId(id), private: false };
+
+      if (queryConditions.includeOnlyPublishedModules) {
+        const courseQueryResult: Array<Course> | null = await MgCourse.aggregate(
+          [{ $match: queryAttributes }, ...publishedModulesOnlyQuery],
+        ).exec();
+
+        if (!courseQueryResult || courseQueryResult.length === 0) {
+          throw new Error(`Course id ${id} not found`);
+        }
+
+        [course] = courseQueryResult;
+      } else {
+        course = await MgCourse.findOne(queryAttributes);
       }
     } catch (error: unknown) {
       Logger.error(`Failed to get course. Reason = ${getErrorMessage(error)}`);
       throw error;
     }
 
+    if (!course) throw new Error(`Could not find course with id ${id}`);
+
     return {
-      id: course.id,
+      // eslint-disable-next-line no-underscore-dangle
+      id: course._id.toString(),
       title: course.title,
       description: course.description,
       image: course.image,
       previewImage: course.previewImage,
       modules: course.modules,
       private: course.private,
-      published: course.published,
     };
   }
 
@@ -43,17 +82,37 @@ class CourseService implements ICourseService {
     queryConditions: CourseVisibilityAttributes,
   ): Promise<CourseResponseDTO[]> {
     try {
-      const courses: Array<Course> = await MgCourse.find(queryConditions);
-      return courses.map((course) => ({
-        id: course.id,
-        title: course.title,
-        description: course.description,
-        image: course.image,
-        previewImage: course.previewImage,
-        modules: course.modules,
-        private: course.private,
-        published: course.published,
-      }));
+      let courses: Array<Course> | null;
+
+      if (queryConditions.includeOnlyPublishedModules) {
+        const filterQueryObject = queryConditions.includePrivateCourses
+          ? []
+          : [{ $match: { private: false } }];
+
+        courses = await MgCourse.aggregate([
+          ...filterQueryObject,
+          ...publishedModulesOnlyQuery,
+        ]).exec();
+      } else {
+        courses = await MgCourse.find(
+          queryConditions.includePrivateCourses ? {} : { private: false },
+        );
+      }
+
+      if (!courses) throw new Error("Courses query failed");
+
+      return courses.map((course) => {
+        return {
+          // eslint-disable-next-line no-underscore-dangle
+          id: course._id.toString(),
+          title: course.title,
+          description: course.description,
+          image: course.image,
+          previewImage: course.previewImage,
+          modules: course.modules,
+          private: course.private,
+        };
+      });
     } catch (error: unknown) {
       Logger.error(`Failed to get courses. Reason = ${getErrorMessage(error)}`);
       throw error;
@@ -80,7 +139,6 @@ class CourseService implements ICourseService {
       previewImage: newCourse.previewImage,
       modules: newCourse.modules,
       private: newCourse.private,
-      published: newCourse.published,
     };
   }
 
@@ -112,7 +170,6 @@ class CourseService implements ICourseService {
       previewImage: updatedCourse.previewImage,
       modules: updatedCourse.modules,
       private: updatedCourse.private,
-      published: updatedCourse.published,
     };
   }
 

@@ -1,6 +1,7 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Flex } from "@chakra-ui/react";
+import { Flex, IconButton } from "@chakra-ui/react";
+import { ChevronRightIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import { DropResult, DragDropContext } from "react-beautiful-dnd";
 import { v4 as uuid } from "uuid";
 
@@ -54,6 +55,7 @@ const ModuleEditor = (): React.ReactElement => {
   const { courseID, moduleIndex }: ModuleEditorParams = useParams();
 
   const [state, dispatch] = useReducer(EditorContextReducer, null);
+  const [showSideBar, setShowSideBar] = useState<boolean>(true);
 
   // Runs once at the beginning
   useEffect(() => {
@@ -68,7 +70,8 @@ const ModuleEditor = (): React.ReactElement => {
           title: "Hello!",
           description: `I am a module ${moduleIndex}`,
           image: "",
-          previewImage: "",
+          previewImage:
+            "https://res.cloudinary.com/practicaldev/image/fetch/s--JIe3p0M4--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://dev-to-uploads.s3.amazonaws.com/i/093ewdrgyf1kedlhzs51.png",
           published: true,
           lessons: ["lesson-hash-1", "lesson-hash-2"],
         },
@@ -95,8 +98,7 @@ const ModuleEditor = (): React.ReactElement => {
             type: ContentTypeEnum.IMAGE,
             id: uuid(),
             content: {
-              link:
-                "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
+              link: "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
             },
           },
           {
@@ -146,11 +148,29 @@ const ModuleEditor = (): React.ReactElement => {
       return <p>Module not found!</p>;
     }
 
+    const sideBarIcon = showSideBar ? (
+      <ChevronLeftIcon />
+    ) : (
+      <ChevronRightIcon />
+    );
     return (
       <EditorContext.Provider value={{ state, dispatch }}>
-        <Flex>
+        <Flex h="100vh">
           <DragDropContext onDragEnd={(result) => onDragEnd(dispatch, result)}>
-            <SideBar />
+            {showSideBar ? <SideBar /> : null}
+            <IconButton
+              aria-label="Show sideBar"
+              borderRadius="0"
+              bg="white"
+              color="black"
+              alignSelf="center"
+              size="s"
+              w="20px"
+              height="45px"
+              onClick={() => setShowSideBar(!showSideBar)}
+            >
+              {sideBarIcon}
+            </IconButton>
             <LessonViewer />
           </DragDropContext>
         </Flex>
