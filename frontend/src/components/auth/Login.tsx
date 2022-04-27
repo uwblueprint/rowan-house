@@ -11,6 +11,7 @@ import {
   VStack,
   Input,
   Center,
+  Spinner,
 } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import RHSLogo from "../../assets/RHSlogo.png";
@@ -35,7 +36,7 @@ const Login = (): React.ReactElement => {
   const [loginState, setLoginState] = useState(LoginState.EnterEmail);
   const history = useHistory();
 
-  const [login] = useMutation<{ login: AuthenticatedUser }>(LOGIN);
+  const [login, { loading }] = useMutation<{ login: AuthenticatedUser }>(LOGIN);
 
   const getLoginUser = async () => {
     const user: AuthenticatedUser = await authAPIClient.login(
@@ -151,7 +152,7 @@ const Login = (): React.ReactElement => {
               onClick={onLogInClick}
               marginBottom="2vh"
             >
-              Login
+              {loading ? <Spinner /> : 'Login'}
             </Button>
             <Center>
               <Button
