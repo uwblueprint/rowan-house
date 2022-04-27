@@ -1,4 +1,14 @@
-export type Module = {
+export interface ModuleRequest {
+  id?: string;
+  title: string;
+  description?: string | null;
+  image?: string | null;
+  previewImage?: string | null;
+  published?: boolean;
+  lessons?: string[] | null;
+}
+
+export interface ModuleResponse {
   id: string;
   title: string;
   description: string | null;
@@ -6,23 +16,23 @@ export type Module = {
   previewImage: string | null;
   published: boolean;
   lessons: string[] | null;
-};
+}
 
-export type CourseRequest = {
+export interface CourseRequest {
   title: string;
-  description?: string;
-  image?: string;
-  previewImage?: string;
-  modules?: Module[];
+  description?: string | null;
+  image?: string | null;
+  previewImage?: string | null;
+  modules?: ModuleRequest[] | null;
   private?: boolean;
-};
+}
 
-export type CourseResponse = {
+export interface CourseResponse {
   id: string;
   title: string;
   description: string | null;
   image: string | null;
   previewImage: string | null;
-  modules: Module[] | null;
+  modules: ModuleResponse[] | null;
   private: boolean;
-};
+}

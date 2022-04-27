@@ -1,37 +1,26 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
-import { Box, Button, Flex, Spinner, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, Flex, Spinner, Text, useDisclosure, VStack } from "@chakra-ui/react";
 import { SmallAddIcon } from "@chakra-ui/icons";
 import CoursePreview from "../admin/CoursePreview";
 import { COURSES } from "../../APIClients/queries/CourseQueries";
 import { CourseResponse } from "../../APIClients/types/CourseClientTypes";
 import { AdminPage } from "../../types/AdminDashboardTypes";
 import SideBar from "../admin/SideBar";
+import EditCourseModal from "../admin/EditCourseModal";
 
 const ManageCoursesPage = (): React.ReactElement => {
-  const [courses, setCourses] = React.useState<CourseResponse[] | null>();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { loading, error } = useQuery<{
-    courses: Array<CourseResponse>;
-  }>(COURSES, {
-    onCompleted: (data) => {
-      setCourses(data.courses);
-    },
-  });
+  const { data, loading, error } = useQuery<{courses: Array<CourseResponse>}>(COURSES);
+  const { courses } = data ?? {courses: []};
 
   const displayCoursePreviews = () => {
-    if (!courses?.length) {
+    if (!courses.length) {
       return <h1>There are no courses.</h1>;
     }
-    return courses?.map((course) => (
-      <CoursePreview
-        key={course.id}
-        courseId={course.id}
-        title={course.title}
-        description={course.description}
-        isPrivate={course.private}
-        modules={course.modules}
-      />
+    return courses.map((course) => (
+      <CoursePreview key={course.id} course={course} />
     ));
   };
 
@@ -52,7 +41,7 @@ const ManageCoursesPage = (): React.ReactElement => {
           <Text variant="display-lg" pb={6}>
             Courses
           </Text>
-          <Button variant="md" leftIcon={<SmallAddIcon />}>
+          <Button variant="md" leftIcon={<SmallAddIcon />} onClick={onOpen}>
             Create New Course
           </Button>
         </Flex>
@@ -60,6 +49,7 @@ const ManageCoursesPage = (): React.ReactElement => {
           {loading ? <Spinner size="xl" /> : displayCoursePreviews()}
         </VStack>
       </Box>
+      {isOpen && <EditCourseModal isOpen={isOpen} onClose={onClose} />}
     </Flex>
   );
 };
