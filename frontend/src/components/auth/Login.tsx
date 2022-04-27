@@ -6,7 +6,6 @@ import {
   Text,
   Image,
   FormControl,
-  Link,
   Box,
   Button,
   VStack,
@@ -112,11 +111,11 @@ const Login = (): React.ReactElement => {
               Don&lsquo;t have an account?&nbsp;
               <Button
                 variant="link"
-                color="purple"
+                color="brand.royal"
                 onClick={onSignUpClick}
                 textDecorationLine="underline"
               >
-                Sign Up
+                Sign up
               </Button>
             </Center>
           </Box>
@@ -128,8 +127,10 @@ const Login = (): React.ReactElement => {
             <FormControl>
               <Box display="flex" marginTop="3vh">
                 <Button onClick={() => onBackClick(loginState)} variant="link">
-                  <ArrowBackIcon />
-                  <Text variant="button">Back</Text>
+                  <ArrowBackIcon color="brand.royal" />
+                  <Text variant="button" color="brand.royal">
+                    Back
+                  </Text>
                 </Button>
               </Box>
               <Text variant="caption-md" marginTop="1.5vh" marginBottom="1vh">
@@ -154,8 +155,8 @@ const Login = (): React.ReactElement => {
             <Center>
               <Button
                 variant="link"
-                color="purple"
-                onClick={(event) => setLoginState(LoginState.ForgetPassword)}
+                color="brand.royal"
+                onClick={() => setLoginState(LoginState.ForgetPassword)}
                 textDecorationLine="underline"
               >
                 Forgot your password?
@@ -169,8 +170,10 @@ const Login = (): React.ReactElement => {
             <Text variant="display-sm-sb">Forgot your password?</Text>
             <Box display="flex" marginTop="3vh">
               <Button onClick={() => onBackClick(loginState)} variant="link">
-                <ArrowBackIcon />
-                <Text variant="button">Back</Text>
+                <ArrowBackIcon color="brand.royal" />
+                <Text variant="button" color="brand.royal">
+                  Back
+                </Text>
               </Button>
             </Box>
             <FormControl>
@@ -196,9 +199,9 @@ const Login = (): React.ReactElement => {
               Remembered your password?&nbsp;
               <Button
                 variant="link"
-                color="purple"
+                color="brand.royal"
                 textDecorationLine="underline"
-                onClick={onSignUpClick}
+                onClick={() => setLoginState(LoginState.EnterEmail)}
               >
                 Sign in
               </Button>
