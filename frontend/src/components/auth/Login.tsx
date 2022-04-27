@@ -14,11 +14,11 @@ import {
 } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import RHSLogo from "../../assets/RHSlogo.png";
-import BackgroundImage from "../signuppage.png";
+import BackgroundImage from "../../assets/signuppage.jpg";
 
 import authAPIClient from "../../APIClients/AuthAPIClient";
 import { LOGIN } from "../../APIClients/mutations/AuthMutations";
-import { HOME_PAGE, SIGNUP_PAGE } from "../../constants/Routes";
+import { MANAGE_COURSES_PAGE, SIGNUP_PAGE } from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
 import { AuthenticatedUser } from "../../types/AuthTypes";
 
@@ -77,8 +77,9 @@ const Login = (): React.ReactElement => {
     }
   };
 
+  // Temporarily while working on the admin side, should normally redirect to HOME_PAGE
   if (authenticatedUser) {
-    return <Redirect to={HOME_PAGE} />;
+    return <Redirect to={MANAGE_COURSES_PAGE} />;
   }
 
   const getLoginForm = (currentLoginState: LoginState) => {
@@ -182,6 +183,7 @@ const Login = (): React.ReactElement => {
               </Text>
               <Input
                 type="email"
+                value={email}
                 placeholder="you@rowanhouse.ca"
                 onChange={(event) => setEmail(event.target.value)}
                 marginBottom="3vh"
@@ -214,16 +216,14 @@ const Login = (): React.ReactElement => {
   };
 
   return (
-    <Flex>
+    <Flex minH="100vh">
       <Center flex="1">
         <VStack>
           <Image height="13vh" marginBottom="2.5vh" src={RHSLogo} />
           {getLoginForm(loginState)}
         </VStack>
       </Center>
-      <Box>
-        <Image height="100vh" src={BackgroundImage} />
-      </Box>
+      <Image width="50vw" objectFit="cover" src={BackgroundImage} />
     </Flex>
   );
 };

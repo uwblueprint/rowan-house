@@ -1,9 +1,4 @@
-import {
-  Spacer,
-  Switch,
-  FormControl,
-  FormLabel,
-} from "@chakra-ui/react";
+import { Spacer, Switch, FormControl, FormLabel } from "@chakra-ui/react";
 
 import React, { useState } from "react";
 
@@ -23,7 +18,7 @@ export const SwitchInput = ({
   disabledName,
   prefix = "",
   isSpaced = true,
-}: SwitchProps) => {
+}: SwitchProps): React.ReactElement => {
   const [enabled, setEnabled] = useState(isEnabled);
   const toggleLabel = () => {
     setEnabled(!enabled);
@@ -32,7 +27,10 @@ export const SwitchInput = ({
 
   return (
     <FormControl display="flex" alignItems="center">
-      <FormLabel>{prefix && `${prefix} `}{enabled ? enabledName : disabledName}</FormLabel>
+      <FormLabel>
+        {prefix && `${prefix} `}
+        {enabled ? enabledName : disabledName}
+      </FormLabel>
       {isSpaced && <Spacer />}
       <Switch defaultIsChecked={isEnabled} onChange={toggleLabel} />
     </FormControl>

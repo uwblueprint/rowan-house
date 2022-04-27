@@ -38,7 +38,7 @@ export const Modal = ({
   spreadButtons = false,
   children,
   ...rest
-}: ModalProps) => {
+}: ModalProps): React.ReactElement => {
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
     <ChakraModal isCentered onClose={onCancel} isOpen={isOpen} {...rest}>

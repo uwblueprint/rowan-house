@@ -14,7 +14,11 @@ import ModulePreview from "./ModulePreview";
 import EditActionsKebabMenu from "./EditActionsKebabMenu";
 import DeleteModal from "../common/DeleteModal";
 import EditCourseModal from "./EditCourseModal";
-import { CourseRequest, CourseResponse, ModuleRequest } from "../../APIClients/types/CourseClientTypes";
+import {
+  CourseRequest,
+  CourseResponse,
+  ModuleRequest,
+} from "../../APIClients/types/CourseClientTypes";
 import EditModuleModal from "./EditModuleModal";
 import { DELETE_COURSE } from "../../APIClients/mutations/CourseMutations";
 import { COURSES } from "../../APIClients/queries/CourseQueries";
@@ -22,14 +26,14 @@ import { COURSES } from "../../APIClients/queries/CourseQueries";
 enum ModalType {
   EDIT = "edit",
   DELETE = "delete",
-  CREATE_MODULE = "create-module"
+  CREATE_MODULE = "create-module",
 }
 
 interface CoursePreviewProps {
   course: CourseResponse;
 }
 
-const refetchQueries = {refetchQueries: [ { query: COURSES } ]};
+const refetchQueries = { refetchQueries: [{ query: COURSES }] };
 
 const CoursePreview = ({ course }: CoursePreviewProps): React.ReactElement => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -46,27 +50,33 @@ const CoursePreview = ({ course }: CoursePreviewProps): React.ReactElement => {
     const { id } = course;
     deleteCourse({ variables: { id } });
     onClose();
-  }
+  };
 
-  const formatCourseRequest = (moduleIndex: number, newModule?: ModuleRequest): [string, CourseRequest] => {
+  const formatCourseRequest = (
+    moduleIndex: number,
+    newModule?: ModuleRequest,
+  ): [string, CourseRequest] => {
     if (!course.modules)
-      throw Error("Attempted to edit module when course does not contain modules");
+      throw Error(
+        "Attempted to edit module when course does not contain modules",
+      );
     let newModules = [];
     // Copy other modules by reference due to the immutability of the data
     if (newModule) {
       // If module index isn't valid, append the new module
       if (moduleIndex >= 0 && moduleIndex < course.modules.length)
-        newModules = course.modules.map((oldModule, index) => moduleIndex === index ? newModule : oldModule);
-      else
-        newModules = [... course.modules, newModule];
-    // If no new module has been passed, remove the module
+        newModules = course.modules.map((oldModule, index) =>
+          moduleIndex === index ? newModule : oldModule,
+        );
+      else newModules = [...course.modules, newModule];
+      // If no new module has been passed, remove the module
     } else {
       newModules = course.modules.filter((_, index) => moduleIndex !== index);
     }
 
-    const {id, ...newCourse} = {...course, modules: newModules};
+    const { id, ...newCourse } = { ...course, modules: newModules };
     return [id, newCourse];
-  }
+  };
 
   return (
     <Box
@@ -137,7 +147,11 @@ const CoursePreview = ({ course }: CoursePreviewProps): React.ReactElement => {
         <EditCourseModal course={course} isOpen={isOpen} onClose={onClose} />
       )}
       {modalType === ModalType.CREATE_MODULE && (
-        <EditModuleModal isOpen={isOpen} onClose={onClose} formatCourseRequest={(m) => formatCourseRequest(-1, m)}/>
+        <EditModuleModal
+          isOpen={isOpen}
+          onClose={onClose}
+          formatCourseRequest={(m) => formatCourseRequest(-1, m)}
+        />
       )}
     </Box>
   );

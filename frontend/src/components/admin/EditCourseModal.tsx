@@ -7,7 +7,10 @@ import { Modal } from "../common/Modal";
 import { SwitchInput } from "../common/SwitchInput";
 import { TextArea } from "../common/TextArea";
 import { CourseResponse } from "../../APIClients/types/CourseClientTypes";
-import { CREATE_COURSE, UPDATE_COURSE } from "../../APIClients/mutations/CourseMutations";
+import {
+  CREATE_COURSE,
+  UPDATE_COURSE,
+} from "../../APIClients/mutations/CourseMutations";
 import { COURSES } from "../../APIClients/queries/CourseQueries";
 
 export interface EditCourseModalProps {
@@ -16,15 +19,25 @@ export interface EditCourseModalProps {
   course?: CourseResponse;
 }
 
-const refetchQueries = {refetchQueries: [ { query: COURSES } ]};
+const refetchQueries = { refetchQueries: [{ query: COURSES }] };
 
-const EditCourseModal = ({ course, onClose, isOpen }: EditCourseModalProps) => {
+const EditCourseModal = ({
+  course,
+  onClose,
+  isOpen,
+}: EditCourseModalProps): React.ReactElement => {
   const [title, setTitle] = useState(course?.title ?? "");
   const [description, setDescription] = useState(course?.description ?? "");
-  const [isPrivate, setIsPrivate] = useState(course?.private ?? false); 
+  const [isPrivate, setIsPrivate] = useState(course?.private ?? false);
 
-  const [updateCourse] = useMutation<CourseResponse>(UPDATE_COURSE, refetchQueries);
-  const [createCourse] = useMutation<CourseResponse>(CREATE_COURSE, refetchQueries);
+  const [updateCourse] = useMutation<CourseResponse>(
+    UPDATE_COURSE,
+    refetchQueries,
+  );
+  const [createCourse] = useMutation<CourseResponse>(
+    CREATE_COURSE,
+    refetchQueries,
+  );
 
   const onCreateCourse = () => {
     const newCourse = { title, description, private: isPrivate };
@@ -46,7 +59,7 @@ const EditCourseModal = ({ course, onClose, isOpen }: EditCourseModalProps) => {
       console.log(newCourse);
       updateCourse({ variables: { id: course.id, course: newCourse } });
     } else {
-      throw Error("Attempted to update course that doesn't exist")
+      throw Error("Attempted to update course that doesn't exist");
     }
     onClose();
   };

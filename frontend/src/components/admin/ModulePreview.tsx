@@ -16,7 +16,12 @@ import DeleteModal from "../common/DeleteModal";
 import EditModuleModal from "./EditModuleModal";
 import { ADMIN_MODULE_EDITOR_BASE_ROUTE } from "../../constants/Routes";
 import { DEFAULT_IMAGE } from "../../constants/DummyData";
-import { ModuleRequest, CourseRequest, ModuleResponse, CourseResponse } from "../../APIClients/types/CourseClientTypes";
+import {
+  ModuleRequest,
+  CourseRequest,
+  ModuleResponse,
+  CourseResponse,
+} from "../../APIClients/types/CourseClientTypes";
 import { UPDATE_COURSE } from "../../APIClients/mutations/CourseMutations";
 import { COURSES } from "../../APIClients/queries/CourseQueries";
 
@@ -32,10 +37,13 @@ interface ModulePreviewProps {
   module: ModuleResponse;
   courseId: string;
   index: number;
-  formatCourseRequest: (index: number, module?: ModuleRequest) => [string, CourseRequest];
+  formatCourseRequest: (
+    index: number,
+    module?: ModuleRequest,
+  ) => [string, CourseRequest];
 }
 
-const refetchQueries = {refetchQueries: [ { query: COURSES } ]};
+const refetchQueries = { refetchQueries: [{ query: COURSES }] };
 
 const ModulePreview = ({
   module,
@@ -47,7 +55,10 @@ const ModulePreview = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [modalType, setModalType] = useState(ModalType.EDIT); // determines which modal is shown when isOpen is true
 
-  const [updateCourse] = useMutation<CourseResponse>(UPDATE_COURSE, refetchQueries);
+  const [updateCourse] = useMutation<CourseResponse>(
+    UPDATE_COURSE,
+    refetchQueries,
+  );
 
   const { title, image, published } = module;
 
@@ -60,7 +71,7 @@ const ModulePreview = ({
     const [id, course] = formatCourseRequest(index);
     updateCourse({ variables: { id, course } });
     onClose();
-  }
+  };
 
   return (
     <Box

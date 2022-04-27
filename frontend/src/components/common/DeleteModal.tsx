@@ -5,7 +5,7 @@ export interface DeleteModalProps extends ModalProps {
   name: string;
 }
 
-const DeleteModal = (props: DeleteModalProps) => {
+const DeleteModal = (props: DeleteModalProps): React.ReactElement => {
   const { name } = props;
 
   return (

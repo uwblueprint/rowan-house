@@ -9,7 +9,7 @@ import {
 import { WarningIcon } from "@chakra-ui/icons";
 
 export interface TextInputProps {
-  onChange: (result: string) => void; 
+  onChange: (result: string) => void;
   label?: string;
   placeholder?: string;
   errorMessage?: string;
@@ -26,9 +26,9 @@ export const TextInput = ({
   errorMessage,
   helperText,
   isInvalid,
-  defaultValue="",
-  isRequired=false,
-}: TextInputProps) => {
+  defaultValue = "",
+  isRequired = false,
+}: TextInputProps): React.ReactElement => {
   return (
     <FormControl id={label} isInvalid={isInvalid} mb={5}>
       <FormLabel fontWeight={400} color={isInvalid ? "red.500" : "blackAlpha"}>

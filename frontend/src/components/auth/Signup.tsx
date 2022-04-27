@@ -6,7 +6,6 @@ import {
   FormControl,
   FormLabel,
   FormErrorMessage,
-  FormHelperText,
   Text,
   Button,
   Center,
@@ -22,7 +21,7 @@ import { HOME_PAGE, LOGIN_PAGE } from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
 import { AuthenticatedUser } from "../../types/AuthTypes";
 import RHSLogo from "../../assets/RHSlogo.png";
-import BackgroundImage from "../signuppage.png";
+import BackgroundImage from "../../assets/signuppage.jpg";
 
 const Signup = (): React.ReactElement => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
@@ -184,9 +183,7 @@ const Signup = (): React.ReactElement => {
           </Box>
         </VStack>
       </Center>
-      <Box>
-        <Image height="100vh" src={BackgroundImage} />
-      </Box>
+      <Image width="50vw" objectFit="cover" src={BackgroundImage} />
     </Flex>
   );
 };
