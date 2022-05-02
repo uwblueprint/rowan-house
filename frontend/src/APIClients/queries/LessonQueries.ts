@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
-export const GET_LESSON = gql`
-query GetLesson($id: ID!) {
-    lessonbyId(id: ID!) {
+const GET_LESSONS = gql`
+query GetLessons($ids: [ID!]!) {
+    lessonsByIds(ids: $ids) {
         id
         course
         module
@@ -19,3 +19,5 @@ query GetLesson($id: ID!) {
     }
 }
 `
+
+export default GET_LESSONS

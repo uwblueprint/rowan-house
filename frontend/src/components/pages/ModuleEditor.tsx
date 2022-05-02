@@ -6,7 +6,7 @@ import { DropResult, DragDropContext } from "react-beautiful-dnd";
 import { v4 as uuid } from "uuid";
 import { useQuery, useLazyQuery } from '@apollo/client';
 import { GET_COURSE } from '../../APIClients/queries/CourseQueries';
-import { GET_LESSON } from '../../APIClients/queries/LessonQueries';
+import GET_LESSONS from '../../APIClients/queries/LessonQueries';
 
 import {
   ContentTypeEnum,
@@ -59,6 +59,12 @@ const ModuleEditor = (): React.ReactElement => {
 
   const [state, dispatch] = useReducer(EditorContextReducer, null);
   const [showSideBar, setShowSideBar] = useState<boolean>(true);
+  const {loading: courseLoading, error: courseError, data: courseData, refetch: courseRefetch} = useQuery(GET_COURSE, {
+    variables: {
+      id: courseID
+    }
+  });
+  const [getLessons, {loading: lessonLoading, error: lessonError, data: lessonData}] = useLazyQuery(GET_LESSONS);
 
   // Runs once at the beginning
   useEffect(() => {
@@ -137,18 +143,25 @@ const ModuleEditor = (): React.ReactElement => {
 
     if (courseData) {
       // Save to context
-      const dummyLessons: LessonsType = {}
+      console.log(courseData)
+      getLessons({variables: {ids: courseData.course.modules[moduleIndex].lessons}})
+    }
+  }, [courseData]);
+
+  useEffect(() => {
+    console.log(lessonData)
+    if (courseData && lessonData) {
       dispatch({
         type: "init",
         value: {
           course: courseData.course,
-          lessons: dummyLessons,
-          focusedLesson: dummyfocusedLesson,
+          lessons: lessonData.lessonsByIds,
+          focusedLesson: lessonData.lessonsByIds[0],
           hasChanged: false,
         },
       });
     }
-  }, [courseData]);
+  }, [courseData, lessonData])
 
   if (state) {
     if (state.course.modules[parseInt(moduleIndex, 10)] === undefined) {
