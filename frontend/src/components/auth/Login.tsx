@@ -6,37 +6,37 @@ import {
   Text,
   Image,
   FormControl,
-  Link,
   Box,
   Button,
   VStack,
   Input,
   Center,
+  Spinner,
 } from "@chakra-ui/react";
-import { ArrowBackIcon } from '@chakra-ui/icons';
+import { ArrowBackIcon } from "@chakra-ui/icons";
 import RHSLogo from "../../assets/RHSlogo.png";
-import BackgroundImage from "../signuppage.png";
+import BackgroundImage from "../../assets/signuppage.jpg";
 
 import authAPIClient from "../../APIClients/AuthAPIClient";
 import { LOGIN } from "../../APIClients/mutations/AuthMutations";
-import { HOME_PAGE, SIGNUP_PAGE } from "../../constants/Routes";
+import { MANAGE_COURSES_PAGE, SIGNUP_PAGE } from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
 import { AuthenticatedUser } from "../../types/AuthTypes";
 
 enum LoginState {
   EnterEmail,
   EnterPassword,
-  ForgetPassword
-}  
+  ForgetPassword,
+}
 
 const Login = (): React.ReactElement => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loginState,  setLoginState] = useState(LoginState.EnterEmail);
+  const [loginState, setLoginState] = useState(LoginState.EnterEmail);
   const history = useHistory();
 
-  const [login] = useMutation<{ login: AuthenticatedUser }>(LOGIN);
+  const [login, { loading }] = useMutation<{ login: AuthenticatedUser }>(LOGIN);
 
   const getLoginUser = async () => {
     const user: AuthenticatedUser = await authAPIClient.login(
@@ -45,7 +45,7 @@ const Login = (): React.ReactElement => {
       login,
     );
     setAuthenticatedUser(user);
-  }
+  };
 
   const onLogInClick = async () => {
     switch (loginState) {
@@ -70,30 +70,29 @@ const Login = (): React.ReactElement => {
   const onBackClick = (currentLoginState: LoginState) => {
     switch (currentLoginState) {
       case LoginState.EnterPassword:
-        return (
-          setLoginState(LoginState.EnterEmail)
-        );
+        return setLoginState(LoginState.EnterEmail);
       case LoginState.ForgetPassword:
-        return (
-          setLoginState(LoginState.EnterPassword)
-        );
+        return setLoginState(LoginState.EnterPassword);
       default:
         throw new Error("Unexpected Error");
     }
-  }
+  };
 
+  // Temporarily while working on the admin side, should normally redirect to HOME_PAGE
   if (authenticatedUser) {
-    return <Redirect to={HOME_PAGE} />;
+    return <Redirect to={MANAGE_COURSES_PAGE} />;
   }
 
   const getLoginForm = (currentLoginState: LoginState) => {
     switch (currentLoginState) {
-      case LoginState.EnterEmail: 
+      case LoginState.EnterEmail:
         return (
           <Box>
             <Text variant="display-sm-sb">Sign in to access courses</Text>
             <FormControl>
-            <Text variant="caption-md" marginTop="4vh" marginBottom="1vh">Email Address</Text>
+              <Text variant="caption-md" marginTop="4vh" marginBottom="1vh">
+                Email Address
+              </Text>
               <Input
                 type="email"
                 value={email}
@@ -114,39 +113,38 @@ const Login = (): React.ReactElement => {
               Don&lsquo;t have an account?&nbsp;
               <Button
                 variant="link"
-                color="purple"
+                color="brand.royal"
                 onClick={onSignUpClick}
                 textDecorationLine="underline"
               >
-                Sign Up
+                Sign up
               </Button>
             </Center>
           </Box>
-        )
-      case LoginState.EnterPassword: 
+        );
+      case LoginState.EnterPassword:
         return (
           <Box>
             <Text variant="display-sm-sb">Sign in to access courses</Text>
             <FormControl>
-            <Box 
-              display="flex"
-              marginTop="3vh"
-              >
-              <Button
-                onClick={() => onBackClick(loginState)}
-                variant="link"
-                >
-                <ArrowBackIcon />
-                <Text variant="button">Back</Text>
-              </Button>
-            </Box>
-            <Text variant="caption-md" marginTop="1.5vh" marginBottom="1vh"> Password</Text>
-            <Input
-              type="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              marginBottom="3vh"
-            />
+              <Box display="flex" marginTop="3vh">
+                <Button onClick={() => onBackClick(loginState)} variant="link">
+                  <ArrowBackIcon color="brand.royal" />
+                  <Text variant="button" color="brand.royal">
+                    Back
+                  </Text>
+                </Button>
+              </Box>
+              <Text variant="caption-md" marginTop="1.5vh" marginBottom="1vh">
+                {" "}
+                Password
+              </Text>
+              <Input
+                type="password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                marginBottom="3vh"
+              />
             </FormControl>
             <Button
               variant="sm"
@@ -154,13 +152,13 @@ const Login = (): React.ReactElement => {
               onClick={onLogInClick}
               marginBottom="2vh"
             >
-              Login
+              {loading ? <Spinner /> : 'Login'}
             </Button>
             <Center>
               <Button
                 variant="link"
-                color="purple"
-                onClick={(event) => setLoginState(LoginState.ForgetPassword)}
+                color="brand.royal"
+                onClick={() => setLoginState(LoginState.ForgetPassword)}
                 textDecorationLine="underline"
               >
                 Forgot your password?
@@ -168,26 +166,25 @@ const Login = (): React.ReactElement => {
             </Center>
           </Box>
         );
-      case LoginState.ForgetPassword: 
+      case LoginState.ForgetPassword:
         return (
           <Box>
             <Text variant="display-sm-sb">Forgot your password?</Text>
-            <Box 
-              display="flex"
-              marginTop="3vh"
-              >
-              <Button
-                onClick={() => onBackClick(loginState)}
-                variant="link"
-                >
-                <ArrowBackIcon />
-                <Text variant="button">Back</Text>
+            <Box display="flex" marginTop="3vh">
+              <Button onClick={() => onBackClick(loginState)} variant="link">
+                <ArrowBackIcon color="brand.royal" />
+                <Text variant="button" color="brand.royal">
+                  Back
+                </Text>
               </Button>
             </Box>
             <FormControl>
-            <Text variant="caption-md" marginTop="1.5vh" marginBottom="1vh">Email Address</Text>
+              <Text variant="caption-md" marginTop="1.5vh" marginBottom="1vh">
+                Email Address
+              </Text>
               <Input
                 type="email"
+                value={email}
                 placeholder="you@rowanhouse.ca"
                 onChange={(event) => setEmail(event.target.value)}
                 marginBottom="3vh"
@@ -205,9 +202,9 @@ const Login = (): React.ReactElement => {
               Remembered your password?&nbsp;
               <Button
                 variant="link"
-                color="purple"
+                color="brand.royal"
                 textDecorationLine="underline"
-                onClick={onSignUpClick}
+                onClick={() => setLoginState(LoginState.EnterEmail)}
               >
                 Sign in
               </Button>
@@ -217,22 +214,17 @@ const Login = (): React.ReactElement => {
       default:
         throw new Error("Unexpected login state");
     }
-  }
+  };
 
   return (
-    <Flex>
+    <Flex minH="100vh">
       <Center flex="1">
         <VStack>
           <Image height="13vh" marginBottom="2.5vh" src={RHSLogo} />
           {getLoginForm(loginState)}
         </VStack>
       </Center>
-      <Box>
-        <Image
-          height="100vh"
-          src={BackgroundImage}
-        />
-      </Box>
+      <Image width="50vw" objectFit="cover" src={BackgroundImage} />
     </Flex>
   );
 };

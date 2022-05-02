@@ -16,11 +16,10 @@ const Logout = (): React.ReactElement => {
   const [logout] = useMutation<{ logout: null }>(LOGOUT);
 
   const onLogOutClick = async () => {
-    const success = await authAPIClient.logout(
-      String(authenticatedUser?.id),
-      logout,
-    );
-    if (success) {
+    try {
+      await authAPIClient.logout(String(authenticatedUser?.id), logout);
+    } catch (e) {
+      console.warn(`Error when logging out: ${e}`);
       setAuthenticatedUser(null);
     }
   };

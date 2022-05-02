@@ -1,21 +1,77 @@
-import React from "react";
-import { Box, Flex, Link, Image, Tag, Text, VStack } from "@chakra-ui/react";
-import { ModulePreviewProps } from "../../types/AdminDashboardTypes";
+import React, { useState } from "react";
+import {
+  Box,
+  Flex,
+  Link,
+  Image,
+  Tag,
+  Text,
+  VStack,
+  useDisclosure,
+} from "@chakra-ui/react";
+import { useMutation } from "@apollo/client";
+
 import EditActionsKebabMenu from "./EditActionsKebabMenu";
+import DeleteModal from "../common/DeleteModal";
+import EditModuleModal from "./EditModuleModal";
 import { ADMIN_MODULE_EDITOR_BASE_ROUTE } from "../../constants/Routes";
 import { DEFAULT_IMAGE } from "../../constants/DummyData";
+import {
+  ModuleRequest,
+  CourseRequest,
+  ModuleResponse,
+  CourseResponse,
+} from "../../APIClients/types/CourseClientTypes";
+import { UPDATE_COURSE } from "../../APIClients/mutations/CourseMutations";
+import { COURSES } from "../../APIClients/queries/CourseQueries";
 
 const buildEditModuleRoute = (courseId: string, index: number): string =>
   `${ADMIN_MODULE_EDITOR_BASE_ROUTE}/${courseId}/${index}`;
 
+enum ModalType {
+  EDIT = "edit",
+  DELETE = "delete",
+}
+
+interface ModulePreviewProps {
+  module: ModuleResponse;
+  courseId: string;
+  index: number;
+  formatCourseRequest: (
+    index: number,
+    module?: ModuleRequest,
+  ) => [string, CourseRequest];
+}
+
+const refetchQueries = { refetchQueries: [{ query: COURSES }] };
+
 const ModulePreview = ({
-  index,
+  module,
   courseId,
-  title,
-  published,
-  image,
+  index,
+  formatCourseRequest,
 }: ModulePreviewProps): React.ReactElement => {
   const EDIT_MODULE_ROUTE = buildEditModuleRoute(courseId, index);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [modalType, setModalType] = useState(ModalType.EDIT); // determines which modal is shown when isOpen is true
+
+  const [updateCourse] = useMutation<CourseResponse>(
+    UPDATE_COURSE,
+    refetchQueries,
+  );
+
+  const { title, image, published } = module;
+
+  const onClick = (type: ModalType) => {
+    setModalType(type);
+    onOpen();
+  };
+
+  const onDeleteModule = () => {
+    const [id, course] = formatCourseRequest(index);
+    updateCourse({ variables: { id, course } });
+    onClose();
+  };
 
   return (
     <Box
@@ -51,11 +107,27 @@ const ModulePreview = ({
           </VStack>
         </Link>
         <EditActionsKebabMenu
-          handleEditDetailsClick={() => alert("edit details")}
-          deleteFunction={() => true}
+          handleEditDetailsClick={() => onClick(ModalType.EDIT)}
+          deleteFunction={() => onClick(ModalType.DELETE)}
           showHorizontal={false}
         />
       </Flex>
+      {modalType === ModalType.DELETE && (
+        <DeleteModal
+          isOpen={isOpen}
+          name="Module"
+          onConfirm={onDeleteModule}
+          onCancel={onClose}
+        />
+      )}
+      {modalType === ModalType.EDIT && (
+        <EditModuleModal
+          module={module}
+          isOpen={isOpen}
+          onClose={onClose}
+          formatCourseRequest={(m) => formatCourseRequest(index, m)}
+        />
+      )}
     </Box>
   );
 };

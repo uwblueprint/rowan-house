@@ -1,26 +1,13 @@
-import { CourseVisibilityAttributes } from "../../models/course.model";
+import { CourseVisibilityAttributes, Module } from "../../models/course.model";
 
-interface Module {
-  title: string;
-  description: string;
-  image: string;
-  previewImage: string;
-  published: boolean;
-  lessons: string[];
-}
-
-export interface ModuleDTO extends Module {
-  id: string;
-}
-
+export type ModuleDTO = Omit<Module, "_id">;
 export interface CreateCourseRequestDTO {
   title: string;
   description: string;
   image: string;
   previewImage: string;
-  modules: Module[];
+  modules: ModuleDTO[];
   private: boolean;
-  published: boolean;
 }
 
 export interface UpdateCourseRequestDTO {
@@ -29,7 +16,6 @@ export interface UpdateCourseRequestDTO {
   image: string;
   previewImage: string;
   private: boolean;
-  published: boolean;
   modules: Module[];
 }
 
@@ -40,33 +26,21 @@ export interface CourseResponseDTO {
   image: string;
   previewImage: string;
   private: boolean;
-  published: boolean;
   modules: Module[];
-}
-
-export interface SerializedCreateCourseRequestDTO
-  extends Omit<CreateCourseRequestDTO, "modules"> {
-  modules: ModuleDTO[];
-}
-
-export interface SerializedUpdateCourseRequestDTO
-  extends Omit<UpdateCourseRequestDTO, "modules"> {
-  modules: ModuleDTO[];
-}
-
-export interface SerializedCourseResponseDTO
-  extends Omit<CourseResponseDTO, "modules"> {
-  modules: ModuleDTO[];
 }
 
 export interface ICourseService {
   /**
    * retrieve the Course with the given id
    * @param id course id
+   * @param queryConditions CourseVisibilityAttributes object to filter courses
    * @returns requested Course
    * @throws Error if retrieval fails
    */
-  getCourse(id: string): Promise<CourseResponseDTO>;
+  getCourse(
+    id: string,
+    queryConditions: CourseVisibilityAttributes,
+  ): Promise<CourseResponseDTO>;
 
   /**
    * retrieve all Courses
