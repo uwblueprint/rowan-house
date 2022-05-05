@@ -7,7 +7,7 @@ import UserService from "../../services/implementations/userService";
 import IAuthService from "../../services/interfaces/authService";
 import IEmailService from "../../services/interfaces/emailService";
 import IUserService from "../../services/interfaces/userService";
-import { AuthDTO, RegisterUserDTO } from "../../types";
+import { AuthDTO, RegisterUserDTO, Role } from "../../types";
 
 const userService: IUserService = new UserService();
 const emailService: IEmailService = new EmailService(nodemailerConfig);
@@ -36,7 +36,9 @@ const authResolvers = {
       { user }: { user: RegisterUserDTO },
       { res }: { res: Response },
     ): Promise<Omit<AuthDTO, "refreshToken">> => {
-      await userService.createUser({ ...user, role: "User" });
+      const role: Role =
+        process.env.NODE_ENV === "production" ? "User" : "Admin";
+      await userService.createUser({ ...user, role });
       const authDTO = await authService.generateToken(
         user.email,
         user.password,
