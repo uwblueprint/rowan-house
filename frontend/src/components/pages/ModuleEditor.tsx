@@ -3,17 +3,16 @@ import { useParams } from "react-router-dom";
 import { Flex, IconButton } from "@chakra-ui/react";
 import { ChevronRightIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import { DropResult, DragDropContext } from "react-beautiful-dnd";
-import { v4 as uuid } from "uuid";
-import { useQuery, useLazyQuery } from '@apollo/client';
-import { GET_COURSE } from '../../APIClients/queries/CourseQueries';
-import GET_LESSONS from '../../APIClients/queries/LessonQueries';
+import { useQuery, useLazyQuery } from "@apollo/client";
+import { GET_COURSE } from "../../APIClients/queries/CourseQueries";
+import GET_LESSONS from "../../APIClients/queries/LessonQueries";
 
 import {
-  ContentTypeEnum,
-  CourseType,
   EditorContextAction,
   LessonsType,
+  LessonDTO,
   ModuleEditorParams,
+  LessonType,
 } from "../../types/ModuleEditorTypes";
 import EditorContextReducer from "../../reducers/ModuleEditorContextReducer";
 import EditorContext from "../../contexts/ModuleEditorContext";
@@ -59,12 +58,12 @@ const ModuleEditor = (): React.ReactElement => {
 
   const [state, dispatch] = useReducer(EditorContextReducer, null);
   const [showSideBar, setShowSideBar] = useState<boolean>(true);
-  const {loading: courseLoading, error: courseError, data: courseData, refetch: courseRefetch} = useQuery(GET_COURSE, {
+  const { data: courseData } = useQuery(GET_COURSE, {
     variables: {
-      id: courseID
-    }
+      id: courseID,
+    },
   });
-  const [getLessons, {loading: lessonLoading, error: lessonError, data: lessonData}] = useLazyQuery(GET_LESSONS);
+  const [getLessons, { data: lessonData }] = useLazyQuery(GET_LESSONS);
 
   // Runs once at the beginning
   useEffect(() => {
@@ -141,33 +140,39 @@ const ModuleEditor = (): React.ReactElement => {
 
     if (courseData) {
       // Save to context
-      getLessons({variables: {ids: courseData.course.modules[moduleIndex].lessons}})
+      getLessons({
+        variables: { ids: courseData.course.modules[moduleIndex].lessons },
+      });
     }
-  }, [courseData]);
+  }, [courseData, getLessons, moduleIndex]);
 
   useEffect(() => {
     if (courseData && lessonData) {
-      const lessonsObj: LessonsType = {}
+      const lessonsObj: LessonsType = {};
 
-      lessonData.lessonsByIds.forEach((lesson: any) => {
-        const lessonObj = {
-          ...lesson
-        }
-        delete lessonObj.id;
+      lessonData.lessonsByIds.forEach((lesson: LessonDTO) => {
+        const lessonObj: LessonType = {
+          course: lesson.course,
+          module: lesson.module,
+          title: lesson.title,
+          description: lesson?.description,
+          image: lesson?.image,
+          content: lesson.content,
+        };
 
-        lessonsObj[lesson.id] = lessonObj
-      })
+        lessonsObj[lesson.id] = lessonObj;
+      });
       dispatch({
         type: "init",
         value: {
           course: courseData.course,
           lessons: lessonsObj,
           focusedLesson: lessonData.lessonsByIds[0],
-          hasChanged: {}
+          hasChanged: {},
         },
       });
     }
-  }, [courseData, lessonData])
+  }, [courseData, lessonData]);
 
   if (state) {
     if (state.course.modules[parseInt(moduleIndex, 10)] === undefined) {

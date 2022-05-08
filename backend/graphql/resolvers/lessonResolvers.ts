@@ -18,9 +18,9 @@ const lessonResolvers = {
     },
     lessonsByIds: async (
       _parent: undefined,
-      {ids}: {ids: string[]}
+      { ids }: { ids: string[] },
     ): Promise<LessonResponseDTO[]> => {
-      return Promise.all(ids.map(lessonService.getLessonById))
+      return Promise.all(ids.map(lessonService.getLessonById));
     },
   },
   Mutation: {

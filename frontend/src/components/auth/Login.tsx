@@ -152,7 +152,7 @@ const Login = (): React.ReactElement => {
               onClick={onLogInClick}
               marginBottom="2vh"
             >
-              {loading ? <Spinner /> : 'Login'}
+              {loading ? <Spinner /> : "Login"}
             </Button>
             <Center>
               <Button

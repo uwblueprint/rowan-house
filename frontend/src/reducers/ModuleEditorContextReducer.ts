@@ -174,7 +174,7 @@ export default function EditorContextReducer(
   // Update changed boolean
   // ! Currently triggers on set-focus change which is incorrect
   // let newState = { ...state, hasChanged: true };
-  let newState = { ...state};
+  let newState = { ...state };
 
   switch (action.type) {
     case "set-focus":
@@ -182,21 +182,39 @@ export default function EditorContextReducer(
         ...newState,
         focusedLesson: action.value,
       };
-    case "create-lesson": 
-      newState = {...state, hasChanged: {...state.hasChanged, [action.value.title]: "CREATE"}}
-      console.log(newState)
+    case "create-lesson":
+      newState = {
+        ...state,
+        hasChanged: { ...state.hasChanged, [action.value.title]: "CREATE" },
+      };
+      console.log(newState);
       return createLesson(newState, action.value);
     case "update-lesson":
       if (newState.focusedLesson) {
-        newState = {...state, hasChanged: {...state.hasChanged, [newState.focusedLesson]: "UPDATE"}}
+        newState = {
+          ...state,
+          hasChanged: {
+            ...state.hasChanged,
+            [newState.focusedLesson]: "UPDATE",
+          },
+        };
       }
       return updateLesson(newState, action.value);
     case "delete-lesson":
-      newState = {...state, hasChanged: {...state.hasChanged, [action.value]: "DELETE"}}
+      newState = {
+        ...state,
+        hasChanged: { ...state.hasChanged, [action.value]: "DELETE" },
+      };
       return deleteLesson(newState, action.value);
     case "create-block":
       if (newState.focusedLesson) {
-        newState = {...state, hasChanged: {...state.hasChanged, [newState.focusedLesson]: "UPDATE"}}
+        newState = {
+          ...state,
+          hasChanged: {
+            ...state.hasChanged,
+            [newState.focusedLesson]: "UPDATE",
+          },
+        };
       }
       return createLessonContentBlock(
         newState,
@@ -205,7 +223,13 @@ export default function EditorContextReducer(
       );
     case "reorder-blocks":
       if (newState.focusedLesson) {
-        newState = {...state, hasChanged: {...state.hasChanged, [newState.focusedLesson]: "UPDATE"}}
+        newState = {
+          ...state,
+          hasChanged: {
+            ...state.hasChanged,
+            [newState.focusedLesson]: "UPDATE",
+          },
+        };
       }
       return reorderLessonContentBlocks(
         newState,
@@ -214,7 +238,13 @@ export default function EditorContextReducer(
       );
     case "update-block":
       if (newState.focusedLesson) {
-        newState = {...state, hasChanged: {...state.hasChanged, [newState.focusedLesson]: "UPDATE"}}
+        newState = {
+          ...state,
+          hasChanged: {
+            ...state.hasChanged,
+            [newState.focusedLesson]: "UPDATE",
+          },
+        };
       }
       return updateLessonContentBlock(
         newState,
@@ -223,7 +253,13 @@ export default function EditorContextReducer(
       );
     case "delete-block":
       if (newState.focusedLesson) {
-        newState = {...state, hasChanged: {...state.hasChanged, [newState.focusedLesson]: "UPDATE"}}
+        newState = {
+          ...state,
+          hasChanged: {
+            ...state.hasChanged,
+            [newState.focusedLesson]: "UPDATE",
+          },
+        };
       }
       return deleteLessonContentBlock(newState, action.value);
     default:

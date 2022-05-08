@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
 import {
   Box,
@@ -15,52 +15,62 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { ChevronLeftIcon, EditIcon } from "@chakra-ui/icons";
-import { useMutation } from '@apollo/client';
+import { useMutation } from "@apollo/client";
 
 import ModuleOverview from "./SideBarModuleOverview";
 import ContentKiosk from "./SideBarContentKiosk";
 import { ReactComponent as SaveIcon } from "../../assets/Save.svg";
 import { MANAGE_COURSES_PAGE } from "../../constants/Routes";
 import EditorContext from "../../contexts/ModuleEditorContext";
-import { EditorContextType, ModuleEditorParams } from "../../types/ModuleEditorTypes";
-import { CREATE_LESSON, UPDATE_LESSON, DELETE_LESSON } from '../../APIClients/mutations/LessonMutations';
-import { UPDATE_COURSE } from '../../APIClients/mutations/CourseMutations';
+import {
+  EditorContextType,
+  ModuleEditorParams,
+} from "../../types/ModuleEditorTypes";
+import {
+  CREATE_LESSON,
+  UPDATE_LESSON,
+  DELETE_LESSON,
+} from "../../APIClients/mutations/LessonMutations";
+import { UPDATE_COURSE } from "../../APIClients/mutations/CourseMutations";
 
 const Sidebar = (): React.ReactElement => {
   const { moduleIndex }: ModuleEditorParams = useParams();
 
   const context: EditorContextType = useContext(EditorContext);
-  const [createLesson] = useMutation(CREATE_LESSON)
-  const [updateLesson] = useMutation(UPDATE_LESSON)
-  const [deleteLesson] = useMutation(DELETE_LESSON)
-  const [updateCourse] = useMutation(UPDATE_COURSE)
+  const [createLesson] = useMutation(CREATE_LESSON);
+  const [updateLesson] = useMutation(UPDATE_LESSON);
+  const [deleteLesson] = useMutation(DELETE_LESSON);
+  const [updateCourse] = useMutation(UPDATE_COURSE);
 
   if (!context) return <></>;
   const { state } = context;
 
-  function saveChanges(changeObj: {[lesson: string]: "CREATE" | "UPDATE" | "DELETE"}) {
+  function saveChanges(changeObj: {
+    [lesson: string]: "CREATE" | "UPDATE" | "DELETE";
+  }) {
     Object.entries(changeObj).forEach(([lesson_id, action]) => {
-      console.log([lesson_id, action])
       const changedLesson = state.lessons[lesson_id];
-      switch(action) {
+      switch (action) {
         case "CREATE":
-          createLesson({variables: {lesson: changedLesson}})
-          break
+          createLesson({ variables: { lesson: changedLesson } });
+          break;
         case "UPDATE":
-          updateLesson({variables: {id: lesson_id, lesson: changedLesson}})
-          break
+          updateLesson({ variables: { id: lesson_id, lesson: changedLesson } });
+          break;
         case "DELETE":
-          deleteLesson({variables: {id: lesson_id}})
-          break
+          deleteLesson({ variables: { id: lesson_id } });
+          break;
         // Make compiler happy
         default:
-          break
+          break;
       }
-      updateCourse({variables: {id: changedLesson.course, course: state.course}})
-    })
-    state.hasChanged = {}
+      updateCourse({
+        variables: { id: changedLesson.course, course: state.course },
+      });
+    });
+    state.hasChanged = {};
   }
-  
+
   return (
     <Box w="20%" minW="300px">
       <Flex
@@ -152,7 +162,7 @@ const Sidebar = (): React.ReactElement => {
         <Spacer />
         {state.hasChanged && (
           <Button
-            bg="#5FCA89" 
+            bg="#5FCA89"
             color="white"
             leftIcon={<SaveIcon />}
             borderRadius="0"

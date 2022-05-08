@@ -1,23 +1,23 @@
 import { gql } from "@apollo/client";
 
 const GET_LESSONS = gql`
-query GetLessons($ids: [ID!]!) {
+  query GetLessons($ids: [ID!]!) {
     lessonsByIds(ids: $ids) {
-        id
-        course
-        module
-        title
-        description
-        image
+      id
+      course
+      module
+      title
+      description
+      image
+      content {
+        type
         content {
-            type
-            content {
-                link
-                text
-            }
+          link
+          text
         }
+      }
     }
-}
-`
+  }
+`;
 
-export default GET_LESSONS
+export default GET_LESSONS;

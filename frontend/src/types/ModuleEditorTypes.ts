@@ -9,6 +9,10 @@ export interface LessonType {
   content: ContentType[];
 }
 
+export interface LessonDTO extends LessonType {
+  id: string;
+}
+
 export type LessonsType = Record<string, LessonType>;
 
 export interface ModuleType {
