@@ -62,7 +62,9 @@ export interface EditorStateType {
   course: CourseType;
   lessons: LessonsType;
   focusedLesson: string | null;
-  hasChanged: boolean;
+  hasChanged: {
+    [lessonId: string]: "CREATE" | "UPDATE" | "DELETE";
+  };
 }
 
 export type EditorContextType = {

@@ -15,7 +15,8 @@ const createLesson = (
   state: EditorStateType,
   lesson: LessonType,
 ): EditorStateType => {
-  const newState = { ...state };
+  // Create deep copy of state
+  const newState = JSON.parse(JSON.stringify(state));
   const moduleIndex = state.course.modules.findIndex(
     (module) => module.id === lesson.module,
   );
@@ -172,7 +173,8 @@ export default function EditorContextReducer(
 
   // Update changed boolean
   // ! Currently triggers on set-focus change which is incorrect
-  const newState = { ...state, hasChanged: true };
+  // let newState = { ...state, hasChanged: true };
+  let newState = { ...state};
 
   switch (action.type) {
     case "set-focus":
@@ -180,31 +182,49 @@ export default function EditorContextReducer(
         ...newState,
         focusedLesson: action.value,
       };
-    case "create-lesson":
+    case "create-lesson": 
+      newState = {...state, hasChanged: {...state.hasChanged, [action.value.title]: "CREATE"}}
+      console.log(newState)
       return createLesson(newState, action.value);
     case "update-lesson":
+      if (newState.focusedLesson) {
+        newState = {...state, hasChanged: {...state.hasChanged, [newState.focusedLesson]: "UPDATE"}}
+      }
       return updateLesson(newState, action.value);
     case "delete-lesson":
+      newState = {...state, hasChanged: {...state.hasChanged, [action.value]: "DELETE"}}
       return deleteLesson(newState, action.value);
     case "create-block":
+      if (newState.focusedLesson) {
+        newState = {...state, hasChanged: {...state.hasChanged, [newState.focusedLesson]: "UPDATE"}}
+      }
       return createLessonContentBlock(
         newState,
         action.value.blockID,
         action.value.index,
       );
     case "reorder-blocks":
+      if (newState.focusedLesson) {
+        newState = {...state, hasChanged: {...state.hasChanged, [newState.focusedLesson]: "UPDATE"}}
+      }
       return reorderLessonContentBlocks(
         newState,
         action.value.oldIndex,
         action.value.newIndex,
       );
     case "update-block":
+      if (newState.focusedLesson) {
+        newState = {...state, hasChanged: {...state.hasChanged, [newState.focusedLesson]: "UPDATE"}}
+      }
       return updateLessonContentBlock(
         newState,
         action.value.index,
         action.value.block,
       );
     case "delete-block":
+      if (newState.focusedLesson) {
+        newState = {...state, hasChanged: {...state.hasChanged, [newState.focusedLesson]: "UPDATE"}}
+      }
       return deleteLessonContentBlock(newState, action.value);
     default:
       return state;
