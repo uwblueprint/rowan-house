@@ -10,18 +10,14 @@ import {
 
 /* eslint-disable no-console */
 
-// TODO: Better deep copy method
-const deepCopy = (obj: any) => {
-  return JSON.parse(JSON.stringify(obj));
-}
-
 // Helper functions for editing a lesson's contents
 const createLesson = (
   state: EditorStateType,
   lesson: LessonType,
 ): EditorStateType => {
   // Create deep copy of state since state properties are readonly
-  const newState = deepCopy(state);
+  // TODO: This is dangerous, we should use immutable ways to edit this data
+  const newState = JSON.parse(JSON.stringify(state));
   const moduleIndex = state.course.modules.findIndex(
     (module) => module.id === lesson.module,
   );

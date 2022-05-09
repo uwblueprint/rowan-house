@@ -1,16 +1,20 @@
 import { v4 as uuid } from "uuid";
 
-import { ContentType, LessonRequest, LessonResponse } from "../APIClients/types/LessonClientTypes";
+import {
+  ContentType,
+  LessonRequest,
+  LessonResponse,
+} from "../APIClients/types/LessonClientTypes";
 import { ContentTypeEnum, LessonType } from "../types/ModuleEditorTypes";
 
 export const formatLessonRequest = (lesson: LessonType): LessonRequest => {
   // Remove IDs from content blocks, switch types to the titles
   const content = lesson.content.map((block) => ({
-      type: block.type.title.toLowerCase() as ContentType,
-      content: block.content,
+    type: block.type.title.toLowerCase() as ContentType,
+    content: block.content,
   }));
-  return {...lesson, content};
-}
+  return { ...lesson, content };
+};
 
 export const formatLessonResponse = (lesson: LessonResponse): LessonType => {
   // Add IDs back into content blocks, switch types to enum
@@ -40,5 +44,5 @@ export const formatLessonResponse = (lesson: LessonResponse): LessonType => {
     description: lesson?.description ?? undefined,
     image: lesson?.image ?? undefined,
     content: content ?? [],
-  }
-}
+  };
+};

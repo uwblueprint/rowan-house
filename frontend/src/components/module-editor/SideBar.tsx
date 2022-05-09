@@ -32,9 +32,12 @@ import {
   DELETE_LESSON,
 } from "../../APIClients/mutations/LessonMutations";
 import { UPDATE_COURSE } from "../../APIClients/mutations/CourseMutations";
-import { LessonRequest, LessonResponse } from "../../APIClients/types/LessonClientTypes";
+import {
+  LessonRequest,
+  LessonResponse,
+} from "../../APIClients/types/LessonClientTypes";
 import { CourseResponse } from "../../APIClients/types/CourseClientTypes";
-import { formatLessonRequest, formatLessonResponse } from "../../utils/lessonUtils";
+import { formatLessonRequest } from "../../utils/lessonUtils";
 
 const Sidebar = (): React.ReactElement => {
   const { moduleIndex }: ModuleEditorParams = useParams();
@@ -49,13 +52,11 @@ const Sidebar = (): React.ReactElement => {
   const { state } = context;
 
   const createLessonWithId = async (changedLesson: LessonRequest) => {
-    console.log(changedLesson);
-    const {data} = await createLesson({ variables: { lesson: changedLesson } });
-    console.log(data);
-    if (data)
-      console.log(formatLessonResponse(data));
+    await createLesson({
+      variables: { lesson: changedLesson },
+    });
     // TODO: Update lesson ID in state with response
-  }
+  };
 
   function saveChanges(changeObj: {
     [lesson: string]: "CREATE" | "UPDATE" | "DELETE";

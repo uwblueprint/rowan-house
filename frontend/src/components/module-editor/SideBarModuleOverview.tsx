@@ -35,39 +35,40 @@ const SideBarModuleOverview = (): React.ReactElement => {
 
   return (
     <VStack>
-      {focusedLesson && orderedLessons.map((lesson, index) =>
-        state.lessons[focusedLesson] === lesson ? (
-          lesson && (
+      {focusedLesson &&
+        orderedLessons.map((lesson, index) =>
+          state.lessons[focusedLesson] === lesson ? (
+            lesson && (
+              <Button
+                key={index}
+                onClick={() => setFocus(index)}
+                variant="unstyled"
+                borderLeftColor="brand.royal"
+                borderLeftWidth="5px"
+                borderRadius="0"
+                bg="background.light"
+                textAlign="left"
+                pl="30px"
+                minH="55px"
+                w="100%"
+              >
+                {lesson.title}
+              </Button>
+            )
+          ) : (
             <Button
               key={index}
               onClick={() => setFocus(index)}
               variant="unstyled"
-              borderLeftColor="brand.royal"
-              borderLeftWidth="5px"
-              borderRadius="0"
-              bg="background.light"
               textAlign="left"
-              pl="30px"
+              pl="35px"
               minH="55px"
               w="100%"
             >
               {lesson.title}
             </Button>
-          )
-        ) : (
-          <Button
-            key={index}
-            onClick={() => setFocus(index)}
-            variant="unstyled"
-            textAlign="left"
-            pl="35px"
-            minH="55px"
-            w="100%"
-          >
-            {lesson.title}
-          </Button>
-        ),
-      )}
+          ),
+        )}
       <Button
         onClick={() =>
           createLesson(`Dummy Lesson ${orderedLessons.length + 1}`)

@@ -16,7 +16,9 @@ const SelectContentBlock = (block: ContentBlock): React.ReactElement => {
     case ContentTypeEnum.IMAGE:
       return <ImageBlock content={content} />;
     default:
-      throw Error(`Unknown content type given to EditableContentBlock: "${type.title}"`);
+      throw Error(
+        `Unknown content type given to EditableContentBlock: "${type.title}"`,
+      );
   }
 };
 

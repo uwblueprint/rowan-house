@@ -11,7 +11,6 @@ import {
   EditorContextAction,
   LessonsType,
   ModuleEditorParams,
-  LessonType,
 } from "../../types/ModuleEditorTypes";
 import EditorContextReducer from "../../reducers/ModuleEditorContextReducer";
 import EditorContext from "../../contexts/ModuleEditorContext";
@@ -66,79 +65,7 @@ const ModuleEditor = (): React.ReactElement => {
   });
   const [getLessons, { data: lessonData }] = useLazyQuery(GET_LESSONS);
 
-  // Runs once at the beginning
   useEffect(() => {
-    // Leaving dummy courses here as they're useful for development
-    // const dummyCourse: CourseType = {
-    //   title: `Course ${courseID}`,
-    //   description: "Hello",
-    //   private: false,
-    //   modules: [
-    //     {
-    //       id: "module-hash-1",
-    //       title: "Hello!",
-    //       description: `I am a module ${moduleIndex}`,
-    //       image: "",
-    //       previewImage:
-    //         "https://res.cloudinary.com/practicaldev/image/fetch/s--JIe3p0M4--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://dev-to-uploads.s3.amazonaws.com/i/093ewdrgyf1kedlhzs51.png",
-    //       published: true,
-    //       lessons: ["lesson-hash-1", "lesson-hash-2"],
-    //     },
-    //   ],
-    // };
-
-    // const dummyLessons: LessonsType = {
-    //   "lesson-hash-1": {
-    //     course: "course-hash-1",
-    //     module: "module-hash-1",
-    //     title: "Dummy Lesson 1",
-    //     description: "Blah",
-    //     image: "",
-    //     content: [
-    //       {
-    //         type: ContentTypeEnum.TEXT,
-    //         id: uuid(),
-    //         content: {
-    //           text: "Hello!",
-    //         },
-    //       },
-    //       {
-    //         type: ContentTypeEnum.IMAGE,
-    //         id: uuid(),
-    //         content: {
-    //           link:
-    //             "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
-    //         },
-    //       },
-    //       {
-    //         type: ContentTypeEnum.TEXT,
-    //         id: uuid(),
-    //         content: {
-    //           text: "Yup!",
-    //         },
-    //       },
-    //     ],
-    //   },
-    //   "lesson-hash-2": {
-    //     course: "course-hash-1",
-    //     module: "module-hash-1",
-    //     title: "Dummy Lesson 2",
-    //     description: "Blah",
-    //     image: "",
-    //     content: [
-    //       {
-    //         type: ContentTypeEnum.TEXT,
-    //         id: uuid(),
-    //         content: {
-    //           text: "Welcome to lesson 2!",
-    //         },
-    //       },
-    //     ],
-    //   },
-    // };
-
-    // const dummyfocusedLesson = Object.keys(dummyLessons)[0];
-
     if (courseData) {
       // Save to context
       getLessons({
@@ -164,7 +91,7 @@ const ModuleEditor = (): React.ReactElement => {
         },
       });
     }
-  }, [courseData, lessonData]);
+  }, [courseData, moduleIndex, lessonData]);
 
   if (state) {
     if (state.course.modules[parseInt(moduleIndex, 10)] === undefined) {
