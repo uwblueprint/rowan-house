@@ -24,6 +24,7 @@ import { MANAGE_COURSES_PAGE } from "../../constants/Routes";
 import EditorContext from "../../contexts/ModuleEditorContext";
 import {
   EditorContextType,
+  LessonType,
   ModuleEditorParams,
 } from "../../types/ModuleEditorTypes";
 import {
@@ -45,6 +46,11 @@ const Sidebar = (): React.ReactElement => {
   if (!context) return <></>;
   const { state } = context;
 
+  const createLessonWithId = async (changedLesson: LessonType) => {
+    await createLesson({ variables: { lesson: changedLesson } });
+    // TODO: Update lesson ID in state with response
+  }
+
   function saveChanges(changeObj: {
     [lesson: string]: "CREATE" | "UPDATE" | "DELETE";
   }) {
@@ -52,7 +58,7 @@ const Sidebar = (): React.ReactElement => {
       const changedLesson = state.lessons[lesson_id];
       switch (action) {
         case "CREATE":
-          createLesson({ variables: { lesson: changedLesson } });
+          createLessonWithId(changedLesson);
           break;
         case "UPDATE":
           updateLesson({ variables: { id: lesson_id, lesson: changedLesson } });

@@ -16,7 +16,6 @@ const SideBarModuleOverview = (): React.ReactElement => {
 
   const { lessons, course, focusedLesson } = state;
   const module = course.modules[moduleID];
-  if (!focusedLesson) return <></>;
 
   const orderedLessons = module.lessons.map((id) => lessons[id]);
 
@@ -36,7 +35,7 @@ const SideBarModuleOverview = (): React.ReactElement => {
 
   return (
     <VStack>
-      {orderedLessons.map((lesson, index) =>
+      {focusedLesson ? orderedLessons.map((lesson, index) =>
         state.lessons[focusedLesson] === lesson ? (
           lesson && (
             <Button
@@ -68,7 +67,7 @@ const SideBarModuleOverview = (): React.ReactElement => {
             {lesson.title}
           </Button>
         ),
-      )}
+      ) : <></>}
       <Button
         onClick={() =>
           createLesson(`Dummy Lesson ${orderedLessons.length + 1}`)
