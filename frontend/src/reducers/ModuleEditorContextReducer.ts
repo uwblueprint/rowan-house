@@ -15,7 +15,7 @@ const createLesson = (
   state: EditorStateType,
   lesson: LessonType,
 ): EditorStateType => {
-  // Create deep copy of state
+  // Create deep copy of state since state properties are readonly
   const newState = JSON.parse(JSON.stringify(state));
   const moduleIndex = state.course.modules.findIndex(
     (module) => module.id === lesson.module,
@@ -173,7 +173,6 @@ export default function EditorContextReducer(
 
   // Update changed boolean
   // ! Currently triggers on set-focus change which is incorrect
-  // let newState = { ...state, hasChanged: true };
   let newState = { ...state };
 
   switch (action.type) {
@@ -187,7 +186,6 @@ export default function EditorContextReducer(
         ...state,
         hasChanged: { ...state.hasChanged, [action.value.title]: "CREATE" },
       };
-      console.log(newState);
       return createLesson(newState, action.value);
     case "update-lesson":
       if (newState.focusedLesson) {

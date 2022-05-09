@@ -64,6 +64,7 @@ const Sidebar = (): React.ReactElement => {
         default:
           break;
       }
+      // TODO: Get lesson id of newly created lesson in server response, update state and call updateCourse
       updateCourse({
         variables: { id: changedLesson.course, course: state.course },
       });

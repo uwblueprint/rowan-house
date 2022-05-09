@@ -150,7 +150,7 @@ const ModuleEditor = (): React.ReactElement => {
     if (courseData && lessonData) {
       const lessonsObj: LessonsType = {};
 
-      lessonData.lessonsByIds.forEach((lesson: LessonDTO) => {
+      lessonData.lessons.forEach((lesson: LessonDTO) => {
         const lessonObj: LessonType = {
           course: lesson.course,
           module: lesson.module,
@@ -167,7 +167,7 @@ const ModuleEditor = (): React.ReactElement => {
         value: {
           course: courseData.course,
           lessons: lessonsObj,
-          focusedLesson: lessonData.lessonsByIds[0],
+          focusedLesson: lessonData.lessons[0],
           hasChanged: {},
         },
       });

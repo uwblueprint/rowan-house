@@ -2,7 +2,7 @@ import { gql } from "@apollo/client";
 
 const GET_LESSONS = gql`
   query GetLessons($ids: [ID!]!) {
-    lessonsByIds(ids: $ids) {
+    lessons(ids: $ids) {
       id
       course
       module

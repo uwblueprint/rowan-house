@@ -50,7 +50,7 @@ const lessonType = gql`
 
   extend type Query {
     lessonById(id: ID!): LessonResponseDTO!
-    lessonsByIds(ids: [ID!]!): [LessonResponseDTO!]!
+    lessons(ids: [ID!]!): [LessonResponseDTO!]!
   }
 
   extend type Mutation {
