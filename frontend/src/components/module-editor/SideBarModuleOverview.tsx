@@ -35,7 +35,7 @@ const SideBarModuleOverview = (): React.ReactElement => {
 
   return (
     <VStack>
-      {focusedLesson ? orderedLessons.map((lesson, index) =>
+      {focusedLesson && orderedLessons.map((lesson, index) =>
         state.lessons[focusedLesson] === lesson ? (
           lesson && (
             <Button
@@ -67,7 +67,7 @@ const SideBarModuleOverview = (): React.ReactElement => {
             {lesson.title}
           </Button>
         ),
-      ) : <></>}
+      )}
       <Button
         onClick={() =>
           createLesson(`Dummy Lesson ${orderedLessons.length + 1}`)

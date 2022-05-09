@@ -2,12 +2,12 @@ import { Box, Divider, Flex, VStack } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 
-import { ContentType, ContentTypeEnum } from "../../types/ModuleEditorTypes";
+import { ContentBlock, ContentTypeEnum } from "../../types/ModuleEditorTypes";
 import { TextBlock, ImageBlock } from "../common/content";
 
 /* eslint-disable react/jsx-props-no-spreading */
 
-const SelectContentBlock = (block: ContentType): React.ReactElement => {
+const SelectContentBlock = (block: ContentBlock): React.ReactElement => {
   const { type, content } = block;
 
   switch (type) {
@@ -16,7 +16,7 @@ const SelectContentBlock = (block: ContentType): React.ReactElement => {
     case ContentTypeEnum.IMAGE:
       return <ImageBlock content={content} />;
     default:
-      throw Error("Unknown content type given to EditableContentBlock");
+      throw Error(`Unknown content type given to EditableContentBlock: "${type.title}"`);
   }
 };
 
@@ -24,7 +24,7 @@ const EditableContentBlock = ({
   block,
   index,
 }: {
-  block: ContentType;
+  block: ContentBlock;
   index: number;
 }): React.ReactElement => {
   const [isHovered, setIsHovered] = useState(false);

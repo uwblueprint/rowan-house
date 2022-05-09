@@ -42,6 +42,7 @@ const lessonType = gql`
 
   input UpdateLessonRequestDTO {
     course: ID
+    module: ID
     title: String
     description: String
     image: String

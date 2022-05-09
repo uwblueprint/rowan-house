@@ -24,7 +24,6 @@ import { MANAGE_COURSES_PAGE } from "../../constants/Routes";
 import EditorContext from "../../contexts/ModuleEditorContext";
 import {
   EditorContextType,
-  LessonType,
   ModuleEditorParams,
 } from "../../types/ModuleEditorTypes";
 import {
@@ -33,21 +32,28 @@ import {
   DELETE_LESSON,
 } from "../../APIClients/mutations/LessonMutations";
 import { UPDATE_COURSE } from "../../APIClients/mutations/CourseMutations";
+import { LessonRequest, LessonResponse } from "../../APIClients/types/LessonClientTypes";
+import { CourseResponse } from "../../APIClients/types/CourseClientTypes";
+import { formatLessonRequest, formatLessonResponse } from "../../utils/lessonUtils";
 
 const Sidebar = (): React.ReactElement => {
   const { moduleIndex }: ModuleEditorParams = useParams();
 
   const context: EditorContextType = useContext(EditorContext);
-  const [createLesson] = useMutation(CREATE_LESSON);
-  const [updateLesson] = useMutation(UPDATE_LESSON);
+  const [updateCourse] = useMutation<CourseResponse>(UPDATE_COURSE);
+  const [createLesson] = useMutation<LessonResponse>(CREATE_LESSON);
+  const [updateLesson] = useMutation<LessonResponse>(UPDATE_LESSON);
   const [deleteLesson] = useMutation(DELETE_LESSON);
-  const [updateCourse] = useMutation(UPDATE_COURSE);
 
   if (!context) return <></>;
   const { state } = context;
 
-  const createLessonWithId = async (changedLesson: LessonType) => {
-    await createLesson({ variables: { lesson: changedLesson } });
+  const createLessonWithId = async (changedLesson: LessonRequest) => {
+    console.log(changedLesson);
+    const {data} = await createLesson({ variables: { lesson: changedLesson } });
+    console.log(data);
+    if (data)
+      console.log(formatLessonResponse(data));
     // TODO: Update lesson ID in state with response
   }
 
@@ -55,7 +61,7 @@ const Sidebar = (): React.ReactElement => {
     [lesson: string]: "CREATE" | "UPDATE" | "DELETE";
   }) {
     Object.entries(changeObj).forEach(([lesson_id, action]) => {
-      const changedLesson = state.lessons[lesson_id];
+      const changedLesson = formatLessonRequest(state.lessons[lesson_id]);
       switch (action) {
         case "CREATE":
           createLessonWithId(changedLesson);
@@ -167,7 +173,7 @@ const Sidebar = (): React.ReactElement => {
           </TabPanels>
         </Tabs>
         <Spacer />
-        {state.hasChanged && (
+        {Object.values(state.hasChanged).length && (
           <Button
             bg="#5FCA89"
             color="white"

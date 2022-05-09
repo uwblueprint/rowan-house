@@ -4,11 +4,16 @@ import {
   EditorContextAction,
   EditorStateType,
   LessonType,
-  ContentType,
+  ContentBlock,
   ContentTypeEnum,
 } from "../types/ModuleEditorTypes";
 
 /* eslint-disable no-console */
+
+// TODO: Better deep copy method
+const deepCopy = (obj: any) => {
+  return JSON.parse(JSON.stringify(obj));
+}
 
 // Helper functions for editing a lesson's contents
 const createLesson = (
@@ -16,14 +21,14 @@ const createLesson = (
   lesson: LessonType,
 ): EditorStateType => {
   // Create deep copy of state since state properties are readonly
-  const newState = JSON.parse(JSON.stringify(state));
+  const newState = deepCopy(state);
   const moduleIndex = state.course.modules.findIndex(
     (module) => module.id === lesson.module,
   );
   // Check to make sure moduleID exists
   console.assert(moduleIndex !== -1, `Invalid moduleID ${lesson.module}`);
-  // TODO: Generate a new ID for the lesson and ensure no duplicates
-  const lessonID = lesson.title;
+  // Temporary lesson that is used until save
+  const lessonID = uuid();
   // Create the new lesson object
   newState.lessons[lessonID] = lesson;
   // Add the lesson ID to the modules
@@ -70,7 +75,7 @@ const createLessonContentBlock = (
     "Content block index exceeds content length",
   );
 
-  let block: ContentType | null;
+  let block: ContentBlock | null;
   switch (blockID) {
     case ContentTypeEnum.TEXT.id:
       block = {
@@ -94,8 +99,16 @@ const createLessonContentBlock = (
     default:
       throw Error("Invalid block id");
   }
+  // Create new lesson
+  const newContent = [...state.lessons[id].content];
+  newContent.splice(index, 0, block);
+  const newLesson = { ...state.lessons[id], content: newContent };
+  // Add new lesson to the state
   const newState = { ...state };
-  newState.lessons[id].content.splice(index, 0, block);
+  newState.lessons = {
+    ...state.lessons,
+    [id]: newLesson,
+  };
   return newState;
 };
 
@@ -127,7 +140,7 @@ const reorderLessonContentBlocks = (
 const updateLessonContentBlock = (
   state: EditorStateType,
   index: number,
-  block: ContentType,
+  block: ContentBlock,
 ): EditorStateType => {
   const id = state.focusedLesson;
   if (!id || Object.keys(state.lessons).includes(id)) return state;

@@ -10,7 +10,6 @@ import GET_LESSONS from "../../APIClients/queries/LessonQueries";
 import {
   EditorContextAction,
   LessonsType,
-  LessonDTO,
   ModuleEditorParams,
   LessonType,
 } from "../../types/ModuleEditorTypes";
@@ -18,6 +17,8 @@ import EditorContextReducer from "../../reducers/ModuleEditorContextReducer";
 import EditorContext from "../../contexts/ModuleEditorContext";
 import SideBar from "../module-editor/SideBar";
 import LessonViewer from "../module-editor/LessonViewer";
+import { LessonResponse } from "../../APIClients/types/LessonClientTypes";
+import { formatLessonResponse } from "../../utils/lessonUtils";
 
 // Copy drag implementation based on https://github.com/atlassian/react-beautiful-dnd/issues/216#issuecomment-423708497
 const onDragEnd = (
@@ -150,24 +151,15 @@ const ModuleEditor = (): React.ReactElement => {
     if (courseData && lessonData) {
       const lessonsObj: LessonsType = {};
 
-      lessonData.lessons.forEach((lesson: LessonDTO) => {
-        const lessonObj: LessonType = {
-          course: lesson.course,
-          module: lesson.module,
-          title: lesson.title,
-          description: lesson?.description,
-          image: lesson?.image,
-          content: lesson.content,
-        };
-
-        lessonsObj[lesson.id] = lessonObj;
+      lessonData.lessons.forEach((lesson: LessonResponse) => {
+        lessonsObj[lesson.id] = formatLessonResponse(lesson);
       });
       dispatch({
         type: "init",
         value: {
           course: courseData.course,
           lessons: lessonsObj,
-          focusedLesson: lessonData.lessons[0],
+          focusedLesson: courseData.course.modules[moduleIndex].lessons[0],
           hasChanged: {},
         },
       });

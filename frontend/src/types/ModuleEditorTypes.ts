@@ -6,11 +6,7 @@ export interface LessonType {
   title: string;
   description?: string;
   image?: string;
-  content: ContentType[];
-}
-
-export interface LessonDTO extends LessonType {
-  id: string;
+  content: ContentBlock[];
 }
 
 export type LessonsType = Record<string, LessonType>;
@@ -50,7 +46,7 @@ export type ContentProps = {
   link?: string;
 };
 
-export interface ContentType {
+export interface ContentBlock {
   type: ContentTypeEnum;
   content: ContentProps;
   id: string;
@@ -107,7 +103,7 @@ export type EditorContextAction =
     }
   | {
       type: "update-block";
-      value: { index: number; block: ContentType };
+      value: { index: number; block: ContentBlock };
     }
   | {
       type: "delete-block";
