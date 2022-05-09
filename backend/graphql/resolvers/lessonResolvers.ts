@@ -16,7 +16,7 @@ const lessonResolvers = {
     ): Promise<LessonResponseDTO> => {
       return lessonService.getLessonById(id);
     },
-    lessonsByIds: async (
+    lessons: async (
       _parent: undefined,
       { ids }: { ids: string[] },
     ): Promise<LessonResponseDTO[]> => {
