@@ -23,6 +23,7 @@ import { ReactComponent as SaveIcon } from "../../assets/Save.svg";
 import { MANAGE_COURSES_PAGE } from "../../constants/Routes";
 import EditorContext from "../../contexts/ModuleEditorContext";
 import {
+  EditorChangeStatuses,
   EditorContextType,
   ModuleEditorParams,
 } from "../../types/ModuleEditorTypes";
@@ -43,47 +44,60 @@ const Sidebar = (): React.ReactElement => {
   const { moduleIndex }: ModuleEditorParams = useParams();
 
   const context: EditorContextType = useContext(EditorContext);
-  const [updateCourse] = useMutation<CourseResponse>(UPDATE_COURSE);
-  const [createLesson] = useMutation<LessonResponse>(CREATE_LESSON);
-  const [updateLesson] = useMutation<LessonResponse>(UPDATE_LESSON);
+  const [updateCourse] = useMutation<{ updateCourse: CourseResponse }>(
+    UPDATE_COURSE,
+  );
+  const [updateLesson] = useMutation<{ updateLesson: LessonResponse }>(
+    UPDATE_LESSON,
+  );
+  const [createLesson] = useMutation<{ createLesson: LessonResponse }>(
+    CREATE_LESSON,
+  );
   const [deleteLesson] = useMutation(DELETE_LESSON);
 
   if (!context) return <></>;
-  const { state } = context;
+  const { state, dispatch } = context;
 
-  const createLessonWithId = async (changedLesson: LessonRequest) => {
-    await createLesson({
+  const createNewLesson = async (
+    oldID: string,
+    changedLesson: LessonRequest,
+  ) => {
+    const { data } = await createLesson({
       variables: { lesson: changedLesson },
     });
-    // TODO: Update lesson ID in state with response
+    if (!data) throw Error("Failed to create new lesson");
+    const lesson = data.createLesson;
+    // Make lesson response compatible with what the frontend needs
+    // const newLesson = formatLessonResponse(lesson);
+    const { id: newID } = lesson;
+    // Update lesson ID in state with response
+    dispatch({ type: "update-lesson-id", value: { oldID, newID } });
   };
 
-  function saveChanges(changeObj: {
-    [lesson: string]: "CREATE" | "UPDATE" | "DELETE";
-  }) {
-    Object.entries(changeObj).forEach(([lesson_id, action]) => {
-      const changedLesson = formatLessonRequest(state.lessons[lesson_id]);
+  const saveChanges = async (changeObj: EditorChangeStatuses) => {
+    Object.entries(changeObj).forEach(async ([doc_id, action]) => {
+      const changedLesson = formatLessonRequest(state.lessons[doc_id]);
       switch (action) {
         case "CREATE":
-          createLessonWithId(changedLesson);
+          // Await required so we can get a new ID
+          await createNewLesson(doc_id, changedLesson);
           break;
         case "UPDATE":
-          updateLesson({ variables: { id: lesson_id, lesson: changedLesson } });
+          updateLesson({ variables: { id: doc_id, lesson: changedLesson } });
           break;
         case "DELETE":
-          deleteLesson({ variables: { id: lesson_id } });
+          deleteLesson({ variables: { id: doc_id } });
           break;
         // Make compiler happy
         default:
           break;
       }
-      // TODO: Get lesson id of newly created lesson in server response, update state and call updateCourse
       updateCourse({
         variables: { id: changedLesson.course, course: state.course },
       });
     });
     state.hasChanged = {};
-  }
+  };
 
   return (
     <Box w="20%" minW="300px">
@@ -174,7 +188,7 @@ const Sidebar = (): React.ReactElement => {
           </TabPanels>
         </Tabs>
         <Spacer />
-        {Object.values(state.hasChanged).length && (
+        {Object.values(state.hasChanged).length ? (
           <Button
             bg="#5FCA89"
             color="white"
@@ -188,6 +202,8 @@ const Sidebar = (): React.ReactElement => {
           >
             Save Changes
           </Button>
+        ) : (
+          <></>
         )}
       </Flex>
     </Box>

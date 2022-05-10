@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Flex, IconButton } from "@chakra-ui/react";
+import { Center, Flex, IconButton, Spinner } from "@chakra-ui/react";
 import { ChevronRightIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import { DropResult, DragDropContext } from "react-beautiful-dnd";
 import { useQuery, useLazyQuery } from "@apollo/client";
@@ -129,7 +129,11 @@ const ModuleEditor = (): React.ReactElement => {
   }
 
   // TODO: Better course fallback
-  return <div>Course not found!</div>;
+  return (
+    <Center>
+      <Spinner />
+    </Center>
+  );
 };
 
 export default ModuleEditor;

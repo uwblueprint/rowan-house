@@ -25,7 +25,7 @@ export const formatLessonResponse = (lesson: LessonResponse): LessonType => {
         type = ContentTypeEnum.TEXT;
         break;
       case "image":
-        type = ContentTypeEnum.TEXT;
+        type = ContentTypeEnum.IMAGE;
         break;
       default:
         throw new Error(`Invalid block type received "${block.type}"`);
