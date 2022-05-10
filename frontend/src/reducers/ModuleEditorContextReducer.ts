@@ -4,7 +4,7 @@ import {
   EditorContextAction,
   EditorStateType,
   LessonType,
-  ContentType,
+  ContentBlock,
   ContentTypeEnum,
 } from "../types/ModuleEditorTypes";
 
@@ -15,14 +15,16 @@ const createLesson = (
   state: EditorStateType,
   lesson: LessonType,
 ): EditorStateType => {
-  const newState = { ...state };
+  // Create deep copy of state since state properties are readonly
+  // TODO: This is dangerous, we should use immutable ways to edit this data
+  const newState = JSON.parse(JSON.stringify(state));
   const moduleIndex = state.course.modules.findIndex(
     (module) => module.id === lesson.module,
   );
   // Check to make sure moduleID exists
   console.assert(moduleIndex !== -1, `Invalid moduleID ${lesson.module}`);
-  // TODO: Generate a new ID for the lesson and ensure no duplicates
-  const lessonID = lesson.title;
+  // Temporary lesson that is used until save
+  const lessonID = uuid();
   // Create the new lesson object
   newState.lessons[lessonID] = lesson;
   // Add the lesson ID to the modules
@@ -69,7 +71,7 @@ const createLessonContentBlock = (
     "Content block index exceeds content length",
   );
 
-  let block: ContentType | null;
+  let block: ContentBlock | null;
   switch (blockID) {
     case ContentTypeEnum.TEXT.id:
       block = {
@@ -93,8 +95,16 @@ const createLessonContentBlock = (
     default:
       throw Error("Invalid block id");
   }
+  // Create new lesson
+  const newContent = [...state.lessons[id].content];
+  newContent.splice(index, 0, block);
+  const newLesson = { ...state.lessons[id], content: newContent };
+  // Add new lesson to the state
   const newState = { ...state };
-  newState.lessons[id].content.splice(index, 0, block);
+  newState.lessons = {
+    ...state.lessons,
+    [id]: newLesson,
+  };
   return newState;
 };
 
@@ -126,7 +136,7 @@ const reorderLessonContentBlocks = (
 const updateLessonContentBlock = (
   state: EditorStateType,
   index: number,
-  block: ContentType,
+  block: ContentBlock,
 ): EditorStateType => {
   const id = state.focusedLesson;
   if (!id || Object.keys(state.lessons).includes(id)) return state;
@@ -172,7 +182,7 @@ export default function EditorContextReducer(
 
   // Update changed boolean
   // ! Currently triggers on set-focus change which is incorrect
-  const newState = { ...state, hasChanged: true };
+  let newState = { ...state };
 
   switch (action.type) {
     case "set-focus":
@@ -181,30 +191,83 @@ export default function EditorContextReducer(
         focusedLesson: action.value,
       };
     case "create-lesson":
+      newState = {
+        ...state,
+        hasChanged: { ...state.hasChanged, [action.value.title]: "CREATE" },
+      };
       return createLesson(newState, action.value);
     case "update-lesson":
+      if (newState.focusedLesson) {
+        newState = {
+          ...state,
+          hasChanged: {
+            ...state.hasChanged,
+            [newState.focusedLesson]: "UPDATE",
+          },
+        };
+      }
       return updateLesson(newState, action.value);
     case "delete-lesson":
+      newState = {
+        ...state,
+        hasChanged: { ...state.hasChanged, [action.value]: "DELETE" },
+      };
       return deleteLesson(newState, action.value);
     case "create-block":
+      if (newState.focusedLesson) {
+        newState = {
+          ...state,
+          hasChanged: {
+            ...state.hasChanged,
+            [newState.focusedLesson]: "UPDATE",
+          },
+        };
+      }
       return createLessonContentBlock(
         newState,
         action.value.blockID,
         action.value.index,
       );
     case "reorder-blocks":
+      if (newState.focusedLesson) {
+        newState = {
+          ...state,
+          hasChanged: {
+            ...state.hasChanged,
+            [newState.focusedLesson]: "UPDATE",
+          },
+        };
+      }
       return reorderLessonContentBlocks(
         newState,
         action.value.oldIndex,
         action.value.newIndex,
       );
     case "update-block":
+      if (newState.focusedLesson) {
+        newState = {
+          ...state,
+          hasChanged: {
+            ...state.hasChanged,
+            [newState.focusedLesson]: "UPDATE",
+          },
+        };
+      }
       return updateLessonContentBlock(
         newState,
         action.value.index,
         action.value.block,
       );
     case "delete-block":
+      if (newState.focusedLesson) {
+        newState = {
+          ...state,
+          hasChanged: {
+            ...state.hasChanged,
+            [newState.focusedLesson]: "UPDATE",
+          },
+        };
+      }
       return deleteLessonContentBlock(newState, action.value);
     default:
       return state;

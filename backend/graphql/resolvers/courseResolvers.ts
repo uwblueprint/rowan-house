@@ -68,7 +68,7 @@ const courseResolvers = {
     },
     courses: async (
       _parent: undefined,
-      _args: { [key: string]: any },
+      _args: { [key: string]: unknown },
       context: ExpressContext,
     ): Promise<CourseResponseDTO[]> => {
       const accessToken = getAccessToken(context.req);

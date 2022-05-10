@@ -15,21 +15,76 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { ChevronLeftIcon, EditIcon } from "@chakra-ui/icons";
+import { useMutation } from "@apollo/client";
 
 import ModuleOverview from "./SideBarModuleOverview";
 import ContentKiosk from "./SideBarContentKiosk";
 import { ReactComponent as SaveIcon } from "../../assets/Save.svg";
 import { MANAGE_COURSES_PAGE } from "../../constants/Routes";
 import EditorContext from "../../contexts/ModuleEditorContext";
-import { ModuleEditorParams } from "../../types/ModuleEditorTypes";
+import {
+  EditorContextType,
+  ModuleEditorParams,
+} from "../../types/ModuleEditorTypes";
+import {
+  CREATE_LESSON,
+  UPDATE_LESSON,
+  DELETE_LESSON,
+} from "../../APIClients/mutations/LessonMutations";
+import { UPDATE_COURSE } from "../../APIClients/mutations/CourseMutations";
+import {
+  LessonRequest,
+  LessonResponse,
+} from "../../APIClients/types/LessonClientTypes";
+import { CourseResponse } from "../../APIClients/types/CourseClientTypes";
+import { formatLessonRequest } from "../../utils/lessonUtils";
 
 const Sidebar = (): React.ReactElement => {
   const { moduleIndex }: ModuleEditorParams = useParams();
 
-  const context = useContext(EditorContext);
+  const context: EditorContextType = useContext(EditorContext);
+  const [updateCourse] = useMutation<CourseResponse>(UPDATE_COURSE);
+  const [createLesson] = useMutation<LessonResponse>(CREATE_LESSON);
+  const [updateLesson] = useMutation<LessonResponse>(UPDATE_LESSON);
+  const [deleteLesson] = useMutation(DELETE_LESSON);
 
   if (!context) return <></>;
   const { state } = context;
+
+  const createLessonWithId = async (changedLesson: LessonRequest) => {
+    await createLesson({
+      variables: { lesson: changedLesson },
+    });
+    // TODO: Update lesson ID in state with response
+  };
+
+  function saveChanges(changeObj: {
+    [lesson: string]: "CREATE" | "UPDATE" | "DELETE";
+  }) {
+    Object.entries(changeObj).forEach(([lesson_id, action]) => {
+      const changedLesson = formatLessonRequest(state.lessons[lesson_id]);
+      switch (action) {
+        case "CREATE":
+          createLessonWithId(changedLesson);
+          break;
+        case "UPDATE":
+          updateLesson({ variables: { id: lesson_id, lesson: changedLesson } });
+          break;
+        case "DELETE":
+          deleteLesson({ variables: { id: lesson_id } });
+          break;
+        // Make compiler happy
+        default:
+          break;
+      }
+      // TODO: Get lesson id of newly created lesson in server response, update state and call updateCourse
+      updateCourse({
+        variables: { id: changedLesson.course, course: state.course },
+      });
+    });
+    state.hasChanged = {};
+  }
+
   return (
     <Box w="20%" minW="300px">
       <Flex
@@ -119,7 +174,7 @@ const Sidebar = (): React.ReactElement => {
           </TabPanels>
         </Tabs>
         <Spacer />
-        {state.hasChanged && (
+        {Object.values(state.hasChanged).length && (
           <Button
             bg="#5FCA89"
             color="white"
@@ -129,6 +184,7 @@ const Sidebar = (): React.ReactElement => {
             width="100%"
             h="55px"
             justifyContent="left"
+            onClick={() => saveChanges(state.hasChanged)}
           >
             Save Changes
           </Button>

@@ -1,4 +1,7 @@
+import { v4 as uuid } from "uuid";
+
 import { CourseResponse } from "../APIClients/types/CourseClientTypes";
+import { ContentTypeEnum, LessonsType } from "../types/ModuleEditorTypes";
 
 export const DEFAULT_IMAGE =
   "https://res.cloudinary.com/practicaldev/image/fetch/s--JIe3p0M4--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://dev-to-uploads.s3.amazonaws.com/i/093ewdrgyf1kedlhzs51.png";
@@ -7,7 +10,7 @@ export const DEFAULT_IMAGE =
 
 export const dummyCourses: Array<CourseResponse> = [
   {
-    id: "abcdefg",
+    id: "empty-course",
     title: "Preventing Domestic Abuse",
     description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis enim, nisi,
       et vitae eget sed id accumsan. Nunc nunc nisi, convallis sed habitasse arcu, urna
@@ -17,39 +20,10 @@ export const dummyCourses: Array<CourseResponse> = [
     image: null,
     previewImage: null,
     private: false,
-    modules: [
-      {
-        id: "a1",
-        title:
-          "Recognizing Signs of Abuse Recognizing Signs of Abuse Recognizing Signs of Abuse",
-        published: true,
-        image: DEFAULT_IMAGE,
-        description: null,
-        previewImage: null,
-        lessons: null,
-      },
-      {
-        id: "a2",
-        title: "Recognizing Signs of Abuse",
-        published: false,
-        image: DEFAULT_IMAGE,
-        description: null,
-        previewImage: null,
-        lessons: null,
-      },
-      {
-        id: "a3",
-        title: "Recognizing Signs of Abuse",
-        published: true,
-        image: DEFAULT_IMAGE,
-        description: null,
-        previewImage: null,
-        lessons: null,
-      },
-    ],
+    modules: [],
   },
   {
-    id: "jklmnop",
+    id: "course-hash-1",
     title: "Preventing Domestic Abuse",
     description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis enim, nisi,
       et vitae eget sed id accumsan. Nunc nunc nisi, convallis sed habitasse arcu, urna
@@ -61,16 +35,16 @@ export const dummyCourses: Array<CourseResponse> = [
     private: false,
     modules: [
       {
-        id: "b1",
+        id: "module-hash-1",
         title: "Recognizing Signs",
         published: false,
         image: DEFAULT_IMAGE,
         description: null,
         previewImage: null,
-        lessons: null,
+        lessons: ["lesson-hash-1", "lesson-hash-2"],
       },
       {
-        id: "b2",
+        id: "module-hash-2",
         title: "Recognizing",
         published: false,
         image: DEFAULT_IMAGE,
@@ -79,7 +53,7 @@ export const dummyCourses: Array<CourseResponse> = [
         lessons: null,
       },
       {
-        id: "b3",
+        id: "module-hash-3",
         title: "Recognizing Signs of",
         published: true,
         image: DEFAULT_IMAGE,
@@ -90,3 +64,53 @@ export const dummyCourses: Array<CourseResponse> = [
     ],
   },
 ];
+
+export const dummyLessons: LessonsType = {
+  "lesson-hash-1": {
+    course: "course-hash-1",
+    module: "module-hash-1",
+    title: "Dummy Lesson 1",
+    description: "Blah",
+    image: "",
+    content: [
+      {
+        type: ContentTypeEnum.TEXT,
+        id: uuid(),
+        content: {
+          text: "Hello!",
+        },
+      },
+      {
+        type: ContentTypeEnum.IMAGE,
+        id: uuid(),
+        content: {
+          link:
+            "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
+        },
+      },
+      {
+        type: ContentTypeEnum.TEXT,
+        id: uuid(),
+        content: {
+          text: "Yup!",
+        },
+      },
+    ],
+  },
+  "lesson-hash-2": {
+    course: "course-hash-1",
+    module: "module-hash-1",
+    title: "Dummy Lesson 2",
+    description: "Blah",
+    image: "",
+    content: [
+      {
+        type: ContentTypeEnum.TEXT,
+        id: uuid(),
+        content: {
+          text: "Welcome to lesson 2!",
+        },
+      },
+    ],
+  },
+};

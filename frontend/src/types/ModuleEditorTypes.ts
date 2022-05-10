@@ -6,7 +6,7 @@ export interface LessonType {
   title: string;
   description?: string;
   image?: string;
-  content: ContentType[];
+  content: ContentBlock[];
 }
 
 export type LessonsType = Record<string, LessonType>;
@@ -46,7 +46,7 @@ export type ContentProps = {
   link?: string;
 };
 
-export interface ContentType {
+export interface ContentBlock {
   type: ContentTypeEnum;
   content: ContentProps;
   id: string;
@@ -62,7 +62,9 @@ export interface EditorStateType {
   course: CourseType;
   lessons: LessonsType;
   focusedLesson: string | null;
-  hasChanged: boolean;
+  hasChanged: {
+    [lessonId: string]: "CREATE" | "UPDATE" | "DELETE";
+  };
 }
 
 export type EditorContextType = {
@@ -101,7 +103,7 @@ export type EditorContextAction =
     }
   | {
       type: "update-block";
-      value: { index: number; block: ContentType };
+      value: { index: number; block: ContentBlock };
     }
   | {
       type: "delete-block";

@@ -42,6 +42,7 @@ const lessonType = gql`
 
   input UpdateLessonRequestDTO {
     course: ID
+    module: ID
     title: String
     description: String
     image: String
@@ -50,6 +51,7 @@ const lessonType = gql`
 
   extend type Query {
     lessonById(id: ID!): LessonResponseDTO!
+    lessons(ids: [ID!]!): [LessonResponseDTO!]!
   }
 
   extend type Mutation {

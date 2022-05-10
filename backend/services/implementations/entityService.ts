@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuid } from "uuid";
 
 import MgEntity, { Entity } from "../../models/entity.model";
 import {
@@ -65,7 +65,7 @@ class EntityService implements IEntityService {
 
   async createEntity(entity: EntityRequestDTO): Promise<EntityResponseDTO> {
     let newEntity: Entity | null;
-    const fileName = entity.filePath ? uuidv4() : "";
+    const fileName = entity.filePath ? uuid() : "";
     try {
       if (entity.filePath) {
         await this.storageService.createFile(
@@ -102,7 +102,7 @@ class EntityService implements IEntityService {
       const currentEntity = await MgEntity.findById(id, "fileName");
       const currentFileName = currentEntity?.fileName;
       if (entity.filePath) {
-        fileName = currentFileName || uuidv4();
+        fileName = currentFileName || uuid();
         if (currentFileName) {
           await this.storageService.updateFile(
             fileName,

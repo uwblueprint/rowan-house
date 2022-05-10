@@ -23,7 +23,7 @@ export const COURSES = gql`
 `;
 
 export const GET_COURSE = gql`
-  query GetCourse($id: String) {
+  query GetCourse($id: ID!) {
     course(id: $id) {
       title
       description
