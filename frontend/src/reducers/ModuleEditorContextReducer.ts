@@ -6,9 +6,22 @@ import {
   LessonType,
   ContentBlock,
   ContentTypeEnum,
+  EditorChangeStatus,
+  EditorChangeStatuses,
 } from "../types/ModuleEditorTypes";
 
 /* eslint-disable no-console */
+
+const updateChangeStatus = (
+  hasChanged: EditorChangeStatuses,
+  docID: string,
+  status: EditorChangeStatus,
+): EditorChangeStatuses => {
+  // TODO: Doesn't work with DELETE. Logic needs to be flushed out.
+  // ! e.g. if a doc has CREATE, but then a DELETE status comes, remove it
+  if (!(docID in hasChanged)) return { ...hasChanged, [docID]: status };
+  return hasChanged;
+};
 
 // Helper functions for editing a lesson's contents
 const createLesson = (
@@ -26,12 +39,18 @@ const createLesson = (
   // Temporary lesson that is used until save
   const lessonID = uuid();
   // Create the new lesson object
-  newState.lessons[lessonID] = lesson;
+  newState.lessons = { ...state.lessons, [lessonID]: lesson };
   // Add the lesson ID to the modules
   // TODO: Object.keys does not guarantee order - fix in the future
   newState.course.modules[moduleIndex].lessons = Object.keys(newState.lessons);
   // Focus on new lesson
   newState.focusedLesson = lessonID;
+  // Update to let the state know things have changed
+  newState.hasChanged = updateChangeStatus(
+    state.hasChanged,
+    lessonID,
+    "CREATE",
+  );
   return newState;
 };
 
@@ -44,6 +63,37 @@ const updateLesson = (
 
   const newState = { ...state };
   newState.lessons[id] = { ...state.lessons[id], ...lesson };
+  // Update to let the state know things have changed
+  newState.hasChanged = updateChangeStatus(state.hasChanged, id, "UPDATE");
+  return newState;
+};
+
+const replaceLessonID = (
+  state: EditorStateType,
+  oldID: string,
+  newID: string,
+): EditorStateType => {
+  const newState = { ...state };
+  // Store lesson
+  const lesson = state.lessons[oldID];
+  // Remove old ID & add new one
+  const rename = (oID: string, neID: string, { [oID]: old, ...rest }) => ({
+    [neID]: old,
+    ...rest,
+  });
+  newState.lessons = rename(oldID, newID, state.lessons);
+  // Replace lesson ID in the course
+  const moduleIndex = state.course.modules.findIndex(
+    (module) => module.id === lesson.module,
+  );
+  const oldIndex = newState.course.modules[moduleIndex].lessons.findIndex(
+    (id) => id === oldID,
+  );
+  newState.course.modules[moduleIndex].lessons[oldIndex] = newID;
+  // Replaced focused ID if needed
+  if (state.focusedLesson === oldID) {
+    newState.focusedLesson = newID;
+  }
   return newState;
 };
 
@@ -54,6 +104,8 @@ const deleteLesson = (state: EditorStateType, id: string) => {
   delete newState.lessons[id];
   // TODO: Remove lesson from module
   // TODO: If focused lesson is the lesson to delete, change focused lesson
+  // Update to let the state know things have changed
+  newState.hasChanged = updateChangeStatus(state.hasChanged, id, "DELETE");
   return newState;
 };
 
@@ -105,6 +157,8 @@ const createLessonContentBlock = (
     ...state.lessons,
     [id]: newLesson,
   };
+  // Update to let the state know things have changed
+  newState.hasChanged = updateChangeStatus(state.hasChanged, id, "UPDATE");
   return newState;
 };
 
@@ -130,6 +184,8 @@ const reorderLessonContentBlocks = (
   const newState = { ...state };
   const [block] = newState.lessons[id].content.splice(oldIndex, 1);
   newState.lessons[id].content.splice(newIndex, 0, block);
+  // Update to let the state know things have changed
+  newState.hasChanged = updateChangeStatus(state.hasChanged, id, "UPDATE");
   return newState;
 };
 
@@ -149,6 +205,8 @@ const updateLessonContentBlock = (
 
   const newState = { ...state };
   newState.lessons[id].content[index] = block;
+  // Update to let the state know things have changed
+  newState.hasChanged = updateChangeStatus(state.hasChanged, id, "UPDATE");
   return newState;
 };
 
@@ -167,6 +225,8 @@ const deleteLessonContentBlock = (
 
   const newState = { ...state };
   newState.lessons[id].content.splice(index, 1);
+  // Update to let the state know things have changed
+  newState.hasChanged = updateChangeStatus(state.hasChanged, id, "UPDATE");
   return newState;
 };
 
@@ -180,95 +240,40 @@ export default function EditorContextReducer(
     return state;
   }
 
-  // Update changed boolean
-  // ! Currently triggers on set-focus change which is incorrect
-  let newState = { ...state };
-
   switch (action.type) {
     case "set-focus":
       return {
-        ...newState,
+        ...state,
         focusedLesson: action.value,
       };
     case "create-lesson":
-      newState = {
-        ...state,
-        hasChanged: { ...state.hasChanged, [action.value.title]: "CREATE" },
-      };
-      return createLesson(newState, action.value);
+      return createLesson(state, action.value);
     case "update-lesson":
-      if (newState.focusedLesson) {
-        newState = {
-          ...state,
-          hasChanged: {
-            ...state.hasChanged,
-            [newState.focusedLesson]: "UPDATE",
-          },
-        };
-      }
-      return updateLesson(newState, action.value);
+      return updateLesson(state, action.value);
     case "delete-lesson":
-      newState = {
-        ...state,
-        hasChanged: { ...state.hasChanged, [action.value]: "DELETE" },
-      };
-      return deleteLesson(newState, action.value);
+      return deleteLesson(state, action.value);
+    case "update-lesson-id":
+      return replaceLessonID(state, action.value.oldID, action.value.newID);
     case "create-block":
-      if (newState.focusedLesson) {
-        newState = {
-          ...state,
-          hasChanged: {
-            ...state.hasChanged,
-            [newState.focusedLesson]: "UPDATE",
-          },
-        };
-      }
       return createLessonContentBlock(
-        newState,
+        state,
         action.value.blockID,
         action.value.index,
       );
     case "reorder-blocks":
-      if (newState.focusedLesson) {
-        newState = {
-          ...state,
-          hasChanged: {
-            ...state.hasChanged,
-            [newState.focusedLesson]: "UPDATE",
-          },
-        };
-      }
       return reorderLessonContentBlocks(
-        newState,
+        state,
         action.value.oldIndex,
         action.value.newIndex,
       );
     case "update-block":
-      if (newState.focusedLesson) {
-        newState = {
-          ...state,
-          hasChanged: {
-            ...state.hasChanged,
-            [newState.focusedLesson]: "UPDATE",
-          },
-        };
-      }
       return updateLessonContentBlock(
-        newState,
+        state,
         action.value.index,
         action.value.block,
       );
     case "delete-block":
-      if (newState.focusedLesson) {
-        newState = {
-          ...state,
-          hasChanged: {
-            ...state.hasChanged,
-            [newState.focusedLesson]: "UPDATE",
-          },
-        };
-      }
-      return deleteLessonContentBlock(newState, action.value);
+      return deleteLessonContentBlock(state, action.value);
     default:
       return state;
   }

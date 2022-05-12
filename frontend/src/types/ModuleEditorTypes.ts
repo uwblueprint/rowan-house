@@ -57,14 +57,18 @@ export interface ModuleEditorParams {
   moduleIndex: string;
 }
 
+export type EditorChangeStatus = "CREATE" | "UPDATE" | "DELETE";
+
+export interface EditorChangeStatuses {
+  [doc_id: string]: EditorChangeStatus;
+}
+
 // Context types
 export interface EditorStateType {
   course: CourseType;
   lessons: LessonsType;
   focusedLesson: string | null;
-  hasChanged: {
-    [lessonId: string]: "CREATE" | "UPDATE" | "DELETE";
-  };
+  hasChanged: EditorChangeStatuses;
 }
 
 export type EditorContextType = {
@@ -92,6 +96,10 @@ export type EditorContextAction =
   | {
       type: "delete-lesson";
       value: string;
+    }
+  | {
+      type: "update-lesson-id";
+      value: { oldID: string; newID: string };
     }
   | {
       type: "create-block";

@@ -70,9 +70,7 @@ const SideBarModuleOverview = (): React.ReactElement => {
           ),
         )}
       <Button
-        onClick={() =>
-          createLesson(`Dummy Lesson ${orderedLessons.length + 1}`)
-        }
+        onClick={() => createLesson(`Lesson ${orderedLessons.length + 1}`)}
         color="brand.royal"
         variant="unstyled"
         leftIcon={<AddIcon />}
