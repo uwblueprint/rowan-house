@@ -17,6 +17,8 @@ const updateChangeStatus = (
   docID: string,
   status: EditorChangeStatus,
 ): EditorChangeStatuses => {
+  // TODO: Doesn't work with DELETE. Logic needs to be flushed out.
+  // ! e.g. if a doc has CREATE, but then a DELETE status comes, remove it
   if (!(docID in hasChanged)) return { ...hasChanged, [docID]: status };
   return hasChanged;
 };

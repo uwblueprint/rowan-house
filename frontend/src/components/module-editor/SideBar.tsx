@@ -67,8 +67,6 @@ const Sidebar = (): React.ReactElement => {
     });
     if (!data) throw Error("Failed to create new lesson");
     const lesson = data.createLesson;
-    // Make lesson response compatible with what the frontend needs
-    // const newLesson = formatLessonResponse(lesson);
     const { id: newID } = lesson;
     // Update lesson ID in state with response
     dispatch({ type: "update-lesson-id", value: { oldID, newID } });
