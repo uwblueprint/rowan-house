@@ -117,3 +117,10 @@ export type EditorContextAction =
       type: "delete-block";
       value: number;
     };
+
+export interface EditContentOptionsMenuProps {
+  isVisible: boolean;
+  onEditClick: () => void;
+  onCopyClick: () => void;
+  onDeleteClick: () => void;
+}
