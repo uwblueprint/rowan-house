@@ -10,6 +10,7 @@ export const LOGIN = gql`
       town
       role
       accessToken
+      emailVerified
     }
   }
 `;
@@ -52,6 +53,7 @@ export const REGISTER = gql`
       town
       role
       accessToken
+      emailVerified
     }
   }
 `;

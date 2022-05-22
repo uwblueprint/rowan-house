@@ -38,7 +38,9 @@ export type UpdateUserDTO = Omit<UserDTO, "id">;
 
 export type RegisterUserDTO = Omit<CreateUserDTO, "role">;
 
-export type AuthDTO = Token & UserDTO;
+export type AuthenticatedUserDTO = UserDTO & { emailVerified: boolean };
+
+export type AuthDTO = Token & AuthenticatedUserDTO;
 
 export type Letters = "A" | "B" | "C" | "D";
 
