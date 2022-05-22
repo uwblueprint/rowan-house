@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Route, Redirect } from "react-router-dom";
 
 import AuthContext from "../../contexts/AuthContext";
-import { LOGIN_PAGE } from "../../constants/Routes";
+import { LOGIN_PAGE, VERIFY_EMAIL_PAGE } from "../../constants/Routes";
 
 type PrivateRouteProps = {
   component: React.FC;
@@ -17,11 +17,12 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
 }: PrivateRouteProps) => {
   const { authenticatedUser } = useContext(AuthContext);
 
-  return authenticatedUser ? (
-    <Route path={path} exact={exact} component={component} />
-  ) : (
-    <Redirect to={LOGIN_PAGE} />
-  );
+  if (!authenticatedUser) {
+    return <Redirect to={LOGIN_PAGE} />;
+  }
+  if (!authenticatedUser?.emailVerified) {
+    return <Redirect to={VERIFY_EMAIL_PAGE} />;
+  }
+  return <Route path={path} exact={exact} component={component} />;
 };
-
 export default PrivateRoute;
