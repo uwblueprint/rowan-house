@@ -32,9 +32,11 @@ class AuthService implements IAuthService {
       );
       const user = await this.userService.getUserByEmail(email);
       const decodedIdToken: firebaseAdmin.auth.DecodedIdToken = await firebaseAdmin
-      .auth()
-      .verifyIdToken(token.accessToken, true); 
-      const emailVerified = (await firebaseAdmin.auth().getUser(decodedIdToken.uid)).emailVerified
+        .auth()
+        .verifyIdToken(token.accessToken, true);
+      const { emailVerified } = await firebaseAdmin
+        .auth()
+        .getUser(decodedIdToken.uid);
       return { ...token, ...user, emailVerified };
     } catch (error) {
       Logger.error(`Failed to generate token for user with email ${email}`);
