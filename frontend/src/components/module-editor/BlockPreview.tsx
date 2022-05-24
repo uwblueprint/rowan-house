@@ -1,8 +1,15 @@
 import React from "react";
 import { Box } from "@chakra-ui/react";
 import { Draggable, DraggableProvided } from "react-beautiful-dnd";
-
 import { ContentTypeEnum } from "../../types/ModuleEditorTypes";
+import { ReactComponent as ImageIcon } from "../../assets/image.svg";
+import { ReactComponent as ColumnIcon } from "../../assets/column.svg";
+import { ReactComponent as HeadingIcon } from "../../assets/heading.svg";
+import { ReactComponent as ParagraphIcon } from "../../assets/paragraph.svg";
+import { ReactComponent as LinkIcon } from "../../assets/link.svg";
+import { ReactComponent as ButtonIcon } from "../../assets/button.svg";
+import { ReactComponent as VideoIcon } from "../../assets/video.svg";
+import { ReactComponent as AudioIcon } from "../../assets/audio.svg";
 
 /* eslint-disable react/jsx-props-no-spreading */
 
@@ -13,14 +20,48 @@ const BlockStyle = ({
   className?: string;
   content: ContentTypeEnum;
 }): React.ReactElement => {
+  let contentIcon: React.ReactElement = <ImageIcon />;
+  // eslint-disable-next-line default-case
+  switch (content.preview) {
+    case "column.svg":
+      contentIcon = <ColumnIcon width="fit-content" height="fit-content" />;
+      break;
+    case "heading.svg":
+      contentIcon = <HeadingIcon width="fit-content" height="fit-content" />;
+      break;
+    case "text.svg":
+      contentIcon = <ParagraphIcon width="fit-content" height="fit-content" />;
+      break;
+    case "link.svg":
+      contentIcon = <LinkIcon width="fit-content" height="fit-content" />;
+      break;
+    case "button.svg":
+      contentIcon = <ButtonIcon width="fit-content" height="fit-content" />;
+      break;
+    case "image.svg":
+      contentIcon = <ImageIcon width="fit-content" height="fit-content" />;
+      break;
+    case "video.svg":
+      contentIcon = <VideoIcon width="fit-content" height="fit-content" />;
+      break;
+    case "audio.svg":
+      contentIcon = <AudioIcon width="fit-content" height="fit-content" />;
+  }
   return (
-    <Box
-      border="1px solid grey"
-      borderRadius="1rem"
-      padding="1rem 2rem"
-      margin=".5rem"
-      className={className}
-    >
+    <Box textAlign="center" mr="12px">
+      <Box
+        padding="1rem"
+        mb="0.5rem"
+        mt="1rem"
+        bg="background.grey"
+        w="72px"
+        h="72px"
+        justifyContent="center"
+        overflow="auto"
+        className={className}
+      >
+        {contentIcon}
+      </Box>
       {content.title}
     </Box>
   );
