@@ -4,6 +4,7 @@ import { Draggable } from "react-beautiful-dnd";
 
 import { ContentBlock, ContentTypeEnum } from "../../types/ModuleEditorTypes";
 import { TextBlock, ImageBlock } from "../common/content";
+import EditContentOptionsMenu from "./EditContentOptionsMenu";
 
 /* eslint-disable react/jsx-props-no-spreading */
 
@@ -45,7 +46,7 @@ const EditableContentBlock = ({
           style={provided.draggableProps.style}
         >
           <Divider opacity={isHovered ? 1 : 0} />
-          <Flex justify="space-between">
+          <Flex width="100%" justify="space-between">
             <Box opacity={isHovered ? 1 : 0} {...provided.dragHandleProps}>
               <svg width="24" height="24" viewBox="0 0 24 24">
                 <path
@@ -55,6 +56,12 @@ const EditableContentBlock = ({
               </svg>
             </Box>
             {SelectContentBlock(block)}
+            <EditContentOptionsMenu
+              isVisible={isHovered}
+              onEditClick={() => {}}
+              onCopyClick={() => {}}
+              onDeleteClick={() => {}}
+            />
           </Flex>
           <Divider opacity={isHovered ? 1 : 0} />
         </VStack>
