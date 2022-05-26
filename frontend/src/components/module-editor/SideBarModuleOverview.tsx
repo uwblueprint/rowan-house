@@ -1,13 +1,17 @@
-import { Button, VStack } from "@chakra-ui/react";
+import { Button, useDisclosure, VStack } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import EditorContext from "../../contexts/ModuleEditorContext";
 import { ModuleEditorParams } from "../../types/ModuleEditorTypes";
+import { Modal } from "../common/Modal";
+import { TextInput } from "../common/TextInput";
 
 const SideBarModuleOverview = (): React.ReactElement => {
   const context = useContext(EditorContext);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [title, setTitle] = useState("");
   const { courseID, moduleIndex }: ModuleEditorParams = useParams();
   const moduleID = parseInt(moduleIndex, 10);
 
@@ -22,16 +26,26 @@ const SideBarModuleOverview = (): React.ReactElement => {
   const setFocus = (index: number) =>
     dispatch({ type: "set-focus", value: module.lessons[index] });
 
-  const createLesson = (title: string) =>
+  
+
+  const createLesson = (lessonTitle: string) => {
     dispatch({
       type: "create-lesson",
       value: {
         course: courseID,
         module: course.modules[moduleID].id,
-        title,
+        title: lessonTitle,
         content: [],
       },
     });
+
+    setTitle("");
+    onClose();
+  };
+
+  const openCreateLessonModal = () => {
+    onOpen();
+  };
 
   return (
     <VStack>
@@ -70,7 +84,8 @@ const SideBarModuleOverview = (): React.ReactElement => {
           ),
         )}
       <Button
-        onClick={() => createLesson(`Lesson ${orderedLessons.length + 1}`)}
+        // onClick={() => createLesson(`Lesson ${orderedLessons.length + 1}`)}
+        onClick={() => openCreateLessonModal()}
         color="brand.royal"
         variant="unstyled"
         leftIcon={<AddIcon />}
@@ -81,6 +96,14 @@ const SideBarModuleOverview = (): React.ReactElement => {
       >
         New Lesson
       </Button>
+      <Modal
+        header="Edit lesson title"
+        isOpen={isOpen}
+        onConfirm={() => createLesson(title)}
+        onCancel={onClose}
+      >
+        <TextInput placeholder="New Lesson" onChange={setTitle} isRequired />
+      </Modal>
     </VStack>
   );
 };
