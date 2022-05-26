@@ -121,6 +121,13 @@ const Button = {
       fontSize: "xs",
       height: "32px",
     },
+    transparent: {
+      bg: "transparent",
+      padding: "0px",
+      margin: "0px",
+      border: "0px",
+      fontWeight: "normal",
+    },
   },
   defaultProps: {
     variant: "default",
