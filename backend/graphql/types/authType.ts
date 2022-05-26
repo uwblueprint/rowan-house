@@ -20,6 +20,10 @@ const authType = gql`
     password: String!
   }
 
+  extend type Query {
+    emailVerifiedByAccessToken(email: String!, accessToken: String!): Boolean!
+  }
+
   extend type Mutation {
     login(email: String!, password: String!): AuthDTO!
     register(user: RegisterUserDTO!): AuthDTO!
