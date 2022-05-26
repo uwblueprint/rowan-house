@@ -12,6 +12,8 @@ const SideBarModuleOverview = (): React.ReactElement => {
   const context = useContext(EditorContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [title, setTitle] = useState("");
+  const [isInvalid, setIsInvalid] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const { courseID, moduleIndex }: ModuleEditorParams = useParams();
   const moduleID = parseInt(moduleIndex, 10);
 
@@ -26,21 +28,29 @@ const SideBarModuleOverview = (): React.ReactElement => {
   const setFocus = (index: number) =>
     dispatch({ type: "set-focus", value: module.lessons[index] });
 
-  
+  const resetState = () => {
+    setTitle("");
+    setErrorMessage("");
+    setIsInvalid(false);
+  };
 
   const createLesson = (lessonTitle: string) => {
-    dispatch({
-      type: "create-lesson",
-      value: {
-        course: courseID,
-        module: course.modules[moduleID].id,
-        title: lessonTitle,
-        content: [],
-      },
-    });
-
-    setTitle("");
-    onClose();
+    if (title) {
+      dispatch({
+        type: "create-lesson",
+        value: {
+          course: courseID,
+          module: course.modules[moduleID].id,
+          title: lessonTitle,
+          content: [],
+        },
+      });
+      resetState();
+      onClose();
+    } else {
+      setErrorMessage("Error: title cannot be empty.");
+      setIsInvalid(true);
+    }
   };
 
   const openCreateLessonModal = () => {
@@ -84,7 +94,6 @@ const SideBarModuleOverview = (): React.ReactElement => {
           ),
         )}
       <Button
-        // onClick={() => createLesson(`Lesson ${orderedLessons.length + 1}`)}
         onClick={() => openCreateLessonModal()}
         color="brand.royal"
         variant="unstyled"
@@ -102,7 +111,13 @@ const SideBarModuleOverview = (): React.ReactElement => {
         onConfirm={() => createLesson(title)}
         onCancel={onClose}
       >
-        <TextInput placeholder="New Lesson" onChange={setTitle} isRequired />
+        <TextInput
+          placeholder="New Lesson"
+          onChange={setTitle}
+          errorMessage={errorMessage}
+          isInvalid={isInvalid}
+          isRequired
+        />
       </Modal>
     </VStack>
   );
