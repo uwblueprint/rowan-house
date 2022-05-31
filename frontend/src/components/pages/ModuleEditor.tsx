@@ -63,6 +63,11 @@ const ModuleEditor = (): React.ReactElement => {
       id: courseID,
     },
   });
+  console.log({
+    variables: {
+      id: courseID,
+    },
+  })
   const [getLessons, { data: lessonData }] = useLazyQuery(GET_LESSONS);
 
   useEffect(() => {

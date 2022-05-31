@@ -16,7 +16,7 @@ export const formatLessonRequest = (lesson: LessonType): LessonRequest => {
   return { ...lesson, content };
 };
 
-export const formatLessonResponse = (lesson: LessonResponse): LessonType => {
+export const formatLessonResponse = (lesson: LessonResponse): LessonType => {   
   // Add IDs back into content blocks, switch types to enum
   const content = lesson.content?.map((block) => {
     let type;

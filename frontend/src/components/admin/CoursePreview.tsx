@@ -19,7 +19,7 @@ import {
   CourseResponse,
   ModuleRequest,
 } from "../../APIClients/types/CourseClientTypes";
-import EditModuleModal from "./EditModuleModal";
+import EditModuleModal from "../common/EditModuleModal";
 import { DELETE_COURSE } from "../../APIClients/mutations/CourseMutations";
 import { COURSES } from "../../APIClients/queries/CourseQueries";
 
@@ -73,6 +73,9 @@ const CoursePreview = ({ course }: CoursePreviewProps): React.ReactElement => {
     } else {
       newModules = course.modules.filter((_, index) => moduleIndex !== index);
     }
+    console.log(newModules);
+    console.log(course.modules);
+    console.log(moduleIndex)
 
     const { id, ...newCourse } = { ...course, modules: newModules };
     return [id, newCourse];

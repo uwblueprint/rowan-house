@@ -2,10 +2,10 @@ import { Flex, VStack, Image } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 
-import { TextInput } from "../common/TextInput";
-import { Modal } from "../common/Modal";
-import { SwitchInput } from "../common/SwitchInput";
-import { TextArea } from "../common/TextArea";
+import { TextInput } from "./TextInput";
+import { Modal } from "./Modal";
+import { SwitchInput } from "./SwitchInput";
+import { TextArea } from "./TextArea";
 import { DEFAULT_IMAGE } from "../../constants/DummyData";
 import {
   CourseRequest,
@@ -14,7 +14,7 @@ import {
   ModuleRequest,
 } from "../../APIClients/types/CourseClientTypes";
 import { UPDATE_COURSE } from "../../APIClients/mutations/CourseMutations";
-import { COURSES } from "../../APIClients/queries/CourseQueries";
+import { COURSES, GET_COURSE } from "../../APIClients/queries/CourseQueries";
 
 export interface EditModuleModalProps {
   onClose: () => void;
@@ -24,7 +24,6 @@ export interface EditModuleModalProps {
 }
 
 const refetchQueries = { refetchQueries: [{ query: COURSES }] };
-
 const EditModuleModal = ({
   module,
   formatCourseRequest,
@@ -35,15 +34,18 @@ const EditModuleModal = ({
   const [isPublished, setVisibility] = useState(module?.published ?? false);
   const [description, setDescription] = useState(module?.description ?? "");
 
-  const [updateCourse] = useMutation<CourseResponse>(
-    UPDATE_COURSE,
-    refetchQueries,
-  );
+  const [updateCourse] = useMutation<CourseResponse>(UPDATE_COURSE);
 
   const onUpdateModule = () => {
     const newModule = { ...module, title, description, published: isPublished };
     const [id, course] = formatCourseRequest(newModule);
-    updateCourse({ variables: { id, course } });
+    updateCourse({
+      variables: { id, course },
+      refetchQueries: [
+        { query: COURSES },
+        { query: GET_COURSE, variables: { id } },
+      ],
+    });
     onClose();
   };
 
@@ -78,7 +80,6 @@ const EditModuleModal = ({
             label="Module Description:"
             defaultValue={description}
             onChange={setDescription}
-            isRequired
           />
         </VStack>
       </Flex>
