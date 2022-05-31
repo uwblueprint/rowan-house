@@ -28,11 +28,23 @@ export interface CourseType {
   modules: ModuleType[];
 }
 
-// Content types
+export const ContentTypeCategories = ["Layout", "Basic", "Media"];
 export class ContentTypeEnum {
+  static COLUMN = new ContentTypeEnum("Column", "column.svg", uuid());
+
+  static HEADING = new ContentTypeEnum("Heading", "heading.svg", uuid());
+
   static TEXT = new ContentTypeEnum("Text", "text.svg", uuid());
 
+  static LINK = new ContentTypeEnum("Link", "link.svg", uuid());
+
+  static BUTTON = new ContentTypeEnum("Button", "button.svg", uuid());
+
   static IMAGE = new ContentTypeEnum("Image", "image.svg", uuid());
+
+  static VIDEO = new ContentTypeEnum("Video", "video.svg", uuid());
+
+  static AUDIO = new ContentTypeEnum("Audio", "audio.svg", uuid());
 
   constructor(
     public readonly title: string,
