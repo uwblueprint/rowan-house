@@ -51,11 +51,9 @@ class CourseService implements ICourseService {
           [{ $match: queryAttributes }, ...publishedModulesOnlyQuery],
         ).exec();
 
-        if (!courseQueryResult || courseQueryResult.length === 0) {
-          throw new Error(`Course id ${id} not found`);
-        }
-
-        [course] = courseQueryResult;
+        course = courseQueryResult?.length
+          ? MgCourse.hydrate(courseQueryResult[0])
+          : null;
       } else {
         course = await MgCourse.findOne(queryAttributes);
       }
@@ -93,6 +91,7 @@ class CourseService implements ICourseService {
           ...filterQueryObject,
           ...publishedModulesOnlyQuery,
         ]).exec();
+        courses = courses?.map(MgCourse.hydrate.bind(MgCourse)) || null;
       } else {
         courses = await MgCourse.find(
           queryConditions.includePrivateCourses ? {} : { private: false },
