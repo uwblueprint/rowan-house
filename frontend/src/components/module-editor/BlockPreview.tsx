@@ -61,6 +61,11 @@ const BlockStyle = ({
         justifyContent="center"
         overflow="auto"
         className={className}
+        _hover={{
+          background: "brand.purple",
+          opacity: 0.5,
+          color: "black",
+        }}
       >
         {contentIcon}
       </Box>
