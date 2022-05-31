@@ -20,8 +20,7 @@ const BlockStyle = ({
   className?: string;
   content: ContentTypeEnum;
 }): React.ReactElement => {
-  let contentIcon: React.ReactElement = <ImageIcon />;
-  // eslint-disable-next-line default-case
+  let contentIcon: React.ReactElement;
   switch (content.preview) {
     case "column.svg":
       contentIcon = <ColumnIcon width="fit-content" height="fit-content" />;
@@ -46,11 +45,14 @@ const BlockStyle = ({
       break;
     case "audio.svg":
       contentIcon = <AudioIcon width="fit-content" height="fit-content" />;
+      break;
+    default:
+      contentIcon = <ImageIcon />;
   }
   return (
     <Box textAlign="center" mr="12px">
       <Box
-        padding="1rem"
+        padding="0.75rem"
         mb="0.5rem"
         mt="1rem"
         bg="background.grey"
