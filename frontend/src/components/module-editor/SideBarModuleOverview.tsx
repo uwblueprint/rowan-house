@@ -113,7 +113,10 @@ const SideBarModuleOverview = (): React.ReactElement => {
       >
         <TextInput
           placeholder="New Lesson"
-          onChange={setTitle}
+         onChange={(currTitle) => {
+         setTitle(currTitle)
+         setIsInvalid(false)
+         }
           errorMessage={errorMessage}
           isInvalid={isInvalid}
           isRequired
