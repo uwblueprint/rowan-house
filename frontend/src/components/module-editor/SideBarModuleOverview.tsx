@@ -56,7 +56,7 @@ const SideBarModuleOverview = (): React.ReactElement => {
   const onCancel = () => {
     resetState();
     onClose();
-  }
+  };
 
   return (
     <VStack>
