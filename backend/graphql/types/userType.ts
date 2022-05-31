@@ -25,6 +25,16 @@ const userType = gql`
     password: String!
   }
 
+  type UserWithVerificationStatusDTO {
+    id: ID!
+    firstName: String!
+    lastName: String!
+    email: String!
+    town: String!
+    role: Role!
+    emailVerified: Boolean!
+  }
+
   input UpdateUserDTO {
     firstName: String!
     lastName: String!
@@ -35,6 +45,9 @@ const userType = gql`
 
   extend type Query {
     userById(id: ID!): UserDTO!
+    userWithVerificationStatusByEmail(
+      email: String!
+    ): UserWithVerificationStatusDTO!
     userByEmail(email: String!): UserDTO!
     users: [UserDTO!]!
     usersCSV: String!

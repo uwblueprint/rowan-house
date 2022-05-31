@@ -20,14 +20,6 @@ const cookieOptions: CookieOptions = {
 };
 
 const authResolvers = {
-  Query: {
-    emailVerifiedByAccessToken: async (
-      _parent: undefined,
-      { email, accessToken }: { email: string; accessToken: string },
-    ): Promise<boolean> => {
-      return authService.isAuthorizedByEmail(accessToken, email);
-    },
-  },
   Mutation: {
     login: async (
       _parent: undefined,
