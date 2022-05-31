@@ -53,6 +53,11 @@ const SideBarModuleOverview = (): React.ReactElement => {
     }
   };
 
+  const onCancel = () => {
+    resetState();
+    onClose();
+  }
+
   return (
     <VStack>
       {focusedLesson &&
@@ -105,7 +110,7 @@ const SideBarModuleOverview = (): React.ReactElement => {
         header="Edit lesson title"
         isOpen={isOpen}
         onConfirm={() => createLesson(title)}
-        onCancel={() => onClose}
+        onCancel={() => onCancel()}
       >
         <TextInput
           placeholder="New Lesson"
