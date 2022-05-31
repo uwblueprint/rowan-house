@@ -53,10 +53,6 @@ const SideBarModuleOverview = (): React.ReactElement => {
     }
   };
 
-  const openCreateLessonModal = () => {
-    onOpen();
-  };
-
   return (
     <VStack>
       {focusedLesson &&
@@ -94,7 +90,7 @@ const SideBarModuleOverview = (): React.ReactElement => {
           ),
         )}
       <Button
-        onClick={() => openCreateLessonModal()}
+        onClick={onOpen}
         color="brand.royal"
         variant="unstyled"
         leftIcon={<AddIcon />}
@@ -109,7 +105,7 @@ const SideBarModuleOverview = (): React.ReactElement => {
         header="Edit lesson title"
         isOpen={isOpen}
         onConfirm={() => createLesson(title)}
-        onCancel={onClose}
+        onCancel={() => onClose}
       >
         <TextInput
           placeholder="New Lesson"
