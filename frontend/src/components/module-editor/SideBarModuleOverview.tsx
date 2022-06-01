@@ -8,7 +8,12 @@ import { ModuleEditorParams } from "../../types/ModuleEditorTypes";
 import { Modal } from "../common/Modal";
 import { TextInput } from "../common/TextInput";
 
+import { ReactComponent as DragHandleIconSvg } from "../../assets/DragHandle.svg";
+import LessonOptions from "./LessonOptions"
+
 const SideBarModuleOverview = (): React.ReactElement => {
+
+  const [isHovered, setIsHovered] = useState({hoveredState: false, index: 0});
   const context = useContext(EditorContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [title, setTitle] = useState("");
@@ -59,36 +64,12 @@ const SideBarModuleOverview = (): React.ReactElement => {
         orderedLessons.map((lesson, index) =>
           state.lessons[focusedLesson] === lesson ? (
             lesson && (
-              <Button
-                key={index}
-                onClick={() => setFocus(index)}
-                variant="unstyled"
-                borderLeftColor="brand.royal"
-                borderLeftWidth="5px"
-                borderRadius="0"
-                bg="background.light"
-                textAlign="left"
-                pl="30px"
-                minH="55px"
-                w="100%"
-              >
-                {lesson.title}
-              </Button>
+              <LessonOptions text={lesson.title} isFocused isHovered={isHovered} index={index} setIsHovered={setIsHovered} setFocus={setFocus}/>                  
             )
           ) : (
-            <Button
-              key={index}
-              onClick={() => setFocus(index)}
-              variant="unstyled"
-              textAlign="left"
-              pl="35px"
-              minH="55px"
-              w="100%"
-            >
-              {lesson.title}
-            </Button>
+            <LessonOptions text={lesson.title} isFocused={false} isHovered={isHovered} index={index} setIsHovered={setIsHovered} setFocus={setFocus}/>
           ),
-        )}
+      )}
       <Button
         onClick={onOpen}
         color="brand.royal"
