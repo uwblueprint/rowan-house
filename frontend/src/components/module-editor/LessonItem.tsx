@@ -20,6 +20,12 @@ const LessonItem = ({
     <>
       <Button
         as="div"
+        role="button"
+        display="inline-flex"
+        alignItems="space-between"
+        justifyContent="center"
+        flexDirection="column"
+        tabIndex={0}
         onClick={setFocus}
         variant="unstyled"
         borderLeftColor={isFocused ? "brand.royal" : undefined}
