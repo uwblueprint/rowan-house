@@ -1,10 +1,32 @@
-import React from "react";
-import { Flex, Image, VStack, Center, Text, Button } from "@chakra-ui/react";
-import { useHistory } from "react-router-dom";
+import React, { useContext, useEffect } from "react";
+import { Flex, Image, VStack, Center, Text } from "@chakra-ui/react";
+import { useQuery } from "@apollo/client";
+import { Redirect } from "react-router-dom";
 import RHSLogo from "../../assets/RHSlogo.png";
+import AuthContext from "../../contexts/AuthContext";
+import { GET_USER_WITH_VERIFICATION_STATUS_BY_EMAIL } from "../../APIClients/queries/UserQueries";
+import { MANAGE_COURSES_PAGE } from "../../constants/Routes";
+import { AuthUser } from "../../types/AuthTypes";
+import authAPIClient from "../../APIClients/AuthAPIClient";
 
 const VerifyEmail = (): React.ReactElement => {
-  const history = useHistory();
+  const { authUser, setAuthUser } = useContext(AuthContext);
+  const { refetch } = useQuery<
+    { userWithVerificationStatusByEmail: Omit<AuthUser, "accessToken"> },
+    { email: string }
+  >(GET_USER_WITH_VERIFICATION_STATUS_BY_EMAIL, { skip: true });
+  useEffect(() => {
+    if (authUser && authUser.email) {
+      authAPIClient.getAuthUser(authUser, refetch).then((user) => {
+        setAuthUser(user);
+      });
+    }
+  }, [authUser, setAuthUser, refetch]);
+
+  if (authUser && authUser?.emailVerified) {
+    return <Redirect to={MANAGE_COURSES_PAGE} />;
+  }
+
   return (
     <Flex minH="100vh">
       <Center flex="1">
@@ -13,9 +35,6 @@ const VerifyEmail = (): React.ReactElement => {
           <Text variant="display-md" paddingBottom="1vw">
             Please Verify your Email to Continue
           </Text>
-          <Button colorScheme="purple" onClick={() => history.goBack()}>
-            Go Back To Previous Page
-          </Button>
         </VStack>
       </Center>
     </Flex>
