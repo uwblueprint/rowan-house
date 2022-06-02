@@ -19,7 +19,11 @@ import BackgroundImage from "../../assets/signuppage.jpg";
 
 import authAPIClient from "../../APIClients/AuthAPIClient";
 import { LOGIN } from "../../APIClients/mutations/AuthMutations";
-import { MANAGE_COURSES_PAGE, SIGNUP_PAGE } from "../../constants/Routes";
+import {
+  MANAGE_COURSES_PAGE,
+  SIGNUP_PAGE,
+  VERIFY_EMAIL_PAGE,
+} from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
 import { AuthUser } from "../../types/AuthTypes";
 
@@ -75,8 +79,12 @@ const Login = (): React.ReactElement => {
   };
 
   // Temporarily while working on the admin side, should normally redirect to HOME_PAGE
-  if (authUser) {
+  if (authUser && authUser?.emailVerified) {
     return <Redirect to={MANAGE_COURSES_PAGE} />;
+  }
+
+  if (authUser && !authUser?.emailVerified) {
+    return <Redirect to={VERIFY_EMAIL_PAGE} />;
   }
 
   const getLoginForm = (currentLoginState: LoginState) => {
