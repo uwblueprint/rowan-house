@@ -8,12 +8,9 @@ import { ModuleEditorParams } from "../../types/ModuleEditorTypes";
 import { Modal } from "../common/Modal";
 import { TextInput } from "../common/TextInput";
 
-import { ReactComponent as DragHandleIconSvg } from "../../assets/DragHandle.svg";
-import LessonOptions from "./LessonOptions"
+import LessonItem from "./LessonItem";
 
 const SideBarModuleOverview = (): React.ReactElement => {
-
-  const [isHovered, setIsHovered] = useState({hoveredState: false, index: 0});
   const context = useContext(EditorContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [title, setTitle] = useState("");
@@ -61,15 +58,14 @@ const SideBarModuleOverview = (): React.ReactElement => {
   return (
     <VStack>
       {focusedLesson &&
-        orderedLessons.map((lesson, index) =>
-          state.lessons[focusedLesson] === lesson ? (
-            lesson && (
-              <LessonOptions text={lesson.title} isFocused isHovered={isHovered} index={index} setIsHovered={setIsHovered} setFocus={setFocus}/>                  
-            )
-          ) : (
-            <LessonOptions text={lesson.title} isFocused={false} isHovered={isHovered} index={index} setIsHovered={setIsHovered} setFocus={setFocus}/>
-          ),
-      )}
+        orderedLessons.map((lesson, index) => (
+          <LessonItem
+            text={lesson.title}
+            isFocused={state.lessons[focusedLesson] === lesson}
+            key={lesson.id}
+            setFocus={() => setFocus(index)}
+          />
+        ))}
       <Button
         onClick={onOpen}
         color="brand.royal"
