@@ -30,7 +30,12 @@ export const TextInput = ({
   isRequired = false,
 }: TextInputProps): React.ReactElement => {
   return (
-    <FormControl id={label} isInvalid={isInvalid} mb={5}>
+    <FormControl
+      id={label}
+      isRequired={isRequired}
+      isInvalid={isInvalid}
+      mb={5}
+    >
       <FormLabel fontWeight={400} color={isInvalid ? "red.500" : "blackAlpha"}>
         {label}
       </FormLabel>
@@ -40,7 +45,6 @@ export const TextInput = ({
         errorBorderColor="red.600"
         onChange={(e) => onChange(e.target.value)}
         defaultValue={defaultValue}
-        isRequired={isRequired}
       />
       {errorMessage && (
         <FormErrorMessage>
