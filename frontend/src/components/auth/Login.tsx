@@ -21,7 +21,7 @@ import authAPIClient from "../../APIClients/AuthAPIClient";
 import { LOGIN } from "../../APIClients/mutations/AuthMutations";
 import { MANAGE_COURSES_PAGE, SIGNUP_PAGE } from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
-import { AuthenticatedUser } from "../../types/AuthTypes";
+import { AuthUser } from "../../types/AuthTypes";
 
 enum LoginState {
   EnterEmail,
@@ -30,21 +30,17 @@ enum LoginState {
 }
 
 const Login = (): React.ReactElement => {
-  const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
+  const { authUser, setAuthUser } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginState, setLoginState] = useState(LoginState.EnterEmail);
   const history = useHistory();
 
-  const [login, { loading }] = useMutation<{ login: AuthenticatedUser }>(LOGIN);
+  const [login, { loading }] = useMutation<{ login: AuthUser }>(LOGIN);
 
   const getLoginUser = async () => {
-    const user: AuthenticatedUser = await authAPIClient.login(
-      email,
-      password,
-      login,
-    );
-    setAuthenticatedUser(user);
+    const user: AuthUser = await authAPIClient.login(email, password, login);
+    setAuthUser(user);
   };
 
   const onLogInClick = async () => {
@@ -79,7 +75,7 @@ const Login = (): React.ReactElement => {
   };
 
   // Temporarily while working on the admin side, should normally redirect to HOME_PAGE
-  if (authenticatedUser) {
+  if (authUser) {
     return <Redirect to={MANAGE_COURSES_PAGE} />;
   }
 

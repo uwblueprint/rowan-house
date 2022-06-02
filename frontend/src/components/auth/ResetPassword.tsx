@@ -4,14 +4,14 @@ import { RESET_PASSWORD } from "../../APIClients/mutations/AuthMutations";
 import AuthContext from "../../contexts/AuthContext";
 
 const ResetPassword = (): React.ReactElement => {
-  const { authenticatedUser } = useContext(AuthContext);
+  const { authUser } = useContext(AuthContext);
 
   const [resetPassword] = useMutation<{ resetPassword: boolean }>(
     RESET_PASSWORD,
   );
 
   const onResetPasswordClick = async () => {
-    await resetPassword({ variables: { email: authenticatedUser?.email } });
+    await resetPassword({ variables: { email: authUser?.email } });
   };
 
   return (

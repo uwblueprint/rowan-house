@@ -1,15 +1,15 @@
 import { createContext } from "react";
-import { AuthenticatedUser } from "../types/AuthTypes";
+import { AuthUser } from "../types/AuthTypes";
 
 type AuthContextType = {
-  authenticatedUser: AuthenticatedUser;
-  setAuthenticatedUser: (_authenticatedUser: AuthenticatedUser) => void;
+  authUser: AuthUser;
+  setAuthUser: (_authUser: AuthUser) => void;
 };
 
 const AuthContext = createContext<AuthContextType>({
-  authenticatedUser: null,
+  authUser: null,
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-  setAuthenticatedUser: (_authenticatedUser: AuthenticatedUser): void => {},
+  setAuthUser: (_authUser: AuthUser): void => {},
 });
 
 export default AuthContext;

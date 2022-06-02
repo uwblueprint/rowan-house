@@ -6,14 +6,14 @@ import AuthContext from "../../contexts/AuthContext";
 import { REFRESH } from "../../APIClients/mutations/AuthMutations";
 
 const RefreshCredentials = (): React.ReactElement => {
-  const { setAuthenticatedUser } = useContext(AuthContext);
+  const { setAuthUser } = useContext(AuthContext);
 
   const [refresh] = useMutation<{ refresh: string }>(REFRESH);
 
   const onRefreshClick = async () => {
     const success = await authAPIClient.refresh(refresh);
     if (!success) {
-      setAuthenticatedUser(null);
+      setAuthUser(null);
     }
   };
 

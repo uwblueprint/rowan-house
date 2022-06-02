@@ -10,8 +10,8 @@ const VerifyEmail = (): React.ReactElement => {
       <Center flex="1">
         <VStack>
           <Image height="13vh" marginBottom="2.5vh" src={RHSLogo} />
-          <Text variant="display-md" paddingBottom="1vw"> 
-          Please Verify your Email to Continue
+          <Text variant="display-md" paddingBottom="1vw">
+            Please Verify your Email to Continue
           </Text>
           <Button colorScheme="purple" onClick={() => history.goBack()}>
             Go Back To Previous Page
