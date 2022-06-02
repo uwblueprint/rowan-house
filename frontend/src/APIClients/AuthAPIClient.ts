@@ -2,18 +2,19 @@ import {
   FetchResult,
   MutationFunctionOptions,
   OperationVariables,
+  QueryFunctionOptions,
 } from "@apollo/client";
 import AUTHENTICATED_USER_KEY from "../constants/AuthConstants";
-import { AuthenticatedUser } from "../types/AuthTypes";
+import { AuthUser } from "../types/AuthTypes";
 import { setLocalStorageObjProperty } from "../utils/LocalStorageUtils";
 
 type LoginFunction = (
   options?:
-    | MutationFunctionOptions<{ login: AuthenticatedUser }, OperationVariables>
+    | MutationFunctionOptions<{ login: AuthUser }, OperationVariables>
     | undefined,
 ) => Promise<
   FetchResult<
-    { login: AuthenticatedUser },
+    { login: AuthUser },
     Record<string, unknown>,
     Record<string, unknown>
   >
@@ -23,8 +24,8 @@ const login = async (
   email: string,
   password: string,
   loginFunction: LoginFunction,
-): Promise<AuthenticatedUser | null> => {
-  let user: AuthenticatedUser = null;
+): Promise<AuthUser | null> => {
+  let user: AuthUser = null;
   try {
     const result = await loginFunction({ variables: { email, password } });
     user = result.data?.login ?? null;
@@ -40,14 +41,11 @@ const login = async (
 
 type RegisterFunction = (
   options?:
-    | MutationFunctionOptions<
-        { register: AuthenticatedUser },
-        OperationVariables
-      >
+    | MutationFunctionOptions<{ register: AuthUser }, OperationVariables>
     | undefined,
 ) => Promise<
   FetchResult<
-    { register: AuthenticatedUser },
+    { register: AuthUser },
     Record<string, unknown>,
     Record<string, unknown>
   >
@@ -60,8 +58,8 @@ const register = async (
   town: string,
   password: string,
   registerFunction: RegisterFunction,
-): Promise<AuthenticatedUser | null> => {
-  let user: AuthenticatedUser = null;
+): Promise<AuthUser | null> => {
+  let user: AuthUser = null;
   try {
     const result = await registerFunction({
       variables: { firstName, lastName, email, town, password },
@@ -97,11 +95,11 @@ type LogoutFunction = (
 >;
 
 const logout = async (
-  authenticatedUserId: string,
+  authUserId: string,
   logoutFunction: LogoutFunction,
 ): Promise<boolean> => {
   const result = await logoutFunction({
-    variables: { userId: authenticatedUserId },
+    variables: { userId: authUserId },
   });
   let success = false;
   if (result.data?.logout === null) {
@@ -144,9 +142,60 @@ const refresh = async (refreshFunction: RefreshFunction): Promise<boolean> => {
   }
 };
 
+type GetUserWithVerificationStatusFunction = (
+  options?:
+    | QueryFunctionOptions<
+        {
+          getUserWithVerificationStatusByEmail: Omit<AuthUser, "accessToken">;
+        },
+        OperationVariables
+      >
+    | undefined,
+) => Promise<
+  FetchResult<
+    {
+      getUserWithVerificationStatusByEmail: Omit<AuthUser, "accessToken">;
+    },
+    Record<string, unknown>,
+    Record<string, unknown>
+  >
+>;
+
+const updateAuthUser = async (
+  authUser: AuthUser,
+  getUserWithVerificationStatusFunction: GetUserWithVerificationStatusFunction,
+): Promise<AuthUser> => {
+  try {
+    if (!authUser) {
+      return null;
+    }
+
+    const result = await getUserWithVerificationStatusFunction({
+      variables: {
+        email: authUser.email,
+      },
+    });
+    if (!result.data || !result.data.getUserWithVerificationStatusByEmail) {
+      return authUser;
+    }
+    const newAuthUser = {
+      accessToken: authUser.accessToken,
+      ...result.data.getUserWithVerificationStatusByEmail,
+    } as AuthUser;
+    localStorage.setItem(AUTHENTICATED_USER_KEY, JSON.stringify(newAuthUser));
+    return newAuthUser;
+  } catch (error) {
+    // TODO: add proper frontend logging
+    // eslint-disable-next-line no-console
+    console.log(error);
+    return authUser;
+  }
+};
+
 export default {
   login,
   logout,
   register,
   refresh,
+  updateAuthUser,
 };
