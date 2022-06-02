@@ -1,8 +1,8 @@
 import {
+  ApolloQueryResult,
   FetchResult,
   MutationFunctionOptions,
   OperationVariables,
-  QueryFunctionOptions,
 } from "@apollo/client";
 import AUTHENTICATED_USER_KEY from "../constants/AuthConstants";
 import { AuthUser } from "../types/AuthTypes";
@@ -143,53 +143,40 @@ const refresh = async (refreshFunction: RefreshFunction): Promise<boolean> => {
 };
 
 type GetUserWithVerificationStatusFunction = (
-  options?:
-    | QueryFunctionOptions<
-        {
-          getUserWithVerificationStatusByEmail: Omit<AuthUser, "accessToken">;
-        },
-        OperationVariables
-      >
+  variables?:
+    | Partial<{
+        email: string;
+      }>
     | undefined,
 ) => Promise<
-  FetchResult<
-    {
-      getUserWithVerificationStatusByEmail: Omit<AuthUser, "accessToken">;
-    },
-    Record<string, unknown>,
-    Record<string, unknown>
-  >
+  ApolloQueryResult<{
+    userWithVerificationStatusByEmail: Omit<AuthUser, "accessToken">;
+  }>
 >;
 
-const updateAuthUser = async (
+const getAuthUser = async (
   authUser: AuthUser,
   getUserWithVerificationStatusFunction: GetUserWithVerificationStatusFunction,
 ): Promise<AuthUser> => {
-  try {
-    if (!authUser) {
-      return null;
-    }
+  if (!authUser) {
+    return null;
+  }
 
-    const result = await getUserWithVerificationStatusFunction({
-      variables: {
-        email: authUser.email,
-      },
-    });
-    if (!result.data || !result.data.getUserWithVerificationStatusByEmail) {
-      return authUser;
-    }
-    const newAuthUser = {
-      accessToken: authUser.accessToken,
-      ...result.data.getUserWithVerificationStatusByEmail,
-    } as AuthUser;
-    localStorage.setItem(AUTHENTICATED_USER_KEY, JSON.stringify(newAuthUser));
-    return newAuthUser;
-  } catch (error) {
+  const { data, error } = await getUserWithVerificationStatusFunction({
+    email: authUser.email,
+  });
+  if (error) {
     // TODO: add proper frontend logging
     // eslint-disable-next-line no-console
     console.log(error);
     return authUser;
   }
+  const newAuthUser = {
+    accessToken: authUser.accessToken,
+    ...data.userWithVerificationStatusByEmail,
+  } as AuthUser;
+  localStorage.setItem(AUTHENTICATED_USER_KEY, JSON.stringify(newAuthUser));
+  return newAuthUser;
 };
 
 export default {
@@ -197,5 +184,5 @@ export default {
   logout,
   register,
   refresh,
-  updateAuthUser,
+  getAuthUser,
 };
