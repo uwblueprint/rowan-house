@@ -1,7 +1,7 @@
 import { Flex, VStack, Image } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useMutation } from "@apollo/client";
-
+import EditorContext from "../../contexts/ModuleEditorContext";
 import { TextInput } from "./TextInput";
 import { Modal } from "./Modal";
 import { SwitchInput } from "./SwitchInput";
@@ -15,6 +15,7 @@ import {
 } from "../../APIClients/types/CourseClientTypes";
 import { UPDATE_COURSE } from "../../APIClients/mutations/CourseMutations";
 import { COURSES, GET_COURSE } from "../../APIClients/queries/CourseQueries";
+import { EditorContextType } from "../../types/ModuleEditorTypes";
 
 export interface EditModuleModalProps {
   onClose: () => void;
@@ -23,7 +24,6 @@ export interface EditModuleModalProps {
   module?: ModuleResponse;
 }
 
-const refetchQueries = { refetchQueries: [{ query: COURSES }] };
 const EditModuleModal = ({
   module,
   formatCourseRequest,
@@ -36,6 +36,9 @@ const EditModuleModal = ({
 
   const [updateCourse] = useMutation<CourseResponse>(UPDATE_COURSE);
 
+  const context: EditorContextType = useContext(EditorContext);
+  if (!context) return <></>;
+  const { dispatch } = context;
   const onUpdateModule = () => {
     const newModule = { ...module, title, description, published: isPublished };
     const [id, course] = formatCourseRequest(newModule);
@@ -47,6 +50,10 @@ const EditModuleModal = ({
       ],
     });
     onClose();
+    dispatch({
+      type: "update-module-summary",
+      value: { title, description, id: Number(module?.id) },
+    });
   };
 
   return (

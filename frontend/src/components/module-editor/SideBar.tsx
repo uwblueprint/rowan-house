@@ -38,7 +38,12 @@ import {
   LessonRequest,
   LessonResponse,
 } from "../../APIClients/types/LessonClientTypes";
-import { CourseResponse, ModuleResponse, CourseRequest, ModuleRequest } from "../../APIClients/types/CourseClientTypes";
+import {
+  CourseResponse,
+  ModuleResponse,
+  CourseRequest,
+  ModuleRequest,
+} from "../../APIClients/types/CourseClientTypes";
 import { formatLessonRequest } from "../../utils/lessonUtils";
 import EditModuleModal from "../common/EditModuleModal";
 
@@ -73,23 +78,28 @@ const Sidebar = (): React.ReactElement => {
     // Copy other modules by reference due to the immutability of the data
     if (newModule) {
       // If module index isn't valid, append the new module
-      if (Number(moduleIndex) >= 0 && Number(moduleIndex) < state.course.modules.length)
+      if (
+        Number(moduleIndex) >= 0 &&
+        Number(moduleIndex) < state.course.modules.length
+      )
         newModules = state.course.modules.map((oldModule, index) =>
           Number(moduleIndex) === index ? newModule : oldModule,
         );
       else newModules = [...state.course.modules, newModule];
       // If no new module has been passed, remove the module
     } else {
-      newModules = state.course.modules.filter((_, index) => Number(moduleIndex) !== index);
+      newModules = state.course.modules.filter(
+        (_, index) => Number(moduleIndex) !== index,
+      );
     }
-    console.log(newModules);
-    console.log(state.course);
-    console.log(moduleIndex)
 
-    const { id, ...newCourse } = { ...state.course, id:courseID, modules: newModules };
+    const { id, ...newCourse } = {
+      ...state.course,
+      id: courseID,
+      modules: newModules,
+    };
     return [id, newCourse];
   };
-
 
   const createNewLesson = async (
     oldID: string,
@@ -241,14 +251,15 @@ const Sidebar = (): React.ReactElement => {
           <></>
         )}
       </Flex>
-      {isOpen &&  <EditModuleModal
-        module={state.course.modules[Number(moduleIndex)] as ModuleResponse} 
-        isOpen={isOpen}
-        onClose={onClose}
-        formatCourseRequest={formatCourseRequest}
-      /> }
-     
-    </Box>  
+      {isOpen && (
+        <EditModuleModal
+          module={state.course.modules[Number(moduleIndex)] as ModuleResponse}
+          isOpen={isOpen}
+          onClose={onClose}
+          formatCourseRequest={formatCourseRequest}
+        />
+      )}
+    </Box>
   );
 };
 

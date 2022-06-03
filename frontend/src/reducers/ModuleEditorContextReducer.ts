@@ -1,4 +1,8 @@
 import { v4 as uuid } from "uuid";
+import {
+  CourseRequest,
+  ModuleResponse,
+} from "../APIClients/types/CourseClientTypes";
 
 import {
   EditorContextAction,
@@ -65,6 +69,18 @@ const updateLesson = (
   newState.lessons[id] = { ...state.lessons[id], ...lesson };
   // Update to let the state know things have changed
   newState.hasChanged = updateChangeStatus(state.hasChanged, id, "UPDATE");
+  return newState;
+};
+
+const updateModule = (
+  state: EditorStateType,
+  id: number,
+  title: string,
+  description: string,
+): EditorStateType => {
+  const newState = { ...state };
+  newState.course.modules[id].description = description;
+  newState.course.modules[id].description = title;
   return newState;
 };
 
@@ -254,6 +270,13 @@ export default function EditorContextReducer(
       return deleteLesson(state, action.value);
     case "update-lesson-id":
       return replaceLessonID(state, action.value.oldID, action.value.newID);
+    case "update-module-summary":
+      return updateModule(
+        state,
+        action.value.id,
+        action.value.title,
+        action.value.description,
+      );
     case "create-block":
       return createLessonContentBlock(
         state,
