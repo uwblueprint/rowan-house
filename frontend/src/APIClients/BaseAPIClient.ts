@@ -52,6 +52,8 @@ const injectAccessToken = async (operation: Operation) => {
     throw Error("Token expired, sign out");
   }
   if (!decodedToken) {
+    // TODO handle this case better.
+    // eslint-disable-next-line no-console
     console.warn("null access token - failed to inject into API call");
   }
 };
