@@ -19,6 +19,8 @@ const Logout = (): React.ReactElement => {
     try {
       await authAPIClient.logout(String(authenticatedUser?.id), logout);
     } catch (e) {
+      // TODO handle this case better
+      // eslint-disable-next-line no-console
       console.warn(`Error when logging out: ${e}`);
       setAuthenticatedUser(null);
     }
