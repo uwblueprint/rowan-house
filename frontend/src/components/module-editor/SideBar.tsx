@@ -26,7 +26,6 @@ import {
   EditorChangeStatuses,
   EditorContextType,
   ModuleEditorParams,
-  ModuleType,
 } from "../../types/ModuleEditorTypes";
 import {
   CREATE_LESSON,
@@ -173,6 +172,7 @@ const Sidebar = (): React.ReactElement => {
                 variant="md"
                 leftIcon={<EditIcon color="white" h={5} w={5} />}
                 onClick={onOpen}
+                backgroundColor="transparent"
               />
             </HStack>
             <Text variant="display-sm-sb" color="white">

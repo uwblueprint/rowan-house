@@ -1,10 +1,5 @@
 import { v4 as uuid } from "uuid";
 import {
-  CourseRequest,
-  ModuleResponse,
-} from "../APIClients/types/CourseClientTypes";
-
-import {
   EditorContextAction,
   EditorStateType,
   LessonType,
@@ -74,13 +69,25 @@ const updateLesson = (
 
 const updateModule = (
   state: EditorStateType,
-  id: number,
+  id: string,
   title: string,
   description: string,
 ): EditorStateType => {
+  const moduleIndex = state.course.modules.findIndex(
+    (module) => module.id === id,
+  );
   const newState = { ...state };
-  newState.course.modules[id].description = description;
-  newState.course.modules[id].description = title;
+  // if we somehow cannot find the id, just return and dont edit
+  if (moduleIndex === -1) {
+    return newState;
+  }
+  newState.course = { ...newState.course };
+  newState.course.modules = [...newState.course.modules];
+  newState.course.modules[moduleIndex] = {
+    ...state.course.modules[moduleIndex],
+    description,
+    title,
+  };
   return newState;
 };
 
@@ -273,7 +280,7 @@ export default function EditorContextReducer(
     case "update-module-summary":
       return updateModule(
         state,
-        action.value.id,
+        action.value.id || "",
         action.value.title,
         action.value.description,
       );

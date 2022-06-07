@@ -24,6 +24,8 @@ export interface EditModuleModalProps {
   module?: ModuleResponse;
 }
 
+const MAX_TITLE_CHARACTERS = 50; // maximum # of characters in the title
+
 const EditModuleModal = ({
   module,
   formatCourseRequest,
@@ -33,6 +35,7 @@ const EditModuleModal = ({
   const [title, setTitle] = useState(module?.title ?? "");
   const [isPublished, setVisibility] = useState(module?.published ?? false);
   const [description, setDescription] = useState(module?.description ?? "");
+  const [invalid, setInvalid] = useState(false);
 
   const [updateCourse] = useMutation<CourseResponse>(UPDATE_COURSE);
 
@@ -40,6 +43,11 @@ const EditModuleModal = ({
   if (!context) return <></>;
   const { dispatch } = context;
   const onUpdateModule = () => {
+    if (!title || title.length > MAX_TITLE_CHARACTERS) {
+      setInvalid(true);
+      // title is mandatory field, do not submit if empty
+      return;
+    }
     const newModule = { ...module, title, description, published: isPublished };
     const [id, course] = formatCourseRequest(newModule);
     updateCourse({
@@ -52,7 +60,7 @@ const EditModuleModal = ({
     onClose();
     dispatch({
       type: "update-module-summary",
-      value: { title, description, id: Number(module?.id) },
+      value: { title, description, id: module?.id || "" },
     });
   };
 
@@ -81,7 +89,9 @@ const EditModuleModal = ({
             label="Module Name:"
             defaultValue={title}
             onChange={setTitle}
+            isInvalid={invalid}
             isRequired
+            helperText={`${title.length}/${MAX_TITLE_CHARACTERS} characters`}
           />
           <TextArea
             label="Module Description:"

@@ -1,5 +1,4 @@
 import { v4 as uuid } from "uuid";
-import { ModuleResponse } from "../APIClients/types/CourseClientTypes";
 
 export interface LessonType {
   course: string;
@@ -119,10 +118,10 @@ export type EditorContextAction =
       value: { oldID: string; newID: string };
     }
   | {
-    type: "update-module-summary";
-    value: {title: string; description: string; id: number}
-  } | 
-  {
+      type: "update-module-summary";
+      value: { title: string; description: string; id: string };
+    }
+  | {
       type: "create-block";
       value: { index: number; blockID: string };
     }

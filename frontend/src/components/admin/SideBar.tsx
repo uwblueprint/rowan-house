@@ -45,7 +45,6 @@ const PageTab = ({
 const Sidebar = ({ currentPage }: SidebarProps): React.ReactElement => {
   const history = useHistory();
 
-
   const getTabColor = (tab: AdminPage) =>
     tab === currentPage ? "brand.purple" : "brand.royal";
 
