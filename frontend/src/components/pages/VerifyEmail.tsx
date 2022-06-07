@@ -17,9 +17,7 @@ const VerifyEmail = (): React.ReactElement => {
   >(GET_USER_WITH_VERIFICATION_STATUS_BY_EMAIL, { skip: true });
   useEffect(() => {
     if (authUser?.email) {
-      authAPIClient.getAuthUser(authUser, refetch).then((user) => {
-        setAuthUser(user);
-      });
+      authAPIClient.getAuthUser(authUser, refetch).then(setAuthUser);
     }
   }, [authUser, setAuthUser, refetch]);
 
