@@ -79,14 +79,13 @@ const Login = (): React.ReactElement => {
   };
 
   // Temporarily while working on the admin side, should normally redirect to HOME_PAGE
-  if (authUser && authUser?.emailVerified) {
-    return <Redirect to={MANAGE_COURSES_PAGE} />;
+  if (authUser) {
+    return (
+      <Redirect
+        to={authUser?.emailVerified ? MANAGE_COURSES_PAGE : VERIFY_EMAIL_PAGE}
+      />
+    );
   }
-
-  if (authUser && !authUser?.emailVerified) {
-    return <Redirect to={VERIFY_EMAIL_PAGE} />;
-  }
-
   const getLoginForm = (currentLoginState: LoginState) => {
     switch (currentLoginState) {
       case LoginState.EnterEmail:

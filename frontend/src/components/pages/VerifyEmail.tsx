@@ -16,14 +16,14 @@ const VerifyEmail = (): React.ReactElement => {
     { email: string }
   >(GET_USER_WITH_VERIFICATION_STATUS_BY_EMAIL, { skip: true });
   useEffect(() => {
-    if (authUser && authUser.email) {
+    if (authUser?.email) {
       authAPIClient.getAuthUser(authUser, refetch).then((user) => {
         setAuthUser(user);
       });
     }
   }, [authUser, setAuthUser, refetch]);
 
-  if (authUser && authUser?.emailVerified) {
+  if (authUser?.emailVerified) {
     return <Redirect to={MANAGE_COURSES_PAGE} />;
   }
 

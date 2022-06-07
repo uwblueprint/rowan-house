@@ -55,11 +55,10 @@ const Signup = (): React.ReactElement => {
     history.push(LOGIN_PAGE);
   };
 
-  if (authUser && authUser?.emailVerified) {
-    return <Redirect to={HOME_PAGE} />;
-  }
-  if (authUser && !authUser?.emailVerified) {
-    return <Redirect to={VERIFY_EMAIL_PAGE} />;
+  if (authUser) {
+    return (
+      <Redirect to={authUser?.emailVerified ? HOME_PAGE : VERIFY_EMAIL_PAGE} />
+    );
   }
 
   const isMatch = password === currentPassword;

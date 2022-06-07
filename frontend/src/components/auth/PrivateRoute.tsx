@@ -20,7 +20,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
   if (!authUser) {
     return <Redirect to={LOGIN_PAGE} />;
   }
-  if (authUser && !authUser.emailVerified) {
+  if (!authUser.emailVerified) {
     return <Redirect to={VERIFY_EMAIL_PAGE} />;
   }
   return <Route path={path} exact={exact} component={component} />;
