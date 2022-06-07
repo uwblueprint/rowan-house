@@ -11,9 +11,11 @@ import authAPIClient from "../../APIClients/AuthAPIClient";
 
 const VerifyEmail = (): React.ReactElement => {
   const { authUser, setAuthUser } = useContext(AuthContext);
+  // refetch used to call query lazily with non-void function output
   const { refetch } = useQuery<
     { userWithVerificationStatusByEmail: Omit<AuthUser, "accessToken"> },
     { email: string }
+    // skip set to true prevents premature query call without valid authUser
   >(GET_USER_WITH_VERIFICATION_STATUS_BY_EMAIL, { skip: true });
   useEffect(() => {
     if (authUser?.email) {
