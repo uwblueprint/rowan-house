@@ -165,10 +165,12 @@ const getAuthUser = async (
   const { data, error } = await getUserWithVerificationStatusFunction({
     email: authUser.email,
   });
-  if (error) {
+  if (error || data.userWithVerificationStatusByEmail === undefined) {
     // TODO: add proper frontend logging
     // eslint-disable-next-line no-console
     console.log(error);
+    // eslint-disable-next-line no-console
+    console.log(data);
     return authUser;
   }
   const newAuthUser = {
