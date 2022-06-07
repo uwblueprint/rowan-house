@@ -4,6 +4,7 @@ export interface LessonType {
   course: string;
   module: string;
   title: string;
+  id?: string;
   description?: string;
   image?: string;
   content: ContentBlock[];
