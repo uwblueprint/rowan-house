@@ -24,10 +24,9 @@ The frontend is a React application written in TypeScript.
 [Starter Code](https://uwblueprint.github.io/starter-code-v2)
 
 ## Getting Started
-This repository was setup using [Blueprint's starter-code](https://uwblueprint.github.io/starter-code-v2/docs/getting-started). To connect to all the services we use, we use `.env` files that keep track of keys, urls, and more. Make sure you have a `.env` file in the following locations:
+This repository was setup using [Blueprint's starter-code](https://uwblueprint.github.io/starter-code-v2/docs/getting-started). To connect to all the services we use, we use `.env` files that keep track of keys, urls, and more; these are populated from the team Vault which you can set up [here](https://www.notion.so/uwblueprintexecs/Secret-Management-2d5b59ef0987415e93ec951ce05bf03e#c51f74151aa44451aee2011905994043). Make sure you have a `.env` file in the following locations by running `./setup_vault.sh`:
 - `./.env` (the main folder)
 - `./frontend/.env`
-- `./e2e-tests/.env` (optional)
 
 Once you have these, build and run the system using:
 ```
