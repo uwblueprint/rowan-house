@@ -4,32 +4,37 @@ import { useQuery } from "@apollo/client";
 import { Redirect } from "react-router-dom";
 import RHSLogo from "../../assets/RHSlogo.png";
 import AuthContext from "../../contexts/AuthContext";
-import { GET_USER_WITH_VERIFICATION_STATUS_BY_EMAIL } from "../../APIClients/queries/UserQueries";
+import { GET_EMAIL_VERIFIED_BY_EMAIL } from "../../APIClients/queries/UserQueries";
 import { MANAGE_COURSES_PAGE } from "../../constants/Routes";
-import { AuthUser } from "../../types/AuthTypes";
 import authAPIClient from "../../APIClients/AuthAPIClient";
 
 const VerifyEmail = (): React.ReactElement => {
   const { authUser, setAuthUser } = useContext(AuthContext);
   // refetch used to call query lazily with non-void function output
   const { refetch } = useQuery<
-    { userWithVerificationStatusByEmail: Omit<AuthUser, "accessToken"> },
+    { emailVerifiedByEmail: boolean },
     { email: string }
     // skip set to true prevents premature query call without valid authUser
-  >(GET_USER_WITH_VERIFICATION_STATUS_BY_EMAIL, { skip: true });
+  >(GET_EMAIL_VERIFIED_BY_EMAIL, { skip: true });
+  const authUserEmail = authUser?.email;
+  const authUserEmailVerified = authUser?.emailVerified;
   useEffect(() => {
-    if (authUser?.email) {
-      authAPIClient.getAuthUser(authUser, refetch).then((newAuthUser) => {
-        if (
-          authUser.emailVerified &&
-          newAuthUser?.emailVerified &&
-          authUser.emailVerified !== newAuthUser?.emailVerified
-        ) {
-          setAuthUser(newAuthUser);
-        }
-      });
+    if (authUserEmail) {
+      authAPIClient
+        .getEmailVerified(authUserEmail, refetch)
+        .then((emailVerified) => {
+          if (
+            emailVerified !== null &&
+            authUserEmailVerified !== emailVerified
+          ) {
+            authAPIClient.updateAuthUserEmailVerified(
+              emailVerified,
+              setAuthUser,
+            );
+          }
+        });
     }
-  }, [authUser, setAuthUser, refetch]);
+  }, [authUserEmail, authUserEmailVerified, setAuthUser, refetch, authUser]);
 
   if (authUser?.emailVerified) {
     return <Redirect to={MANAGE_COURSES_PAGE} />;

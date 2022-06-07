@@ -1,10 +1,4 @@
-import {
-  CreateUserDTO,
-  Role,
-  UpdateUserDTO,
-  UserDTO,
-  UserWithVerificationStatusDTO,
-} from "../../types";
+import { CreateUserDTO, Role, UpdateUserDTO, UserDTO } from "../../types";
 
 interface IUserService {
   /**
@@ -14,16 +8,6 @@ interface IUserService {
    * @throws Error if user retrieval fails
    */
   getUserById(userId: string): Promise<UserDTO>;
-
-  /**
-   * Get user associated with email along with its verification status
-   * @param email user's email
-   * @returns a UserWithVerificationStatusDTO with user's information, including verification status
-   * @throws Error if user retrieval fails
-   */
-  getUserWithVerificationStatusByEmail(
-    email: string,
-  ): Promise<UserWithVerificationStatusDTO>;
 
   /**
    * Get user associated with email

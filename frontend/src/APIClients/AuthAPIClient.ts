@@ -4,6 +4,7 @@ import {
   MutationFunctionOptions,
   OperationVariables,
 } from "@apollo/client";
+import { Dispatch, SetStateAction } from "react";
 import AUTHENTICATED_USER_KEY from "../constants/AuthConstants";
 import { AuthUser } from "../types/AuthTypes";
 import { setLocalStorageObjProperty } from "../utils/LocalStorageUtils";
@@ -142,7 +143,7 @@ const refresh = async (refreshFunction: RefreshFunction): Promise<boolean> => {
   }
 };
 
-type GetUserWithVerificationStatusFunction = (
+type GetEmailVerifiedByEmailFunction = (
   variables?:
     | Partial<{
         email: string;
@@ -150,35 +151,40 @@ type GetUserWithVerificationStatusFunction = (
     | undefined,
 ) => Promise<
   ApolloQueryResult<{
-    userWithVerificationStatusByEmail: Omit<AuthUser, "accessToken">;
+    emailVerifiedByEmail: boolean;
   }>
 >;
 
-const getAuthUser = async (
-  authUser: AuthUser,
-  getUserWithVerificationStatusFunction: GetUserWithVerificationStatusFunction,
-): Promise<AuthUser> => {
-  if (!authUser) {
-    return null;
-  }
-
-  const { data, error } = await getUserWithVerificationStatusFunction({
-    email: authUser.email,
+const getEmailVerified = async (
+  authUserEmail: string,
+  getEmailVerifiedByEmailFunction: GetEmailVerifiedByEmailFunction,
+): Promise<boolean | null> => {
+  const { data, error } = await getEmailVerifiedByEmailFunction({
+    email: authUserEmail,
   });
-  if (error || data.userWithVerificationStatusByEmail === undefined) {
+  if (error || data.emailVerifiedByEmail === undefined) {
     // TODO: add proper frontend logging
     // eslint-disable-next-line no-console
     console.log(error);
     // eslint-disable-next-line no-console
     console.log(data);
-    return authUser;
+    return null;
   }
-  const newAuthUser = {
-    accessToken: authUser.accessToken,
-    ...data.userWithVerificationStatusByEmail,
-  } as AuthUser;
-  localStorage.setItem(AUTHENTICATED_USER_KEY, JSON.stringify(newAuthUser));
-  return newAuthUser;
+  return data.emailVerifiedByEmail;
+};
+
+const updateAuthUserEmailVerified = (
+  emailVerified: boolean,
+  setAuthUser: Dispatch<SetStateAction<AuthUser>>,
+): void => {
+  setAuthUser((prevAuthUser: AuthUser) => {
+    const newAuthUser = {
+      ...prevAuthUser,
+      emailVerified,
+    } as AuthUser;
+    localStorage.setItem(AUTHENTICATED_USER_KEY, JSON.stringify(newAuthUser));
+    return newAuthUser;
+  });
 };
 
 export default {
@@ -186,5 +192,6 @@ export default {
   logout,
   register,
   refresh,
-  getAuthUser,
+  getEmailVerified,
+  updateAuthUserEmailVerified,
 };

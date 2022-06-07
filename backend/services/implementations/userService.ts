@@ -3,13 +3,7 @@ import { Types } from "mongoose";
 
 import IUserService from "../interfaces/userService";
 import MgUser, { User } from "../../models/user.model";
-import {
-  CreateUserDTO,
-  Role,
-  UpdateUserDTO,
-  UserDTO,
-  UserWithVerificationStatusDTO,
-} from "../../types";
+import { CreateUserDTO, Role, UpdateUserDTO, UserDTO } from "../../types";
 import { getErrorMessage } from "../../utilities/errorUtils";
 import logger from "../../utilities/logger";
 
@@ -96,9 +90,7 @@ class UserService implements IUserService {
     };
   }
 
-  async getUserWithVerificationStatusByEmail(
-    email: string,
-  ): Promise<UserWithVerificationStatusDTO> {
+  async getUserByEmail(email: string): Promise<UserDTO> {
     let user: User | null;
     let firebaseUser: firebaseAdmin.auth.UserRecord;
 
@@ -121,16 +113,7 @@ class UserService implements IUserService {
       email: firebaseUser.email ?? "",
       role: user.role,
       town: user.town,
-      emailVerified: firebaseUser.emailVerified,
     };
-  }
-
-  async getUserByEmail(email: string): Promise<UserDTO> {
-    const {
-      emailVerified,
-      ...rest
-    } = await this.getUserWithVerificationStatusByEmail(email);
-    return rest;
   }
 
   async getUserRoleByAuthId(authId: string): Promise<Role> {

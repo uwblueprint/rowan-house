@@ -5,12 +5,7 @@ import UserService from "../../services/implementations/userService";
 import IAuthService from "../../services/interfaces/authService";
 import IEmailService from "../../services/interfaces/emailService";
 import IUserService from "../../services/interfaces/userService";
-import {
-  CreateUserDTO,
-  UpdateUserDTO,
-  UserDTO,
-  UserWithVerificationStatusDTO,
-} from "../../types";
+import { CreateUserDTO, UpdateUserDTO, UserDTO } from "../../types";
 import { generateCSV } from "../../utilities/CSVUtils";
 
 const userService: IUserService = new UserService();
@@ -24,15 +19,6 @@ const userResolvers = {
       { id }: { id: string },
     ): Promise<UserDTO> => {
       return userService.getUserById(id);
-    },
-    userWithVerificationStatusByEmail: async (
-      _parent: undefined,
-      { email }: { email: string },
-    ): Promise<UserWithVerificationStatusDTO> => {
-      return {
-        emailVerified: await userService.getUserEmailVerifiedByEmail(email),
-        ...(await userService.getUserByEmail(email)),
-      };
     },
     userByEmail: async (
       _parent: undefined,
@@ -54,6 +40,12 @@ const userResolvers = {
     ): Promise<string> => {
       const result = await userService.getUserCountByTown(startDate, endDate);
       return JSON.stringify(result);
+    },
+    emailVerifiedByEmail: async (
+      _parent: undefined,
+      { email }: { email: string },
+    ): Promise<boolean> => {
+      return userService.getUserEmailVerifiedByEmail(email);
     },
   },
   Mutation: {

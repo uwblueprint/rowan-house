@@ -14,16 +14,8 @@ export const GET_USER_BY_EMAIL = gql`
   }
 `;
 
-export const GET_USER_WITH_VERIFICATION_STATUS_BY_EMAIL = gql`
-  query GetUserWithVerificationStatusByEmail($email: String!) {
-    userWithVerificationStatusByEmail(email: $email) {
-      id
-      firstName
-      lastName
-      email
-      town
-      role
-      emailVerified
-    }
+export const GET_EMAIL_VERIFIED_BY_EMAIL = gql`
+  query GetEmailVerifiedByEmail($email: String!) {
+    emailVerifiedByEmail(email: $email)
   }
 `;
