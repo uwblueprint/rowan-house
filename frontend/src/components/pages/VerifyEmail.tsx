@@ -16,25 +16,11 @@ const VerifyEmail = (): React.ReactElement => {
     { email: string }
     // skip set to true prevents premature query call without valid authUser
   >(GET_EMAIL_VERIFIED_BY_EMAIL, { skip: true });
-  const authUserEmail = authUser?.email;
-  const authUserEmailVerified = authUser?.emailVerified;
   useEffect(() => {
-    if (authUserEmail) {
-      authAPIClient
-        .getEmailVerified(authUserEmail, refetch)
-        .then((emailVerified) => {
-          if (
-            emailVerified !== null &&
-            authUserEmailVerified !== emailVerified
-          ) {
-            authAPIClient.updateAuthUserEmailVerified(
-              emailVerified,
-              setAuthUser,
-            );
-          }
-        });
+    if (authUser) {
+      authAPIClient.updateAuthUser(authUser, refetch, setAuthUser);
     }
-  }, [authUserEmail, authUserEmailVerified, setAuthUser, refetch, authUser]);
+  }, [authUser, setAuthUser, refetch]);
 
   if (authUser?.emailVerified) {
     return <Redirect to={MANAGE_COURSES_PAGE} />;

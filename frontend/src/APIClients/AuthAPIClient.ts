@@ -155,36 +155,36 @@ type GetEmailVerifiedByEmailFunction = (
   }>
 >;
 
-const getEmailVerified = async (
-  authUserEmail: string,
+const updateAuthUser = async (
+  authUser: AuthUser,
   getEmailVerifiedByEmailFunction: GetEmailVerifiedByEmailFunction,
-): Promise<boolean | null> => {
-  const { data, error } = await getEmailVerifiedByEmailFunction({
-    email: authUserEmail,
-  });
-  if (error || data.emailVerifiedByEmail === undefined) {
-    // TODO: add proper frontend logging
-    // eslint-disable-next-line no-console
-    console.log(error);
-    // eslint-disable-next-line no-console
-    console.log(data);
-    return null;
-  }
-  return data.emailVerifiedByEmail;
-};
-
-const updateAuthUserEmailVerified = (
-  emailVerified: boolean,
   setAuthUser: Dispatch<SetStateAction<AuthUser>>,
-): void => {
-  setAuthUser((prevAuthUser: AuthUser) => {
-    const newAuthUser = {
-      ...prevAuthUser,
-      emailVerified,
-    } as AuthUser;
-    localStorage.setItem(AUTHENTICATED_USER_KEY, JSON.stringify(newAuthUser));
-    return newAuthUser;
-  });
+): Promise<void> => {
+  if (authUser) {
+    const { data, error } = await getEmailVerifiedByEmailFunction({
+      email: authUser.email,
+    });
+    if (error || data.emailVerifiedByEmail === undefined) {
+      // TODO: add proper frontend logging
+      // eslint-disable-next-line no-console
+      console.log(error);
+      // eslint-disable-next-line no-console
+      console.log(data);
+
+      return;
+    }
+    if (
+      data.emailVerifiedByEmail !== undefined &&
+      data.emailVerifiedByEmail !== authUser.emailVerified
+    ) {
+      setAuthUser((prevAuthUser: AuthUser) => {
+        return {
+          ...prevAuthUser,
+          emailVerified: data.emailVerifiedByEmail,
+        } as AuthUser;
+      });
+    }
+  }
 };
 
 export default {
@@ -192,6 +192,5 @@ export default {
   logout,
   register,
   refresh,
-  getEmailVerified,
-  updateAuthUserEmailVerified,
+  updateAuthUser,
 };
