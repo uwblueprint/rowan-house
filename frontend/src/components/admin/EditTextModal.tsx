@@ -27,16 +27,24 @@ const EditTextModal = ({
   const { state, dispatch } = context;
 
   const onSave = () => {
-    const newBlock = block;
-    newBlock.content.text = text;
+    const newBlock = {
+      ...block,
+      content: {
+        ...block.content,
+        text,
+      }
+    };
+    // newBlock.content.text = text;
     dispatch({
       type: "update-block",
       value: {
         index,
-        block,
+        block: newBlock,
       },
     });
-  }
+    // state.
+    onClose();
+  };
 
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
