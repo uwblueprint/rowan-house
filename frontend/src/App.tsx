@@ -59,7 +59,9 @@ const App = (): React.ReactElement => {
         value={dispatchSampleContextUpdate}
       >
         <ApolloProvider client={client}>
-          <AuthContext.Provider value={{ authenticatedUser, setAuthenticatedUser }}>
+          <AuthContext.Provider
+            value={{ authenticatedUser, setAuthenticatedUser }}
+          >
             <ChakraProvider theme={defaultTheme}>
               <Router>
                 <Switch>

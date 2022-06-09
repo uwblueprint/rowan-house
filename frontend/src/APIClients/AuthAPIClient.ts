@@ -42,7 +42,10 @@ const login = async (
 
 type RegisterFunction = (
   options?:
-    | MutationFunctionOptions<{ register: AuthenticatedUser }, OperationVariables>
+    | MutationFunctionOptions<
+        { register: AuthenticatedUser },
+        OperationVariables
+      >
     | undefined,
 ) => Promise<
   FetchResult<

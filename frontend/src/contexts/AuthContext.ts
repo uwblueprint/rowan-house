@@ -10,7 +10,9 @@ const AuthContext = createContext<AuthContextType>({
   authenticatedUser: null,
   setAuthenticatedUser: (
     /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-    _authenticatedUserSetStateAction: AuthenticatedUser | ((prevState: AuthenticatedUser) => AuthenticatedUser),
+    _authenticatedUserSetStateAction:
+      | AuthenticatedUser
+      | ((prevState: AuthenticatedUser) => AuthenticatedUser),
   ): void => {},
 });
 

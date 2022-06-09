@@ -57,7 +57,9 @@ const Signup = (): React.ReactElement => {
 
   if (authenticatedUser) {
     return (
-      <Redirect to={authenticatedUser?.emailVerified ? HOME_PAGE : VERIFY_EMAIL_PAGE} />
+      <Redirect
+        to={authenticatedUser?.emailVerified ? HOME_PAGE : VERIFY_EMAIL_PAGE}
+      />
     );
   }
 
