@@ -11,16 +11,16 @@ const LOGOUT = gql`
 `;
 
 const Logout = (): React.ReactElement => {
-  const { authUser, setAuthUser } = useContext(AuthContext);
+  const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
 
   const [logout] = useMutation<{ logout: null }>(LOGOUT);
 
   const onLogOutClick = async () => {
     try {
-      await authAPIClient.logout(String(authUser?.id), logout);
+      await authAPIClient.logout(String(authenticatedUser?.id), logout);
     } catch (e) {
       console.warn(`Error when logging out: ${e}`);
-      setAuthUser(null);
+      setAuthenticatedUser(null);
     }
   };
 

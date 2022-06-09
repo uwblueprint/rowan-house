@@ -15,12 +15,12 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
   exact,
   path,
 }: PrivateRouteProps) => {
-  const { authUser } = useContext(AuthContext);
+  const { authenticatedUser } = useContext(AuthContext);
 
-  if (!authUser) {
+  if (!authenticatedUser) {
     return <Redirect to={LOGIN_PAGE} />;
   }
-  if (!authUser.emailVerified) {
+  if (!authenticatedUser.emailVerified) {
     return <Redirect to={VERIFY_EMAIL_PAGE} />;
   }
   return <Route path={path} exact={exact} component={component} />;

@@ -23,12 +23,12 @@ import {
   VERIFY_EMAIL_PAGE,
 } from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
-import { AuthUser } from "../../types/AuthTypes";
+import { AuthenticatedUser } from "../../types/AuthTypes";
 import RHSLogo from "../../assets/RHSlogo.png";
 import BackgroundImage from "../../assets/signuppage.jpg";
 
 const Signup = (): React.ReactElement => {
-  const { authUser, setAuthUser } = useContext(AuthContext);
+  const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -37,10 +37,10 @@ const Signup = (): React.ReactElement => {
   const [currentPassword, setCurrentPassword] = useState("");
   const history = useHistory();
 
-  const [register] = useMutation<{ register: AuthUser }>(REGISTER);
+  const [register] = useMutation<{ register: AuthenticatedUser }>(REGISTER);
 
   const onSignupClick = async () => {
-    const user: AuthUser = await authAPIClient.register(
+    const user: AuthenticatedUser = await authAPIClient.register(
       firstName,
       lastName,
       email,
@@ -48,16 +48,16 @@ const Signup = (): React.ReactElement => {
       password,
       register,
     );
-    setAuthUser(user);
+    setAuthenticatedUser(user);
   };
 
   const onSignInClick = () => {
     history.push(LOGIN_PAGE);
   };
 
-  if (authUser) {
+  if (authenticatedUser) {
     return (
-      <Redirect to={authUser?.emailVerified ? HOME_PAGE : VERIFY_EMAIL_PAGE} />
+      <Redirect to={authenticatedUser?.emailVerified ? HOME_PAGE : VERIFY_EMAIL_PAGE} />
     );
   }
 

@@ -9,20 +9,20 @@ import { MANAGE_COURSES_PAGE } from "../../constants/Routes";
 import authAPIClient from "../../APIClients/AuthAPIClient";
 
 const VerifyEmail = (): React.ReactElement => {
-  const { authUser, setAuthUser } = useContext(AuthContext);
+  const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
   // refetch used to call query lazily with non-void function output
   const { refetch } = useQuery<
     { emailVerifiedByEmail: boolean },
     { email: string }
-    // skip set to true prevents premature query call without valid authUser
+    // skip set to true prevents premature query call without valid authenticatedUser
   >(GET_EMAIL_VERIFIED_BY_EMAIL, { skip: true });
   useEffect(() => {
-    if (authUser) {
-      authAPIClient.updateAuthUser(authUser, refetch, setAuthUser);
+    if (authenticatedUser) {
+      authAPIClient.updateAuthenticatedUser(authenticatedUser, refetch, setAuthenticatedUser);
     }
-  }, [authUser, setAuthUser, refetch]);
+  }, [authenticatedUser, setAuthenticatedUser, refetch]);
 
-  if (authUser?.emailVerified) {
+  if (authenticatedUser?.emailVerified) {
     return <Redirect to={MANAGE_COURSES_PAGE} />;
   }
 

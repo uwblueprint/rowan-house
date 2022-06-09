@@ -31,17 +31,19 @@ import sampleContextReducer from "./reducers/SampleContextReducer";
 import SampleContextDispatcherContext from "./contexts/SampleContextDispatcherContext";
 import EditTeamInfoPage from "./components/pages/EditTeamPage";
 import HooksDemo from "./components/pages/HooksDemo";
-import { AuthUser } from "./types/AuthTypes";
+import { AuthenticatedUser } from "./types/AuthTypes";
 import client from "./APIClients/BaseAPIClient";
 import ManageUsersPage from "./components/pages/ManageUsersPage";
 import ManageCoursesPage from "./components/pages/ManageCoursesPage";
 
 const App = (): React.ReactElement => {
-  const currentUser: AuthUser = getLocalStorageObj<AuthUser>(
+  const currentUser: AuthenticatedUser = getLocalStorageObj<AuthenticatedUser>(
     AUTHENTICATED_USER_KEY,
   );
 
-  const [authUser, setAuthUser] = useState<AuthUser>(currentUser);
+  const [authenticatedUser, setAuthenticatedUser] = useState<AuthenticatedUser>(
+    currentUser,
+  );
 
   // Some sort of global state. Context API replaces redux.
   // Split related states into different contexts as necessary.
@@ -57,7 +59,7 @@ const App = (): React.ReactElement => {
         value={dispatchSampleContextUpdate}
       >
         <ApolloProvider client={client}>
-          <AuthContext.Provider value={{ authUser, setAuthUser }}>
+          <AuthContext.Provider value={{ authenticatedUser, setAuthenticatedUser }}>
             <ChakraProvider theme={defaultTheme}>
               <Router>
                 <Switch>

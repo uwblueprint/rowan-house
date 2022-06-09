@@ -1,16 +1,16 @@
 import { createContext, Dispatch, SetStateAction } from "react";
-import { AuthUser } from "../types/AuthTypes";
+import { AuthenticatedUser } from "../types/AuthTypes";
 
 type AuthContextType = {
-  authUser: AuthUser;
-  setAuthUser: Dispatch<SetStateAction<AuthUser>>;
+  authenticatedUser: AuthenticatedUser;
+  setAuthenticatedUser: Dispatch<SetStateAction<AuthenticatedUser>>;
 };
 
 const AuthContext = createContext<AuthContextType>({
-  authUser: null,
-  setAuthUser: (
+  authenticatedUser: null,
+  setAuthenticatedUser: (
     /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-    _authUserSetStateAction: AuthUser | ((prevState: AuthUser) => AuthUser),
+    _authenticatedUserSetStateAction: AuthenticatedUser | ((prevState: AuthenticatedUser) => AuthenticatedUser),
   ): void => {},
 });
 

@@ -6,16 +6,16 @@ import {
 } from "@apollo/client";
 import { Dispatch, SetStateAction } from "react";
 import AUTHENTICATED_USER_KEY from "../constants/AuthConstants";
-import { AuthUser } from "../types/AuthTypes";
+import { AuthenticatedUser } from "../types/AuthTypes";
 import { setLocalStorageObjProperty } from "../utils/LocalStorageUtils";
 
 type LoginFunction = (
   options?:
-    | MutationFunctionOptions<{ login: AuthUser }, OperationVariables>
+    | MutationFunctionOptions<{ login: AuthenticatedUser }, OperationVariables>
     | undefined,
 ) => Promise<
   FetchResult<
-    { login: AuthUser },
+    { login: AuthenticatedUser },
     Record<string, unknown>,
     Record<string, unknown>
   >
@@ -25,8 +25,8 @@ const login = async (
   email: string,
   password: string,
   loginFunction: LoginFunction,
-): Promise<AuthUser | null> => {
-  let user: AuthUser = null;
+): Promise<AuthenticatedUser | null> => {
+  let user: AuthenticatedUser = null;
   try {
     const result = await loginFunction({ variables: { email, password } });
     user = result.data?.login ?? null;
@@ -42,11 +42,11 @@ const login = async (
 
 type RegisterFunction = (
   options?:
-    | MutationFunctionOptions<{ register: AuthUser }, OperationVariables>
+    | MutationFunctionOptions<{ register: AuthenticatedUser }, OperationVariables>
     | undefined,
 ) => Promise<
   FetchResult<
-    { register: AuthUser },
+    { register: AuthenticatedUser },
     Record<string, unknown>,
     Record<string, unknown>
   >
@@ -59,8 +59,8 @@ const register = async (
   town: string,
   password: string,
   registerFunction: RegisterFunction,
-): Promise<AuthUser | null> => {
-  let user: AuthUser = null;
+): Promise<AuthenticatedUser | null> => {
+  let user: AuthenticatedUser = null;
   try {
     const result = await registerFunction({
       variables: { firstName, lastName, email, town, password },
@@ -96,11 +96,11 @@ type LogoutFunction = (
 >;
 
 const logout = async (
-  authUserId: string,
+  authenticatedUserId: string,
   logoutFunction: LogoutFunction,
 ): Promise<boolean> => {
   const result = await logoutFunction({
-    variables: { userId: authUserId },
+    variables: { userId: authenticatedUserId },
   });
   let success = false;
   if (result.data?.logout === null) {
@@ -155,14 +155,14 @@ type GetEmailVerifiedByEmailFunction = (
   }>
 >;
 
-const updateAuthUser = async (
-  authUser: AuthUser,
+const updateAuthenticatedUser = async (
+  authenticatedUser: AuthenticatedUser,
   getEmailVerifiedByEmailFunction: GetEmailVerifiedByEmailFunction,
-  setAuthUser: Dispatch<SetStateAction<AuthUser>>,
+  setAuthenticatedUser: Dispatch<SetStateAction<AuthenticatedUser>>,
 ): Promise<void> => {
-  if (authUser) {
+  if (authenticatedUser) {
     const { data, error } = await getEmailVerifiedByEmailFunction({
-      email: authUser.email,
+      email: authenticatedUser.email,
     });
     if (error || data.emailVerifiedByEmail === undefined) {
       // TODO: add proper frontend logging
@@ -175,13 +175,13 @@ const updateAuthUser = async (
     }
     if (
       data.emailVerifiedByEmail !== undefined &&
-      data.emailVerifiedByEmail !== authUser.emailVerified
+      data.emailVerifiedByEmail !== authenticatedUser.emailVerified
     ) {
-      setAuthUser((prevAuthUser: AuthUser) => {
+      setAuthenticatedUser((prevAuthenticatedUser: AuthenticatedUser) => {
         return {
-          ...prevAuthUser,
+          ...prevAuthenticatedUser,
           emailVerified: data.emailVerifiedByEmail,
-        } as AuthUser;
+        } as AuthenticatedUser;
       });
     }
   }
@@ -192,5 +192,5 @@ export default {
   logout,
   register,
   refresh,
-  updateAuthUser,
+  updateAuthenticatedUser,
 };
