@@ -43,11 +43,7 @@ const Login = (): React.ReactElement => {
   const [login, { loading }] = useMutation<{ login: AuthUser }>(LOGIN);
 
   const getLoginUser = async () => {
-    const user: AuthUser = await authAPIClient.login(
-      email,
-      password,
-      login,
-    );
+    const user: AuthUser = await authAPIClient.login(email, password, login);
     setAuthUser(user);
   };
 
@@ -86,11 +82,7 @@ const Login = (): React.ReactElement => {
   if (authUser) {
     return (
       <Redirect
-        to={
-          authUser?.emailVerified
-            ? MANAGE_COURSES_PAGE
-            : VERIFY_EMAIL_PAGE
-        }
+        to={authUser?.emailVerified ? MANAGE_COURSES_PAGE : VERIFY_EMAIL_PAGE}
       />
     );
   }

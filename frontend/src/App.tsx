@@ -41,9 +41,7 @@ const App = (): React.ReactElement => {
     AUTHENTICATED_USER_KEY,
   );
 
-  const [authUser, setAuthUser] = useState<AuthUser>(
-    currentUser,
-  );
+  const [authUser, setAuthUser] = useState<AuthUser>(currentUser);
 
   // Some sort of global state. Context API replaces redux.
   // Split related states into different contexts as necessary.
@@ -59,9 +57,7 @@ const App = (): React.ReactElement => {
         value={dispatchSampleContextUpdate}
       >
         <ApolloProvider client={client}>
-          <AuthContext.Provider
-            value={{ authUser, setAuthUser }}
-          >
+          <AuthContext.Provider value={{ authUser, setAuthUser }}>
             <ChakraProvider theme={defaultTheme}>
               <Router>
                 <Switch>
