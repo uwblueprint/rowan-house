@@ -6,16 +6,16 @@ import {
 } from "@apollo/client";
 import { Dispatch, SetStateAction } from "react";
 import AUTHENTICATED_USER_KEY from "../constants/AuthConstants";
-import { AuthenticatedUser } from "../types/AuthTypes";
+import { AuthUser } from "../types/AuthTypes";
 import { setLocalStorageObjProperty } from "../utils/LocalStorageUtils";
 
 type LoginFunction = (
   options?:
-    | MutationFunctionOptions<{ login: AuthenticatedUser }, OperationVariables>
+    | MutationFunctionOptions<{ login: AuthUser }, OperationVariables>
     | undefined,
 ) => Promise<
   FetchResult<
-    { login: AuthenticatedUser },
+    { login: AuthUser },
     Record<string, unknown>,
     Record<string, unknown>
   >
@@ -25,8 +25,8 @@ const login = async (
   email: string,
   password: string,
   loginFunction: LoginFunction,
-): Promise<AuthenticatedUser | null> => {
-  let user: AuthenticatedUser = null;
+): Promise<AuthUser | null> => {
+  let user: AuthUser = null;
   try {
     const result = await loginFunction({ variables: { email, password } });
     user = result.data?.login ?? null;
@@ -43,13 +43,13 @@ const login = async (
 type RegisterFunction = (
   options?:
     | MutationFunctionOptions<
-        { register: AuthenticatedUser },
+        { register: AuthUser },
         OperationVariables
       >
     | undefined,
 ) => Promise<
   FetchResult<
-    { register: AuthenticatedUser },
+    { register: AuthUser },
     Record<string, unknown>,
     Record<string, unknown>
   >
@@ -62,8 +62,8 @@ const register = async (
   town: string,
   password: string,
   registerFunction: RegisterFunction,
-): Promise<AuthenticatedUser | null> => {
-  let user: AuthenticatedUser = null;
+): Promise<AuthUser | null> => {
+  let user: AuthUser = null;
   try {
     const result = await registerFunction({
       variables: { firstName, lastName, email, town, password },
@@ -158,10 +158,10 @@ type GetEmailVerifiedByEmailFunction = (
   }>
 >;
 
-const updateAuthenticatedUser = async (
-  authenticatedUser: AuthenticatedUser,
+const updateAuthUser = async (
+  authenticatedUser: AuthUser,
   getEmailVerifiedByEmailFunction: GetEmailVerifiedByEmailFunction,
-  setAuthenticatedUser: Dispatch<SetStateAction<AuthenticatedUser>>,
+  setAuthUser: Dispatch<SetStateAction<AuthUser>>,
 ): Promise<void> => {
   if (authenticatedUser) {
     const { data, error } = await getEmailVerifiedByEmailFunction({
@@ -180,11 +180,11 @@ const updateAuthenticatedUser = async (
       data.emailVerifiedByEmail !== undefined &&
       data.emailVerifiedByEmail !== authenticatedUser.emailVerified
     ) {
-      setAuthenticatedUser((prevAuthenticatedUser: AuthenticatedUser) => {
+      setAuthUser((prevAuthUser: AuthUser) => {
         return {
-          ...prevAuthenticatedUser,
+          ...prevAuthUser,
           emailVerified: data.emailVerifiedByEmail,
-        } as AuthenticatedUser;
+        } as AuthUser;
       });
     }
   }
@@ -195,5 +195,5 @@ export default {
   logout,
   register,
   refresh,
-  updateAuthenticatedUser,
+  updateAuthUser,
 };

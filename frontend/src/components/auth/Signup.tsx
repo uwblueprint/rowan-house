@@ -23,12 +23,12 @@ import {
   VERIFY_EMAIL_PAGE,
 } from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
-import { AuthenticatedUser } from "../../types/AuthTypes";
+import { AuthUser } from "../../types/AuthTypes";
 import RHSLogo from "../../assets/RHSlogo.png";
 import BackgroundImage from "../../assets/signuppage.jpg";
 
 const Signup = (): React.ReactElement => {
-  const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
+  const { authenticatedUser, setAuthUser } = useContext(AuthContext);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -37,10 +37,10 @@ const Signup = (): React.ReactElement => {
   const [currentPassword, setCurrentPassword] = useState("");
   const history = useHistory();
 
-  const [register] = useMutation<{ register: AuthenticatedUser }>(REGISTER);
+  const [register] = useMutation<{ register: AuthUser }>(REGISTER);
 
   const onSignupClick = async () => {
-    const user: AuthenticatedUser = await authAPIClient.register(
+    const user: AuthUser = await authAPIClient.register(
       firstName,
       lastName,
       email,
@@ -48,7 +48,7 @@ const Signup = (): React.ReactElement => {
       password,
       register,
     );
-    setAuthenticatedUser(user);
+    setAuthUser(user);
   };
 
   const onSignInClick = () => {

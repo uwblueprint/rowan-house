@@ -31,17 +31,17 @@ import sampleContextReducer from "./reducers/SampleContextReducer";
 import SampleContextDispatcherContext from "./contexts/SampleContextDispatcherContext";
 import EditTeamInfoPage from "./components/pages/EditTeamPage";
 import HooksDemo from "./components/pages/HooksDemo";
-import { AuthenticatedUser } from "./types/AuthTypes";
+import { AuthUser } from "./types/AuthTypes";
 import client from "./APIClients/BaseAPIClient";
 import ManageUsersPage from "./components/pages/ManageUsersPage";
 import ManageCoursesPage from "./components/pages/ManageCoursesPage";
 
 const App = (): React.ReactElement => {
-  const currentUser: AuthenticatedUser = getLocalStorageObj<AuthenticatedUser>(
+  const currentUser: AuthUser = getLocalStorageObj<AuthUser>(
     AUTHENTICATED_USER_KEY,
   );
 
-  const [authenticatedUser, setAuthenticatedUser] = useState<AuthenticatedUser>(
+  const [authenticatedUser, setAuthUser] = useState<AuthUser>(
     currentUser,
   );
 
@@ -60,7 +60,7 @@ const App = (): React.ReactElement => {
       >
         <ApolloProvider client={client}>
           <AuthContext.Provider
-            value={{ authenticatedUser, setAuthenticatedUser }}
+            value={{ authenticatedUser, setAuthUser }}
           >
             <ChakraProvider theme={defaultTheme}>
               <Router>

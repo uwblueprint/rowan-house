@@ -25,7 +25,7 @@ import {
   VERIFY_EMAIL_PAGE,
 } from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
-import { AuthenticatedUser } from "../../types/AuthTypes";
+import { AuthUser } from "../../types/AuthTypes";
 
 enum LoginState {
   EnterEmail,
@@ -34,21 +34,21 @@ enum LoginState {
 }
 
 const Login = (): React.ReactElement => {
-  const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
+  const { authenticatedUser, setAuthUser } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginState, setLoginState] = useState(LoginState.EnterEmail);
   const history = useHistory();
 
-  const [login, { loading }] = useMutation<{ login: AuthenticatedUser }>(LOGIN);
+  const [login, { loading }] = useMutation<{ login: AuthUser }>(LOGIN);
 
   const getLoginUser = async () => {
-    const user: AuthenticatedUser = await authAPIClient.login(
+    const user: AuthUser = await authAPIClient.login(
       email,
       password,
       login,
     );
-    setAuthenticatedUser(user);
+    setAuthUser(user);
   };
 
   const onLogInClick = async () => {
