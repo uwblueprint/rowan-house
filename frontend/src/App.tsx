@@ -41,7 +41,7 @@ const App = (): React.ReactElement => {
     AUTHENTICATED_USER_KEY,
   );
 
-  const [authenticatedUser, setAuthUser] = useState<AuthUser>(
+  const [authUser, setAuthUser] = useState<AuthUser>(
     currentUser,
   );
 
@@ -60,7 +60,7 @@ const App = (): React.ReactElement => {
       >
         <ApolloProvider client={client}>
           <AuthContext.Provider
-            value={{ authenticatedUser, setAuthUser }}
+            value={{ authUser, setAuthUser }}
           >
             <ChakraProvider theme={defaultTheme}>
               <Router>

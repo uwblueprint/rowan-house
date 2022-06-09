@@ -28,7 +28,7 @@ import RHSLogo from "../../assets/RHSlogo.png";
 import BackgroundImage from "../../assets/signuppage.jpg";
 
 const Signup = (): React.ReactElement => {
-  const { authenticatedUser, setAuthUser } = useContext(AuthContext);
+  const { authUser, setAuthUser } = useContext(AuthContext);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -55,10 +55,10 @@ const Signup = (): React.ReactElement => {
     history.push(LOGIN_PAGE);
   };
 
-  if (authenticatedUser) {
+  if (authUser) {
     return (
       <Redirect
-        to={authenticatedUser?.emailVerified ? HOME_PAGE : VERIFY_EMAIL_PAGE}
+        to={authUser?.emailVerified ? HOME_PAGE : VERIFY_EMAIL_PAGE}
       />
     );
   }

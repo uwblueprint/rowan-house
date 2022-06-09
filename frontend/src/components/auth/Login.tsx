@@ -34,7 +34,7 @@ enum LoginState {
 }
 
 const Login = (): React.ReactElement => {
-  const { authenticatedUser, setAuthUser } = useContext(AuthContext);
+  const { authUser, setAuthUser } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginState, setLoginState] = useState(LoginState.EnterEmail);
@@ -83,11 +83,11 @@ const Login = (): React.ReactElement => {
   };
 
   // Temporarily while working on the admin side, should normally redirect to HOME_PAGE
-  if (authenticatedUser) {
+  if (authUser) {
     return (
       <Redirect
         to={
-          authenticatedUser?.emailVerified
+          authUser?.emailVerified
             ? MANAGE_COURSES_PAGE
             : VERIFY_EMAIL_PAGE
         }

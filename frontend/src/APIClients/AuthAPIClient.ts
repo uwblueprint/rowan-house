@@ -99,11 +99,11 @@ type LogoutFunction = (
 >;
 
 const logout = async (
-  authenticatedUserId: string,
+  authUserId: string,
   logoutFunction: LogoutFunction,
 ): Promise<boolean> => {
   const result = await logoutFunction({
-    variables: { userId: authenticatedUserId },
+    variables: { userId: authUserId },
   });
   let success = false;
   if (result.data?.logout === null) {
@@ -159,13 +159,13 @@ type GetEmailVerifiedByEmailFunction = (
 >;
 
 const updateAuthUser = async (
-  authenticatedUser: AuthUser,
+  authUser: AuthUser,
   getEmailVerifiedByEmailFunction: GetEmailVerifiedByEmailFunction,
   setAuthUser: Dispatch<SetStateAction<AuthUser>>,
 ): Promise<void> => {
-  if (authenticatedUser) {
+  if (authUser) {
     const { data, error } = await getEmailVerifiedByEmailFunction({
-      email: authenticatedUser.email,
+      email: authUser.email,
     });
     if (error || data.emailVerifiedByEmail === undefined) {
       // TODO: add proper frontend logging
@@ -178,7 +178,7 @@ const updateAuthUser = async (
     }
     if (
       data.emailVerifiedByEmail !== undefined &&
-      data.emailVerifiedByEmail !== authenticatedUser.emailVerified
+      data.emailVerifiedByEmail !== authUser.emailVerified
     ) {
       setAuthUser((prevAuthUser: AuthUser) => {
         return {
