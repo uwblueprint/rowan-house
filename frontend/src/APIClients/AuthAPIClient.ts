@@ -1,8 +1,10 @@
 import {
+  ApolloQueryResult,
   FetchResult,
   MutationFunctionOptions,
   OperationVariables,
 } from "@apollo/client";
+import { Dispatch, SetStateAction } from "react";
 import AUTHENTICATED_USER_KEY from "../constants/AuthConstants";
 import { AuthenticatedUser } from "../types/AuthTypes";
 import { setLocalStorageObjProperty } from "../utils/LocalStorageUtils";
@@ -144,9 +146,54 @@ const refresh = async (refreshFunction: RefreshFunction): Promise<boolean> => {
   }
 };
 
+type GetEmailVerifiedByEmailFunction = (
+  variables?:
+    | Partial<{
+        email: string;
+      }>
+    | undefined,
+) => Promise<
+  ApolloQueryResult<{
+    emailVerifiedByEmail: boolean;
+  }>
+>;
+
+const updateAuthenticatedUser = async (
+  authenticatedUser: AuthenticatedUser,
+  getEmailVerifiedByEmailFunction: GetEmailVerifiedByEmailFunction,
+  setAuthenticatedUser: Dispatch<SetStateAction<AuthenticatedUser>>,
+): Promise<void> => {
+  if (authenticatedUser) {
+    const { data, error } = await getEmailVerifiedByEmailFunction({
+      email: authenticatedUser.email,
+    });
+    if (error || data.emailVerifiedByEmail === undefined) {
+      // TODO: add proper frontend logging
+      // eslint-disable-next-line no-console
+      console.log(error);
+      // eslint-disable-next-line no-console
+      console.log(data);
+
+      return;
+    }
+    if (
+      data.emailVerifiedByEmail !== undefined &&
+      data.emailVerifiedByEmail !== authenticatedUser.emailVerified
+    ) {
+      setAuthenticatedUser((prevAuthenticatedUser: AuthenticatedUser) => {
+        return {
+          ...prevAuthenticatedUser,
+          emailVerified: data.emailVerifiedByEmail,
+        } as AuthenticatedUser;
+      });
+    }
+  }
+};
+
 export default {
   login,
   logout,
   register,
   refresh,
+  updateAuthenticatedUser,
 };

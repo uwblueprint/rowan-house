@@ -41,6 +41,12 @@ const userResolvers = {
       const result = await userService.getUserCountByTown(startDate, endDate);
       return JSON.stringify(result);
     },
+    emailVerifiedByEmail: async (
+      _parent: undefined,
+      { email }: { email: string },
+    ): Promise<boolean> => {
+      return userService.getUserEmailVerifiedByEmail(email);
+    },
   },
   Mutation: {
     createUser: async (

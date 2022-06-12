@@ -19,6 +19,7 @@ import DisplayPage from "./components/pages/DisplayPage";
 import NotFound from "./components/pages/NotFound";
 import UpdatePage from "./components/pages/UpdatePage";
 import ModuleEditor from "./components/pages/ModuleEditor";
+import VerifyEmail from "./components/pages/VerifyEmail";
 import * as Routes from "./constants/Routes";
 import AUTHENTICATED_USER_KEY from "./constants/AuthConstants";
 import AuthContext from "./contexts/AuthContext";
@@ -115,6 +116,11 @@ const App = (): React.ReactElement => {
                     exact
                     path={`${Routes.ADMIN_MODULE_EDITOR_BASE_ROUTE}/:courseID/:moduleIndex`}
                     component={ModuleEditor}
+                  />
+                  <Route
+                    exact
+                    path={`${Routes.VERIFY_EMAIL_PAGE}`}
+                    component={VerifyEmail}
                   />
                   <Route exact path="*" component={NotFound} />
                 </Switch>

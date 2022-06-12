@@ -215,6 +215,19 @@ class UserService implements IUserService {
     );
   }
 
+  async getUserEmailVerifiedByEmail(email: string): Promise<boolean> {
+    try {
+      return (await firebaseAdmin.auth().getUserByEmail(email)).emailVerified;
+    } catch (error: unknown) {
+      Logger.error(
+        `Failed to get email verification status. Reason = ${getErrorMessage(
+          error,
+        )}`,
+      );
+      throw error;
+    }
+  }
+
   async createUser(user: CreateUserDTO): Promise<UserDTO> {
     let newUser: User;
     let firebaseUser: firebaseAdmin.auth.UserRecord;

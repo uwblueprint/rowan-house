@@ -5,6 +5,7 @@ export type AuthenticatedUser = {
   email: string;
   role: "Admin" | "User" | "Staff";
   accessToken: string;
+  emailVerified: boolean;
 } | null;
 
 export type DecodedJWT =

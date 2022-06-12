@@ -71,6 +71,13 @@ interface IUserService {
   ): Promise<{ [key: string]: number }>;
 
   /**
+   *  Get emailVerified for user by email
+   * @param email user email
+   * @returns user's emailVerified value
+   * @throws Error if query fails
+   */
+  getUserEmailVerifiedByEmail(email: string): Promise<boolean>;
+  /**
    * Create a user, email verification configurable
    * @param user the user to be created
    * @param authId the user's firebase auth id, optional

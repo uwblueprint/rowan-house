@@ -9,6 +9,7 @@ const authType = gql`
     town: String!
     role: Role!
     accessToken: String!
+    emailVerified: Boolean!
   }
 
   input RegisterUserDTO {
