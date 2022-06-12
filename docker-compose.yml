@@ -25,8 +25,8 @@ services:
       - /app/node_modules
     ports:
       - 5000:5000
+      - 9229:9229  # debugging
     dns:
       - 8.8.8.8
     env_file:
       - ./.env
-
