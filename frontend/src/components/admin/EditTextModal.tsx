@@ -1,10 +1,16 @@
 import { Flex, VStack, Image } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
+import {
+  EditorChangeStatuses,
+  EditorContextType,
+  ModuleEditorParams,
 
+  ContentBlock,
+
+} from "../../types/ModuleEditorTypes";
 import { TextInput } from "../common/TextInput";
 import { Modal } from "../common/Modal";
-import { ContentBlock, ContentTypeEnum, EditorContextAction } from "../../types/ModuleEditorTypes";
-import EditorContext from "../../contexts/ModuleEditorContext";
+
 import { TextArea } from "../common/TextArea";
 
 export interface EditTextModalProps {
@@ -12,6 +18,7 @@ export interface EditTextModalProps {
   isOpen: boolean;
   block: ContentBlock;
   index: number;
+  context: EditorContextType;
 }
 
 const EditTextModal = ({
@@ -19,8 +26,9 @@ const EditTextModal = ({
   index,
   isOpen,
   onClose,
-}: EditTextModalProps): React.ReactElement => {
-  const context = useContext(EditorContext);
+  context,
+}:
+EditTextModalProps): React.ReactElement => {
   const [text, setText] = useState(block.content.text ?? "");
 
   if (!context) return <></>;
@@ -32,9 +40,9 @@ const EditTextModal = ({
       content: {
         ...block.content,
         text,
-      }
+      },
     };
-    // newBlock.content.text = text;
+
     dispatch({
       type: "update-block",
       value: {
@@ -42,7 +50,7 @@ const EditTextModal = ({
         block: newBlock,
       },
     });
-    // state.
+  
     onClose();
   };
 

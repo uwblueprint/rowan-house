@@ -20,7 +20,12 @@ const LessonViewer = (): React.ReactElement => {
         {(provided) => (
           <Flex ref={provided.innerRef} direction="column" flex="1">
             {lesson?.content.map((block, index) => (
-              <EditableContentBlock block={block} key={index} index={index} />
+              <EditableContentBlock
+                block={block}
+                key={index}
+                index={index}
+                context={context}
+              />
             ))}
             {provided.placeholder}
           </Flex>
