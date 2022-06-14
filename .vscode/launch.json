@@ -1,0 +1,22 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug: Frontend",
+            "type": "pwa-chrome",
+            "request": "launch",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}/frontend",
+            "sourceMapPathOverrides": {
+                "/app/*": "${webRoot}/*"
+            }
+        },
+        {
+            "type": "node",
+            "request": "attach",
+            "name": "Debug: Backend",
+            "localRoot": "${workspaceFolder}/backend",
+            "remoteRoot": "/app"
+        }
+    ]
+}

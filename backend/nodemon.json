@@ -1,4 +1,4 @@
 {
     "ext": "ts,js,json",
-    "exec": "ts-node -r dotenv/config server"
+    "exec": "node -r dotenv/config  -r ts-node/register --inspect=0.0.0.0:9229 server"
 }
