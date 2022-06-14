@@ -26,6 +26,8 @@ export interface EditModuleModalProps {
 
 const MAX_TITLE_CHARACTERS = 50; // maximum # of characters in the title
 
+const refetchQueries = { refetchQueries: [{ query: COURSES }] };
+
 const EditModuleModal = ({
   module,
   formatCourseRequest,
@@ -37,7 +39,10 @@ const EditModuleModal = ({
   const [description, setDescription] = useState(module?.description ?? "");
   const [invalid, setInvalid] = useState(false);
 
-  const [updateCourse] = useMutation<CourseResponse>(UPDATE_COURSE);
+  const [updateCourse] = useMutation<CourseResponse>(
+    UPDATE_COURSE,
+    refetchQueries,
+  );
 
   const context: EditorContextType = useContext(EditorContext);
   if (!context) return <></>;
@@ -58,10 +63,10 @@ const EditModuleModal = ({
       ],
     });
     onClose();
-    dispatch({
-      type: "update-module-summary",
-      value: { title, description, id: module?.id || "" },
-    });
+    // dispatch({
+    //   type: "update-module-summary",
+    //   value: { title, description, id: module?.id || "" },
+    // });
   };
 
   return (
