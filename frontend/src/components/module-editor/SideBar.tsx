@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
   Box,
@@ -61,6 +61,13 @@ const Sidebar = (): React.ReactElement => {
 
   const [updateCourse] = useMutation<{ updateCourse: CourseResponse }>(
     UPDATE_COURSE,
+    {
+      refetchQueries: [
+        {
+          query: GET_COURSE,
+        },
+      ],
+    },
   );
   const [updateLesson] = useMutation<{ updateLesson: LessonResponse }>(
     UPDATE_LESSON,
