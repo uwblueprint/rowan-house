@@ -46,7 +46,6 @@ const EditModuleModal = ({
 
   const context: EditorContextType = useContext(EditorContext);
   if (!context) return <></>;
-  const { dispatch } = context;
   const onUpdateModule = () => {
     if (!title || title.length > MAX_TITLE_CHARACTERS) {
       setInvalid(true);
