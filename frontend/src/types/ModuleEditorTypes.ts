@@ -118,10 +118,6 @@ export type EditorContextAction =
       value: { oldID: string; newID: string };
     }
   | {
-      type: "update-module-summary";
-      value: { title: string; description: string; id: string };
-    }
-  | {
       type: "create-block";
       value: { index: number; blockID: string };
     }

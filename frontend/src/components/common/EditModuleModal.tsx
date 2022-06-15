@@ -58,10 +58,6 @@ const EditModuleModal = ({
       ],
     });
     onClose();
-    // dispatch({
-    //   type: "update-module-summary",
-    //   value: { title, description, id: module?.id || "" },
-    // });
   };
 
   return (

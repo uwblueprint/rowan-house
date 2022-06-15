@@ -67,30 +67,6 @@ const updateLesson = (
   return newState;
 };
 
-const updateModule = (
-  state: EditorStateType,
-  id: string,
-  title: string,
-  description: string,
-): EditorStateType => {
-  const moduleIndex = state.course.modules.findIndex(
-    (module) => module.id === id,
-  );
-  const newState = { ...state };
-  // if we somehow cannot find the id, just return and dont edit
-  if (moduleIndex === -1) {
-    return newState;
-  }
-  newState.course = { ...newState.course };
-  newState.course.modules = [...newState.course.modules];
-  newState.course.modules[moduleIndex] = {
-    ...state.course.modules[moduleIndex],
-    description,
-    title,
-  };
-  return newState;
-};
-
 const replaceLessonID = (
   state: EditorStateType,
   oldID: string,
@@ -277,13 +253,6 @@ export default function EditorContextReducer(
       return deleteLesson(state, action.value);
     case "update-lesson-id":
       return replaceLessonID(state, action.value.oldID, action.value.newID);
-    case "update-module-summary":
-      return updateModule(
-        state,
-        action.value.id || "",
-        action.value.title,
-        action.value.description,
-      );
     case "create-block":
       return createLessonContentBlock(
         state,
