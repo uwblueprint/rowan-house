@@ -1,7 +1,6 @@
 import { Flex, VStack, Image } from "@chakra-ui/react";
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
-import EditorContext from "../../contexts/ModuleEditorContext";
 import { TextInput } from "./TextInput";
 import { Modal } from "./Modal";
 import { SwitchInput } from "./SwitchInput";
@@ -15,7 +14,6 @@ import {
 } from "../../APIClients/types/CourseClientTypes";
 import { UPDATE_COURSE } from "../../APIClients/mutations/CourseMutations";
 import { COURSES, GET_COURSE } from "../../APIClients/queries/CourseQueries";
-import { EditorContextType } from "../../types/ModuleEditorTypes";
 
 export interface EditModuleModalProps {
   onClose: () => void;
@@ -44,8 +42,6 @@ const EditModuleModal = ({
     refetchQueries,
   );
 
-  const context: EditorContextType = useContext(EditorContext);
-  if (!context) return <></>;
   const onUpdateModule = () => {
     if (!title || title.length > MAX_TITLE_CHARACTERS) {
       setInvalid(true);
