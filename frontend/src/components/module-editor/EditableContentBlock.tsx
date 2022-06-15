@@ -70,6 +70,7 @@ const EditableContentBlock = ({
             />
           </Flex>
           <Divider opacity={isHovered ? 1 : 0} />
+          {/* TODO: only allow text changes for text blocks */}
           <EditTextModal
             isOpen={isOpen}
             onClose={onClose}

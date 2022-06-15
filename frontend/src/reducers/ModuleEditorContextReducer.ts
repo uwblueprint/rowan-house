@@ -266,7 +266,6 @@ export default function EditorContextReducer(
         action.value.newIndex,
       );
     case "update-block":
-      console.log("CALLED");
       return updateLessonContentBlock(
         state,
         action.value.index,
