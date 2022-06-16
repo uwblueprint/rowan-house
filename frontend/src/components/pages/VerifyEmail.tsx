@@ -28,14 +28,14 @@ const VerifyEmailContent = ({
 }: VerifyEmailProps): React.ReactElement<VerifyEmailProps> => {
   if (hasError) {
     return (
-      <Text variant="display-sm" paddingBottom="1vw">
+      <Text variant="display-md" paddingBottom="1vw">
         An error has occurred while resending your verification email
       </Text>
     );
   }
   if (hasBeenPressed) {
     return (
-      <Text variant="display-sm" paddingBottom="1vw">
+      <Text variant="display-md" paddingBottom="1vw">
         Verification email has been sent
       </Text>
     );
