@@ -57,3 +57,11 @@ export const REGISTER = gql`
     }
   }
 `;
+
+export const SEND_EMAIL_VERIFICATION_LINK = gql`
+  mutation Send_Email_Verification_Link($email: String!) {
+    sendEmailVerificationLink(email: $email) {
+      ok
+    }
+  }
+`;
