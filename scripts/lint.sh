@@ -29,4 +29,4 @@ fi
 echo "Warning: Docker services not running! Linting will be slow." >&2
 echo "Run \`docker-compose up\` to speed this up." >&2
 
-faketty docker-compose run -t --rm --entrypoint yarn $SERVICE_NAME fix
+faketty docker-compose run --rm --entrypoint yarn $SERVICE_NAME fix
