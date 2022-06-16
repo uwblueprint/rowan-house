@@ -1,13 +1,8 @@
-import { Flex, VStack, Image } from "@chakra-ui/react";
+import { Flex, VStack } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
-import {
-  EditorChangeStatuses,
-  EditorContextType,
-  ModuleEditorParams,
-  ContentBlock,
-} from "../../types/ModuleEditorTypes";
-import { TextInput } from "../common/TextInput";
+import { ContentBlock } from "../../types/ModuleEditorTypes";
 import { Modal } from "../common/Modal";
+import EditorContext from "../../contexts/ModuleEditorContext";
 
 import { TextArea } from "../common/TextArea";
 
@@ -16,7 +11,6 @@ export interface EditTextModalProps {
   isOpen: boolean;
   block: ContentBlock;
   index: number;
-  context: EditorContextType;
 }
 
 const EditTextModal = ({
@@ -24,14 +18,19 @@ const EditTextModal = ({
   index,
   isOpen,
   onClose,
-  context,
 }: EditTextModalProps): React.ReactElement => {
   const [text, setText] = useState(block.content.text ?? "");
+  const [invalid, setInvalid] = useState(false);
+  const context = useContext(EditorContext);
 
   if (!context) return <></>;
-  const { state, dispatch } = context;
+  const { dispatch } = context;
 
   const onSave = () => {
+    if (!text) {
+      setInvalid(true);
+      return;
+    }
     const newBlock = {
       ...block,
       content: {
@@ -62,7 +61,13 @@ const EditTextModal = ({
     >
       <Flex>
         <VStack flex="1">
-          <TextArea defaultValue={text} onChange={setText} isRequired />
+          <TextArea
+            label="Text Content:"
+            defaultValue={text}
+            onChange={setText}
+            isInvalid={invalid}
+            errorMessage="This field is required."
+          />
         </VStack>
       </Flex>
     </Modal>
