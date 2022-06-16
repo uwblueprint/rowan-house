@@ -163,7 +163,7 @@ const updateAuthenticatedUser = async (
   getEmailVerifiedByEmailFunction: GetEmailVerifiedByEmailFunction,
   setAuthenticatedUser: Dispatch<SetStateAction<AuthenticatedUser>>,
 ): Promise<void> => {
-  if (authenticatedUser && authenticatedUser.email) {
+  if (authenticatedUser) {
     const res = await getEmailVerifiedByEmailFunction({
       email: authenticatedUser.email,
     });
