@@ -70,9 +70,9 @@ const VerifyEmail = (): React.ReactElement => {
     // skip set to true prevents premature query call without valid authenticatedUser
   >(GET_EMAIL_VERIFIED_BY_EMAIL, { skip: true });
 
-  const [sendEmailVerificationLink] = useMutation<boolean>(
-    SEND_EMAIL_VERIFICATION_LINK,
-  );
+  const [sendEmailVerificationLink] = useMutation<{
+    sendEmailVerificationLink: boolean;
+  }>(SEND_EMAIL_VERIFICATION_LINK);
   useEffect(() => {
     if (authenticatedUser) {
       authAPIClient.updateAuthenticatedUser(
@@ -91,7 +91,7 @@ const VerifyEmail = (): React.ReactElement => {
             variables: { email: authenticatedUser.email },
           });
           if (result) {
-            const success = result.data ?? null;
+            const success = result.data?.sendEmailVerificationLink ?? null;
             if (success) {
               // TODO: Add rate limiting for button presses
               setHasBeenPressed(true);
