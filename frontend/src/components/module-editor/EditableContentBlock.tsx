@@ -2,7 +2,9 @@ import { Box, Divider, Flex, useDisclosure, VStack } from "@chakra-ui/react";
 import React, { useState, useContext, useEffect } from "react";
 import { Draggable } from "react-beautiful-dnd";
 
-import { ContentBlock, ContentTypeEnum ,
+import {
+  ContentBlock,
+  ContentTypeEnum,
   EditorContextType,
 } from "../../types/ModuleEditorTypes";
 import { TextBlock, ImageBlock } from "../common/content";

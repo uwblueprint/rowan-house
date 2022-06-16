@@ -4,9 +4,7 @@ import {
   EditorChangeStatuses,
   EditorContextType,
   ModuleEditorParams,
-
   ContentBlock,
-
 } from "../../types/ModuleEditorTypes";
 import { TextInput } from "../common/TextInput";
 import { Modal } from "../common/Modal";
@@ -27,8 +25,7 @@ const EditTextModal = ({
   isOpen,
   onClose,
   context,
-}:
-EditTextModalProps): React.ReactElement => {
+}: EditTextModalProps): React.ReactElement => {
   const [text, setText] = useState(block.content.text ?? "");
 
   if (!context) return <></>;
@@ -50,7 +47,7 @@ EditTextModalProps): React.ReactElement => {
         block: newBlock,
       },
     });
-  
+
     onClose();
   };
 
