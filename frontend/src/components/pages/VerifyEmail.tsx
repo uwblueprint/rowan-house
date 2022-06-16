@@ -1,5 +1,5 @@
-import React, { useContext, useEffect } from "react";
-import { Flex, Image, VStack, Center, Text } from "@chakra-ui/react";
+import React, { useContext, useEffect, useState } from "react";
+import { Flex, Image, VStack, Center, Text, Button } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
 import { Redirect } from "react-router-dom";
 import RHSLogo from "../../assets/RHSlogo.png";
@@ -26,6 +26,14 @@ const VerifyEmail = (): React.ReactElement => {
     }
   }, [authenticatedUser, setAuthenticatedUser, refetch]);
 
+  const [hasBeenPressed, setHasBeenPressed] = useState(false);
+
+  const onResendEmailButtonPress = () => {
+    // call backend function to send email
+    setHasBeenPressed(true);
+    // TODO: add rate limiting
+  };
+
   if (authenticatedUser?.emailVerified) {
     return <Redirect to={MANAGE_COURSES_PAGE} />;
   }
@@ -33,11 +41,27 @@ const VerifyEmail = (): React.ReactElement => {
   return (
     <Flex minH="100vh">
       <Center flex="1">
-        <VStack>
+        <VStack spacing="4vh">
           <Image height="13vh" marginBottom="2.5vh" src={RHSLogo} />
-          <Text variant="display-md" paddingBottom="1vw">
-            Please Verify your Email to Continue
-          </Text>
+          {hasBeenPressed ? (
+            <Text variant="display-sm" paddingBottom="1vw">
+              Verification email has been sent
+            </Text>
+          ) : (
+            <>
+              <Text variant="display-md" paddingBottom="1vw">
+                Please verify your email to continue
+              </Text>
+              <Button
+                variant="sm"
+                width="full"
+                marginBottom="2vh"
+                onClick={onResendEmailButtonPress}
+              >
+                Resend verification email
+              </Button>
+            </>
+          )}
         </VStack>
       </Center>
     </Flex>
