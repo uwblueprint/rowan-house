@@ -64,9 +64,7 @@ const EditableContentBlock = ({
             {SelectContentBlock(block)}
             <EditContentOptionsMenu
               isVisible={isHovered}
-              onEditClick={() => {
-                onOpen();
-              }}
+              onEditClick={onOpen}
               onCopyClick={() => {}}
               onDeleteClick={() => {}}
             />
