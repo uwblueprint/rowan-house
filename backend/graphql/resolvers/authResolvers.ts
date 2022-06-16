@@ -83,8 +83,8 @@ const authResolvers = {
         return true;
       } catch (error: unknown) {
         const errorMessage = [
-          `Failed to resolve email verification link mutation for user with email ${email}`,
-          "Reason =",
+          `Failed to resolve email verification link mutation for user with email ${email}, `,
+          "reason =",
           getErrorMessage(error),
         ];
         Logger.error(errorMessage.join(" "));
