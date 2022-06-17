@@ -339,7 +339,7 @@ class UserService implements IUserService {
       }
     } catch (error: unknown) {
       Logger.error(
-        `Failed to update user role. Reason = ${getErrorMessage(error)}`
+        `Failed to update user role. Reason = ${getErrorMessage(error)}`,
       );
       throw error;
     }
@@ -349,7 +349,6 @@ class UserService implements IUserService {
   async deleteUserById(userId: string): Promise<void> {
     try {
       const deletedUser: User | null = await MgUser.findByIdAndDelete(userId);
-      
       if (!deletedUser) {
         throw new Error(`userId ${userId} not found.`);
       }
