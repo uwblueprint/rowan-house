@@ -331,9 +331,7 @@ class UserService implements IUserService {
       updatedUser = await MgUser.findByIdAndUpdate(
         userId,
         { role: userRole } ,
-        { runValidators: true, 
-          new: true
-        },
+        { runValidators: true, new: true },
       );
 
       if (!updatedUser) {
@@ -352,7 +350,6 @@ class UserService implements IUserService {
   async deleteUserById(userId: string): Promise<void> {
     try {
       const deletedUser: User | null = await MgUser.findByIdAndDelete(userId);
-
       if (!deletedUser) {
         throw new Error(`userId ${userId} not found.`);
       }

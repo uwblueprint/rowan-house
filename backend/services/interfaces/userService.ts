@@ -90,7 +90,7 @@ interface IUserService {
    */
   updateUserById(userId: string, user: UpdateUserDTO): Promise<UserDTO>;
 
-    /**
+  /**
    * Update a user's role.
    * Note: the password cannot be updated using this method, use IAuthService.resetPassword instead
    * @param userId user's id
