@@ -75,6 +75,7 @@ const graphQLMiddlewares = {
     deleteEntity: authorizedByAllRoles(),
     createUser: authorizedByAdmin(),
     updateUser: authorizedByAdmin(),
+    updateUserRole: authorizedByAdmin(),
     deleteUserById: authorizedByAdmin(),
     deleteUserByEmail: authorizedByAdmin(),
     logout: isAuthorizedByUserId("userId"),

@@ -323,6 +323,32 @@ class UserService implements IUserService {
     };
   }
 
+  async updateUserRole(userId: string, userRole: Role): Promise<Role> {
+    let updatedUser: User | null;
+
+    try {
+      // must explicitly specify runValidators when updating through findByIdAndUpdate
+      updatedUser = await MgUser.findByIdAndUpdate(
+        userId,
+        { role: userRole } ,
+        { runValidators: true, 
+          new: true
+        },
+      );
+
+      if (!updatedUser) {
+        throw new Error(`userId ${userId} not found.`);
+      }
+
+
+    } catch (error: unknown) {
+      Logger.error(`Failed to update user role. Reason = ${getErrorMessage(error)}`);
+      throw error;
+    }
+
+    return updatedUser.role;
+  }
+
   async deleteUserById(userId: string): Promise<void> {
     try {
       const deletedUser: User | null = await MgUser.findByIdAndDelete(userId);

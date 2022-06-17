@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Box, Button, Flex, HStack, Text } from "@chakra-ui/react";
 import { DownloadIcon, SearchIcon } from "@chakra-ui/icons";
-import { AdminPage, UserCardProps } from "../../types/AdminDashboardTypes";
+import { UserResponse } from "../../APIClients/types/UserClientTypes";
+import { AdminPage } from "../../types/AdminDashboardTypes";
 import UserCard from "../admin/UserCard";
 import SideBar from "../admin/SideBar";
 import SearchUsersBar from "../admin/SearchUsersBar";
@@ -25,10 +26,7 @@ const NoUserSelectedCard = (): React.ReactElement => {
 };
 
 const ManageUsersPage = (): React.ReactElement => {
-  const [
-    spotlightedUser,
-    setSpotlightedUser,
-  ] = useState<UserCardProps | null>();
+  const [spotlightedUser, setSpotlightedUser] = useState<UserResponse | null>();
 
   return (
     <Flex h="100vh">
@@ -48,7 +46,7 @@ const ManageUsersPage = (): React.ReactElement => {
               Users
             </Text>
             <SearchUsersBar
-              onUserSelect={(user: UserCardProps) => setSpotlightedUser(user)}
+              onUserSelect={(user: UserResponse) => setSpotlightedUser(user)}
             />
           </HStack>
           <Button variant="md" leftIcon={<DownloadIcon />}>
@@ -67,6 +65,7 @@ const ManageUsersPage = (): React.ReactElement => {
               role={spotlightedUser.role}
               email={spotlightedUser.email}
               town={spotlightedUser.town}
+              onUserSelect={(user: UserResponse) => setSpotlightedUser(user)}
             />
           ) : (
             <NoUserSelectedCard />

@@ -4,7 +4,7 @@ import { Select } from "@chakra-ui/react";
 export interface SelectInputProps {
   onChange: (result: string) => void;
   value?: string;
-  optionsMap: string[];
+  optionsMap: { label: string; value: string }[];
 }
 
 const SelectInput = ({
@@ -15,8 +15,8 @@ const SelectInput = ({
   return (
     <Select value={value} onChange={(e) => onChange(e.target.value)}>
       {optionsMap.map((options) => (
-        <option key={options} value={options}>
-          {options}
+        <option key={options.value} value={options.value}>
+          {options.label}
         </option>
       ))}
       ;

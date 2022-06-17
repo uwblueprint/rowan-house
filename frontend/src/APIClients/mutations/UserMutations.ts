@@ -1,16 +1,9 @@
 import { gql } from "@apollo/client";
 
-const UPDATE_USER = gql`
-  mutation UpdateUser($id: ID!, $user: UpdateUserDTO!) {
-    updateUser(id: $id, user: $user) {
-      id
-      firstName
-      lastName
-      email
-      town
-      role
-    }
+const UPDATE_USER_ROLE = gql`
+  mutation UpdateUserRole($id: ID!, $userRole: Role!) {
+    updateUserRole(id: $id, userRole: $userRole)
   }
 `;
 
-export default UPDATE_USER;
+export default UPDATE_USER_ROLE;

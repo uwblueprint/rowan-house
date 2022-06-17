@@ -11,15 +11,19 @@ import { useMutation } from "@apollo/client";
 import { UserCardProps } from "../../types/AdminDashboardTypes";
 import { Modal } from "../common/Modal";
 import SelectInput from "../common/SelectInput";
-import UPDATE_USER from "../../APIClients/mutations/UserMutations";
-import {
-  UserRequest,
-  UserResponse,
-} from "../../APIClients/types/UserClientTypes";
+import UPDATE_USER_ROLE from "../../APIClients/mutations/UserMutations";
+import USER_ROLES from "../../constants/UserConstants";
+import { Role } from "../../types/AuthTypes";
 
 interface DefaultUserIconProps {
   initials: string;
 }
+
+const USER_INFO = [
+  { label: USER_ROLES[0], value: USER_ROLES[0] },
+  { label: USER_ROLES[1], value: USER_ROLES[1] },
+  { label: USER_ROLES[2], value: USER_ROLES[2] },
+];
 
 const DefaultUserIcon = ({
   initials,
@@ -48,30 +52,28 @@ const UserCard = ({
   role,
   email,
   town,
+  onUserSelect,
 }: UserCardProps): React.ReactElement => {
-  const userCardOptions = ["User", "Admin", "Staff"];
-  const [selectValue, setSelectValue] = useState(userCardOptions[0]);
-  const [currRole, setCurrRole] = useState(role);
+  const [selectValue, setSelectValue] = useState(role);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const [updateUser] = useMutation<{ updateUser: UserResponse }>(UPDATE_USER);
+  const [UpdateUserRole] = useMutation(UPDATE_USER_ROLE);
 
   const resetState = () => {
-    setSelectValue(userCardOptions[0]);
+    setSelectValue(role);
   };
 
-  const updateUserRender = async (userRole: string) => {
-    const userInfo: UserRequest = {
-      firstName,
-      lastName,
-      email,
-      town,
-      role: `${userRole}`,
-    };
-    const { data } = await updateUser({ variables: { id, user: userInfo } });
+  const updateUserRender = async (userRole: Role) => {
+    const { data } = await UpdateUserRole({ variables: { id, userRole } });
     if (data) {
-      resetState();
-      setCurrRole(userRole);
+      onUserSelect({
+        id,
+        firstName,
+        lastName,
+        email,
+        town,
+        role: userRole,
+      });
       onClose();
     } else {
       throw Error("Failed to update user role");
@@ -113,11 +115,9 @@ const UserCard = ({
           }}
         >
           <SelectInput
-            onChange={(currValue) => {
-              setSelectValue(currValue);
-            }}
+            onChange={setSelectValue}
             value={selectValue}
-            optionsMap={userCardOptions}
+            optionsMap={USER_INFO}
           />
         </Modal>
       </VStack>
@@ -127,7 +127,7 @@ const UserCard = ({
         spacingY={5}
       >
         {renderField("Name", `${firstName} ${lastName}`)}
-        {renderField("Role", currRole)}
+        {renderField("Role", role)}
         {renderField("Email", email)}
         {renderField("Location", town)}
       </SimpleGrid>
