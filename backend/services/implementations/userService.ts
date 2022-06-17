@@ -349,6 +349,7 @@ class UserService implements IUserService {
   async deleteUserById(userId: string): Promise<void> {
     try {
       const deletedUser: User | null = await MgUser.findByIdAndDelete(userId);
+      
       if (!deletedUser) {
         throw new Error(`userId ${userId} not found.`);
       }
