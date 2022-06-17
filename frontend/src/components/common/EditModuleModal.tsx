@@ -57,6 +57,7 @@ const EditModuleModal = ({
         { query: GET_COURSE, variables: { id } },
       ],
     });
+    setInvalid(false);
     onClose();
   };
 
@@ -88,6 +89,7 @@ const EditModuleModal = ({
             isInvalid={invalid}
             isRequired
             helperText={`${title.length}/${MAX_TITLE_CHARACTERS} characters`}
+            errorMessage={`${title.length}/${MAX_TITLE_CHARACTERS} characters`}
           />
           <TextArea
             label="Module Description:"

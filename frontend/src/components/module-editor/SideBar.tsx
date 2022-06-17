@@ -48,7 +48,11 @@ import EditModuleModal from "../common/EditModuleModal";
 import { GET_COURSE } from "../../APIClients/queries/CourseQueries";
 
 const Sidebar = (): React.ReactElement => {
-  const { moduleIndex, courseID }: ModuleEditorParams = useParams();
+  const {
+    moduleIndex: moduleIndexString,
+    courseID,
+  }: ModuleEditorParams = useParams();
+  const moduleIndex = Number(moduleIndexString);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -94,11 +98,13 @@ const Sidebar = (): React.ReactElement => {
       if (
         Number(moduleIndex) >= 0 &&
         Number(moduleIndex) < state.course.modules.length
-      )
+      ) {
         newModules = state.course.modules.map((oldModule, index) =>
           Number(moduleIndex) === index ? newModule : oldModule,
         );
-      else newModules = [...state.course.modules, newModule];
+      } else {
+        newModules = [...state.course.modules, newModule];
+      }
       // If no new module has been passed, remove the module
     } else {
       newModules = state.course.modules.filter(
@@ -153,139 +159,133 @@ const Sidebar = (): React.ReactElement => {
     state.hasChanged = {};
   };
 
+  const module = courseData?.course?.modules?.[
+    Number(moduleIndex)
+  ] as ModuleResponse;
+
   return (
     <>
-      {courseData &&
-        courseData.course &&
-        courseData.course.modules &&
-        courseData.course.modules[Number(moduleIndex)] && (
-          <Box w="20%" minW="300px">
-            <Flex
-              position="fixed"
-              w="inherit"
-              minW="inherit"
-              h="100vh"
-              overflow="hidden"
-              boxShadow="xl"
-              flexFlow="column"
-            >
-              <Box opacity="0.9" backgroundColor="black">
-                <Flex
-                  h="240px"
-                  backgroundPosition="center"
-                  backgroundImage={
-                    courseData.course.modules[Number(moduleIndex)]
-                      .previewImage ?? ""
-                  }
-                  backgroundSize="cover"
-                  bgRepeat="no-repeat"
-                  opacity="1"
-                  direction="column"
-                  justifyContent="space-between"
-                  p="35px"
-                >
-                  <HStack justify="space-between">
-                    <Link href={MANAGE_COURSES_PAGE}>
-                      <ChevronLeftIcon color="white" h={6} w={6} />
-                    </Link>
-                    <Button
-                      variant="md"
-                      leftIcon={<EditIcon color="white" h={5} w={5} />}
-                      onClick={onOpen}
-                      backgroundColor="transparent"
-                    />
-                  </HStack>
-                  <Text variant="display-sm-sb" color="white">
-                    {courseData.course.modules[Number(moduleIndex)].title ?? ""}
-                  </Text>
-                </Flex>
-              </Box>
-              <Tabs variant="unstyled" height="100%" overflowY="hidden">
-                <Box
-                  bg="background.light"
-                  borderRadius="md"
-                  p="6px"
-                  margin="auto"
-                  maxW="min-content"
-                  my="43px"
-                >
-                  <TabList>
-                    <Tab
-                      style={{ paddingInline: "35px", height: "32px" }}
-                      _selected={{
-                        color: "white",
-                        bg: "brand.royal",
-                        borderRadius: "md",
-                      }}
-                    >
-                      Overview
-                    </Tab>
-                    <Tab
-                      style={{ paddingInline: "23px", height: "32px" }}
-                      _selected={{
-                        color: "white",
-                        bg: "brand.royal",
-                        borderRadius: "md",
-                      }}
-                    >
-                      Components
-                    </Tab>
-                  </TabList>
-                </Box>
-                <TabPanels height="100%" overflowY="hidden">
-                  <TabPanel
-                    p="0"
-                    pb="200px"
-                    height="100%"
-                    overflowY="auto"
-                    className="tabScroll"
-                  >
-                    <ModuleOverview />
-                  </TabPanel>
-                  <TabPanel
-                    pb="200px"
-                    height="100%"
-                    overflowY="auto"
-                    className="tabScroll"
-                  >
-                    <ContentKiosk />
-                  </TabPanel>
-                </TabPanels>
-              </Tabs>
-              <Spacer />
-              {Object.values(state.hasChanged).length ? (
-                <Button
-                  bg="#5FCA89"
-                  color="white"
-                  leftIcon={<SaveIcon />}
-                  borderRadius="0"
-                  pl="35px"
-                  width="100%"
-                  h="55px"
-                  justifyContent="left"
-                  onClick={() => saveChanges(state.hasChanged)}
-                >
-                  Save Changes
-                </Button>
-              ) : (
-                <></>
-              )}
-            </Flex>
-            {isOpen && (
-              <EditModuleModal
-                module={
-                  courseData.course.modules[
-                    Number(moduleIndex)
-                  ] as ModuleResponse
+      {courseData?.course?.modules?.[Number(moduleIndex)] && (
+        <Box w="20%" minW="300px">
+          <Flex
+            position="fixed"
+            w="inherit"
+            minW="inherit"
+            h="100vh"
+            overflow="hidden"
+            boxShadow="xl"
+            flexFlow="column"
+          >
+            <Box opacity="0.9" backgroundColor="black">
+              <Flex
+                h="240px"
+                backgroundPosition="center"
+                backgroundImage={
+                  courseData?.course?.modules?.[Number(moduleIndex)]
+                    ?.previewImage || undefined
                 }
-                isOpen={isOpen}
-                onClose={onClose}
-                formatCourseRequest={formatCourseRequest}
-              />
+                backgroundSize="cover"
+                bgRepeat="no-repeat"
+                opacity="1"
+                direction="column"
+                justifyContent="space-between"
+                p="35px"
+              >
+                <HStack justify="space-between">
+                  <Link href={MANAGE_COURSES_PAGE}>
+                    <ChevronLeftIcon color="white" h={6} w={6} />
+                  </Link>
+                  <Button
+                    variant="md"
+                    leftIcon={<EditIcon color="white" h={5} w={5} />}
+                    onClick={onOpen}
+                    backgroundColor="transparent"
+                  />
+                </HStack>
+                <Text variant="display-sm-sb" color="white">
+                  {courseData?.course?.modules?.[Number(moduleIndex)].title}
+                </Text>
+              </Flex>
+            </Box>
+            <Tabs variant="unstyled" height="100%" overflowY="hidden">
+              <Box
+                bg="background.light"
+                borderRadius="md"
+                p="6px"
+                margin="auto"
+                maxW="min-content"
+                my="43px"
+              >
+                <TabList>
+                  <Tab
+                    style={{ paddingInline: "35px", height: "32px" }}
+                    _selected={{
+                      color: "white",
+                      bg: "brand.royal",
+                      borderRadius: "md",
+                    }}
+                  >
+                    Overview
+                  </Tab>
+                  <Tab
+                    style={{ paddingInline: "23px", height: "32px" }}
+                    _selected={{
+                      color: "white",
+                      bg: "brand.royal",
+                      borderRadius: "md",
+                    }}
+                  >
+                    Components
+                  </Tab>
+                </TabList>
+              </Box>
+              <TabPanels height="100%" overflowY="hidden">
+                <TabPanel
+                  p="0"
+                  pb="200px"
+                  height="100%"
+                  overflowY="auto"
+                  className="tabScroll"
+                >
+                  <ModuleOverview />
+                </TabPanel>
+                <TabPanel
+                  pb="200px"
+                  height="100%"
+                  overflowY="auto"
+                  className="tabScroll"
+                >
+                  <ContentKiosk />
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+            <Spacer />
+            {Object.values(state.hasChanged).length ? (
+              <Button
+                bg="#5FCA89"
+                color="white"
+                leftIcon={<SaveIcon />}
+                borderRadius="0"
+                pl="35px"
+                width="100%"
+                h="55px"
+                justifyContent="left"
+                onClick={() => saveChanges(state.hasChanged)}
+              >
+                Save Changes
+              </Button>
+            ) : (
+              <></>
             )}
-          </Box>
-        )}
-      ;
+          </Flex>
+          <EditModuleModal
+            module={module}
+            isOpen={isOpen}
+            onClose={onClose}
+            formatCourseRequest={formatCourseRequest}
+          />
+        </Box>
+      )}
     </>
   );
 };
