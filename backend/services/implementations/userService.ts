@@ -330,7 +330,7 @@ class UserService implements IUserService {
       // must explicitly specify runValidators when updating through findByIdAndUpdate
       updatedUser = await MgUser.findByIdAndUpdate(
         userId,
-        { role: userRole } ,
+        { role: userRole },
         { runValidators: true, new: true },
       );
 
