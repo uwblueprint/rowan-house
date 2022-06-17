@@ -337,13 +337,12 @@ class UserService implements IUserService {
       if (!updatedUser) {
         throw new Error(`userId ${userId} not found.`);
       }
-
-
     } catch (error: unknown) {
-      Logger.error(`Failed to update user role. Reason = ${getErrorMessage(error)}`);
+      Logger.error(
+        `Failed to update user role. Reason = ${getErrorMessage(error)}`
+      );
       throw error;
     }
-
     return updatedUser.role;
   }
 
