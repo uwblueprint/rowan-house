@@ -5,7 +5,15 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { Flex, Image, VStack, Center, Text, Button } from "@chakra-ui/react";
+import {
+  Flex,
+  Image,
+  VStack,
+  Center,
+  Text,
+  Button,
+  Spinner,
+} from "@chakra-ui/react";
 import { useQuery, useMutation } from "@apollo/client";
 import { Redirect } from "react-router-dom";
 import RHSLogo from "../../assets/RHSlogo.png";
@@ -15,53 +23,67 @@ import { MANAGE_COURSES_PAGE } from "../../constants/Routes";
 import authAPIClient from "../../APIClients/AuthAPIClient";
 import { SEND_EMAIL_VERIFICATION_LINK } from "../../APIClients/mutations/AuthMutations";
 
+enum VerifyEmailState {
+  default = "default",
+  requested = "requested",
+  sent = "sent",
+  error = "error",
+}
+
 interface VerifyEmailProps {
-  hasError: boolean;
-  hasBeenPressed: boolean;
-  setHasBeenPressed: Dispatch<SetStateAction<boolean>>;
+  verifyEmailRequestState: VerifyEmailState;
+  setVerifyEmailRequestState: Dispatch<SetStateAction<VerifyEmailState>>;
 }
 
 const VerifyEmailContent = ({
-  hasError,
-  hasBeenPressed,
-  setHasBeenPressed,
+  verifyEmailRequestState,
+  setVerifyEmailRequestState,
 }: VerifyEmailProps): React.ReactElement<VerifyEmailProps> => {
-  if (hasError) {
-    return (
-      <Text variant="display-md" paddingBottom="1vw">
-        An error has occurred while resending your verification email
-      </Text>
-    );
+  switch (verifyEmailRequestState) {
+    case VerifyEmailState.default:
+      return (
+        <>
+          <Text variant="display-md" paddingBottom="1vw">
+            Please verify your email to continue
+          </Text>
+          <Button
+            variant="sm"
+            width="full"
+            marginBottom="2vh"
+            onClick={() =>
+              setVerifyEmailRequestState(VerifyEmailState.requested)
+            }
+          >
+            Resend verification email
+          </Button>
+        </>
+      );
+    case VerifyEmailState.requested:
+      return <Spinner />;
+    case VerifyEmailState.sent:
+      return (
+        <Text variant="display-md" paddingBottom="1vw">
+          Verification email has been sent
+        </Text>
+      );
+    case VerifyEmailState.error:
+      return (
+        <Text variant="display-md" paddingBottom="1vw">
+          An error has occurred while resending your verification email
+        </Text>
+      );
+    // Invalid VerifyEmail page state
+    default:
+      return <></>;
   }
-  if (hasBeenPressed) {
-    return (
-      <Text variant="display-md" paddingBottom="1vw">
-        Verification email has been sent
-      </Text>
-    );
-  }
-  return (
-    <>
-      <Text variant="display-md" paddingBottom="1vw">
-        Please verify your email to continue
-      </Text>
-      <Button
-        variant="sm"
-        width="full"
-        marginBottom="2vh"
-        onClick={() => setHasBeenPressed(true)}
-      >
-        Resend verification email
-      </Button>
-    </>
-  );
 };
 
 const VerifyEmail = (): React.ReactElement => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
 
-  const [hasBeenPressed, setHasBeenPressed] = useState(false);
-  const [hasError, setHasError] = useState(false);
+  const [verifyEmailRequestState, setVerifyEmailRequestState] = useState(
+    VerifyEmailState.default,
+  );
 
   // refetch used to call query lazily with non-void function output
   const { refetch } = useQuery<
@@ -85,7 +107,10 @@ const VerifyEmail = (): React.ReactElement => {
 
   useEffect(() => {
     const onButtonPress = async () => {
-      if (authenticatedUser && hasBeenPressed) {
+      if (
+        authenticatedUser &&
+        verifyEmailRequestState === VerifyEmailState.requested
+      ) {
         try {
           const result = await sendEmailVerificationLink({
             variables: { email: authenticatedUser.email },
@@ -94,10 +119,10 @@ const VerifyEmail = (): React.ReactElement => {
             const success = result.data?.sendEmailVerificationLink ?? null;
             if (success) {
               // TODO: Add rate limiting for button presses
-              setHasBeenPressed(true);
+              setVerifyEmailRequestState(VerifyEmailState.sent);
               return;
             }
-            setHasError(true);
+            setVerifyEmailRequestState(VerifyEmailState.error);
           }
         } catch (error: unknown) {
           // TODO: Add frontend logging
@@ -105,7 +130,7 @@ const VerifyEmail = (): React.ReactElement => {
       }
     };
     onButtonPress();
-  }, [authenticatedUser, hasBeenPressed, sendEmailVerificationLink]);
+  }, [authenticatedUser, verifyEmailRequestState, sendEmailVerificationLink]);
 
   if (authenticatedUser?.emailVerified) {
     return <Redirect to={MANAGE_COURSES_PAGE} />;
@@ -117,9 +142,8 @@ const VerifyEmail = (): React.ReactElement => {
         <VStack spacing="4vh">
           <Image height="13vh" marginBottom="2.5vh" src={RHSLogo} />
           <VerifyEmailContent
-            hasError={hasError}
-            hasBeenPressed={hasBeenPressed}
-            setHasBeenPressed={setHasBeenPressed}
+            verifyEmailRequestState={verifyEmailRequestState}
+            setVerifyEmailRequestState={setVerifyEmailRequestState}
           />
         </VStack>
       </Center>
