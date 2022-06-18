@@ -74,6 +74,7 @@ const VerifyEmailContent = ({
       );
     // Invalid VerifyEmail page state
     default:
+      // TODO: Add frontend logging
       return <></>;
   }
 };
