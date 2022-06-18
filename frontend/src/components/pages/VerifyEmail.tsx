@@ -106,6 +106,7 @@ const VerifyEmail = (): React.ReactElement => {
   }, [authenticatedUser, setAuthenticatedUser, refetch]);
 
   useEffect(() => {
+    // TODO: Add rate limiting for button presses
     const onButtonPress = async () => {
       if (
         authenticatedUser &&
@@ -115,15 +116,12 @@ const VerifyEmail = (): React.ReactElement => {
           const result = await sendEmailVerificationLink({
             variables: { email: authenticatedUser.email },
           });
-          if (result) {
-            const success = result.data?.sendEmailVerificationLink ?? null;
-            if (success) {
-              // TODO: Add rate limiting for button presses
-              setVerifyEmailRequestState(VerifyEmailState.sent);
-              return;
-            }
-            setVerifyEmailRequestState(VerifyEmailState.error);
+          const success = result.data?.sendEmailVerificationLink ?? null;
+          if (result && success) {
+            setVerifyEmailRequestState(VerifyEmailState.sent);
+            return;
           }
+          setVerifyEmailRequestState(VerifyEmailState.error);
         } catch (error: unknown) {
           // TODO: Add frontend logging
         }
