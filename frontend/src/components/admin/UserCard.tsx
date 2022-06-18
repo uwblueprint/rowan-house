@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Flex,
@@ -54,13 +54,17 @@ const UserCard = ({
   town,
   onUserSelect,
 }: UserCardProps): React.ReactElement => {
-  const [selectValue, setSelectValue] = useState(role);
+  const [selectValue, setSelectValue] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  useEffect(() => {
+    setSelectValue(role);
+  }, [role]);
 
   const [UpdateUserRole] = useMutation(UPDATE_USER_ROLE);
 
-  const resetState = () => {
-    setSelectValue(role);
+  const resetState = (userRole: Role) => {
+    setSelectValue(userRole);
   };
 
   const updateUserRender = async (userRole: Role) => {
@@ -110,7 +114,7 @@ const UserCard = ({
           isOpen={isOpen}
           onConfirm={() => updateUserRender(selectValue)}
           onCancel={() => {
-            resetState();
+            resetState(role);
             onClose();
           }}
         >
