@@ -139,7 +139,7 @@ const VerifyEmail = (): React.ReactElement => {
   return (
     <Flex minH="100vh">
       <Center flex="1">
-        <VStack spacing="4vh">
+        <VStack spacing="2vh">
           <Image height="13vh" marginBottom="2.5vh" src={RHSLogo} />
           <VerifyEmailContent
             verifyEmailRequestState={verifyEmailRequestState}
