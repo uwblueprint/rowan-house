@@ -98,6 +98,16 @@ interface IUserService {
   updateUserById(userId: string, user: UpdateUserDTO): Promise<UserDTO>;
 
   /**
+   * Update a user's role.
+   * Note: the password cannot be updated using this method, use IAuthService.resetPassword instead
+   * @param userId user's id
+   * @param role the new user role to be updated to
+   * @returns the new user role updated to
+   * @throws Error if user update fails
+   */
+  updateUserRole(userId: string, userRole: Role): Promise<Role>;
+
+  /**
    * Delete a user by id
    * @param userId user's userId
    * @throws Error if user deletion fails

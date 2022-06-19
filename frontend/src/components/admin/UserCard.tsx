@@ -1,10 +1,25 @@
-import React from "react";
-import { Button, Flex, SimpleGrid, Text, VStack } from "@chakra-ui/react";
+import React, { useState, useEffect } from "react";
+import {
+  Button,
+  Flex,
+  SimpleGrid,
+  Text,
+  VStack,
+  useDisclosure,
+} from "@chakra-ui/react";
+import { useMutation } from "@apollo/client";
 import { UserCardProps } from "../../types/AdminDashboardTypes";
+import { Modal } from "../common/Modal";
+import SelectInput from "../common/SelectInput";
+import UPDATE_USER_ROLE from "../../APIClients/mutations/UserMutations";
+import USER_ROLES from "../../constants/UserConstants";
+import { Role } from "../../types/AuthTypes";
 
 interface DefaultUserIconProps {
   initials: string;
 }
+
+const USER_INFO = USER_ROLES.map((role) => ({ label: role, value: role }));
 
 const DefaultUserIcon = ({
   initials,
@@ -27,12 +42,42 @@ const DefaultUserIcon = ({
 };
 
 const UserCard = ({
+  id,
   firstName,
   lastName,
   role,
   email,
   town,
+  onUserSelect,
 }: UserCardProps): React.ReactElement => {
+  const [selectValue, setSelectValue] = useState<Role>(role);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  useEffect(() => {
+    setSelectValue(role);
+  }, [role]);
+
+  const [UpdateUserRole] = useMutation(UPDATE_USER_ROLE);
+
+  const resetState = setSelectValue;
+
+  const updateUserRender = async (userRole: Role) => {
+    const { data } = await UpdateUserRole({ variables: { id, userRole } });
+    if (data) {
+      onUserSelect({
+        id,
+        firstName,
+        lastName,
+        email,
+        town,
+        role: userRole,
+      });
+      onClose();
+    } else {
+      throw Error("Failed to update user role");
+    }
+  };
+
   const renderField = (fieldName: string, value: string) => {
     return (
       <VStack spacing={2} align="left">
@@ -55,7 +100,24 @@ const UserCard = ({
     >
       <VStack align="center" spacing={8} ml="60px" mr="132px">
         <DefaultUserIcon initials={getInitials(firstName, lastName)} />
-        <Button variant="outline-md">Edit Role</Button>
+        <Button onClick={onOpen} variant="outline-md">
+          Edit Role
+        </Button>
+        <Modal
+          header="Edit user role"
+          isOpen={isOpen}
+          onConfirm={() => updateUserRender(selectValue)}
+          onCancel={() => {
+            resetState(role);
+            onClose();
+          }}
+        >
+          <SelectInput
+            onChange={setSelectValue}
+            value={selectValue}
+            optionsMap={USER_INFO}
+          />
+        </Modal>
       </VStack>
       <SimpleGrid
         templateColumns="repeat(auto-fit, 300px)"
