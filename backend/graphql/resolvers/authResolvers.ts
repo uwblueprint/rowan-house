@@ -8,6 +8,10 @@ import IAuthService from "../../services/interfaces/authService";
 import IEmailService from "../../services/interfaces/emailService";
 import IUserService from "../../services/interfaces/userService";
 import { AuthDTO, RegisterUserDTO, Role } from "../../types";
+import { getErrorMessage } from "../../utilities/errorUtils";
+import logger from "../../utilities/logger";
+
+const Logger = logger(__filename);
 
 const userService: IUserService = new UserService();
 const emailService: IEmailService = new EmailService(nodemailerConfig);
@@ -69,6 +73,23 @@ const authResolvers = {
     ): Promise<boolean> => {
       await authService.resetPassword(email);
       return true;
+    },
+    sendEmailVerificationLink: async (
+      _parent: undefined,
+      { email }: { email: string },
+    ): Promise<boolean> => {
+      try {
+        await authService.sendEmailVerificationLink(email);
+        return true;
+      } catch (error: unknown) {
+        const errorMessage = [
+          `Failed to resolve email verification link mutation for user with email ${email}, `,
+          "reason =",
+          getErrorMessage(error),
+        ];
+        Logger.error(errorMessage.join(" "));
+        return false;
+      }
     },
   },
 };

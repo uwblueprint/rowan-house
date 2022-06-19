@@ -164,9 +164,13 @@ const updateAuthenticatedUser = async (
   setAuthenticatedUser: Dispatch<SetStateAction<AuthenticatedUser>>,
 ): Promise<void> => {
   if (authenticatedUser) {
-    const { data, error } = await getEmailVerifiedByEmailFunction({
+    const res = await getEmailVerifiedByEmailFunction({
       email: authenticatedUser.email,
     });
+    if (!res) {
+      return;
+    }
+    const { data, error } = res;
     if (error || data.emailVerifiedByEmail === undefined) {
       // TODO: add proper frontend logging
       // eslint-disable-next-line no-console
