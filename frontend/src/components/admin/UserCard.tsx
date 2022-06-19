@@ -19,11 +19,7 @@ interface DefaultUserIconProps {
   initials: string;
 }
 
-const USER_INFO = [
-  { label: USER_ROLES[0], value: USER_ROLES[0] },
-  { label: USER_ROLES[1], value: USER_ROLES[1] },
-  { label: USER_ROLES[2], value: USER_ROLES[2] },
-];
+const USER_INFO = USER_ROLES.map((role) => ({ label: role, value: role }));
 
 const DefaultUserIcon = ({
   initials,
@@ -54,7 +50,7 @@ const UserCard = ({
   town,
   onUserSelect,
 }: UserCardProps): React.ReactElement => {
-  const [selectValue, setSelectValue] = useState("");
+  const [selectValue, setSelectValue] = useState<Role>(role);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
@@ -63,9 +59,7 @@ const UserCard = ({
 
   const [UpdateUserRole] = useMutation(UPDATE_USER_ROLE);
 
-  const resetState = (userRole: Role) => {
-    setSelectValue(userRole);
-  };
+  const resetState = setSelectValue;
 
   const updateUserRender = async (userRole: Role) => {
     const { data } = await UpdateUserRole({ variables: { id, userRole } });
