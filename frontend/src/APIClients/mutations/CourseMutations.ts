@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const CREATE_COURSE = gql`
-  mutation CreateCourse($course: CreateCourseRequestDTO!) {
-    createCourse(course: $course) {
+  mutation CreateCourse($course: CreateCourseRequestDTO!, $file: Upload) {
+    createCourse(course: $course, file: $file) {
       title
       description
       image
@@ -17,17 +17,23 @@ export const CREATE_COURSE = gql`
         lessons
       }
       private
+      fileName
     }
   }
 `;
 
 export const UPDATE_COURSE = gql`
-  mutation UpdateCourse($id: ID!, $course: UpdateCourseRequestDTO!) {
-    updateCourse(id: $id, course: $course) {
+  mutation UpdateCourse(
+    $id: ID!
+    $course: UpdateCourseRequestDTO!
+    $file: Upload
+  ) {
+    updateCourse(id: $id, course: $course, file: $file) {
       title
       description
       image
       previewImage
+      fileName
       modules {
         id
         title

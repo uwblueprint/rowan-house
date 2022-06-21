@@ -29,6 +29,7 @@ const courseType = gql`
     previewImage: String
     modules: [ModuleResponseDTO!]
     private: Boolean!
+    fileName: String
   }
 
   input CreateCourseRequestDTO {
@@ -52,11 +53,12 @@ const courseType = gql`
   extend type Query {
     course(id: ID!): CourseResponseDTO!
     courses: [CourseResponseDTO!]!
+    courseFile(fileUUID: ID!): String!
   }
 
   extend type Mutation {
-    createCourse(course: CreateCourseRequestDTO!): CourseResponseDTO!
-    updateCourse(id: ID!, course: UpdateCourseRequestDTO!): CourseResponseDTO
+    createCourse(course: CreateCourseRequestDTO!, file: Upload): CourseResponseDTO!
+    updateCourse(id: ID!, course: UpdateCourseRequestDTO!, file: Upload): CourseResponseDTO
     deleteCourse(id: ID!): ID
   }
 `;
