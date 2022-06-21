@@ -23,8 +23,11 @@ export interface ModuleType {
 }
 
 export interface CourseType {
+  id: string;
   title: string;
   description?: string;
+  image: string | null;
+  previewImage: string | null;
   private: boolean;
   modules: ModuleType[];
 }
