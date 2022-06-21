@@ -215,6 +215,19 @@ class UserService implements IUserService {
     );
   }
 
+  async getUserEmailVerifiedByEmail(email: string): Promise<boolean> {
+    try {
+      return (await firebaseAdmin.auth().getUserByEmail(email)).emailVerified;
+    } catch (error: unknown) {
+      Logger.error(
+        `Failed to get email verification status. Reason = ${getErrorMessage(
+          error,
+        )}`,
+      );
+      throw error;
+    }
+  }
+
   async createUser(user: CreateUserDTO): Promise<UserDTO> {
     let newUser: User;
     let firebaseUser: firebaseAdmin.auth.UserRecord;
@@ -323,10 +336,32 @@ class UserService implements IUserService {
     };
   }
 
+  async updateUserRole(userId: string, userRole: Role): Promise<Role> {
+    let updatedUser: User | null;
+
+    try {
+      // must explicitly specify runValidators when updating through findByIdAndUpdate
+      updatedUser = await MgUser.findByIdAndUpdate(
+        userId,
+        { role: userRole },
+        { runValidators: true, new: true },
+      );
+
+      if (!updatedUser) {
+        throw new Error(`userId ${userId} not found.`);
+      }
+    } catch (error: unknown) {
+      Logger.error(
+        `Failed to update user role. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
+    return updatedUser.role;
+  }
+
   async deleteUserById(userId: string): Promise<void> {
     try {
       const deletedUser: User | null = await MgUser.findByIdAndDelete(userId);
-
       if (!deletedUser) {
         throw new Error(`userId ${userId} not found.`);
       }

@@ -56,7 +56,6 @@ const EditCourseModal = ({
         description,
         private: isPrivate,
       };
-      console.log(newCourse);
       updateCourse({ variables: { id: course.id, course: newCourse } });
     } else {
       throw Error("Attempted to update course that doesn't exist");

@@ -71,6 +71,13 @@ interface IUserService {
   ): Promise<{ [key: string]: number }>;
 
   /**
+   *  Get emailVerified for user by email
+   * @param email user email
+   * @returns user's emailVerified value
+   * @throws Error if query fails
+   */
+  getUserEmailVerifiedByEmail(email: string): Promise<boolean>;
+  /**
    * Create a user, email verification configurable
    * @param user the user to be created
    * @param authId the user's firebase auth id, optional
@@ -89,6 +96,16 @@ interface IUserService {
    * @throws Error if user update fails
    */
   updateUserById(userId: string, user: UpdateUserDTO): Promise<UserDTO>;
+
+  /**
+   * Update a user's role.
+   * Note: the password cannot be updated using this method, use IAuthService.resetPassword instead
+   * @param userId user's id
+   * @param role the new user role to be updated to
+   * @returns the new user role updated to
+   * @throws Error if user update fails
+   */
+  updateUserRole(userId: string, userRole: Role): Promise<Role>;
 
   /**
    * Delete a user by id

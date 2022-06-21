@@ -13,3 +13,9 @@ export const GET_USER_BY_EMAIL = gql`
     }
   }
 `;
+
+export const GET_EMAIL_VERIFIED_BY_EMAIL = gql`
+  query GetEmailVerifiedByEmail($email: String!) {
+    emailVerifiedByEmail(email: $email)
+  }
+`;

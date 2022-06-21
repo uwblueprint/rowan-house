@@ -9,6 +9,7 @@ const authType = gql`
     town: String!
     role: Role!
     accessToken: String!
+    emailVerified: Boolean!
   }
 
   input RegisterUserDTO {
@@ -25,6 +26,7 @@ const authType = gql`
     refresh: String!
     logout(userId: ID!): ID
     resetPassword(email: String!): Boolean!
+    sendEmailVerificationLink(email: String!): Boolean!
   }
 `;
 

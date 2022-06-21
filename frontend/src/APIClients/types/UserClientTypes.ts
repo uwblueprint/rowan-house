@@ -1,9 +1,11 @@
+import { Role } from "../../types/AuthTypes";
+
 export type UserRequest = {
   firstName?: string;
   lastName?: string;
   email?: string;
   town?: string;
-  role?: string;
+  role?: Role;
 };
 
 export type UserResponse = {
@@ -12,5 +14,5 @@ export type UserResponse = {
   lastName: string;
   email: string;
   town: string;
-  role: string;
+  role: Role;
 };

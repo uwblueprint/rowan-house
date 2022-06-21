@@ -10,6 +10,7 @@ export const LOGIN = gql`
       town
       role
       accessToken
+      emailVerified
     }
   }
 `;
@@ -52,6 +53,13 @@ export const REGISTER = gql`
       town
       role
       accessToken
+      emailVerified
     }
+  }
+`;
+
+export const SEND_EMAIL_VERIFICATION_LINK = gql`
+  mutation Send_Email_Verification_Link($email: String!) {
+    sendEmailVerificationLink(email: $email)
   }
 `;

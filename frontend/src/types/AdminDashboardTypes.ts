@@ -9,8 +9,8 @@ export interface SidebarProps {
   currentPage: AdminPage;
 }
 
-export type UserCardProps = UserResponse;
-
 export interface SearchUsersBarProps {
-  onUserSelect: (user: UserCardProps) => void;
+  onUserSelect: (user: UserResponse) => void;
 }
+
+export type UserCardProps = UserResponse & SearchUsersBarProps;

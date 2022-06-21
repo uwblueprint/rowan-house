@@ -5,7 +5,7 @@ import UserService from "../../services/implementations/userService";
 import IAuthService from "../../services/interfaces/authService";
 import IEmailService from "../../services/interfaces/emailService";
 import IUserService from "../../services/interfaces/userService";
-import { CreateUserDTO, UpdateUserDTO, UserDTO } from "../../types";
+import { CreateUserDTO, Role, UpdateUserDTO, UserDTO } from "../../types";
 import { generateCSV } from "../../utilities/CSVUtils";
 
 const userService: IUserService = new UserService();
@@ -41,6 +41,12 @@ const userResolvers = {
       const result = await userService.getUserCountByTown(startDate, endDate);
       return JSON.stringify(result);
     },
+    emailVerifiedByEmail: async (
+      _parent: undefined,
+      { email }: { email: string },
+    ): Promise<boolean> => {
+      return userService.getUserEmailVerifiedByEmail(email);
+    },
   },
   Mutation: {
     createUser: async (
@@ -56,6 +62,12 @@ const userResolvers = {
       { id, user }: { id: string; user: UpdateUserDTO },
     ): Promise<UserDTO> => {
       return userService.updateUserById(id, user);
+    },
+    updateUserRole: async (
+      _parent: undefined,
+      { id, userRole }: { id: string; userRole: Role },
+    ): Promise<Role> => {
+      return userService.updateUserRole(id, userRole);
     },
     deleteUserById: async (
       _parent: undefined,

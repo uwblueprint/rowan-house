@@ -39,11 +39,13 @@ const userType = gql`
     users: [UserDTO!]!
     usersCSV: String!
     userCountByTown(startDate: String, endDate: String): String!
+    emailVerifiedByEmail(email: String!): Boolean!
   }
 
   extend type Mutation {
     createUser(user: CreateUserDTO!): UserDTO!
     updateUser(id: ID!, user: UpdateUserDTO!): UserDTO!
+    updateUserRole(id: ID!, userRole: Role!): Role!
     deleteUserById(id: ID!): ID
     deleteUserByEmail(email: String!): ID
   }

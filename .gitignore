@@ -6,7 +6,9 @@
 **/*.log
 **/firebaseServiceAccount.json
 **/.DS_Store
-.vscode
+.vscode/**/*
+!.vscode/launch.json
 **/*.cache
 **/*.egg-info
 .history/
+.eslintcache

@@ -10,7 +10,11 @@ const EditContentOptionsMenu = ({
   onDeleteClick,
 }: EditContentOptionsMenuProps): React.ReactElement => {
   return (
-    <HStack spacing={0} visibility={isVisible ? "visible" : "hidden"}>
+    <HStack
+      spacing={0}
+      visibility={isVisible ? "visible" : "hidden"}
+      align="start"
+    >
       <IconButton
         aria-label="Edit this content block"
         variant="transparent"

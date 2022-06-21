@@ -17,7 +17,11 @@ import {
 
 import authAPIClient from "../../APIClients/AuthAPIClient";
 import { REGISTER } from "../../APIClients/mutations/AuthMutations";
-import { HOME_PAGE, LOGIN_PAGE } from "../../constants/Routes";
+import {
+  HOME_PAGE,
+  LOGIN_PAGE,
+  VERIFY_EMAIL_PAGE,
+} from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
 import { AuthenticatedUser } from "../../types/AuthTypes";
 import RHSLogo from "../../assets/RHSlogo.png";
@@ -52,7 +56,11 @@ const Signup = (): React.ReactElement => {
   };
 
   if (authenticatedUser) {
-    return <Redirect to={HOME_PAGE} />;
+    return (
+      <Redirect
+        to={authenticatedUser?.emailVerified ? HOME_PAGE : VERIFY_EMAIL_PAGE}
+      />
+    );
   }
 
   const isMatch = password === currentPassword;
