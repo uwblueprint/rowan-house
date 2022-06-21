@@ -1,6 +1,6 @@
 import React from "react";
-import { ContentType } from "../APIClients/types/LessonClientTypes";
-import { ContentBlockState } from "../types/ModuleEditorTypes";
+import { ContentType } from "../../../APIClients/types/LessonClientTypes";
+import { ContentBlockState } from "../../../types/ContentBlockTypes";
 
 // Many thanks to https://github.com/Microsoft/TypeScript/issues/30581#issuecomment-1080979994.
 

@@ -3,11 +3,10 @@ import {
   EditorContextAction,
   EditorStateType,
   LessonType,
-  ContentBlockState,
-  ContentTypeEnum,
   EditorChangeStatus,
   EditorChangeStatuses,
 } from "../types/ModuleEditorTypes";
+import { ContentBlockState, ContentTypeEnum } from "../types/ContentBlockTypes";
 
 /* eslint-disable no-console */
 

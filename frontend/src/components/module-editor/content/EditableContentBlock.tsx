@@ -3,20 +3,23 @@ import React, { useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 
 import {
+  ContentBlockProps,
   ContentBlockState,
-  EditModalProps,
-} from "../../types/ModuleEditorTypes";
-import { TextBlock, ImageBlock } from "../common/content";
-import EditContentOptionsMenu from "./EditContentOptionsMenu";
+} from "../../../types/ContentBlockTypes";
+import { TextBlock, ImageBlock } from "../../common/content";
+import EditContentOptionsMenu from "../EditContentOptionsMenu";
 
-import { ReactComponent as DragHandleIconSvg } from "../../assets/DragHandle.svg";
-import EditTextModal from "./EditTextModal";
-import ContentBlockRenderer from "../../utils/ContentBlockRenderer";
+import { ReactComponent as DragHandleIconSvg } from "../../../assets/DragHandle.svg";
+import { EditImageModal, EditTextModal } from "./modals";
+import ContentBlockRenderer from "../../common/content/ContentBlockRenderer";
+import { EditContentModalProps } from "../../../types/ModuleEditorTypes";
 
 /* eslint-disable react/jsx-props-no-spreading */
 
 const Empty = () => null;
-const CONTENT_BLOCKS = new ContentBlockRenderer<{ block: ContentBlockState }>({
+const CONTENT_BLOCKS = new ContentBlockRenderer<
+  ContentBlockProps<ContentBlockState>
+>({
   column: Empty,
   heading: Empty,
   text: TextBlock,
@@ -27,18 +30,18 @@ const CONTENT_BLOCKS = new ContentBlockRenderer<{ block: ContentBlockState }>({
   audio: Empty,
 });
 
-const EDIT_MODALS = new ContentBlockRenderer<EditModalProps<ContentBlockState>>(
-  {
-    column: Empty,
-    heading: Empty,
-    text: EditTextModal,
-    link: Empty,
-    button: Empty,
-    image: Empty,
-    video: Empty,
-    audio: Empty,
-  },
-);
+const EDIT_MODALS = new ContentBlockRenderer<
+  EditContentModalProps<ContentBlockState>
+>({
+  column: Empty,
+  heading: Empty,
+  text: EditTextModal,
+  link: Empty,
+  button: Empty,
+  image: EditImageModal,
+  video: Empty,
+  audio: Empty,
+});
 
 const EditableContentBlock = ({
   block,

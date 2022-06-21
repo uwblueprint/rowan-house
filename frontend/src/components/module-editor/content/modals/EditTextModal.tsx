@@ -1,17 +1,18 @@
 import { Flex, VStack } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
-import { EditModalProps, TextBlockState } from "../../types/ModuleEditorTypes";
-import { Modal } from "../common/Modal";
-import EditorContext from "../../contexts/ModuleEditorContext";
+import { TextBlockState } from "../../../../types/ContentBlockTypes";
+import { Modal } from "../../../common/Modal";
+import EditorContext from "../../../../contexts/ModuleEditorContext";
 
-import { TextArea } from "../common/TextArea";
+import { TextArea } from "../../../common/TextArea";
+import { EditContentModalProps } from "../../../../types/ModuleEditorTypes";
 
 const EditTextModal = ({
   block,
   index,
   isOpen,
   onClose,
-}: EditModalProps<TextBlockState>): React.ReactElement => {
+}: EditContentModalProps<TextBlockState>): React.ReactElement => {
   const [text, setText] = useState(block.content.text ?? "");
   const [invalid, setInvalid] = useState(false);
   const context = useContext(EditorContext);

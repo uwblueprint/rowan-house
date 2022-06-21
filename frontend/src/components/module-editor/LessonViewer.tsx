@@ -3,7 +3,7 @@ import { Flex } from "@chakra-ui/react";
 import { Droppable } from "react-beautiful-dnd";
 
 import EditorContext from "../../contexts/ModuleEditorContext";
-import EditableContentBlock from "./EditableContentBlock";
+import EditableContentBlock from "./content/EditableContentBlock";
 
 const LessonViewer = (): React.ReactElement => {
   const context = useContext(EditorContext);
