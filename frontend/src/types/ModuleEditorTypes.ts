@@ -8,7 +8,7 @@ export interface LessonType {
   id?: string;
   description?: string;
   image?: string;
-  content: ContentBlock[];
+  content: ContentBlockState[];
 }
 
 export type LessonsType = Record<string, LessonType>;
@@ -34,22 +34,44 @@ export interface CourseType {
 }
 
 export const ContentTypeCategories = ["Layout", "Basic", "Media"];
+
 export class ContentTypeEnum {
-  static COLUMN = new ContentTypeEnum("Column", "column.svg", "column");
+  static new = <ClientType>(
+    title: string,
+    preview: string,
+    clientType: ContentType,
+  ): ContentTypeEnum & { clientType: ClientType } =>
+    new ContentTypeEnum(title, preview, clientType) as ContentTypeEnum & {
+      clientType: ClientType;
+    };
 
-  static HEADING = new ContentTypeEnum("Heading", "heading.svg", "heading");
+  static COLUMN = ContentTypeEnum.new<"column">(
+    "Column",
+    "column.svg",
+    "column",
+  );
 
-  static TEXT = new ContentTypeEnum("Text", "text.svg", "text");
+  static HEADING = ContentTypeEnum.new<"heading">(
+    "Heading",
+    "heading.svg",
+    "heading",
+  );
 
-  static LINK = new ContentTypeEnum("Link", "link.svg", "link");
+  static TEXT = ContentTypeEnum.new<"text">("Text", "text.svg", "text");
 
-  static BUTTON = new ContentTypeEnum("Button", "button.svg", "button");
+  static LINK = ContentTypeEnum.new<"link">("Link", "link.svg", "link");
 
-  static IMAGE = new ContentTypeEnum("Image", "image.svg", "image");
+  static BUTTON = ContentTypeEnum.new<"button">(
+    "Button",
+    "button.svg",
+    "button",
+  );
 
-  static VIDEO = new ContentTypeEnum("Video", "video.svg", "video");
+  static IMAGE = ContentTypeEnum.new<"image">("Image", "image.svg", "image");
 
-  static AUDIO = new ContentTypeEnum("Audio", "audio.svg", "audio");
+  static VIDEO = ContentTypeEnum.new<"video">("Video", "video.svg", "video");
+
+  static AUDIO = ContentTypeEnum.new<"audio">("Audio", "audio.svg", "audio");
 
   public readonly id: string;
 
@@ -62,15 +84,36 @@ export class ContentTypeEnum {
   }
 }
 
-export type ContentProps = {
-  text?: string;
-  link?: string;
-};
-
-export interface ContentBlock {
-  type: ContentTypeEnum;
-  content: ContentProps;
+export interface ContentBlockStateType<
+  ClientType extends ContentType,
+  BlockStateType
+> {
+  type: ContentTypeEnum & { clientType: ClientType };
+  content: BlockStateType;
   id: string;
+}
+
+export type TextBlockState = ContentBlockStateType<
+  "text",
+  {
+    text: string;
+  }
+>;
+
+export type ImageBlockState = ContentBlockStateType<
+  "image",
+  {
+    link: string;
+  }
+>;
+
+export type ContentBlockState = TextBlockState | ImageBlockState;
+
+export interface EditModalProps<BlockType extends ContentBlockState> {
+  onClose: () => void;
+  isOpen: boolean;
+  block: BlockType;
+  index: number;
 }
 
 export interface ModuleEditorParams {
@@ -132,7 +175,7 @@ export type EditorContextAction =
     }
   | {
       type: "update-block";
-      value: { index: number; block: ContentBlock };
+      value: { index: number; block: ContentBlockState };
     }
   | {
       type: "delete-block";

@@ -4,7 +4,11 @@ import {
   LessonRequest,
   LessonResponse,
 } from "../APIClients/types/LessonClientTypes";
-import { ContentTypeEnum, LessonType } from "../types/ModuleEditorTypes";
+import {
+  ContentBlockState,
+  ContentTypeEnum,
+  LessonType,
+} from "../types/ModuleEditorTypes";
 
 export const formatLessonRequest = (lesson: LessonType): LessonRequest => {
   // Remove IDs from content blocks, switch types to the titles
@@ -42,6 +46,6 @@ export const formatLessonResponse = (lesson: LessonResponse): LessonType => {
     title: lesson.title,
     description: lesson?.description ?? undefined,
     image: lesson?.image ?? undefined,
-    content: content ?? [],
+    content: (content ?? []) as ContentBlockState[],
   };
 };

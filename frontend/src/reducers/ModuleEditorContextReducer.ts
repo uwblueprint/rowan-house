@@ -3,7 +3,7 @@ import {
   EditorContextAction,
   EditorStateType,
   LessonType,
-  ContentBlock,
+  ContentBlockState,
   ContentTypeEnum,
   EditorChangeStatus,
   EditorChangeStatuses,
@@ -122,7 +122,7 @@ const createLessonContentBlock = (
     "Content block index exceeds content length",
   );
 
-  let block: ContentBlock | null;
+  let block: ContentBlockState | null;
   switch (blockID) {
     case ContentTypeEnum.TEXT.id:
       block = {
@@ -191,7 +191,7 @@ const reorderLessonContentBlocks = (
 const updateLessonContentBlock = (
   state: EditorStateType,
   index: number,
-  block: ContentBlock,
+  block: ContentBlockState,
 ): EditorStateType => {
   const id = state.focusedLesson;
   if (!id || !Object.keys(state.lessons).includes(id)) return state;
