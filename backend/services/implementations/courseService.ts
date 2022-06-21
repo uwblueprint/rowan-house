@@ -37,9 +37,11 @@ const publishedModulesOnlyQuery = [
 
 class CourseService implements ICourseService {
   storageService: IFileStorageService;
+
   constructor(storageService: IFileStorageService) {
     this.storageService = storageService;
   }
+
   /* eslint-disable class-methods-use-this */
   async getCourse(
     id: string,
@@ -79,7 +81,6 @@ class CourseService implements ICourseService {
       previewImage: course.previewImage,
       modules: course.modules,
       private: course.private,
-      fileName: course.fileName,
     };
   }
 
@@ -117,7 +118,6 @@ class CourseService implements ICourseService {
           previewImage: course.previewImage,
           modules: course.modules,
           private: course.private,
-          fileName: course.fileName,
         };
       });
     } catch (error: unknown) {
@@ -130,16 +130,20 @@ class CourseService implements ICourseService {
     course: CreateCourseRequestDTO,
   ): Promise<CourseResponseDTO> {
     let newCourse: Course | null;
-    const fileName = course.filePath ? uuid() : "";
     try {
-      if (course.filePath) {
-        await this.storageService.createFile(
-          fileName,
-          course.filePath,
-          course.fileContentType,
-        )
+      if (course.modules.length > 0) {
+        course.modules.forEach(async (module) => {
+          const fileName = module.filePath ? uuid() : "";
+          if (module.filePath) {
+            await this.storageService.createFile(
+              fileName,
+              module.filePath,
+              module.fileContentType,
+            );
+          }
+        });
       }
-      newCourse = await MgCourse.create({...course, fileName });
+      newCourse = await MgCourse.create({ course });
     } catch (error: unknown) {
       Logger.error(
         `Failed to create course. Reason = ${getErrorMessage(error)}`,
@@ -154,7 +158,6 @@ class CourseService implements ICourseService {
       previewImage: newCourse.previewImage,
       modules: newCourse.modules,
       private: newCourse.private,
-      fileName,
     };
   }
 
@@ -163,30 +166,30 @@ class CourseService implements ICourseService {
     course: UpdateCourseRequestDTO,
   ): Promise<CourseResponseDTO | null> {
     let updatedCourse: Course | null;
-    let fileName = "";
     try {
-      const currentCourse = await MgCourse.findById(id);
-      const currentFileName = currentCourse?.fileName;
-
-      if (course.filePath) {
-        fileName = currentFileName || uuid();
-        if (currentFileName) {
-          await this.storageService.updateFile(
-            fileName,
-            course.filePath,
-            course.fileContentType,
-          );
-        } else {
-          await this.storageService.createFile(
-            fileName,
-            course.filePath,
-            course.fileContentType,
-          )
-        }
-      } else if (currentFileName) {
-        await this.storageService.deleteFile(currentFileName);
+      if (course.modules.length > 0) {
+        course.modules.forEach(async (module) => {
+          const fileName = module.fileName || uuid();
+          if (module.filePath) {
+            if (module.fileName) {
+              await this.storageService.updateFile(
+                fileName,
+                module.filePath,
+                module.fileContentType,
+              );
+            } else {
+              await this.storageService.createFile(
+                fileName,
+                module.filePath,
+                module.fileContentType,
+              );
+            }
+          } else if (module.fileName) {
+            await this.storageService.deleteFile(fileName);
+          }
+        });
       }
-      updatedCourse = await MgCourse.findByIdAndUpdate(id, {...course, fileName}, {
+      updatedCourse = await MgCourse.findByIdAndUpdate(id, course, {
         new: true,
         runValidators: true,
       });
@@ -208,7 +211,6 @@ class CourseService implements ICourseService {
       previewImage: updatedCourse.previewImage,
       modules: updatedCourse.modules,
       private: updatedCourse.private,
-      fileName,
     };
   }
 
@@ -218,8 +220,12 @@ class CourseService implements ICourseService {
       if (!deletedCourse) {
         throw new Error(`Course id ${id} not found`);
       }
-      if(deletedCourse.fileName) {
-        await this.storageService.deleteFile(deletedCourse.fileName);
+      if (deletedCourse.modules.length > 0) {
+        deletedCourse.modules.forEach(async (module) => {
+          if (module.filePath) {
+            await this.storageService.deleteFile(module.fileName);
+          }
+        });
       }
       return id;
     } catch (error: unknown) {

@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import {
   getApiValidationError,
   getFileTypeValidationError,
-  validateFileType,
   validateImageFileType,
   validateObject,
   validatePrimitive,

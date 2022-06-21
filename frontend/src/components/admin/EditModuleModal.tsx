@@ -48,9 +48,10 @@ const EditModuleModal = ({
       title,
       description,
       published: isPublished,
+      file: previewImage,
     };
     const [id, course] = formatCourseRequest(newModule);
-    updateCourse({ variables: { id, course, file: previewImage } });
+    updateCourse({ variables: { id, course } });
     onClose();
   };
 
@@ -61,7 +62,6 @@ const EditModuleModal = ({
         // eslint-disable-next-line no-alert
         window.alert("Your file exceeds 5MB. Upload a smaller file.");
       } else {
-        console.log("file!", e.target.files[0]);
         setPreviewImage(e.target.files[0]);
       }
     }
