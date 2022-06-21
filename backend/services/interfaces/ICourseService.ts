@@ -9,7 +9,6 @@ export interface CreateCourseRequestDTO {
   modules: (ModuleDTO | null)[];
   private: boolean;
   filePath: string;
-  fileContentType: string;
 }
 
 export interface UpdateCourseRequestDTO {

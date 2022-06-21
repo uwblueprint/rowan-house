@@ -21,7 +21,6 @@ export const dummyCourses: Array<CourseResponse> = [
     previewImage: null,
     private: false,
     modules: [],
-    fileName: "",
   },
   {
     id: "course-hash-1",
@@ -43,6 +42,7 @@ export const dummyCourses: Array<CourseResponse> = [
         description: null,
         previewImage: null,
         lessons: ["lesson-hash-1", "lesson-hash-2"],
+        fileName: "",
       },
       {
         id: "module-hash-2",
@@ -52,6 +52,7 @@ export const dummyCourses: Array<CourseResponse> = [
         description: null,
         previewImage: null,
         lessons: null,
+        fileName: "",
       },
       {
         id: "module-hash-3",
@@ -61,9 +62,9 @@ export const dummyCourses: Array<CourseResponse> = [
         description: null,
         previewImage: null,
         lessons: null,
+        fileName: "",
       },
     ],
-    fileName: "",
   },
 ];
 
@@ -86,7 +87,8 @@ export const dummyLessons: LessonsType = {
         type: ContentTypeEnum.IMAGE,
         id: uuid(),
         content: {
-          link: "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
+          link:
+            "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
         },
       },
       {

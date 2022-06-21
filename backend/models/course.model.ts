@@ -1,4 +1,5 @@
 import { Schema, Document, model, Types } from "mongoose";
+import { FileUpload } from "graphql-upload";
 
 export interface Module {
   _id: Types.ObjectId;
@@ -8,6 +9,10 @@ export interface Module {
   previewImage: string;
   published: boolean;
   lessons: string[];
+  file: Promise<FileUpload>;
+  fileName: string;
+  filePath: string;
+  fileContentType: string;
 }
 
 export interface Course extends Document {
@@ -18,7 +23,6 @@ export interface Course extends Document {
   previewImage: string;
   modules: (Module | null)[];
   private: boolean;
-  fileName: string;
 }
 
 export interface CourseVisibilityAttributes {
@@ -40,6 +44,9 @@ const ModuleSchema: Schema = new Schema({
     required: true,
   },
   lessons: [String],
+  fileName: {
+    type: String,
+  },
 });
 
 const CourseSchema: Schema = new Schema({
@@ -64,9 +71,6 @@ const CourseSchema: Schema = new Schema({
     default: true,
     required: true,
   },
-  fileName: {
-    type: String,
-  }
 });
 
 export default model<Course>("Course", CourseSchema);

@@ -82,10 +82,15 @@ const EditModuleModal = ({
       title,
       description,
       published: isPublished,
+      file: previewImage,
     };
     const [id, course] = formatCourseRequest(newModule);
+<<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
     updateCourse({ variables: { id, course, file: previewImage } });
 >>>>>>> 70d4f30 (add file upload logic to courses be and fe):frontend/src/components/admin/EditModuleModal.tsx
+=======
+    updateCourse({ variables: { id, course } });
+>>>>>>> 8695160 (file upload for modules not course):frontend/src/components/admin/EditModuleModal.tsx
     onClose();
   };
 
@@ -96,7 +101,6 @@ const EditModuleModal = ({
         // eslint-disable-next-line no-alert
         window.alert("Your file exceeds 5MB. Upload a smaller file.");
       } else {
-        console.log("file!", e.target.files[0]);
         setPreviewImage(e.target.files[0]);
       }
     }

@@ -1,7 +1,7 @@
 import { ExpressContext } from "apollo-server-express";
 import { AuthenticationError, ExpressContext } from "apollo-server-express";
 import fs from "fs";
-import { FileUpload } from "graphql-upload";
+/* eslint-disable-next-line import/no-extraneous-dependencies */
 import { ReadStream } from "fs-capacitor";
 import multer from "multer";
 import FileStorageService from "../../services/implementations/fileStorageService";
@@ -23,7 +23,10 @@ import IUserService from "../../services/interfaces/userService";
 import { Role } from "../../types";
 import { CourseVisibilityAttributes } from "../../models/course.model";
 import { assertNever } from "../../utilities/errorUtils";
-import { getFileTypeValidationError, validateImageFileType } from "../../middlewares/validators/util";
+import {
+  getFileTypeValidationError,
+  validateImageFileType,
+} from "../../middlewares/validators/util";
 
 const defaultBucket = process.env.FIREBASE_STORAGE_DEFAULT_BUCKET || "";
 const fileStorageService = new FileStorageService(defaultBucket);
@@ -97,65 +100,65 @@ const courseResolvers = {
       const attributes = getCourseVisibilityAttributes(null);
       return courseService.getCourses(attributes);
     },
-    courseFile: async (
-      _req: undefined,
-      { fileUUID }: { fileUUID: string },
-    ): Promise<string> => {
-      return fileStorageService.getFile(fileUUID);
-    },
   },
   Mutation: {
     createCourse: async (
       _parent: undefined,
-      { course, file }: { course: CreateCourseRequestDTO, file: Promise<FileUpload> },
+      { course }: { course: CreateCourseRequestDTO },
     ): Promise<CourseResponseDTO> => {
-      let filePath = "";
-      let fileContentType = "";
-      if (file) {
-        const { createReadStream, mimetype, filename } = await file;
-        const uploadDir = "uploads";
-        filePath = `${uploadDir}/${filename}`;
-        fileContentType = mimetype;
-        if (!validateImageFileType(fileContentType)) {
-          throw new Error(getFileTypeValidationError(fileContentType));
-        }
-        await writeFile(createReadStream(), filePath);
-      }
-      if (filePath) {
-        fs.unlinkSync(filePath);
+      if (course.modules.length > 0) {
+        course.modules.forEach(async (module) => {
+          let filePath = "";
+          let fileContentType = "";
+          if (module.file) {
+            const { createReadStream, mimetype, filename } = await module.file;
+            const uploadDir = "uploads";
+            filePath = `${uploadDir}/${filename}`;
+            fileContentType = mimetype;
+            if (!validateImageFileType(fileContentType)) {
+              throw new Error(getFileTypeValidationError(fileContentType));
+            }
+            await writeFile(createReadStream(), filePath);
+          }
+          if (filePath) {
+            fs.unlinkSync(filePath);
+          }
+        });
       }
       const newCourse = await courseService.createCourse(course);
       return newCourse;
     },
     updateCourse: async (
       _parent: undefined,
-      { id, course, file }: { id: string; course: UpdateCourseRequestDTO, file: Promise<FileUpload> },
+      { id, course }: { id: string; course: UpdateCourseRequestDTO },
     ): Promise<CourseResponseDTO | null> => {
-      let filePath = "";
-      let fileContentType = "";
-      if (file) {
-        const { createReadStream, mimetype, filename } = await file;
-        const uploadDir = "uploads";
-        filePath = `${uploadDir}/${filename}`;
-        fileContentType = mimetype
-        if(!validateImageFileType(fileContentType)) {
-          throw new Error(getFileTypeValidationError(fileContentType));
-        }
-        await writeFile(createReadStream(), filePath);
+      if (course.modules.length > 0) {
+        course.modules.forEach(async (module) => {
+          let filePath = "";
+          let fileContentType = "";
+          if (module.file) {
+            const { createReadStream, mimetype, filename } = await module.file;
+            const uploadDir = "uploads";
+            filePath = `${uploadDir}/${filename}`;
+            fileContentType = mimetype;
+            if (!validateImageFileType(fileContentType)) {
+              throw new Error(getFileTypeValidationError(fileContentType));
+            }
+            await writeFile(createReadStream(), filePath);
+          }
+          if (filePath) {
+            fs.unlinkSync(filePath);
+          }
+        });
       }
-      if (filePath) {
-        fs.unlinkSync(filePath);
-      }
-      
+
       return courseService.updateCourse(id, {
         title: course.title,
         description: course.description,
         image: course.image,
-        previewImage: filePath,
+        previewImage: course.previewImage,
         private: course.private,
         modules: course.modules,
-        fileContentType: fileContentType,
-        filePath: filePath,
       });
     },
     deleteCourse: async (

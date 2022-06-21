@@ -9,6 +9,8 @@ const courseType = gql`
     previewImage: String
     published: Boolean!
     lessons: [String]
+    file: Upload
+    fileName: String
   }
 
   input ModuleRequestDTO {
@@ -19,6 +21,7 @@ const courseType = gql`
     previewImage: String
     published: Boolean
     lessons: [String]
+    filePath: String
   }
 
   type CourseResponseDTO {
@@ -29,7 +32,6 @@ const courseType = gql`
     previewImage: String
     modules: [ModuleResponseDTO]
     private: Boolean!
-    fileName: String
   }
 
   input CreateCourseRequestDTO {

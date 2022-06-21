@@ -16,6 +16,7 @@ export interface ModuleResponse {
   previewImage?: string | null;
   published?: boolean;
   lessons?: string[] | null;
+  fileName: string;
 }
 
 export interface CourseRequest {
@@ -35,5 +36,4 @@ export interface CourseResponse {
   previewImage: string | null;
   modules: (ModuleResponse | null)[] | null;
   private: boolean;
-  fileName: string;
 }
