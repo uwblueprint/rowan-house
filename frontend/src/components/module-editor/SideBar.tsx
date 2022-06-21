@@ -69,6 +69,7 @@ const Sidebar = (): React.ReactElement => {
       refetchQueries: [
         {
           query: GET_COURSE,
+          variables: { id: courseID },
         },
       ],
     },
