@@ -18,6 +18,7 @@ export interface Course extends Document {
   previewImage: string;
   modules: (Module | null)[];
   private: boolean;
+  fileName: string;
 }
 
 export interface CourseVisibilityAttributes {
@@ -63,6 +64,9 @@ const CourseSchema: Schema = new Schema({
     default: true,
     required: true,
   },
+  fileName: {
+    type: String,
+  }
 });
 
 export default model<Course>("Course", CourseSchema);

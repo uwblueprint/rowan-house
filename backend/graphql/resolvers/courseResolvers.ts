@@ -1,4 +1,10 @@
 import { ExpressContext } from "apollo-server-express";
+import { AuthenticationError, ExpressContext } from "apollo-server-express";
+import fs from "fs";
+import { FileUpload } from "graphql-upload";
+import { ReadStream } from "fs-capacitor";
+import multer from "multer";
+import FileStorageService from "../../services/implementations/fileStorageService";
 import CourseService from "../../services/implementations/courseService";
 import {
   CreateCourseRequestDTO,
@@ -17,11 +23,27 @@ import IUserService from "../../services/interfaces/userService";
 import { Role } from "../../types";
 import { CourseVisibilityAttributes } from "../../models/course.model";
 import { assertNever } from "../../utilities/errorUtils";
+import { getFileTypeValidationError, validateImageFileType } from "../../middlewares/validators/util";
 
-const courseService: ICourseService = new CourseService();
+const defaultBucket = process.env.FIREBASE_STORAGE_DEFAULT_BUCKET || "";
+const fileStorageService = new FileStorageService(defaultBucket);
+const courseService: ICourseService = new CourseService(fileStorageService);
 const userService: IUserService = new UserService();
 const emailService: IEmailService = new EmailService(nodemailerConfig);
 const authService: IAuthService = new AuthService(userService, emailService);
+
+multer({ dest: "uploads/" });
+
+const writeFile = (readStream: ReadStream, filePath: string): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const out = fs.createWriteStream(filePath);
+    readStream.pipe(out);
+    out.on("finish", () => {
+      resolve();
+    });
+    out.on("error", (err: Error) => reject(err));
+  });
+};
 
 const getCourseVisibilityAttributes = (
   role: Role | null,
@@ -75,20 +97,66 @@ const courseResolvers = {
       const attributes = getCourseVisibilityAttributes(null);
       return courseService.getCourses(attributes);
     },
+    courseFile: async (
+      _req: undefined,
+      { fileUUID }: { fileUUID: string },
+    ): Promise<string> => {
+      return fileStorageService.getFile(fileUUID);
+    },
   },
   Mutation: {
     createCourse: async (
       _parent: undefined,
-      { course }: { course: CreateCourseRequestDTO },
+      { course, file }: { course: CreateCourseRequestDTO, file: Promise<FileUpload> },
     ): Promise<CourseResponseDTO> => {
+      let filePath = "";
+      let fileContentType = "";
+      if (file) {
+        const { createReadStream, mimetype, filename } = await file;
+        const uploadDir = "uploads";
+        filePath = `${uploadDir}/${filename}`;
+        fileContentType = mimetype;
+        if (!validateImageFileType(fileContentType)) {
+          throw new Error(getFileTypeValidationError(fileContentType));
+        }
+        await writeFile(createReadStream(), filePath);
+      }
+      if (filePath) {
+        fs.unlinkSync(filePath);
+      }
       const newCourse = await courseService.createCourse(course);
       return newCourse;
     },
     updateCourse: async (
       _parent: undefined,
-      { id, course }: { id: string; course: UpdateCourseRequestDTO },
+      { id, course, file }: { id: string; course: UpdateCourseRequestDTO, file: Promise<FileUpload> },
     ): Promise<CourseResponseDTO | null> => {
-      return courseService.updateCourse(id, course);
+      let filePath = "";
+      let fileContentType = "";
+      if (file) {
+        const { createReadStream, mimetype, filename } = await file;
+        const uploadDir = "uploads";
+        filePath = `${uploadDir}/${filename}`;
+        fileContentType = mimetype
+        if(!validateImageFileType(fileContentType)) {
+          throw new Error(getFileTypeValidationError(fileContentType));
+        }
+        await writeFile(createReadStream(), filePath);
+      }
+      if (filePath) {
+        fs.unlinkSync(filePath);
+      }
+      
+      return courseService.updateCourse(id, {
+        title: course.title,
+        description: course.description,
+        image: course.image,
+        previewImage: filePath,
+        private: course.private,
+        modules: course.modules,
+        fileContentType: fileContentType,
+        filePath: filePath,
+      });
     },
     deleteCourse: async (
       _parent: undefined,

@@ -35,4 +35,5 @@ export interface CourseResponse {
   previewImage: string | null;
   modules: (ModuleResponse | null)[] | null;
   private: boolean;
+  fileName: string;
 }

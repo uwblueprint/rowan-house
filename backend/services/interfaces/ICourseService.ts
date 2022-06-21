@@ -8,6 +8,8 @@ export interface CreateCourseRequestDTO {
   previewImage: string;
   modules: (ModuleDTO | null)[];
   private: boolean;
+  filePath: string;
+  fileContentType: string;
 }
 
 export interface UpdateCourseRequestDTO {
@@ -17,6 +19,8 @@ export interface UpdateCourseRequestDTO {
   previewImage: string;
   private: boolean;
   modules: (Module | null)[];
+  filePath: string;
+  fileContentType: string;
 }
 
 export interface CourseResponseDTO {
@@ -27,6 +31,7 @@ export interface CourseResponseDTO {
   previewImage: string;
   private: boolean;
   modules: (Module | null)[];
+  fileName: string;
 }
 
 export interface ICourseService {

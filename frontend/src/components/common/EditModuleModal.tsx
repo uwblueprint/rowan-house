@@ -1,4 +1,4 @@
-import { Flex, VStack, Image } from "@chakra-ui/react";
+import { Box, Flex, VStack, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { TextInput } from "./TextInput";
@@ -13,7 +13,12 @@ import {
   ModuleRequest,
 } from "../../APIClients/types/CourseClientTypes";
 import { UPDATE_COURSE } from "../../APIClients/mutations/CourseMutations";
+<<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
 import { COURSES, GET_COURSE } from "../../APIClients/queries/CourseQueries";
+=======
+import { COURSES } from "../../APIClients/queries/CourseQueries";
+import { ReactComponent as ImageIcon } from "../../assets/image_white_outline.svg";
+>>>>>>> 70d4f30 (add file upload logic to courses be and fe):frontend/src/components/admin/EditModuleModal.tsx
 
 export interface EditModuleModalProps {
   onClose: () => void;
@@ -35,15 +40,22 @@ const EditModuleModal = ({
   const [title, setTitle] = useState(module?.title ?? "");
   const [isPublished, setVisibility] = useState(module?.published ?? false);
   const [description, setDescription] = useState(module?.description ?? "");
+<<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
   const [invalid, setInvalid] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const [updateCourse] = useMutation<CourseResponse>(
+=======
+  const [previewImage, setPreviewImage] = useState<File | null>(null);
+  const [updateCourse] = useMutation<{ updateCourse: CourseResponse }>(
+>>>>>>> 70d4f30 (add file upload logic to courses be and fe):frontend/src/components/admin/EditModuleModal.tsx
     UPDATE_COURSE,
     refetchQueries,
   );
+  const [isHover, setIsHover] = useState<boolean>();
 
   const onUpdateModule = () => {
+<<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
     if (!title || title.length > MAX_TITLE_CHARACTERS) {
       setInvalid(true);
       // title is mandatory field, do not submit if empty or exceed max char
@@ -64,7 +76,37 @@ const EditModuleModal = ({
       ],
     });
     setInvalid(false);
+=======
+    const newModule = {
+      ...module,
+      title,
+      description,
+      published: isPublished,
+    };
+    const [id, course] = formatCourseRequest(newModule);
+    updateCourse({ variables: { id, course, file: previewImage } });
+>>>>>>> 70d4f30 (add file upload logic to courses be and fe):frontend/src/components/admin/EditModuleModal.tsx
     onClose();
+  };
+
+  const fileChanged = (e: { target: HTMLInputElement }) => {
+    if (e.target.files) {
+      const fileSize = e.target.files[0].size / 1024 / 1024;
+      if (fileSize > 5) {
+        // eslint-disable-next-line no-alert
+        window.alert("Your file exceeds 5MB. Upload a smaller file.");
+      } else {
+        console.log("file!", e.target.files[0]);
+        setPreviewImage(e.target.files[0]);
+      }
+    }
+  };
+
+  const inputFile = React.useRef<HTMLInputElement>(null);
+  const openFileBrowser = () => {
+    if (inputFile.current) {
+      inputFile.current.click();
+    }
   };
 
   return (
@@ -77,7 +119,46 @@ const EditModuleModal = ({
     >
       <Flex>
         <VStack flex="1" pr="1rem">
-          <Image src={DEFAULT_IMAGE} borderRadius=".5rem" />
+          <Box
+            borderRadius=".5rem"
+            onMouseEnter={() => setIsHover(true)}
+            onMouseLeave={() => setIsHover(false)}
+            _hover={{
+              background: "black",
+              opacity: 0.9,
+            }}
+            onClick={openFileBrowser}
+          >
+            <Flex
+              backgroundImage={DEFAULT_IMAGE}
+              backgroundPosition="center"
+              h="214px"
+              w="214px"
+              bgRepeat="no-repeat"
+              direction="column"
+              backgroundSize="cover"
+              opacity="1"
+              justifyContent="center"
+              borderRadius=".5rem"
+              alignItems="center"
+            >
+              <input
+                type="file"
+                style={{ display: "none" }}
+                ref={inputFile}
+                onChange={fileChanged}
+                accept="image/*"
+              />
+              {isHover && (
+                <>
+                  <ImageIcon color="white" style={{ marginBottom: "1rem" }} />
+                  <Text variant="caption" color="white">
+                    Upload image
+                  </Text>
+                </>
+              )}
+            </Flex>
+          </Box>
           <SwitchInput
             enabledName="Published"
             disabledName="Draft"
