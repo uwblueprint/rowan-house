@@ -36,6 +36,7 @@ const EditModuleModal = ({
   const [isPublished, setVisibility] = useState(module?.published ?? false);
   const [description, setDescription] = useState(module?.description ?? "");
   const [invalid, setInvalid] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [updateCourse] = useMutation<CourseResponse>(
     UPDATE_COURSE,
@@ -45,7 +46,12 @@ const EditModuleModal = ({
   const onUpdateModule = () => {
     if (!title || title.length > MAX_TITLE_CHARACTERS) {
       setInvalid(true);
-      // title is mandatory field, do not submit if empty
+      // title is mandatory field, do not submit if empty or exceed max char
+      setErrorMessage(
+        !title
+          ? "This field is required"
+          : `Exceed max length of ${MAX_TITLE_CHARACTERS} characters`,
+      );
       return;
     }
     const newModule = { ...module, title, description, published: isPublished };
@@ -89,7 +95,7 @@ const EditModuleModal = ({
             isInvalid={invalid}
             isRequired
             helperText={`${title.length}/${MAX_TITLE_CHARACTERS} characters`}
-            errorMessage={`${title.length}/${MAX_TITLE_CHARACTERS} characters`}
+            errorMessage={errorMessage}
           />
           <TextArea
             label="Module Description:"

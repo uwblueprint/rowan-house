@@ -165,7 +165,7 @@ const Sidebar = (): React.ReactElement => {
 
   return (
     <>
-      {courseData?.course?.modules?.[Number(moduleIndex)] && (
+      {module && (
         <Box w="20%" minW="300px">
           <Flex
             position="fixed"
@@ -180,10 +180,7 @@ const Sidebar = (): React.ReactElement => {
               <Flex
                 h="240px"
                 backgroundPosition="center"
-                backgroundImage={
-                  courseData?.course?.modules?.[Number(moduleIndex)]
-                    ?.previewImage || undefined
-                }
+                backgroundImage={module?.previewImage || undefined}
                 backgroundSize="cover"
                 bgRepeat="no-repeat"
                 opacity="1"
@@ -203,7 +200,7 @@ const Sidebar = (): React.ReactElement => {
                   />
                 </HStack>
                 <Text variant="display-sm-sb" color="white">
-                  {courseData?.course?.modules?.[Number(moduleIndex)].title}
+                  {module?.title}
                 </Text>
               </Flex>
             </Box>
