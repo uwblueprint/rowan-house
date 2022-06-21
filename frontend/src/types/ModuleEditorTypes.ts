@@ -1,4 +1,5 @@
 import { v4 as uuid } from "uuid";
+import { ContentType } from "../APIClients/types/LessonClientTypes";
 
 export interface LessonType {
   course: string;
@@ -34,27 +35,31 @@ export interface CourseType {
 
 export const ContentTypeCategories = ["Layout", "Basic", "Media"];
 export class ContentTypeEnum {
-  static COLUMN = new ContentTypeEnum("Column", "column.svg", uuid());
+  static COLUMN = new ContentTypeEnum("Column", "column.svg", "column");
 
-  static HEADING = new ContentTypeEnum("Heading", "heading.svg", uuid());
+  static HEADING = new ContentTypeEnum("Heading", "heading.svg", "heading");
 
-  static TEXT = new ContentTypeEnum("Text", "text.svg", uuid());
+  static TEXT = new ContentTypeEnum("Text", "text.svg", "text");
 
-  static LINK = new ContentTypeEnum("Link", "link.svg", uuid());
+  static LINK = new ContentTypeEnum("Link", "link.svg", "link");
 
-  static BUTTON = new ContentTypeEnum("Button", "button.svg", uuid());
+  static BUTTON = new ContentTypeEnum("Button", "button.svg", "button");
 
-  static IMAGE = new ContentTypeEnum("Image", "image.svg", uuid());
+  static IMAGE = new ContentTypeEnum("Image", "image.svg", "image");
 
-  static VIDEO = new ContentTypeEnum("Video", "video.svg", uuid());
+  static VIDEO = new ContentTypeEnum("Video", "video.svg", "video");
 
-  static AUDIO = new ContentTypeEnum("Audio", "audio.svg", uuid());
+  static AUDIO = new ContentTypeEnum("Audio", "audio.svg", "audio");
+
+  public readonly id: string;
 
   constructor(
     public readonly title: string,
     public readonly preview: string,
-    public readonly id: string,
-  ) {}
+    public readonly clientType: ContentType,
+  ) {
+    this.id = uuid();
+  }
 }
 
 export type ContentProps = {

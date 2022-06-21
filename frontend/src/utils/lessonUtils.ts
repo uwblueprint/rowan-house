@@ -1,7 +1,6 @@
 import { v4 as uuid } from "uuid";
 
 import {
-  ContentType,
   LessonRequest,
   LessonResponse,
 } from "../APIClients/types/LessonClientTypes";
@@ -10,7 +9,7 @@ import { ContentTypeEnum, LessonType } from "../types/ModuleEditorTypes";
 export const formatLessonRequest = (lesson: LessonType): LessonRequest => {
   // Remove IDs from content blocks, switch types to the titles
   const content = lesson.content.map((block) => ({
-    type: block.type.title.toLowerCase() as ContentType,
+    type: block.type.clientType,
     content: block.content,
   }));
   return { ...lesson, content };
