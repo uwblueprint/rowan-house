@@ -43,33 +43,53 @@ export class ContentTypeEnum {
       clientType: ClientType;
     };
 
-  static COLUMN = ContentTypeEnum.new<"column">(
+  static readonly COLUMN = ContentTypeEnum.new<"column">(
     "Column",
     "column.svg",
     "column",
   );
 
-  static HEADING = ContentTypeEnum.new<"heading">(
+  static readonly HEADING = ContentTypeEnum.new<"heading">(
     "Heading",
     "heading.svg",
     "heading",
   );
 
-  static TEXT = ContentTypeEnum.new<"text">("Text", "text.svg", "text");
+  static readonly TEXT = ContentTypeEnum.new<"text">(
+    "Text",
+    "text.svg",
+    "text",
+  );
 
-  static LINK = ContentTypeEnum.new<"link">("Link", "link.svg", "link");
+  static readonly LINK = ContentTypeEnum.new<"link">(
+    "Link",
+    "link.svg",
+    "link",
+  );
 
-  static BUTTON = ContentTypeEnum.new<"button">(
+  static readonly BUTTON = ContentTypeEnum.new<"button">(
     "Button",
     "button.svg",
     "button",
   );
 
-  static IMAGE = ContentTypeEnum.new<"image">("Image", "image.svg", "image");
+  static readonly IMAGE = ContentTypeEnum.new<"image">(
+    "Image",
+    "image.svg",
+    "image",
+  );
 
-  static VIDEO = ContentTypeEnum.new<"video">("Video", "video.svg", "video");
+  static readonly VIDEO = ContentTypeEnum.new<"video">(
+    "Video",
+    "video.svg",
+    "video",
+  );
 
-  static AUDIO = ContentTypeEnum.new<"audio">("Audio", "audio.svg", "audio");
+  static readonly AUDIO = ContentTypeEnum.new<"audio">(
+    "Audio",
+    "audio.svg",
+    "audio",
+  );
 
   public readonly id: string;
 
