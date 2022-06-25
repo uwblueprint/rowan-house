@@ -3,6 +3,36 @@ import { ContentType } from "../APIClients/types/LessonClientTypes";
 
 export const ContentTypeCategories = ["Layout", "Basic", "Media"];
 
+export type ColumnBlockState = ContentBlockStateType<"column">;
+export type HeadingBlockState = ContentBlockStateType<"heading">;
+export type TextBlockState = ContentBlockStateType<
+  "text",
+  {
+    text: string;
+  }
+>;
+export type LinkBlockState = ContentBlockStateType<"link">;
+export type ButtonBlockState = ContentBlockStateType<"button">;
+export type ImageBlockState = ContentBlockStateType<
+  "image",
+  {
+    link: string;
+  }
+>;
+export type VideoBlockState = ContentBlockStateType<"video">;
+export type AudioBlockState = ContentBlockStateType<"audio">;
+
+export type ContentBlockState = RequireAllContentTypesArePresent<
+  | ColumnBlockState
+  | HeadingBlockState
+  | TextBlockState
+  | LinkBlockState
+  | ButtonBlockState
+  | ImageBlockState
+  | VideoBlockState
+  | AudioBlockState
+>;
+
 export class ContentTypeEnum {
   static new = <ClientType>(
     title: string,
@@ -54,29 +84,28 @@ export class ContentTypeEnum {
 
 export interface ContentBlockStateType<
   ClientType extends ContentType,
-  BlockStateType
+  BlockStateType = never
 > {
   type: ContentTypeEnum & { clientType: ClientType };
   content: BlockStateType;
   id: string;
 }
 
-export type TextBlockState = ContentBlockStateType<
-  "text",
-  {
-    text: string;
-  }
+export type ContentBlockTypeToState<Type extends ContentType> = Extract<
+  ContentBlockState,
+  { ["type"]: { ["clientType"]: Type } }
 >;
-
-export type ImageBlockState = ContentBlockStateType<
-  "image",
-  {
-    link: string;
-  }
->;
-
-export type ContentBlockState = TextBlockState | ImageBlockState;
 
 export interface ContentBlockProps<BlockType extends ContentBlockState> {
   block: BlockType;
 }
+
+// Custom logic to make sure there aren't duplicated types.
+// This is to prevent typos in the implementation logic above.
+type RequireAllContentTypesArePresent<
+  V extends ContentBlockStateType<ContentType, any>
+> = (<G>() => G extends V["type"]["clientType"] ? true : false) extends <
+  G
+>() => G extends ContentType ? true : false
+  ? V
+  : "missing content type from ContentBlockState";

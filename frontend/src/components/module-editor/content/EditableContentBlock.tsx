@@ -2,43 +2,31 @@ import { Box, Divider, Flex, useDisclosure, VStack } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 
-import {
-  ContentBlockProps,
-  ContentBlockState,
-} from "../../../types/ContentBlockTypes";
+import { ContentBlockState } from "../../../types/ContentBlockTypes";
 import { TextBlock, ImageBlock } from "../../common/content";
 import EditContentOptionsMenu from "../EditContentOptionsMenu";
 
 import { ReactComponent as DragHandleIconSvg } from "../../../assets/DragHandle.svg";
 import { EditImageModal, EditTextModal } from "./modals";
-import ContentBlockRenderer from "../../common/content/ContentBlockRenderer";
-import { EditContentModalProps } from "../../../types/ModuleEditorTypes";
+import createContentBlockRenderers, {
+  EmptyConfigEntry as Empty,
+} from "../../common/content/ContentBlockRenderer";
 
 /* eslint-disable react/jsx-props-no-spreading */
 
-const Empty = () => null;
-const CONTENT_BLOCKS = new ContentBlockRenderer<
-  ContentBlockProps<ContentBlockState>
->({
+const [CONTENT_BLOCKS, EDIT_MODALS] = createContentBlockRenderers({
   column: Empty,
   heading: Empty,
-  text: TextBlock,
+  text: {
+    renderBlock: TextBlock,
+    renderEditModal: EditTextModal,
+  },
   link: Empty,
   button: Empty,
-  image: ImageBlock,
-  video: Empty,
-  audio: Empty,
-});
-
-const EDIT_MODALS = new ContentBlockRenderer<
-  EditContentModalProps<ContentBlockState>
->({
-  column: Empty,
-  heading: Empty,
-  text: EditTextModal,
-  link: Empty,
-  button: Empty,
-  image: EditImageModal,
+  image: {
+    renderBlock: ImageBlock,
+    renderEditModal: EditImageModal,
+  },
   video: Empty,
   audio: Empty,
 });

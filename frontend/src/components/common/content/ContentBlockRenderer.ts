@@ -1,13 +1,21 @@
 import React from "react";
 import { ContentType } from "../../../APIClients/types/LessonClientTypes";
-import { ContentBlockState } from "../../../types/ContentBlockTypes";
+import {
+  ContentBlockProps,
+  ContentBlockState,
+  ContentBlockTypeToState,
+} from "../../../types/ContentBlockTypes";
+import { EditContentModalProps } from "../../../types/ModuleEditorTypes";
 
 // Many thanks to https://github.com/Microsoft/TypeScript/issues/30581#issuecomment-1080979994.
+// This class provides a type-safe dispatch table for React components. In detail, it allows us
+// to conditionally render different React components depending on the requested type of the
+// provided component block, in a type-safe manner.
 
 type ValueOf<T> = T[keyof T];
 
 type ArgMap<D extends ContentType> = {
-  [K in D]: Extract<ContentBlockState, { ["type"]: { ["clientType"]: K } }>;
+  [K in D]: ContentBlockTypeToState<K>;
 };
 
 class ContentBlockRenderer<
@@ -16,9 +24,9 @@ class ContentBlockRenderer<
 > {
   constructor(
     private dispatchTable: {
-      [K in keyof ArgMap<DispatchableT>]: (
-        props: Omit<PropType, "block"> & { block: ArgMap<DispatchableT>[K] },
-      ) => React.ReactNode;
+      [K in keyof ArgMap<DispatchableT>]: React.ComponentType<
+        Omit<PropType, "block"> & { block: ArgMap<DispatchableT>[K] }
+      >;
     },
   ) {}
 
@@ -30,7 +38,7 @@ class ContentBlockRenderer<
       };
     }[keyof ArgMap<DispatchableT>],
   ) {
-    return this.dispatchTable[op.method](op.arg);
+    return React.createElement(this.dispatchTable[op.method], op.arg);
   }
 
   private callWithArgMap(
@@ -61,4 +69,49 @@ class ContentBlockRenderer<
   }
 }
 
-export default ContentBlockRenderer;
+interface ConfigEntry<T extends ContentType> {
+  renderBlock:
+    | React.ComponentType<ContentBlockProps<ContentBlockTypeToState<T>>>
+    | typeof EmptyConfigComponent;
+  renderEditModal:
+    | React.ComponentType<EditContentModalProps<ContentBlockTypeToState<T>>>
+    | typeof EmptyConfigComponent;
+}
+
+export const EmptyConfigComponent = () => null;
+export const EmptyConfigEntry = {
+  renderBlock: EmptyConfigComponent,
+  renderEditModal: EmptyConfigComponent,
+};
+
+export type ContentBlockRendererConfig = {
+  [Type in ContentType]: ConfigEntry<Type>;
+};
+
+const mapToObjectKey = <
+  T extends keyof ContentBlockRendererConfig[ContentType]
+>(
+  config: ContentBlockRendererConfig,
+  key: T,
+) =>
+  Object.fromEntries(
+    Object.entries(config).map(([type, entry]) => [type, entry[key]]),
+  ) as { [Type in ContentType]: ContentBlockRendererConfig[Type][T] };
+
+const createContentBlockRenderers = (
+  config: ContentBlockRendererConfig,
+): [
+  ContentBlockRenderer<ContentBlockProps<ContentBlockState>>,
+  ContentBlockRenderer<EditContentModalProps<ContentBlockState>>,
+] => {
+  const contentBlockRenderer = new ContentBlockRenderer<
+    ContentBlockProps<ContentBlockState>
+  >(mapToObjectKey(config, "renderBlock"));
+  const editModalRenderer = new ContentBlockRenderer<
+    EditContentModalProps<ContentBlockState>
+  >(mapToObjectKey(config, "renderEditModal"));
+
+  return [contentBlockRenderer, editModalRenderer];
+};
+
+export default createContentBlockRenderers;
