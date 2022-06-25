@@ -78,7 +78,7 @@ interface ConfigEntry<T extends ContentType> {
     | typeof EmptyConfigComponent;
 }
 
-export const EmptyConfigComponent = () => null;
+export const EmptyConfigComponent = (): null => null;
 export const EmptyConfigEntry = {
   renderBlock: EmptyConfigComponent,
   renderEditModal: EmptyConfigComponent,

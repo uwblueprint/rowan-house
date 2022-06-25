@@ -18,24 +18,11 @@ export const formatLessonRequest = (lesson: LessonType): LessonRequest => {
 
 export const formatLessonResponse = (lesson: LessonResponse): LessonType => {
   // Add IDs back into content blocks, switch types to enum
-  const content = lesson.content?.map((block) => {
-    let type;
-    switch (block.type) {
-      case "text":
-        type = ContentTypeEnum.TEXT;
-        break;
-      case "image":
-        type = ContentTypeEnum.IMAGE;
-        break;
-      default:
-        throw new Error(`Invalid block type received "${block.type}"`);
-    }
-    return {
-      id: uuid(),
-      type,
-      content: block.content,
-    };
-  });
+  const content = lesson.content?.map(({ type, content: blockContent }) => ({
+    id: uuid(),
+    type: ContentTypeEnum.from(type),
+    content: blockContent,
+  }));
 
   return {
     course: lesson.course,

@@ -34,14 +34,31 @@ export type ContentBlockState = RequireAllContentTypesArePresent<
 >;
 
 export class ContentTypeEnum {
-  static new = <ClientType>(
+  private static CLIENT_TYPES: { [t in ContentType]?: ContentTypeEnum } = {};
+
+  private static new = <ClientType>(
     title: string,
     preview: string,
     clientType: ContentType,
-  ): ContentTypeEnum & { clientType: ClientType } =>
-    new ContentTypeEnum(title, preview, clientType) as ContentTypeEnum & {
+  ): ContentTypeEnum & { clientType: ClientType } => {
+    const contentTypeEnum = new ContentTypeEnum(
+      title,
+      preview,
+      clientType,
+    ) as ContentTypeEnum & {
       clientType: ClientType;
     };
+    ContentTypeEnum.CLIENT_TYPES[clientType] = contentTypeEnum;
+    return contentTypeEnum;
+  };
+
+  static from = (clientType: ContentType): ContentTypeEnum => {
+    const contentTypeEnum = ContentTypeEnum.CLIENT_TYPES[clientType];
+    if (contentTypeEnum == null) {
+      throw new Error(`Invalid content block type "${clientType}"`);
+    }
+    return contentTypeEnum;
+  };
 
   static readonly COLUMN = ContentTypeEnum.new<"column">(
     "Column",
@@ -123,7 +140,7 @@ export interface ContentBlockProps<BlockType extends ContentBlockState> {
 // Custom logic to make sure there aren't duplicated types.
 // This is to prevent typos in the implementation logic above.
 type RequireAllContentTypesArePresent<
-  V extends ContentBlockStateType<ContentType, any>
+  V extends ContentBlockStateType<ContentType, Record<string, unknown>>
 > = (<G>() => G extends V["type"]["clientType"] ? true : false) extends <
   G
 >() => G extends ContentType ? true : false
