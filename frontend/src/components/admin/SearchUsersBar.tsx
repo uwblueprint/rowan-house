@@ -18,7 +18,10 @@ const SearchUsersBar = ({
   onUserSelect,
 }: SearchUsersBarProps): React.ReactElement => {
   const [searchEmail, setSearchEmail] = useState<string>("");
-  const [showNewResult, setShowNewResult] = useState<boolean>(false);
+  const [searchFieldHasFocus, setSearchFieldHasFocus] = useState<boolean>(
+    false,
+  );
+  const [menuItemIsOpen, setMenuItemIsOpen] = useState<boolean>(false);
   const [getSearchResult, { loading, data }] = useLazyQuery<{
     user: UserResponse;
   }>(GET_USER_BY_EMAIL, { fetchPolicy: "cache-and-network" });
@@ -42,9 +45,9 @@ const SearchUsersBar = ({
 
   return (
     <Menu
-      isOpen={searchEmail !== "" && showNewResult}
+      isOpen={searchEmail !== "" && (menuItemIsOpen || searchFieldHasFocus)}
       offset={[8, 20]}
-      onClose={() => setShowNewResult(false)}
+      onClose={() => setMenuItemIsOpen(false)}
     >
       <MenuButton tabIndex={-1} />
       <InputGroup w="500px">
@@ -55,9 +58,13 @@ const SearchUsersBar = ({
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             setSearchEmail(event.target.value);
             getSearchResult({ variables: { email: event.target.value } });
-            setShowNewResult(true);
+            setMenuItemIsOpen(true);
           }}
-          onFocus={() => setShowNewResult(true)}
+          onFocus={() => {
+            setMenuItemIsOpen(true);
+            setSearchFieldHasFocus(true);
+          }}
+          onBlur={() => setSearchFieldHasFocus(false)}
           onKeyPress={(event: React.KeyboardEvent<HTMLInputElement>) => {
             if (event.key === "Enter" && data) {
               handleOnSelectUser();
@@ -74,20 +81,14 @@ const SearchUsersBar = ({
         p={0}
         borderRadius="6px"
         boxShadow="0px 8px 20px rgba(0, 0, 0, 0.15), 0px 0px 1px rgba(0, 0, 0, 0.9)"
+        closeOnBlur={false}
+        autoSelect={false}
       >
-        {data ? (
-          <MenuItem
-            pl={7}
-            py={2}
-            borderRadius="6px"
-            _hover={{ borderRadius: "6px" }}
-            onClick={handleOnSelectUser}
-          >
-            {`${data.user.firstName} ${data.user.lastName}`}
-          </MenuItem>
-        ) : (
-          <MenuItem isDisabled>{getNoResultMessage()}</MenuItem>
-        )}
+        <MenuItem onClick={handleOnSelectUser}>
+          {data
+            ? `${data.user.firstName} ${data.user.lastName}`
+            : getNoResultMessage()}
+        </MenuItem>
       </MenuList>
     </Menu>
   );
