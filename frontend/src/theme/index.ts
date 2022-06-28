@@ -5,7 +5,7 @@ import colors from "./foundations/colors";
 
 import fonts from "./foundations/fonts";
 import fontSizes from "./foundations/fontSizes";
-import { Button, Text } from "./components";
+import { AutocompleteItem, Button, Text } from "./components";
 /**
  * This file is generated for providing a custom theme to Chakra UI
  *
@@ -15,7 +15,7 @@ import { Button, Text } from "./components";
 
 const overrides = {
   ...styles,
-  components: { Button, Text },
+  components: { AutocompleteItem, Button, Text },
   colors,
   fonts,
   fontSizes,
