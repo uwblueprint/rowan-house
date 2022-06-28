@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
+import { useHistory } from "react-router-dom";
 import { gql, useMutation } from "@apollo/client";
-
-import authAPIClient from "../../APIClients/AuthAPIClient";
-import AuthContext from "../../contexts/AuthContext";
+import authAPIClient from "../APIClients/AuthAPIClient";
+import AuthContext from "../contexts/AuthContext";
 
 const LOGOUT = gql`
   mutation Logout($userId: ID!) {
@@ -10,27 +10,25 @@ const LOGOUT = gql`
   }
 `;
 
-const Logout = (): React.ReactElement => {
+const useLogout = (): (() => Promise<void>) => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
+
+  const history = useHistory();
 
   const [logout] = useMutation<{ logout: null }>(LOGOUT);
 
-  const onLogOutClick = async () => {
+  const tryLogout = async () => {
     try {
       await authAPIClient.logout(String(authenticatedUser?.id), logout);
+      await tryLogout();
     } catch (e) {
-      // TODO handle this case better
       // eslint-disable-next-line no-console
       console.warn(`Error when logging out: ${e}`);
       setAuthenticatedUser(null);
+      history.push("/");
     }
   };
-
-  return (
-    <button type="button" className="btn btn-primary" onClick={onLogOutClick}>
-      Log Out
-    </button>
-  );
+  return tryLogout;
 };
 
-export default Logout;
+export default useLogout;

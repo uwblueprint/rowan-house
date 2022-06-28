@@ -5,6 +5,7 @@ import { ReactComponent as CoursesIcon } from "../../assets/Courses.svg";
 import { ReactComponent as UsersIcon } from "../../assets/Users.svg";
 import RHSLogo from "../../assets/RHSLogo-white.png";
 import { AdminPage, SidebarProps } from "../../types/AdminDashboardTypes";
+import LogoutButton from "../auth/LogoutButton";
 import { MANAGE_COURSES_PAGE, MANAGE_USERS_PAGE } from "../../constants/Routes";
 
 interface PageTabProps {
@@ -97,7 +98,7 @@ const Sidebar = ({ currentPage }: SidebarProps): React.ReactElement => {
             </Text>
             <Text variant="body-bold">Jane Doe</Text>
           </Flex>
-          <Button variant="secondary-filled">Sign out</Button>
+          <LogoutButton />
         </Flex>
       </Flex>
     </Flex>
