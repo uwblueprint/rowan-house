@@ -4,6 +4,7 @@ import { Draggable } from "react-beautiful-dnd";
 
 import { ContentBlockState } from "../../../types/ContentBlockTypes";
 import { TextBlock, ImageBlock } from "../../common/content";
+import DeleteModal from "../../common/DeleteModal";
 import EditContentOptionsMenu from "../EditContentOptionsMenu";
 
 import { ReactComponent as DragHandleIconSvg } from "../../../assets/DragHandle.svg";
@@ -11,6 +12,11 @@ import { EditImageModal, EditTextModal } from "./modals";
 import createContentBlockRenderers, {
   EmptyConfigEntry as Empty,
 } from "../../common/content/ContentBlockRenderer";
+
+enum ModalType {
+  EDIT = "edit",
+  DELETE = "delete",
+}
 
 /* eslint-disable react/jsx-props-no-spreading */
 
@@ -39,7 +45,15 @@ const EditableContentBlock = ({
   index: number;
 }): React.ReactElement => {
   const [isHovered, setIsHovered] = useState(false);
+  const [modalType, setModalType] = useState(ModalType.EDIT);
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const deleteContentBlock = () => {};
+
+  const openModal = (modalConfig: ModalType) => {
+    setModalType(modalConfig);
+    onOpen();
+  };
 
   return (
     <Draggable key={block.id} draggableId={block.id} index={index}>
@@ -62,13 +76,22 @@ const EditableContentBlock = ({
             {CONTENT_BLOCKS.render({ block })}
             <EditContentOptionsMenu
               isVisible={isHovered}
-              onEditClick={onOpen}
+              onEditClick={() => openModal(ModalType.EDIT)}
               onCopyClick={() => {}}
-              onDeleteClick={() => {}}
+              onDeleteClick={() => openModal(ModalType.DELETE)}
             />
           </Flex>
           <Divider opacity={isHovered ? 1 : 0} />
           {EDIT_MODALS.render({ isOpen, onClose, block, index })}
+          {/* TODO: only allow text changes for text blocks */}
+          {modalType === ModalType.DELETE && (
+            <DeleteModal
+              name="Content Block"
+              isOpen={isOpen}
+              onConfirm={deleteContentBlock}
+              onCancel={onClose}
+            />
+          )}
         </VStack>
       )}
     </Draggable>
