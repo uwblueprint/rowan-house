@@ -51,8 +51,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint . --ext .ts,.tsx,.js,.jsx --cache",
-    "fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix --cache"
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx --cache --max-warnings=0",
+    "fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix --cache --max-warnings=0"
   },
   "eslintConfig": {
     "extends": [
