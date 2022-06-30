@@ -1,7 +1,7 @@
 import { Request } from "express";
 import { AuthenticationError, ExpressContext } from "apollo-server-express";
 import { GraphQLResolveInfo } from "graphql";
-import { IMiddlewareResolver } from "graphql-middleware";
+import { IMiddlewareFunction } from "graphql-middleware";
 
 import AuthService from "../services/implementations/authService";
 import UserService from "../services/implementations/userService";
@@ -22,23 +22,45 @@ export const getAccessToken = (req: Request): string | null => {
   return null;
 };
 
-export const and = async (firstFn: IMiddlewareResolver, secondFn: IMiddlewareResolver) => { //Change parameter type
-  return async ( 
-    resolve: (
-      parent: any,
-      args: { [key: string]: any },
-      context: ExpressContext,
-      info: GraphQLResolveInfo,
-    ) => any,
+type Resolve = (
+  parent: any,
+  args: { [key: string]: any },
+  context: ExpressContext | undefined,
+  info: GraphQLResolveInfo | undefined,
+) => any;
+
+const callResolver = (
+  resolver: IMiddlewareFunction<any, ExpressContext>,
+  resolve: Resolve,
+  parent: any,
+  args: { [key: string]: any },
+  context: ExpressContext,
+  info: GraphQLResolveInfo,
+) => {
+  if ("resolve" in resolver) {
+    resolver.resolve?.(resolve, parent, args, context, info);
+  }
+  if (typeof resolver === "function") {
+    resolver(resolve, parent, args, context, info);
+  }
+};
+
+export const and = async (
+  firstFn: IMiddlewareFunction<any, ExpressContext>,
+  secondFn: IMiddlewareFunction<any, ExpressContext>,
+) => {
+  // Change parameter type
+  return async (
+    resolve: Resolve,
     parent: any,
     args: { [key: string]: any },
     context: ExpressContext,
     info: GraphQLResolveInfo,
   ) => {
     const resolveFirst = async () => {
-       secondFn(resolve);
+      callResolver(secondFn, resolve, parent, args, context, info);
     };
-     firstFn(resolveFirst);
+    callResolver(firstFn, resolve, parent, args, context, info);
 
     return resolve(parent, args, context, info);
   };
@@ -63,7 +85,10 @@ export const isAuthorizedToChangeRole = (userIdField: string) => {
     const accessToken = getAccessToken(context.req);
     const authorized =
       accessToken &&
-      (await authService.isAuthorizedToChangeRole(accessToken, args[userIdField]));
+      (await authService.isAuthorizedToChangeRole(
+        accessToken,
+        args[userIdField],
+      ));
 
     if (!authorized) {
       throw new AuthenticationError(

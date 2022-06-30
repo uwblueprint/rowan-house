@@ -43,14 +43,17 @@ interface IAuthService {
   sendEmailVerificationLink(email: string): Promise<void>;
 
   /**
-   * Determine if the provided access token is valid and authorized to change 
+   * Determine if the provided access token is valid and authorized to change
    * the user role
    * @param accessToken user's access token
-   * @param requestedUserId user's id 
+   * @param requestedUserId user's id
    * @returns true if token is valid and authorized; and if the id does not match
    * current logged in user's id, false otherwise
    */
-   isAuthorizedToChangeRole(accessToken: string, requestedUserId: string,): Promise<boolean>;
+  isAuthorizedToChangeRole(
+    accessToken: string,
+    requestedUserId: string,
+  ): Promise<boolean>;
 
   /**
    * Determine if the provided access token is valid and authorized for at least
