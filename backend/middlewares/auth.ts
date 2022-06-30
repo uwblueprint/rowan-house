@@ -1,6 +1,7 @@
 import { Request } from "express";
 import { AuthenticationError, ExpressContext } from "apollo-server-express";
 import { GraphQLResolveInfo } from "graphql";
+import { IMiddlewareResolver } from "graphql-middleware";
 
 import AuthService from "../services/implementations/authService";
 import UserService from "../services/implementations/userService";
@@ -19,6 +20,59 @@ export const getAccessToken = (req: Request): string | null => {
     return authHeaderParts[1];
   }
   return null;
+};
+
+export const and = async (firstFn: IMiddlewareResolver, secondFn: IMiddlewareResolver) => { //Change parameter type
+  return async ( 
+    resolve: (
+      parent: any,
+      args: { [key: string]: any },
+      context: ExpressContext,
+      info: GraphQLResolveInfo,
+    ) => any,
+    parent: any,
+    args: { [key: string]: any },
+    context: ExpressContext,
+    info: GraphQLResolveInfo,
+  ) => {
+    const resolveFirst = async () => {
+       secondFn(resolve);
+    };
+     firstFn(resolveFirst);
+
+    return resolve(parent, args, context, info);
+  };
+};
+
+/* Determine if request for a user-specific resource is authorized based on accessToken
+ * validity and if the userId that the token was issued to matches the requested userId
+ * Note: userIdField is the name of the request parameter containing the requested userId */
+export const isAuthorizedToChangeRole = (userIdField: string) => {
+  return async (
+    resolve: (
+      parent: any,
+      args: { [key: string]: any },
+      context: ExpressContext,
+      info: GraphQLResolveInfo,
+    ) => any,
+    parent: any,
+    args: { [key: string]: any },
+    context: ExpressContext,
+    info: GraphQLResolveInfo,
+  ) => {
+    const accessToken = getAccessToken(context.req);
+    const authorized =
+      accessToken &&
+      (await authService.isAuthorizedToChangeRole(accessToken, args[userIdField]));
+
+    if (!authorized) {
+      throw new AuthenticationError(
+        "Failed authentication and/or authorization by userId",
+      );
+    }
+
+    return resolve(parent, args, context, info);
+  };
 };
 
 /* Determine if request is authorized based on accessToken validity and role of client */
