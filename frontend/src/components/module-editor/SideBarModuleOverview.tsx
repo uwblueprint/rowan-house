@@ -50,7 +50,7 @@ const SideBarModuleOverview = (): React.ReactElement => {
       resetState();
       onClose();
     } else {
-      setErrorMessage("Error: title cannot be empty.");
+      setErrorMessage("Error: Title cannot be empty.");
       setIsInvalid(true);
     }
   };
@@ -88,14 +88,13 @@ const SideBarModuleOverview = (): React.ReactElement => {
         }}
       >
         <TextInput
-          placeholder="New Lesson"
+          placeholder="New lesson"
           onChange={(currTitle) => {
             setTitle(currTitle);
             setIsInvalid(false);
           }}
           errorMessage={errorMessage}
           isInvalid={isInvalid}
-          isRequired
         />
       </Modal>
     </VStack>
