@@ -1,5 +1,5 @@
 import { Box, Divider, Flex, useDisclosure, VStack } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 
 import { ContentBlockState } from "../../../types/ContentBlockTypes";
@@ -12,6 +12,8 @@ import { EditImageModal, EditTextModal } from "./modals";
 import createContentBlockRenderers, {
   EmptyConfigEntry as Empty,
 } from "../../common/content/ContentBlockRenderer";
+
+import EditorContext from "../../../contexts/ModuleEditorContext";
 
 enum ModalType {
   EDIT = "edit",
@@ -47,8 +49,20 @@ const EditableContentBlock = ({
   const [isHovered, setIsHovered] = useState(false);
   const [modalType, setModalType] = useState(ModalType.EDIT);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const context = useContext(EditorContext);
 
-  const deleteContentBlock = () => {};
+  if (!context) return <></>;
+  const { dispatch } = context;
+
+  const deleteContentBlock = () => {
+    // const { id } = block;
+    dispatch({
+      type: "delete-block",
+      value: index,
+    });
+
+    onClose();
+  };
 
   const openModal = (modalConfig: ModalType) => {
     setModalType(modalConfig);
