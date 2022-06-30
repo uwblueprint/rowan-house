@@ -2,35 +2,40 @@ import { Box, Divider, Flex, useDisclosure, VStack } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 
-import { ContentBlock, ContentTypeEnum } from "../../types/ModuleEditorTypes";
-import { TextBlock, ImageBlock } from "../common/content";
-import EditContentOptionsMenu from "./EditContentOptionsMenu";
+import { ContentBlockState } from "../../../types/ContentBlockTypes";
+import { TextBlock, ImageBlock } from "../../common/content";
+import EditContentOptionsMenu from "../EditContentOptionsMenu";
 
-import { ReactComponent as DragHandleIconSvg } from "../../assets/DragHandle.svg";
-import EditTextModal from "./EditTextModal";
+import { ReactComponent as DragHandleIconSvg } from "../../../assets/DragHandle.svg";
+import { EditImageModal, EditTextModal } from "./modals";
+import createContentBlockRenderers, {
+  EmptyConfigEntry as Empty,
+} from "../../common/content/ContentBlockRenderer";
 
 /* eslint-disable react/jsx-props-no-spreading */
 
-const SelectContentBlock = (block: ContentBlock): React.ReactElement => {
-  const { type, content } = block;
-
-  switch (type) {
-    case ContentTypeEnum.TEXT:
-      return <TextBlock content={content} />;
-    case ContentTypeEnum.IMAGE:
-      return <ImageBlock content={content} />;
-    default:
-      throw Error(
-        `Unknown content type given to EditableContentBlock: "${type.title}"`,
-      );
-  }
-};
+const [CONTENT_BLOCKS, EDIT_MODALS] = createContentBlockRenderers({
+  column: Empty,
+  heading: Empty,
+  text: {
+    renderBlock: TextBlock,
+    renderEditModal: EditTextModal,
+  },
+  link: Empty,
+  button: Empty,
+  image: {
+    renderBlock: ImageBlock,
+    renderEditModal: EditImageModal,
+  },
+  video: Empty,
+  audio: Empty,
+});
 
 const EditableContentBlock = ({
   block,
   index,
 }: {
-  block: ContentBlock;
+  block: ContentBlockState;
   index: number;
 }): React.ReactElement => {
   const [isHovered, setIsHovered] = useState(false);
@@ -54,7 +59,7 @@ const EditableContentBlock = ({
             <Box opacity={isHovered ? 1 : 0} {...provided.dragHandleProps}>
               <DragHandleIconSvg />
             </Box>
-            {SelectContentBlock(block)}
+            {CONTENT_BLOCKS.render({ block })}
             <EditContentOptionsMenu
               isVisible={isHovered}
               onEditClick={onOpen}
@@ -63,13 +68,7 @@ const EditableContentBlock = ({
             />
           </Flex>
           <Divider opacity={isHovered ? 1 : 0} />
-          {/* TODO: only allow text changes for text blocks */}
-          <EditTextModal
-            isOpen={isOpen}
-            onClose={onClose}
-            block={block}
-            index={index}
-          />
+          {EDIT_MODALS.render({ isOpen, onClose, block, index })}
         </VStack>
       )}
     </Draggable>
