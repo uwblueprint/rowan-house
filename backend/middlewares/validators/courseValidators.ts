@@ -1,8 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import {
   getApiValidationError,
-  getFileTypeValidationError,
-  validateImageFileType,
   validateObject,
   validatePrimitive,
 } from "./util";
@@ -48,9 +46,6 @@ export const courseRequestDtoValidator = async (
   }
   if (!validateObject(body.modules, VALID_MODULES)) {
     return res.status(400).send("Modules object is not valid");
-  }
-  if (req.file && !validateImageFileType(req.file.mimetype)) {
-    return res.status(400).send(getFileTypeValidationError(req.file.mimetype));
   }
   return next();
 };

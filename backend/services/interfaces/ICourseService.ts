@@ -8,7 +8,6 @@ export interface CreateCourseRequestDTO {
   previewImage: string;
   modules: ModuleDTO[];
   private: boolean;
-  filePath: string;
 }
 
 export interface UpdateCourseRequestDTO {
@@ -80,4 +79,12 @@ export interface ICourseService {
    * @throws Error if deletion fails
    */
   deleteCourse(id: string): Promise<string>;
+
+  /**
+   * upload module image
+   * @param file  id
+   * @returns fileName of the module image uploaded
+   * @throws Error if upload fails
+   */
+  uploadModuleImage(filePath: string, fileContentType: string): Promise<string>;
 }

@@ -131,19 +131,7 @@ class CourseService implements ICourseService {
   ): Promise<CourseResponseDTO> {
     let newCourse: Course | null;
     try {
-      if (course.modules.length > 0) {
-        course.modules.forEach(async (module) => {
-          const fileName = module.filePath ? uuid() : "";
-          if (module.filePath) {
-            await this.storageService.createFile(
-              fileName,
-              module.filePath,
-              module.fileContentType,
-            );
-          }
-        });
-      }
-      newCourse = await MgCourse.create({ course });
+      newCourse = await MgCourse.create(course);
     } catch (error: unknown) {
       Logger.error(
         `Failed to create course. Reason = ${getErrorMessage(error)}`,
@@ -167,28 +155,6 @@ class CourseService implements ICourseService {
   ): Promise<CourseResponseDTO | null> {
     let updatedCourse: Course | null;
     try {
-      if (course.modules.length > 0) {
-        course.modules.forEach(async (module) => {
-          const fileName = module.fileName || uuid();
-          if (module.filePath) {
-            if (module.fileName) {
-              await this.storageService.updateFile(
-                fileName,
-                module.filePath,
-                module.fileContentType,
-              );
-            } else {
-              await this.storageService.createFile(
-                fileName,
-                module.filePath,
-                module.fileContentType,
-              );
-            }
-          } else if (module.fileName) {
-            await this.storageService.deleteFile(fileName);
-          }
-        });
-      }
       updatedCourse = await MgCourse.findByIdAndUpdate(id, course, {
         new: true,
         runValidators: true,
@@ -220,13 +186,6 @@ class CourseService implements ICourseService {
       if (!deletedCourse) {
         throw new Error(`Course id ${id} not found`);
       }
-      if (deletedCourse.modules.length > 0) {
-        deletedCourse.modules.forEach(async (module) => {
-          if (module.filePath) {
-            await this.storageService.deleteFile(module.fileName);
-          }
-        });
-      }
       return id;
     } catch (error: unknown) {
       Logger.error(
@@ -234,6 +193,22 @@ class CourseService implements ICourseService {
       );
       throw error;
     }
+  }
+
+  async uploadModuleImage(
+    filePath: string,
+    fileContentType: string,
+  ): Promise<string> {
+    const fileName = filePath ? uuid() : ""; // is this really necessary idk
+    try {
+      await this.storageService.createFile(fileName, filePath, fileContentType);
+    } catch (error: unknown) {
+      Logger.error(
+        `Failed to create entity. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
+    return fileName;
   }
 }
 

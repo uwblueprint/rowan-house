@@ -12,8 +12,12 @@ import {
   CourseResponse,
   ModuleResponse,
   ModuleRequest,
+  ImageUploadResponse,
 } from "../../APIClients/types/CourseClientTypes";
-import { UPDATE_COURSE } from "../../APIClients/mutations/CourseMutations";
+import {
+  UPDATE_COURSE,
+  UPLOAD_IMAGE,
+} from "../../APIClients/mutations/CourseMutations";
 import { COURSES } from "../../APIClients/queries/CourseQueries";
 import { ReactComponent as ImageIcon } from "../../assets/image_white_outline.svg";
 
@@ -40,19 +44,30 @@ const EditModuleModal = ({
     UPDATE_COURSE,
     refetchQueries,
   );
+  const [uploadImage] = useMutation<{ uploadImage: ImageUploadResponse }>(
+    UPLOAD_IMAGE,
+  );
+
   const [isHover, setIsHover] = useState<boolean>();
 
-  const onUpdateModule = () => {
-    const newModule = {
-      ...module,
-      title,
-      description,
-      published: isPublished,
-      file: previewImage,
-    };
-    const [id, course] = formatCourseRequest(newModule);
-    updateCourse({ variables: { id, course } });
-    onClose();
+  const onUpdateModule = async () => {
+    if (previewImage) {
+      const imageUploadResult = await uploadImage({
+        variables: { file: previewImage },
+      });
+
+      const newModule = {
+        ...module,
+        title,
+        description,
+        published: isPublished,
+        fileName: imageUploadResult.data?.uploadImage.fileName,
+      };
+
+      const [id, course] = formatCourseRequest(newModule);
+      updateCourse({ variables: { id, course } });
+      onClose();
+    }
   };
 
   const fileChanged = (e: { target: HTMLInputElement }) => {
