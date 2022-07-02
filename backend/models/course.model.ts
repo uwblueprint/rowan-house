@@ -1,5 +1,4 @@
 import { Schema, Document, model, Types } from "mongoose";
-// import { FileUpload } from "graphql-upload";
 
 export interface Module {
   _id: Types.ObjectId;
