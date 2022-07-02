@@ -49,12 +49,16 @@ const EditModuleModal = ({
   const [isPublished, setVisibility] = useState(module?.published ?? false);
   const [description, setDescription] = useState(module?.description ?? "");
 <<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
+<<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
   const [invalid, setInvalid] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const [updateCourse] = useMutation<CourseResponse>(
 =======
   const [previewImage, setPreviewImage] = useState<File | null>(null);
+=======
+  const [previewImage, setPreviewImage] = useState<string | undefined>();
+>>>>>>> 4b65eff (set preview image before updating course):frontend/src/components/admin/EditModuleModal.tsx
   const [updateCourse] = useMutation<{ updateCourse: CourseResponse }>(
 >>>>>>> 70d4f30 (add file upload logic to courses be and fe):frontend/src/components/admin/EditModuleModal.tsx
     UPDATE_COURSE,
@@ -108,16 +112,12 @@ const EditModuleModal = ({
 =======
   const onUpdateModule = async () => {
     if (previewImage) {
-      const imageUploadResult = await uploadImage({
-        variables: { file: previewImage },
-      });
-
       const newModule = {
         ...module,
         title,
         description,
         published: isPublished,
-        fileName: imageUploadResult.data?.uploadImage.fileName,
+        fileName: previewImage,
       };
 
       const [id, course] = formatCourseRequest(newModule);
@@ -127,14 +127,17 @@ const EditModuleModal = ({
 >>>>>>> 0964cb0 (create separate upload module image mutation):frontend/src/components/admin/EditModuleModal.tsx
   };
 
-  const fileChanged = (e: { target: HTMLInputElement }) => {
+  const fileChanged = async (e: { target: HTMLInputElement }) => {
     if (e.target.files) {
       const fileSize = e.target.files[0].size / 1024 / 1024;
       if (fileSize > 5) {
         // eslint-disable-next-line no-alert
         window.alert("Your file exceeds 5MB. Upload a smaller file.");
       } else {
-        setPreviewImage(e.target.files[0]);
+        const imageUploadResult = await uploadImage({
+          variables: { file: e.target.files[0] },
+        });
+        setPreviewImage(imageUploadResult.data?.uploadImage.fileName);
       }
     }
   };
@@ -167,7 +170,7 @@ const EditModuleModal = ({
             onClick={openFileBrowser}
           >
             <Flex
-              backgroundImage={DEFAULT_IMAGE}
+              backgroundImage={previewImage ?? DEFAULT_IMAGE}
               backgroundPosition="center"
               h="214px"
               w="214px"
