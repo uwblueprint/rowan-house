@@ -204,7 +204,7 @@ class CourseService implements ICourseService {
       await this.storageService.createFile(fileName, filePath, fileContentType);
     } catch (error: unknown) {
       Logger.error(
-        `Failed to create entity. Reason = ${getErrorMessage(error)}`,
+        `Failed to upload module image. Reason = ${getErrorMessage(error)}`,
       );
       throw error;
     }

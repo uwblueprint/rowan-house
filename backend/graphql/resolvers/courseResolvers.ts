@@ -36,7 +36,7 @@ const userService: IUserService = new UserService();
 const emailService: IEmailService = new EmailService(nodemailerConfig);
 const authService: IAuthService = new AuthService(userService, emailService);
 
-multer({ dest: "uploads/" });
+multer({ dest: "moduleImages/" });
 
 const writeFile = (readStream: ReadStream, filePath: string): Promise<void> => {
   return new Promise((resolve, reject) => {
@@ -131,7 +131,7 @@ const courseResolvers = {
       let fileContentType = "";
       if (file) {
         const { createReadStream, mimetype, filename } = await file;
-        const uploadDir = "uploads";
+        const uploadDir = "moduleImages";
         filePath = `${uploadDir}/${filename}`;
         fileContentType = mimetype;
         if (!validateImageFileType(fileContentType)) {
@@ -139,10 +139,15 @@ const courseResolvers = {
         }
         await writeFile(createReadStream(), filePath);
       }
+      const fileName = await courseService.uploadModuleImage(
+        filePath,
+        fileContentType,
+      );
+
       if (filePath) {
         fs.unlinkSync(filePath);
       }
-      return courseService.uploadModuleImage(filePath, fileContentType);
+      return fileName;
     },
   },
 };
