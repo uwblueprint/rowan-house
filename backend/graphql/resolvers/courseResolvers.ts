@@ -1,6 +1,7 @@
 import { ExpressContext } from "apollo-server-express";
 import { AuthenticationError, ExpressContext } from "apollo-server-express";
 import fs from "fs";
+import { FileUpload } from "graphql-upload";
 /* eslint-disable-next-line import/no-extraneous-dependencies */
 import { ReadStream } from "fs-capacitor";
 import multer from "multer";
@@ -106,25 +107,6 @@ const courseResolvers = {
       _parent: undefined,
       { course }: { course: CreateCourseRequestDTO },
     ): Promise<CourseResponseDTO> => {
-      if (course.modules.length > 0) {
-        course.modules.forEach(async (module) => {
-          let filePath = "";
-          let fileContentType = "";
-          if (module.file) {
-            const { createReadStream, mimetype, filename } = await module.file;
-            const uploadDir = "uploads";
-            filePath = `${uploadDir}/${filename}`;
-            fileContentType = mimetype;
-            if (!validateImageFileType(fileContentType)) {
-              throw new Error(getFileTypeValidationError(fileContentType));
-            }
-            await writeFile(createReadStream(), filePath);
-          }
-          if (filePath) {
-            fs.unlinkSync(filePath);
-          }
-        });
-      }
       const newCourse = await courseService.createCourse(course);
       return newCourse;
     },
@@ -132,40 +114,35 @@ const courseResolvers = {
       _parent: undefined,
       { id, course }: { id: string; course: UpdateCourseRequestDTO },
     ): Promise<CourseResponseDTO | null> => {
-      if (course.modules.length > 0) {
-        course.modules.forEach(async (module) => {
-          let filePath = "";
-          let fileContentType = "";
-          if (module.file) {
-            const { createReadStream, mimetype, filename } = await module.file;
-            const uploadDir = "uploads";
-            filePath = `${uploadDir}/${filename}`;
-            fileContentType = mimetype;
-            if (!validateImageFileType(fileContentType)) {
-              throw new Error(getFileTypeValidationError(fileContentType));
-            }
-            await writeFile(createReadStream(), filePath);
-          }
-          if (filePath) {
-            fs.unlinkSync(filePath);
-          }
-        });
-      }
-
-      return courseService.updateCourse(id, {
-        title: course.title,
-        description: course.description,
-        image: course.image,
-        previewImage: course.previewImage,
-        private: course.private,
-        modules: course.modules,
-      });
+      return courseService.updateCourse(id, course);
     },
     deleteCourse: async (
       _parent: undefined,
       { id }: { id: string },
     ): Promise<string> => {
       return courseService.deleteCourse(id);
+    },
+
+    uploadModuleImage: async (
+      _req: undefined,
+      { file }: { file: Promise<FileUpload> },
+    ): Promise<string> => {
+      let filePath = "";
+      let fileContentType = "";
+      if (file) {
+        const { createReadStream, mimetype, filename } = await file;
+        const uploadDir = "uploads";
+        filePath = `${uploadDir}/${filename}`;
+        fileContentType = mimetype;
+        if (!validateImageFileType(fileContentType)) {
+          throw new Error(getFileTypeValidationError(fileContentType));
+        }
+        await writeFile(createReadStream(), filePath);
+      }
+      if (filePath) {
+        fs.unlinkSync(filePath);
+      }
+      return courseService.uploadModuleImage(filePath, fileContentType);
     },
   },
 };

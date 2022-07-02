@@ -11,11 +11,19 @@ import {
   CourseResponse,
   ModuleResponse,
   ModuleRequest,
+  ImageUploadResponse,
 } from "../../APIClients/types/CourseClientTypes";
+<<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
 import { UPDATE_COURSE } from "../../APIClients/mutations/CourseMutations";
 <<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
 import { COURSES, GET_COURSE } from "../../APIClients/queries/CourseQueries";
 =======
+=======
+import {
+  UPDATE_COURSE,
+  UPLOAD_IMAGE,
+} from "../../APIClients/mutations/CourseMutations";
+>>>>>>> 0964cb0 (create separate upload module image mutation):frontend/src/components/admin/EditModuleModal.tsx
 import { COURSES } from "../../APIClients/queries/CourseQueries";
 import { ReactComponent as ImageIcon } from "../../assets/image_white_outline.svg";
 >>>>>>> 70d4f30 (add file upload logic to courses be and fe):frontend/src/components/admin/EditModuleModal.tsx
@@ -52,8 +60,13 @@ const EditModuleModal = ({
     UPDATE_COURSE,
     refetchQueries,
   );
+  const [uploadImage] = useMutation<{ uploadImage: ImageUploadResponse }>(
+    UPLOAD_IMAGE,
+  );
+
   const [isHover, setIsHover] = useState<boolean>();
 
+<<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
   const onUpdateModule = () => {
 <<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
     if (!title || title.length > MAX_TITLE_CHARACTERS) {
@@ -92,6 +105,26 @@ const EditModuleModal = ({
     updateCourse({ variables: { id, course } });
 >>>>>>> 8695160 (file upload for modules not course):frontend/src/components/admin/EditModuleModal.tsx
     onClose();
+=======
+  const onUpdateModule = async () => {
+    if (previewImage) {
+      const imageUploadResult = await uploadImage({
+        variables: { file: previewImage },
+      });
+
+      const newModule = {
+        ...module,
+        title,
+        description,
+        published: isPublished,
+        fileName: imageUploadResult.data?.uploadImage.fileName,
+      };
+
+      const [id, course] = formatCourseRequest(newModule);
+      updateCourse({ variables: { id, course } });
+      onClose();
+    }
+>>>>>>> 0964cb0 (create separate upload module image mutation):frontend/src/components/admin/EditModuleModal.tsx
   };
 
   const fileChanged = (e: { target: HTMLInputElement }) => {

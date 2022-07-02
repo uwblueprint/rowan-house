@@ -1,5 +1,5 @@
 import { Schema, Document, model, Types } from "mongoose";
-import { FileUpload } from "graphql-upload";
+// import { FileUpload } from "graphql-upload";
 
 export interface Module {
   _id: Types.ObjectId;
@@ -9,10 +9,7 @@ export interface Module {
   previewImage: string;
   published: boolean;
   lessons: string[];
-  file: Promise<FileUpload>;
   fileName: string;
-  filePath: string;
-  fileContentType: string;
 }
 
 export interface Course extends Document {

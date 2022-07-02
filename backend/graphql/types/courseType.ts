@@ -9,7 +9,6 @@ const courseType = gql`
     previewImage: String
     published: Boolean!
     lessons: [String]
-    file: Upload
     fileName: String
   }
 
@@ -21,7 +20,7 @@ const courseType = gql`
     previewImage: String
     published: Boolean
     lessons: [String]
-    filePath: String
+    fileName: String
   }
 
   type CourseResponseDTO {
@@ -70,6 +69,7 @@ const courseType = gql`
       file: Upload
     ): CourseResponseDTO
     deleteCourse(id: ID!): ID
+    uploadModuleImage(file: Upload): String
   }
 `;
 
