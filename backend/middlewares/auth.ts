@@ -8,6 +8,14 @@ import UserService from "../services/implementations/userService";
 import IAuthService from "../services/interfaces/authService";
 import { Role } from "../types";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+type Resolve = (
+  parent: any,
+  args: { [key: string]: any },
+  context: ExpressContext | undefined,
+  info: GraphQLResolveInfo | undefined,
+) => any;
+
 const authService: IAuthService = new AuthService(new UserService());
 
 export const getAccessToken = (req: Request): string | null => {
@@ -22,34 +30,31 @@ export const getAccessToken = (req: Request): string | null => {
   return null;
 };
 
-type Resolve = (
-  parent: any,
-  args: { [key: string]: any },
-  context: ExpressContext | undefined,
-  info: GraphQLResolveInfo | undefined,
-) => any;
-
-const callResolver = (
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+const callResolver = async (
   resolver: IMiddlewareFunction<any, ExpressContext>,
   resolve: Resolve,
   parent: any,
   args: { [key: string]: any },
   context: ExpressContext,
   info: GraphQLResolveInfo,
+  // eslint-disable-next-line consistent-return
 ) => {
   if ("resolve" in resolver) {
-    resolver.resolve?.(resolve, parent, args, context, info);
+    return resolver.resolve?.(resolve, parent, args, context, info);
   }
   if (typeof resolver === "function") {
-    resolver(resolve, parent, args, context, info);
+    return resolver(resolve, parent, args, context, info);
   }
 };
 
-export const and = async (
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+export const and = (
   firstFn: IMiddlewareFunction<any, ExpressContext>,
   secondFn: IMiddlewareFunction<any, ExpressContext>,
 ) => {
-  // Change parameter type
   return async (
     resolve: Resolve,
     parent: any,
@@ -58,17 +63,17 @@ export const and = async (
     info: GraphQLResolveInfo,
   ) => {
     const resolveFirst = async () => {
-      callResolver(secondFn, resolve, parent, args, context, info);
+      return callResolver(secondFn, resolve, parent, args, context, info);
     };
-    callResolver(firstFn, resolve, parent, args, context, info);
-
-    return resolve(parent, args, context, info);
+    return callResolver(firstFn, resolveFirst, parent, args, context, info);
   };
 };
 
-/* Determine if request for a user-specific resource is authorized based on accessToken
- * validity and if the userId that the token was issued to matches the requested userId
+/* Determine if the user whose role is to be changed does not match the currently 
+logged in user. 
  * Note: userIdField is the name of the request parameter containing the requested userId */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 export const isAuthorizedToChangeRole = (userIdField: string) => {
   return async (
     resolve: (

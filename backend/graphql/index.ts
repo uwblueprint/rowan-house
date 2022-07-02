@@ -60,7 +60,6 @@ const authorizeRoleChange = (id: string) => {
     isAuthorizedByRole(new Set(["Admin"])),
   );
 };
-// and(isAuthorizedToChangeRole(id), isAuthorizedByRole(new Set(["Admin"])))
 
 const graphQLMiddlewares = {
   Query: {
