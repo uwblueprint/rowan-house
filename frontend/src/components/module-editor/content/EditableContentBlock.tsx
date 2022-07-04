@@ -96,7 +96,8 @@ const EditableContentBlock = ({
             />
           </Flex>
           <Divider opacity={isHovered ? 1 : 0} />
-          {EDIT_MODALS.render({ isOpen, onClose, block, index })}
+          {modalType === ModalType.EDIT &&
+            EDIT_MODALS.render({ isOpen, onClose, block, index })}
           {/* TODO: only allow text changes for text blocks */}
           {modalType === ModalType.DELETE && (
             <DeleteModal
