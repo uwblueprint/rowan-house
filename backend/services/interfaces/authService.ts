@@ -50,7 +50,7 @@ interface IAuthService {
    * @returns true if token is valid and authorized; and if the id does not match
    * current logged in user's id, false otherwise
    */
-  isAuthorizedToChangeRole(
+  iDNotSameasActiveUser(
     accessToken: string,
     requestedUserId: string,
   ): Promise<boolean>;

@@ -163,7 +163,7 @@ class AuthService implements IAuthService {
     }
   }
 
-  async isAuthorizedToChangeRole(
+  async iDNotSameasActiveUser(
     accessToken: string,
     requestedUserId: string,
   ): Promise<boolean> {
@@ -174,14 +174,7 @@ class AuthService implements IAuthService {
       const tokenUserId = await this.userService.getUserIdByAuthId(
         decodedIdToken.uid,
       );
-
-      const firebaseUser = await firebaseAdmin
-        .auth()
-        .getUser(decodedIdToken.uid);
-
-      return (
-        firebaseUser.emailVerified && String(tokenUserId) !== requestedUserId
-      );
+      return String(tokenUserId) !== requestedUserId;
     } catch (error) {
       return false;
     }
