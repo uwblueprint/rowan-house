@@ -163,7 +163,7 @@ class AuthService implements IAuthService {
     }
   }
 
-  async iDNotSameasActiveUser(
+  async idNotSameAsActiveUser(
     accessToken: string,
     requestedUserId: string,
   ): Promise<boolean> {

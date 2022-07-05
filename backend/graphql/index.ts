@@ -6,7 +6,7 @@ import {
   isAuthorizedByEmail,
   isAuthorizedByRole,
   isAuthorizedByUserId,
-  iDNotSameasActiveUser,
+  idNotSameAsActiveUser,
 } from "../middlewares/auth";
 import and from "../middlewares/utils/combinatorsUtils";
 import authResolvers from "./resolvers/authResolvers";
@@ -55,7 +55,7 @@ const authorizedByAllRoles = () =>
   isAuthorizedByRole(new Set(["User", "Admin", "Staff"]));
 const authorizedByAdmin = () => isAuthorizedByRole(new Set(["Admin"]));
 const authorizeRoleChange = (id: string) => {
-  return and(authorizedByAdmin(), iDNotSameasActiveUser(id));
+  return and(authorizedByAdmin(), idNotSameAsActiveUser(id));
 };
 
 const graphQLMiddlewares = {

@@ -13,6 +13,7 @@ export type Resolve = (
 export const callResolver = async (
   resolver: IMiddlewareFunction<any, ExpressContext>,
   resolve: Resolve,
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   parent: any,
   args: { [key: string]: any },
   context: ExpressContext,

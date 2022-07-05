@@ -26,7 +26,7 @@ logged in user.
  * Note: userIdField is the name of the request parameter containing the requested userId */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-export const iDNotSameasActiveUser = (userIdField: string) => {
+export const idNotSameAsActiveUser = (userIdField: string) => {
   return async (
     resolve: (
       parent: any,
@@ -42,7 +42,7 @@ export const iDNotSameasActiveUser = (userIdField: string) => {
     const accessToken = getAccessToken(context.req);
     const authorized =
       accessToken &&
-      (await authService.iDNotSameasActiveUser(accessToken, args[userIdField]));
+      (await authService.idNotSameAsActiveUser(accessToken, args[userIdField]));
 
     if (!authorized) {
       throw new AuthenticationError("User ID cannot change its own role");
