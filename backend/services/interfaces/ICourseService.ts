@@ -32,6 +32,11 @@ export interface CourseResponseDTO {
   fileName: string;
 }
 
+export interface UploadModuleImage {
+  previewImage: string;
+  filePath: string;
+}
+
 export interface ICourseService {
   /**
    * retrieve the Course with the given id
@@ -86,8 +91,11 @@ export interface ICourseService {
   /**
    * upload module image
    * @param file  id
-   * @returns fileName of the module image uploaded
+   * @returns the preview image and file path of the module image uploaded
    * @throws Error if upload fails
    */
-  uploadModuleImage(filePath: string, fileContentType: string): Promise<string>;
+  uploadModuleImage(
+    filePath: string,
+    fileContentType: string,
+  ): Promise<UploadModuleImage>;
 }

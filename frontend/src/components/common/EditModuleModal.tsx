@@ -1,17 +1,23 @@
 import { Box, Flex, VStack, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
+<<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
 import { TextInput } from "./TextInput";
 import { Modal } from "./Modal";
 import { SwitchInput } from "./SwitchInput";
 import { TextArea } from "./TextArea";
+=======
+import { TextInput } from "../common/TextInput";
+import { Modal } from "../common/Modal";
+import { SwitchInput } from "../common/SwitchInput";
+import { TextArea } from "../common/TextArea";
+>>>>>>> 4b06be6 (display uploaded image on modal):frontend/src/components/admin/EditModuleModal.tsx
 import { DEFAULT_IMAGE } from "../../constants/DummyData";
 import {
   CourseRequest,
   CourseResponse,
   ModuleResponse,
   ModuleRequest,
-  ImageUploadResponse,
 } from "../../APIClients/types/CourseClientTypes";
 <<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
 import { UPDATE_COURSE } from "../../APIClients/mutations/CourseMutations";
@@ -58,15 +64,17 @@ const EditModuleModal = ({
   const [previewImage, setPreviewImage] = useState<File | null>(null);
 =======
   const [previewImage, setPreviewImage] = useState<string | undefined>();
+<<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
 >>>>>>> 4b65eff (set preview image before updating course):frontend/src/components/admin/EditModuleModal.tsx
+=======
+  const [imageFile, setImageFile] = useState<string | undefined>();
+>>>>>>> 4b06be6 (display uploaded image on modal):frontend/src/components/admin/EditModuleModal.tsx
   const [updateCourse] = useMutation<{ updateCourse: CourseResponse }>(
 >>>>>>> 70d4f30 (add file upload logic to courses be and fe):frontend/src/components/admin/EditModuleModal.tsx
     UPDATE_COURSE,
     refetchQueries,
   );
-  const [uploadImage] = useMutation<{ uploadImage: ImageUploadResponse }>(
-    UPLOAD_IMAGE,
-  );
+  const [uploadImage] = useMutation(UPLOAD_IMAGE);
 
   const [isHover, setIsHover] = useState<boolean>();
 
@@ -117,7 +125,8 @@ const EditModuleModal = ({
         title,
         description,
         published: isPublished,
-        fileName: previewImage,
+        previewImage,
+        fileName: imageFile,
       };
 
       const [id, course] = formatCourseRequest(newModule);
@@ -137,7 +146,9 @@ const EditModuleModal = ({
         const imageUploadResult = await uploadImage({
           variables: { file: e.target.files[0] },
         });
-        setPreviewImage(imageUploadResult.data?.uploadImage.fileName);
+        const result = imageUploadResult.data.uploadModuleImage ?? null;
+        setImageFile(result?.filePath);
+        setPreviewImage(result?.previewImage ?? undefined);
       }
     }
   };

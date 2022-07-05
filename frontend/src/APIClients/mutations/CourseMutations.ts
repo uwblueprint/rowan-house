@@ -52,6 +52,9 @@ export const DELETE_COURSE = gql`
 
 export const UPLOAD_IMAGE = gql`
   mutation UploadImage($file: Upload) {
-    uploadModuleImage(file: $file)
+    uploadModuleImage(file: $file) {
+      previewImage
+      filePath
+    }
   }
 `;

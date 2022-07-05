@@ -42,6 +42,7 @@ export interface CourseResponse {
 export interface ImageUploadRequest {
   file: File;
 }
-export interface ImageUploadResponse {
-  fileName: string;
-}
+export type ImageUploadResponse = {
+  previewImage: string;
+  filePath: string;
+};

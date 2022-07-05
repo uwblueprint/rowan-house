@@ -59,7 +59,8 @@ const ModulePreview = ({
     UPDATE_COURSE,
     refetchQueries,
   );
-  const { title, image, published } = module;
+
+  const { title, previewImage, published } = module;
 
   const onClick = (type: ModalType) => {
     setModalType(type);
@@ -84,7 +85,7 @@ const ModulePreview = ({
     >
       <Link href={EDIT_MODULE_ROUTE}>
         <Image
-          src={image || DEFAULT_IMAGE}
+          src={previewImage ?? DEFAULT_IMAGE}
           alt="module-preview"
           height="160px"
           width="240px"

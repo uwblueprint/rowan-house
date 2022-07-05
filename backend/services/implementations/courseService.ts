@@ -7,6 +7,7 @@ import {
   UpdateCourseRequestDTO,
   CourseResponseDTO,
   ICourseService,
+  UploadModuleImage,
 } from "../interfaces/ICourseService";
 import MgCourse, {
   Course,
@@ -198,7 +199,7 @@ class CourseService implements ICourseService {
   async uploadModuleImage(
     filePath: string,
     fileContentType: string,
-  ): Promise<string> {
+  ): Promise<UploadModuleImage> {
     const fileName = filePath ? uuid() : ""; // is this really necessary idk
     try {
       await this.storageService.createFile(fileName, filePath, fileContentType);
@@ -208,7 +209,8 @@ class CourseService implements ICourseService {
       );
       throw error;
     }
-    return fileName;
+    const signedUrl = await this.storageService.getFile(fileName, 60);
+    return { previewImage: signedUrl, filePath: fileName };
   }
 }
 

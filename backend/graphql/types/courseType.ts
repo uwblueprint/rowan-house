@@ -33,6 +33,10 @@ const courseType = gql`
     private: Boolean!
   }
 
+  type ModuleImageResponseDTO {
+    previewImage: String
+    filePath: String
+  }
   input CreateCourseRequestDTO {
     title: String!
     description: String
@@ -69,7 +73,7 @@ const courseType = gql`
       file: Upload
     ): CourseResponseDTO
     deleteCourse(id: ID!): ID
-    uploadModuleImage(file: Upload): String
+    uploadModuleImage(file: Upload): ModuleImageResponseDTO
   }
 `;
 
