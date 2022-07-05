@@ -127,6 +127,11 @@ class CourseService implements ICourseService {
     }
   }
 
+  async getModuleImage(fileName: string): Promise<string> {
+    const signedUrl = await this.storageService.getFile(fileName, 60);
+    return signedUrl;
+  }
+
   async createCourse(
     course: CreateCourseRequestDTO,
   ): Promise<CourseResponseDTO> {

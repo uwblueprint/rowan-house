@@ -14,6 +14,7 @@ export const COURSES = gql`
         description
         image
         previewImage
+        fileName
         published
         lessons
       }
@@ -58,10 +59,17 @@ export const GET_COURSE = gql`
         description
         image
         previewImage
+        fileName
         published
         lessons
       }
       private
     }
+  }
+`;
+
+export const GET_MODULE_IMAGE = gql`
+  query GetModuleImage($fileName: String!) {
+    moduleImage(fileName: $fileName)
   }
 `;

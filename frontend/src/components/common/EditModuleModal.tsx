@@ -1,4 +1,5 @@
 import { Box, Flex, VStack, Text } from "@chakra-ui/react";
+<<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 <<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
@@ -7,6 +8,10 @@ import { Modal } from "./Modal";
 import { SwitchInput } from "./SwitchInput";
 import { TextArea } from "./TextArea";
 =======
+=======
+import React, { useEffect, useState } from "react";
+import { useMutation, useQuery } from "@apollo/client";
+>>>>>>> d3a7ed1 (display uploaded image in module preview card):frontend/src/components/admin/EditModuleModal.tsx
 import { TextInput } from "../common/TextInput";
 import { Modal } from "../common/Modal";
 import { SwitchInput } from "../common/SwitchInput";
@@ -29,8 +34,15 @@ import {
   UPDATE_COURSE,
   UPLOAD_IMAGE,
 } from "../../APIClients/mutations/CourseMutations";
+<<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
 >>>>>>> 0964cb0 (create separate upload module image mutation):frontend/src/components/admin/EditModuleModal.tsx
 import { COURSES } from "../../APIClients/queries/CourseQueries";
+=======
+import {
+  COURSES,
+  GET_MODULE_IMAGE,
+} from "../../APIClients/queries/CourseQueries";
+>>>>>>> d3a7ed1 (display uploaded image in module preview card):frontend/src/components/admin/EditModuleModal.tsx
 import { ReactComponent as ImageIcon } from "../../assets/image_white_outline.svg";
 >>>>>>> 70d4f30 (add file upload logic to courses be and fe):frontend/src/components/admin/EditModuleModal.tsx
 
@@ -159,6 +171,16 @@ const EditModuleModal = ({
       inputFile.current.click();
     }
   };
+
+  if (module?.fileName) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useQuery(GET_MODULE_IMAGE, {
+      variables: { fileName: module.fileName },
+      onCompleted: (data) => {
+        setPreviewImage(data.moduleImage);
+      },
+    });
+  }
 
   return (
     <Modal

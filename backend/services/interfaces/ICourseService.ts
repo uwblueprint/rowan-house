@@ -61,6 +61,14 @@ export interface ICourseService {
   ): Promise<CourseResponseDTO[]>;
 
   /**
+   * gets signed url for module image
+   * @param fileName
+   * @returns returns signed URL for module image
+   * @throws Error if retrieval fails
+   */
+  getModuleImage(fileName: string): Promise<string>;
+
+  /**
    * create an Course with the fields given in the DTO, return created Course
    * @param course user's email
    * @returns the created Course
