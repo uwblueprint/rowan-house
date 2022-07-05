@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Button,
   Flex,
@@ -14,6 +14,7 @@ import SelectInput from "../common/SelectInput";
 import UPDATE_USER_ROLE from "../../APIClients/mutations/UserMutations";
 import USER_ROLES from "../../constants/UserConstants";
 import { Role } from "../../types/AuthTypes";
+import AuthContext from "../../contexts/AuthContext";
 
 interface DefaultUserIconProps {
   initials: string;
@@ -52,6 +53,7 @@ const UserCard = ({
 }: UserCardProps): React.ReactElement => {
   const [selectValue, setSelectValue] = useState<Role>(role);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { authenticatedUser } = useContext(AuthContext);
 
   useEffect(() => {
     setSelectValue(role);
@@ -100,9 +102,11 @@ const UserCard = ({
     >
       <VStack align="center" spacing={8} ml="60px" mr="132px">
         <DefaultUserIcon initials={getInitials(firstName, lastName)} />
-        <Button onClick={onOpen} variant="outline-md">
-          Edit Role
-        </Button>
+        {authenticatedUser?.email !== email && (
+          <Button onClick={onOpen} variant="outline-md">
+            Edit Role
+          </Button>
+        )}
         <Modal
           header="Edit user role"
           isOpen={isOpen}

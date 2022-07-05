@@ -163,6 +163,23 @@ class AuthService implements IAuthService {
     }
   }
 
+  async idNotSameAsActiveUser(
+    accessToken: string,
+    requestedUserId: string,
+  ): Promise<boolean> {
+    try {
+      const decodedIdToken: firebaseAdmin.auth.DecodedIdToken = await firebaseAdmin
+        .auth()
+        .verifyIdToken(accessToken, true);
+      const tokenUserId = await this.userService.getUserIdByAuthId(
+        decodedIdToken.uid,
+      );
+      return String(tokenUserId) !== requestedUserId;
+    } catch (error) {
+      return false;
+    }
+  }
+
   async isAuthorizedByUserId(
     accessToken: string,
     requestedUserId: string,
