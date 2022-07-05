@@ -58,6 +58,7 @@ const courseType = gql`
   extend type Query {
     course(id: ID!): CourseResponseDTO!
     courses: [CourseResponseDTO!]!
+    moduleImage(fileName: String!): String!
   }
 
   extend type Mutation {

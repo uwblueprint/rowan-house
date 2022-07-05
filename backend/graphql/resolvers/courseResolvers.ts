@@ -109,6 +109,12 @@ const courseResolvers = {
 
       return courseService.getCourses(attributes);
     },
+    moduleImage: async (
+      _parent: undefined,
+      { fileName }: { fileName: string },
+    ): Promise<string> => {
+      return courseService.getModuleImage(fileName);
+    },
   },
   Mutation: {
     createCourse: async (

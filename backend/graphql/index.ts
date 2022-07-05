@@ -57,6 +57,7 @@ const graphQLMiddlewares = {
   Query: {
     course: authorizedByAllRoles(),
     courses: authorizedByAllRoles(),
+    moduleImage: authorizedByAllRoles(),
     entity: authorizedByAllRoles(),
     entities: authorizedByAllRoles(),
     userById: authorizedByAdmin(),

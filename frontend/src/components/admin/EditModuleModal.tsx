@@ -1,6 +1,6 @@
 import { Box, Flex, VStack, Text } from "@chakra-ui/react";
-import React, { useState } from "react";
-import { useMutation } from "@apollo/client";
+import React, { useEffect, useState } from "react";
+import { useMutation, useQuery } from "@apollo/client";
 import { TextInput } from "../common/TextInput";
 import { Modal } from "../common/Modal";
 import { SwitchInput } from "../common/SwitchInput";
@@ -16,7 +16,10 @@ import {
   UPDATE_COURSE,
   UPLOAD_IMAGE,
 } from "../../APIClients/mutations/CourseMutations";
-import { COURSES } from "../../APIClients/queries/CourseQueries";
+import {
+  COURSES,
+  GET_MODULE_IMAGE,
+} from "../../APIClients/queries/CourseQueries";
 import { ReactComponent as ImageIcon } from "../../assets/image_white_outline.svg";
 
 export interface EditModuleModalProps {
@@ -87,6 +90,16 @@ const EditModuleModal = ({
       inputFile.current.click();
     }
   };
+
+  if (module?.fileName) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useQuery(GET_MODULE_IMAGE, {
+      variables: { fileName: module.fileName },
+      onCompleted: (data) => {
+        setPreviewImage(data.moduleImage);
+      },
+    });
+  }
 
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
