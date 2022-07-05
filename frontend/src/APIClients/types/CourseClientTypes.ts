@@ -17,7 +17,7 @@ export interface ModuleResponse {
   previewImage: string | null;
   published: boolean;
   lessons: string[] | null;
-  fileName?: string;
+  fileName: string;
 }
 
 export interface CourseRequest {
@@ -42,6 +42,7 @@ export interface CourseResponse {
 export interface ImageUploadRequest {
   file: File;
 }
-export interface ImageUploadResponse {
-  fileName: string;
-}
+export type ImageUploadResponse = {
+  previewImage: string;
+  filePath: string;
+};

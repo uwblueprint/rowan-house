@@ -1,7 +1,6 @@
 import { Box, Flex, VStack, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
-
 import { TextInput } from "../common/TextInput";
 import { Modal } from "../common/Modal";
 import { SwitchInput } from "../common/SwitchInput";
@@ -12,7 +11,6 @@ import {
   CourseResponse,
   ModuleResponse,
   ModuleRequest,
-  ImageUploadResponse,
 } from "../../APIClients/types/CourseClientTypes";
 import {
   UPDATE_COURSE,
@@ -40,13 +38,12 @@ const EditModuleModal = ({
   const [isPublished, setVisibility] = useState(module?.published ?? false);
   const [description, setDescription] = useState(module?.description ?? "");
   const [previewImage, setPreviewImage] = useState<string | undefined>();
+  const [imageFile, setImageFile] = useState<string | undefined>();
   const [updateCourse] = useMutation<{ updateCourse: CourseResponse }>(
     UPDATE_COURSE,
     refetchQueries,
   );
-  const [uploadImage] = useMutation<{ uploadImage: ImageUploadResponse }>(
-    UPLOAD_IMAGE,
-  );
+  const [uploadImage] = useMutation(UPLOAD_IMAGE);
 
   const [isHover, setIsHover] = useState<boolean>();
 
@@ -57,7 +54,8 @@ const EditModuleModal = ({
         title,
         description,
         published: isPublished,
-        fileName: previewImage,
+        previewImage,
+        fileName: imageFile,
       };
 
       const [id, course] = formatCourseRequest(newModule);
@@ -76,7 +74,9 @@ const EditModuleModal = ({
         const imageUploadResult = await uploadImage({
           variables: { file: e.target.files[0] },
         });
-        setPreviewImage(imageUploadResult.data?.uploadImage.fileName);
+        const result = imageUploadResult.data.uploadModuleImage ?? null;
+        setImageFile(result?.filePath);
+        setPreviewImage(result?.previewImage ?? undefined);
       }
     }
   };

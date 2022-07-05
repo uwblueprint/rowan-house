@@ -11,6 +11,7 @@ import {
   UpdateCourseRequestDTO,
   CourseResponseDTO,
   ICourseService,
+  UploadModuleImage,
 } from "../../services/interfaces/ICourseService";
 import { getAccessToken } from "../../middlewares/auth";
 import IAuthService from "../../services/interfaces/authService";
@@ -133,7 +134,7 @@ const courseResolvers = {
     uploadModuleImage: async (
       _req: undefined,
       { file }: { file: Promise<FileUpload> },
-    ): Promise<string> => {
+    ): Promise<UploadModuleImage> => {
       let filePath = "";
       let fileContentType = "";
       if (file) {
@@ -146,7 +147,7 @@ const courseResolvers = {
         }
         await writeFile(createReadStream(), filePath);
       }
-      const fileName = await courseService.uploadModuleImage(
+      const uploadedModuleImage = await courseService.uploadModuleImage(
         filePath,
         fileContentType,
       );
@@ -154,7 +155,7 @@ const courseResolvers = {
       if (filePath) {
         fs.unlinkSync(filePath);
       }
-      return fileName;
+      return uploadedModuleImage;
     },
   },
 };
