@@ -15,11 +15,6 @@ import createContentBlockRenderers, {
 
 import EditorContext from "../../../contexts/ModuleEditorContext";
 
-enum ModalType {
-  EDIT = "edit",
-  DELETE = "delete",
-}
-
 /* eslint-disable react/jsx-props-no-spreading */
 
 const [CONTENT_BLOCKS, EDIT_MODALS] = createContentBlockRenderers({
@@ -47,26 +42,28 @@ const EditableContentBlock = ({
   index: number;
 }): React.ReactElement => {
   const [isHovered, setIsHovered] = useState(false);
-  const [modalType, setModalType] = useState(ModalType.EDIT);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isEditModalOpen,
+    onOpen: onEditModalOpen,
+    onClose: onEditModalClose,
+  } = useDisclosure();
+  const {
+    isOpen: isDeleteModalOpen,
+    onOpen: onDeleteModalOpen,
+    onClose: onDeleteModalClose,
+  } = useDisclosure();
   const context = useContext(EditorContext);
 
   if (!context) return <></>;
   const { dispatch } = context;
 
   const deleteContentBlock = () => {
-    // const { id } = block;
     dispatch({
       type: "delete-block",
       value: index,
     });
 
-    onClose();
-  };
-
-  const openModal = (modalConfig: ModalType) => {
-    setModalType(modalConfig);
-    onOpen();
+    onDeleteModalClose();
   };
 
   return (
@@ -90,23 +87,24 @@ const EditableContentBlock = ({
             {CONTENT_BLOCKS.render({ block })}
             <EditContentOptionsMenu
               isVisible={isHovered}
-              onEditClick={() => openModal(ModalType.EDIT)}
+              onEditClick={onEditModalOpen}
               onCopyClick={() => {}}
-              onDeleteClick={() => openModal(ModalType.DELETE)}
+              onDeleteClick={onDeleteModalOpen}
             />
           </Flex>
           <Divider opacity={isHovered ? 1 : 0} />
-          {modalType === ModalType.EDIT &&
-            EDIT_MODALS.render({ isOpen, onClose, block, index })}
-          {/* TODO: only allow text changes for text blocks */}
-          {modalType === ModalType.DELETE && (
-            <DeleteModal
-              name="Content Block"
-              isOpen={isOpen}
-              onConfirm={deleteContentBlock}
-              onCancel={onClose}
-            />
-          )}
+          {EDIT_MODALS.render({
+            isOpen: isEditModalOpen,
+            onClose: onEditModalClose,
+            block,
+            index,
+          })}
+          <DeleteModal
+            name="Content Block"
+            isOpen={isDeleteModalOpen}
+            onConfirm={deleteContentBlock}
+            onCancel={onDeleteModalClose}
+          />
         </VStack>
       )}
     </Draggable>
