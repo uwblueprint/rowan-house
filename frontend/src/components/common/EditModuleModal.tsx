@@ -1,10 +1,10 @@
 import { Box, Flex, VStack, Text } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
-import { TextInput } from "../common/TextInput";
-import { Modal } from "../common/Modal";
-import { SwitchInput } from "../common/SwitchInput";
-import { TextArea } from "../common/TextArea";
+import { TextInput } from "./TextInput";
+import { Modal } from "./Modal";
+import { SwitchInput } from "./SwitchInput";
+import { TextArea } from "./TextArea";
 import { DEFAULT_IMAGE } from "../../constants/DummyData";
 import {
   CourseRequest,
@@ -18,6 +18,7 @@ import {
 } from "../../APIClients/mutations/CourseMutations";
 import {
   COURSES,
+  GET_COURSE,
   GET_MODULE_IMAGE,
 } from "../../APIClients/queries/CourseQueries";
 import { ReactComponent as ImageIcon } from "../../assets/image_white_outline.svg";
@@ -28,6 +29,8 @@ export interface EditModuleModalProps {
   formatCourseRequest: (module: ModuleRequest) => [string, CourseRequest];
   module?: ModuleResponse;
 }
+
+const MAX_TITLE_CHARACTERS = 50; // maximum # of characters in the title
 
 const refetchQueries = { refetchQueries: [{ query: COURSES }] };
 
@@ -40,9 +43,12 @@ const EditModuleModal = ({
   const [title, setTitle] = useState(module?.title ?? "");
   const [isPublished, setVisibility] = useState(module?.published ?? false);
   const [description, setDescription] = useState(module?.description ?? "");
+  const [invalid, setInvalid] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [previewImage, setPreviewImage] = useState<string | undefined>();
   const [imageFile, setImageFile] = useState<string | undefined>();
-  const [updateCourse] = useMutation<{ updateCourse: CourseResponse }>(
+
+  const [updateCourse] = useMutation<CourseResponse>(
     UPDATE_COURSE,
     refetchQueries,
   );
@@ -51,6 +57,17 @@ const EditModuleModal = ({
   const [isHover, setIsHover] = useState<boolean>();
 
   const onUpdateModule = async () => {
+    if (!title || title.length > MAX_TITLE_CHARACTERS) {
+      setInvalid(true);
+      // title is mandatory field, do not submit if empty or exceed max char
+      setErrorMessage(
+        !title
+          ? "This field is required"
+          : `Exceed max length of ${MAX_TITLE_CHARACTERS} characters`,
+      );
+      return;
+    }
+
     if (previewImage) {
       const newModule = {
         ...module,
@@ -62,7 +79,14 @@ const EditModuleModal = ({
       };
 
       const [id, course] = formatCourseRequest(newModule);
-      updateCourse({ variables: { id, course } });
+      updateCourse({
+        variables: { id, course },
+        refetchQueries: [
+          { query: COURSES },
+          { query: GET_COURSE, variables: { id } },
+        ],
+      });
+      setInvalid(false);
       onClose();
     }
   };
@@ -165,13 +189,15 @@ const EditModuleModal = ({
             label="Module Name:"
             defaultValue={title}
             onChange={setTitle}
+            isInvalid={invalid}
             isRequired
+            helperText={`${title.length}/${MAX_TITLE_CHARACTERS} characters`}
+            errorMessage={errorMessage}
           />
           <TextArea
             label="Module Description:"
             defaultValue={description}
             onChange={setDescription}
-            isRequired
           />
         </VStack>
       </Flex>

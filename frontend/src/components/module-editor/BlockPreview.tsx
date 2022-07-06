@@ -1,7 +1,7 @@
 import React from "react";
 import { Box } from "@chakra-ui/react";
 import { Draggable, DraggableProvided } from "react-beautiful-dnd";
-import { ContentTypeEnum } from "../../types/ModuleEditorTypes";
+import { ContentTypeEnum } from "../../types/ContentBlockTypes";
 import { ReactComponent as ImageIcon } from "../../assets/image.svg";
 import { ReactComponent as ColumnIcon } from "../../assets/column.svg";
 import { ReactComponent as HeadingIcon } from "../../assets/heading.svg";

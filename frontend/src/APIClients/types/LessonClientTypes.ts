@@ -1,4 +1,12 @@
-export type ContentType = "text" | "image" | "video";
+export type ContentType =
+  | "column"
+  | "heading"
+  | "text"
+  | "link"
+  | "button"
+  | "image"
+  | "video"
+  | "audio";
 export interface ContentBlockDTO {
   type: ContentType;
   content: Record<string, unknown>;
