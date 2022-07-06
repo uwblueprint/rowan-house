@@ -89,10 +89,20 @@ const EditModuleModal = ({
   const [uploadImage] = useMutation(UPLOAD_IMAGE);
 
   const [isHover, setIsHover] = useState<boolean>();
+<<<<<<< HEAD
 
 <<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
   const onUpdateModule = () => {
 <<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
+=======
+  const resetModal = () => {
+    setDescription("");
+    setTitle("");
+    setPreviewImage(undefined);
+    setImageFile(undefined);
+  };
+  const onUpdateModule = async () => {
+>>>>>>> f1258e9 (display previewimage on module editor)
     if (!title || title.length > MAX_TITLE_CHARACTERS) {
       setInvalid(true);
       // title is mandatory field, do not submit if empty or exceed max char
@@ -142,7 +152,19 @@ const EditModuleModal = ({
       };
 
       const [id, course] = formatCourseRequest(newModule);
+<<<<<<< HEAD
       updateCourse({ variables: { id, course } });
+=======
+      updateCourse({
+        variables: { id, course },
+        refetchQueries: [
+          { query: COURSES },
+          { query: GET_COURSE, variables: { id } },
+        ],
+      });
+      setInvalid(false);
+      resetModal();
+>>>>>>> f1258e9 (display previewimage on module editor)
       onClose();
     }
 >>>>>>> 0964cb0 (create separate upload module image mutation):frontend/src/components/admin/EditModuleModal.tsx
