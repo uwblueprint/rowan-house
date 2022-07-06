@@ -19,11 +19,22 @@ const useLogout = (): (() => Promise<void>) => {
 
   const tryLogout = async () => {
     try {
-      await authAPIClient.logout(String(authenticatedUser?.id), logout);
-      await tryLogout();
+      const maxTries = 3;
+      for (let tries = 0; tries < maxTries; tries += 1) {
+        // Await-in-loop is fine here since these must run sequentially.
+        // eslint-disable-next-line no-await-in-loop
+        const logoutSucceeded = await authAPIClient.logout(
+          String(authenticatedUser?.id),
+          logout,
+        );
+        if (logoutSucceeded) return;
+      }
+      // eslint-disable-next-line no-console
+      console.error(`Failed to log out after ${maxTries} tries, giving up...`);
     } catch (e) {
       // eslint-disable-next-line no-console
       console.warn(`Error when logging out: ${e}`);
+    } finally {
       setAuthenticatedUser(null);
       history.push("/");
     }
