@@ -97,6 +97,7 @@ const ModulePreview = ({
         <Image
           src={previewImage ?? DEFAULT_IMAGE}
           alt="module-preview"
+          objectFit="cover"
           height="160px"
           width="240px"
           borderTopRadius="6px"
