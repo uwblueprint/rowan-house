@@ -55,7 +55,12 @@ const EditModuleModal = ({
   const [uploadImage] = useMutation(UPLOAD_IMAGE);
 
   const [isHover, setIsHover] = useState<boolean>();
-
+  const resetModal = () => {
+    setDescription("");
+    setTitle("");
+    setPreviewImage(undefined);
+    setImageFile(undefined);
+  };
   const onUpdateModule = async () => {
     if (!title || title.length > MAX_TITLE_CHARACTERS) {
       setInvalid(true);
@@ -87,6 +92,7 @@ const EditModuleModal = ({
         ],
       });
       setInvalid(false);
+      resetModal();
       onClose();
     }
   };
