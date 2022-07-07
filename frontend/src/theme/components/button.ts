@@ -120,6 +120,11 @@ const Button = {
       borderRadius: "md",
       fontSize: "xs",
       height: "32px",
+      _loading: {
+        _hover: {
+          bg: "white",
+        },
+      },
     },
     transparent: {
       bg: "transparent",

@@ -16,6 +16,7 @@ import PrivateRoute from "./components/auth/PrivateRoute";
 import CreatePage from "./components/pages/CreatePage";
 import Default from "./components/pages/Default";
 import DisplayPage from "./components/pages/DisplayPage";
+import Logout from "./components/pages/Logout";
 import NotFound from "./components/pages/NotFound";
 import UpdatePage from "./components/pages/UpdatePage";
 import ModuleEditor from "./components/pages/ModuleEditor";
@@ -121,6 +122,11 @@ const App = (): React.ReactElement => {
                     exact
                     path={`${Routes.VERIFY_EMAIL_PAGE}`}
                     component={VerifyEmail}
+                  />
+                  <Route
+                    exact
+                    path={`${Routes.LOGOUT_PAGE}`}
+                    component={Logout}
                   />
                   <Route exact path="*" component={NotFound} />
                 </Switch>
