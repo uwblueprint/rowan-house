@@ -1,9 +1,10 @@
 import { Box, Divider, Flex, useDisclosure, VStack } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 
 import { ContentBlockState } from "../../../types/ContentBlockTypes";
 import { TextBlock, ImageBlock } from "../../common/content";
+import DeleteModal from "../../common/DeleteModal";
 import EditContentOptionsMenu from "../EditContentOptionsMenu";
 
 import { ReactComponent as DragHandleIconSvg } from "../../../assets/DragHandle.svg";
@@ -11,6 +12,8 @@ import { EditImageModal, EditTextModal } from "./modals";
 import createContentBlockRenderers, {
   EmptyConfigEntry as Empty,
 } from "../../common/content/ContentBlockRenderer";
+
+import EditorContext from "../../../contexts/ModuleEditorContext";
 
 /* eslint-disable react/jsx-props-no-spreading */
 
@@ -39,7 +42,29 @@ const EditableContentBlock = ({
   index: number;
 }): React.ReactElement => {
   const [isHovered, setIsHovered] = useState(false);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isEditModalOpen,
+    onOpen: onEditModalOpen,
+    onClose: onEditModalClose,
+  } = useDisclosure();
+  const {
+    isOpen: isDeleteModalOpen,
+    onOpen: onDeleteModalOpen,
+    onClose: onDeleteModalClose,
+  } = useDisclosure();
+  const context = useContext(EditorContext);
+
+  if (!context) return <></>;
+  const { dispatch } = context;
+
+  const deleteContentBlock = () => {
+    dispatch({
+      type: "delete-block",
+      value: index,
+    });
+
+    onDeleteModalClose();
+  };
 
   return (
     <Draggable key={block.id} draggableId={block.id} index={index}>
@@ -62,13 +87,24 @@ const EditableContentBlock = ({
             {CONTENT_BLOCKS.render({ block })}
             <EditContentOptionsMenu
               isVisible={isHovered}
-              onEditClick={onOpen}
+              onEditClick={onEditModalOpen}
               onCopyClick={() => {}}
-              onDeleteClick={() => {}}
+              onDeleteClick={onDeleteModalOpen}
             />
           </Flex>
           <Divider opacity={isHovered ? 1 : 0} />
-          {EDIT_MODALS.render({ isOpen, onClose, block, index })}
+          {EDIT_MODALS.render({
+            isOpen: isEditModalOpen,
+            onClose: onEditModalClose,
+            block,
+            index,
+          })}
+          <DeleteModal
+            name="Content Block"
+            isOpen={isDeleteModalOpen}
+            onConfirm={deleteContentBlock}
+            onCancel={onDeleteModalClose}
+          />
         </VStack>
       )}
     </Draggable>
