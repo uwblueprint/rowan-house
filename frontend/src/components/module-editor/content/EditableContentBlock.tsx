@@ -15,8 +15,6 @@ import createContentBlockRenderers, {
 
 import EditorContext from "../../../contexts/ModuleEditorContext";
 
-/* eslint-disable react/jsx-props-no-spreading */
-
 const [CONTENT_BLOCKS, EDIT_MODALS] = createContentBlockRenderers({
   column: Empty,
   heading: Empty,

@@ -64,7 +64,6 @@ const EditCourseModal = ({
   };
 
   return (
-    // eslint-disable-next-line react/jsx-props-no-spreading
     <Modal
       size="lg"
       header="Edit Course"

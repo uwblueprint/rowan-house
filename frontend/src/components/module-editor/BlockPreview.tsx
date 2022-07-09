@@ -11,8 +11,6 @@ import { ReactComponent as ButtonIcon } from "../../assets/button.svg";
 import { ReactComponent as VideoIcon } from "../../assets/video.svg";
 import { ReactComponent as AudioIcon } from "../../assets/audio.svg";
 
-/* eslint-disable react/jsx-props-no-spreading */
-
 const BlockStyle = ({
   content,
   className,

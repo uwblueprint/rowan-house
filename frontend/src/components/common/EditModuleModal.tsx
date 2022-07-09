@@ -68,7 +68,6 @@ const EditModuleModal = ({
   };
 
   return (
-    // eslint-disable-next-line react/jsx-props-no-spreading
     <Modal
       size="xl"
       header="Edit Module"
