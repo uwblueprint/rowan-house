@@ -13,6 +13,7 @@ import defaultTheme from "./theme";
 import Login from "./components/auth/Login";
 import Signup from "./components/auth/Signup";
 import PrivateRoute from "./components/auth/PrivateRoute";
+import CourseOverview from "./components/pages/CourseOverview";
 import CreatePage from "./components/pages/CreatePage";
 import Default from "./components/pages/Default";
 import DisplayPage from "./components/pages/DisplayPage";
@@ -69,6 +70,11 @@ const App = (): React.ReactElement => {
                   <Route exact path={Routes.LOGIN_PAGE} component={Login} />
                   <Route exact path={Routes.SIGNUP_PAGE} component={Signup} />
                   <Route exact path={Routes.HOME_PAGE} component={Default} />
+                  <Route
+                    exact
+                    path={`${Routes.COURSE_OVERVIEW_BASE_ROUTE}/:courseID`}
+                    component={CourseOverview}
+                  />
                   <PrivateRoute
                     exact
                     path={Routes.CREATE_ENTITY_PAGE}

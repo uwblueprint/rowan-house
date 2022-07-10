@@ -11,6 +11,7 @@ import {
 import { ReactComponent as DocumentIcon } from "../../../assets/document.svg";
 import { DEFAULT_IMAGE } from "../../../constants/DummyData";
 import RouterLink from "../../common/RouterLink";
+import { COURSE_OVERVIEW_BASE_ROUTE } from "../../../constants/Routes";
 import { makeDeferredCallback } from "../../../utils/CallbackUtils";
 
 const CourseCard = (): React.ReactElement => {
@@ -23,6 +24,7 @@ const CourseCard = (): React.ReactElement => {
 
   return (
     <RouterLink
+      to={`${COURSE_OVERVIEW_BASE_ROUTE}/123`}
       onFocus={onFocusChange(true)}
       onBlur={onFocusChange(false)}
       onMouseEnter={onHoverChange(true)}

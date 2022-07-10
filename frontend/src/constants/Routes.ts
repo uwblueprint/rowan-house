@@ -24,4 +24,6 @@ export const MANAGE_USERS_PAGE = "/admin/users";
 
 export const ADMIN_MODULE_EDITOR_BASE_ROUTE = "/admin/edit-module";
 
+export const COURSE_OVERVIEW_BASE_ROUTE = "/course";
+
 export const VERIFY_EMAIL_PAGE = "/verify";
