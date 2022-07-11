@@ -3,7 +3,7 @@ import { Flex } from "@chakra-ui/react";
 import { Droppable } from "react-beautiful-dnd";
 
 import EditorContext from "../../contexts/ModuleEditorContext";
-import EditableContentBlock from "./content/EditableContentBlock";
+import ContentBlock from "./content/ContentBlock";
 
 const LessonViewer = (): React.ReactElement => {
   const context = useContext(EditorContext);
@@ -20,7 +20,7 @@ const LessonViewer = (): React.ReactElement => {
         {(provided) => (
           <Flex ref={provided.innerRef} direction="column" flex="1">
             {lesson?.content.map((block, index) => (
-              <EditableContentBlock block={block} key={index} index={index} />
+              <ContentBlock block={block} key={index} index={index} />
             ))}
             {provided.placeholder}
           </Flex>

@@ -32,7 +32,7 @@ const [CONTENT_BLOCKS, EDIT_MODALS] = createContentBlockRenderers({
   audio: Empty,
 });
 
-const EditableContentBlock = ({
+const ContentBlock = ({
   block,
   index,
 }: {
@@ -109,4 +109,4 @@ const EditableContentBlock = ({
   );
 };
 
-export default EditableContentBlock;
+export default ContentBlock;

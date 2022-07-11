@@ -14,8 +14,8 @@ import {
 } from "../../types/ModuleEditorTypes";
 import EditorContextReducer from "../../reducers/ModuleEditorContextReducer";
 import EditorContext from "../../contexts/ModuleEditorContext";
-import SideBar from "../module-editor/SideBar";
-import LessonViewer from "../module-editor/LessonViewer";
+import SideBar from "../module-viewer/SideBar";
+import LessonViewer from "../module-viewer/LessonViewer";
 import { LessonResponse } from "../../APIClients/types/LessonClientTypes";
 import { formatLessonResponse } from "../../utils/lessonUtils";
 
