@@ -57,7 +57,8 @@ const updateLesson = (
   lesson: LessonType,
 ): EditorStateType => {
   const id = state.focusedLesson;
-  if (!id || Object.keys(state.lessons).includes(id)) return state;
+
+  if (!id || !Object.keys(state.lessons).includes(id)) return state;
 
   const newState = { ...state };
   newState.lessons[id] = { ...state.lessons[id], ...lesson };
