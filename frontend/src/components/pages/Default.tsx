@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import * as Routes from "../../constants/Routes";
 import SampleContext from "../../contexts/SampleContext";
 
-import Logout from "../auth/Logout";
+import LogoutButton from "../auth/LogoutButton";
 import RefreshCredentials from "../auth/RefreshCredentials";
 import ResetPassword from "../auth/ResetPassword";
 
@@ -42,7 +42,7 @@ const Default = (): React.ReactElement => {
     <div style={{ textAlign: "center", paddingTop: "20px" }}>
       <h1>Default Page</h1>
       <div className="btn-group" style={{ paddingRight: "10px" }}>
-        <Logout />
+        <LogoutButton />
         <RefreshCredentials />
         <ResetPassword />
         <Button text="Create Entity" path={Routes.CREATE_ENTITY_PAGE} />

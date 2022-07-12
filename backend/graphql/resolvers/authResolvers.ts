@@ -41,7 +41,7 @@ const authResolvers = {
       { res }: { res: Response },
     ): Promise<Omit<AuthDTO, "refreshToken">> => {
       const role: Role =
-        process.env.NODE_ENV === "production" ? "User" : "Admin";
+        process.env.NODE_ENV === "production" ? "Learner" : "Admin";
       await userService.createUser({ ...user, role });
       const authDTO = await authService.generateToken(
         user.email,

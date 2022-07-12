@@ -52,7 +52,7 @@ const executableSchema = makeExecutableSchema({
 });
 
 const authorizedByAllRoles = () =>
-  isAuthorizedByRole(new Set(["User", "Admin", "Staff"]));
+  isAuthorizedByRole(new Set(["Learner", "Admin", "Staff"]));
 const authorizedByAdmin = () => isAuthorizedByRole(new Set(["Admin"]));
 const authorizeRoleChange = (id: string) => {
   return and(authorizedByAdmin(), idNotSameAsActiveUser(id));

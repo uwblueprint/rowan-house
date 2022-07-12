@@ -96,7 +96,7 @@ class UserService implements IUserService {
 
     try {
       firebaseUser = await firebaseAdmin.auth().getUserByEmail(email);
-      user = await MgUser.findOne({ authId: firebaseUser.uid });
+      user = await getMongoUserByAuthId(firebaseUser.uid);
 
       if (!user) {
         throw new Error(`userId with authId ${firebaseUser.uid} not found.`);

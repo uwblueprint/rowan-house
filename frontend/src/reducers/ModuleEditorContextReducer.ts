@@ -212,14 +212,12 @@ const deleteLessonContentBlock = (
   index: number,
 ): EditorStateType => {
   const id = state.focusedLesson;
-  if (!id || Object.keys(state.lessons).includes(id)) return state;
-
+  if (!id || !Object.keys(state.lessons).includes(id)) return state;
   console.assert(index >= 0, "Content block index must be positive");
   console.assert(
     index < state.lessons[id].content.length,
     "Content block index exceeds content length",
   );
-
   const newState = { ...state };
   newState.lessons[id].content.splice(index, 1);
   // Update to let the state know things have changed
