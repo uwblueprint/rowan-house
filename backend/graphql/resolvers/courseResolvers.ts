@@ -27,7 +27,7 @@ const getCourseVisibilityAttributes = (
   role: Role,
 ): CourseVisibilityAttributes => {
   switch (role) {
-    case "User":
+    case "Learner":
       return {
         includePrivateCourses: false,
         includeOnlyPublishedModules: true,
