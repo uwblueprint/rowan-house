@@ -15,6 +15,7 @@ export const CREATE_COURSE = gql`
         previewImage
         published
         lessons
+        fileName
       }
       private
     }
@@ -36,6 +37,7 @@ export const UPDATE_COURSE = gql`
         previewImage
         published
         lessons
+        fileName
       }
       private
     }
@@ -45,5 +47,14 @@ export const UPDATE_COURSE = gql`
 export const DELETE_COURSE = gql`
   mutation DeleteCourse($id: ID!) {
     deleteCourse(id: $id)
+  }
+`;
+
+export const UPLOAD_IMAGE = gql`
+  mutation UploadImage($file: Upload) {
+    uploadModuleImage(file: $file) {
+      previewImage
+      filePath
+    }
   }
 `;

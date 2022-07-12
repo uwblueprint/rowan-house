@@ -1,3 +1,4 @@
+import { v4 as uuid } from "uuid";
 import { Types } from "mongoose";
 import { getErrorMessage } from "../../utilities/errorUtils";
 import logger from "../../utilities/logger";
@@ -6,11 +7,13 @@ import {
   UpdateCourseRequestDTO,
   CourseResponseDTO,
   ICourseService,
+  UploadModuleImage,
 } from "../interfaces/ICourseService";
 import MgCourse, {
   Course,
   CourseVisibilityAttributes,
 } from "../../models/course.model";
+import IFileStorageService from "../interfaces/fileStorageService";
 
 const Logger = logger(__filename);
 
@@ -34,6 +37,12 @@ const publishedModulesOnlyQuery = [
 ];
 
 class CourseService implements ICourseService {
+  storageService: IFileStorageService;
+
+  constructor(storageService: IFileStorageService) {
+    this.storageService = storageService;
+  }
+
   /* eslint-disable class-methods-use-this */
   async getCourse(
     id: string,
@@ -118,6 +127,11 @@ class CourseService implements ICourseService {
     }
   }
 
+  async getModuleImage(fileName: string): Promise<string> {
+    const signedUrl = await this.storageService.getFile(fileName, 60);
+    return signedUrl;
+  }
+
   async createCourse(
     course: CreateCourseRequestDTO,
   ): Promise<CourseResponseDTO> {
@@ -185,6 +199,23 @@ class CourseService implements ICourseService {
       );
       throw error;
     }
+  }
+
+  async uploadModuleImage(
+    filePath: string,
+    fileContentType: string,
+  ): Promise<UploadModuleImage> {
+    const fileName = filePath ? uuid() : ""; // is this really necessary idk
+    try {
+      await this.storageService.createFile(fileName, filePath, fileContentType);
+    } catch (error: unknown) {
+      Logger.error(
+        `Failed to upload module image. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
+    const signedUrl = await this.storageService.getFile(fileName, 60);
+    return { previewImage: signedUrl, filePath: fileName };
   }
 }
 

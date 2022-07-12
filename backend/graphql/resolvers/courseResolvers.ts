@@ -1,10 +1,17 @@
 import { AuthenticationError, ExpressContext } from "apollo-server-express";
+import fs from "fs";
+import { FileUpload } from "graphql-upload";
+/* eslint-disable-next-line import/no-extraneous-dependencies */
+import { ReadStream } from "fs-capacitor";
+import multer from "multer";
+import FileStorageService from "../../services/implementations/fileStorageService";
 import CourseService from "../../services/implementations/courseService";
 import {
   CreateCourseRequestDTO,
   UpdateCourseRequestDTO,
   CourseResponseDTO,
   ICourseService,
+  UploadModuleImage,
 } from "../../services/interfaces/ICourseService";
 import { getAccessToken } from "../../middlewares/auth";
 import IAuthService from "../../services/interfaces/authService";
@@ -17,11 +24,30 @@ import IUserService from "../../services/interfaces/userService";
 import { Role } from "../../types";
 import { CourseVisibilityAttributes } from "../../models/course.model";
 import { assertNever } from "../../utilities/errorUtils";
+import {
+  getFileTypeValidationError,
+  validateImageFileType,
+} from "../../middlewares/validators/util";
 
-const courseService: ICourseService = new CourseService();
+const defaultBucket = process.env.FIREBASE_STORAGE_DEFAULT_BUCKET || "";
+const fileStorageService = new FileStorageService(defaultBucket);
+const courseService: ICourseService = new CourseService(fileStorageService);
 const userService: IUserService = new UserService();
 const emailService: IEmailService = new EmailService(nodemailerConfig);
 const authService: IAuthService = new AuthService(userService, emailService);
+
+multer({ dest: "moduleImages/" });
+
+const writeFile = (readStream: ReadStream, filePath: string): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const out = fs.createWriteStream(filePath);
+    readStream.pipe(out);
+    out.on("finish", () => {
+      resolve();
+    });
+    out.on("error", (err: Error) => reject(err));
+  });
+};
 
 const getCourseVisibilityAttributes = (
   role: Role,
@@ -83,6 +109,12 @@ const courseResolvers = {
 
       return courseService.getCourses(attributes);
     },
+    moduleImage: async (
+      _parent: undefined,
+      { fileName }: { fileName: string },
+    ): Promise<string> => {
+      return courseService.getModuleImage(fileName);
+    },
   },
   Mutation: {
     createCourse: async (
@@ -103,6 +135,33 @@ const courseResolvers = {
       { id }: { id: string },
     ): Promise<string> => {
       return courseService.deleteCourse(id);
+    },
+
+    uploadModuleImage: async (
+      _req: undefined,
+      { file }: { file: Promise<FileUpload> },
+    ): Promise<UploadModuleImage> => {
+      let filePath = "";
+      let fileContentType = "";
+      if (file) {
+        const { createReadStream, mimetype, filename } = await file;
+        const uploadDir = "moduleImages";
+        filePath = `${uploadDir}/${filename}`;
+        fileContentType = mimetype;
+        if (!validateImageFileType(fileContentType)) {
+          throw new Error(getFileTypeValidationError(fileContentType));
+        }
+        await writeFile(createReadStream(), filePath);
+      }
+      const uploadedModuleImage = await courseService.uploadModuleImage(
+        filePath,
+        fileContentType,
+      );
+
+      if (filePath) {
+        fs.unlinkSync(filePath);
+      }
+      return uploadedModuleImage;
     },
   },
 };

@@ -62,6 +62,7 @@ const graphQLMiddlewares = {
   Query: {
     course: authorizedByAllRoles(),
     courses: authorizedByAllRoles(),
+    moduleImage: authorizedByAllRoles(),
     entity: authorizedByAllRoles(),
     entities: authorizedByAllRoles(),
     userById: authorizedByAdmin(),
@@ -75,6 +76,7 @@ const graphQLMiddlewares = {
     createCourse: authorizedByAdmin(),
     updateCourse: authorizedByAdmin(),
     deleteCourse: authorizedByAdmin(),
+    uploadModuleImage: authorizedByAdmin(),
     createEntity: authorizedByAllRoles(),
     updateEntity: authorizedByAllRoles(),
     deleteEntity: authorizedByAllRoles(),

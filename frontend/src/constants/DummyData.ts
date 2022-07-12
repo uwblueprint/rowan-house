@@ -43,6 +43,7 @@ export const dummyCourses: Array<CourseResponse> = [
         description: null,
         previewImage: null,
         lessons: ["lesson-hash-1", "lesson-hash-2"],
+        fileName: "hi",
       },
       {
         id: "module-hash-2",
@@ -52,6 +53,7 @@ export const dummyCourses: Array<CourseResponse> = [
         description: null,
         previewImage: null,
         lessons: null,
+        fileName: "hi",
       },
       {
         id: "module-hash-3",
@@ -61,6 +63,7 @@ export const dummyCourses: Array<CourseResponse> = [
         description: null,
         previewImage: null,
         lessons: null,
+        fileName: "hi",
       },
     ],
   },
