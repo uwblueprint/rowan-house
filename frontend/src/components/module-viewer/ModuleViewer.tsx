@@ -111,7 +111,7 @@ const ModuleViewer = ({
       <EditorContext.Provider value={{ state, dispatch }}>
         <Flex h="100vh">
           <DragDropContext onDragEnd={(result) => onDragEnd(dispatch, result)}>
-            {showSideBar ? <SideBar /> : null}
+            {showSideBar ? <SideBar editable={editable} /> : null}
             <IconButton
               aria-label="Show sideBar"
               borderRadius="0"
@@ -125,7 +125,7 @@ const ModuleViewer = ({
             >
               {sideBarIcon}
             </IconButton>
-            <LessonViewer />
+            <LessonViewer editable={editable} />
           </DragDropContext>
         </Flex>
       </EditorContext.Provider>

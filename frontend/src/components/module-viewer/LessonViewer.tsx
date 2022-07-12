@@ -5,7 +5,11 @@ import { Droppable } from "react-beautiful-dnd";
 import EditorContext from "../../contexts/ModuleEditorContext";
 import ContentBlock from "./content/ContentBlock";
 
-const LessonViewer = (): React.ReactElement => {
+const LessonViewer = ({
+  editable,
+}: {
+  editable: boolean;
+}): React.ReactElement => {
   const context = useContext(EditorContext);
   if (!context) return <></>;
 
@@ -16,11 +20,16 @@ const LessonViewer = (): React.ReactElement => {
     const lesson = state.lessons[focusedLesson];
 
     return (
-      <Droppable droppableId="EDITOR">
+      <Droppable droppableId="EDITOR" isDropDisabled={!editable}>
         {(provided) => (
           <Flex ref={provided.innerRef} direction="column" flex="1">
             {lesson?.content.map((block, index) => (
-              <ContentBlock block={block} key={index} index={index} />
+              <ContentBlock
+                editable={editable}
+                block={block}
+                key={index}
+                index={index}
+              />
             ))}
             {provided.placeholder}
           </Flex>

@@ -10,7 +10,11 @@ import { TextInput } from "../common/TextInput";
 
 import LessonItem from "./LessonItem";
 
-const SideBarModuleOverview = (): React.ReactElement => {
+const SideBarModuleOverview = ({
+  editable,
+}: {
+  editable: boolean;
+}): React.ReactElement => {
   const context = useContext(EditorContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [title, setTitle] = useState("");
@@ -56,48 +60,53 @@ const SideBarModuleOverview = (): React.ReactElement => {
   };
 
   return (
-    <VStack>
+    <VStack pt={editable ? "0px" : "30px"}>
       {focusedLesson &&
         orderedLessons.map((lesson, index) => (
           <LessonItem
+            editable={editable}
             text={lesson.title}
             isFocused={state.lessons[focusedLesson] === lesson}
             key={lesson.id}
             setFocus={() => setFocus(index)}
           />
         ))}
-      <Button
-        onClick={onOpen}
-        color="brand.royal"
-        variant="unstyled"
-        leftIcon={<AddIcon />}
-        textAlign="left"
-        pl="35px"
-        minH="55px"
-        w="100%"
-      >
-        New Lesson
-      </Button>
-      <Modal
-        header="Edit lesson title"
-        isOpen={isOpen}
-        onConfirm={() => createLesson(title)}
-        onCancel={() => {
-          resetState();
-          onClose();
-        }}
-      >
-        <TextInput
-          placeholder="New Lesson"
-          onChange={(currTitle) => {
-            setTitle(currTitle);
-            setIsInvalid(false);
-          }}
-          errorMessage={errorMessage}
-          isInvalid={isInvalid}
-          isRequired
-        />
-      </Modal>
+      {editable && (
+        <>
+          <Button
+            onClick={onOpen}
+            color="brand.royal"
+            variant="unstyled"
+            leftIcon={<AddIcon />}
+            textAlign="left"
+            pl="35px"
+            minH="55px"
+            w="100%"
+          >
+            New Lesson
+          </Button>
+          <Modal
+            header="Edit lesson title"
+            isOpen={isOpen}
+            onConfirm={() => createLesson(title)}
+            onCancel={() => {
+              resetState();
+              onClose();
+            }}
+          >
+            <TextInput
+              placeholder="New Lesson"
+              onChange={(currTitle) => {
+                setTitle(currTitle);
+                setIsInvalid(false);
+              }}
+              errorMessage={errorMessage}
+              isInvalid={isInvalid}
+              isRequired
+            />
+          </Modal>
+        </>
+      )}
     </VStack>
   );
 };
