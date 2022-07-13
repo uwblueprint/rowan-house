@@ -1,14 +1,17 @@
-import React, { useContext } from "react";
-import { Flex } from "@chakra-ui/react";
+import React, { useContext, useMemo } from "react";
+import { Button, Flex } from "@chakra-ui/react";
 import { Droppable } from "react-beautiful-dnd";
 
 import EditorContext from "../../contexts/ModuleEditorContext";
 import ContentBlock from "./content/ContentBlock";
+import Banner from "../learner/Banner";
 
 const LessonViewer = ({
   editable,
+  onLessonCompleted,
 }: {
   editable: boolean;
+  onLessonCompleted: (lessonId: string) => void;
 }): React.ReactElement => {
   const context = useContext(EditorContext);
   if (!context) return <></>;
@@ -23,6 +26,7 @@ const LessonViewer = ({
       <Droppable droppableId="EDITOR" isDropDisabled={!editable}>
         {(provided) => (
           <Flex ref={provided.innerRef} direction="column" flex="1">
+            {!editable && <Banner />}
             {lesson?.content.map((block, index) => (
               <ContentBlock
                 editable={editable}
@@ -31,6 +35,13 @@ const LessonViewer = ({
                 index={index}
               />
             ))}
+            {!editable && (
+              <Flex py="22px" justify="center">
+                <Button onClick={() => onLessonCompleted(focusedLesson)}>
+                  Continue
+                </Button>
+              </Flex>
+            )}
             {provided.placeholder}
           </Flex>
         )}

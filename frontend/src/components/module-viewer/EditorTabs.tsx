@@ -4,7 +4,7 @@ import { Box, Tab, Tabs, TabList, TabPanel, TabPanels } from "@chakra-ui/react";
 import ModuleOverview from "./SideBarModuleOverview";
 import ContentKiosk from "./SideBarContentKiosk";
 
-const EditorTabs = () => (
+const EditorTabs = ({ onLessonSelected }: { onLessonSelected: () => void }) => (
   <Tabs variant="unstyled" height="100%" overflowY="hidden">
     <Box
       bg="background.light"
@@ -45,7 +45,7 @@ const EditorTabs = () => (
         overflowY="auto"
         className="tabScroll"
       >
-        <ModuleOverview editable />
+        <ModuleOverview editable onLessonSelected={onLessonSelected} />
       </TabPanel>
       <TabPanel pb="200px" height="100%" overflowY="auto" className="tabScroll">
         <ContentKiosk />

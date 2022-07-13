@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Center, Flex, IconButton, Spinner } from "@chakra-ui/react";
+import { Center, Box, Flex, IconButton, Spinner } from "@chakra-ui/react";
 import { ChevronRightIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import { DropResult, DragDropContext } from "react-beautiful-dnd";
 import { useQuery, useLazyQuery } from "@apollo/client";
@@ -16,8 +16,10 @@ import EditorContextReducer from "../../reducers/ModuleEditorContextReducer";
 import EditorContext from "../../contexts/ModuleEditorContext";
 import SideBar from "./SideBar";
 import LessonViewer from "./LessonViewer";
+import LessonCompleted from "./LessonCompleted";
 import { LessonResponse } from "../../APIClients/types/LessonClientTypes";
 import { formatLessonResponse } from "../../utils/lessonUtils";
+import { useURLSearchFlag } from "../../hooks/useURLSearch";
 
 // Copy drag implementation based on https://github.com/atlassian/react-beautiful-dnd/issues/216#issuecomment-423708497
 const onDragEnd = (
@@ -58,7 +60,12 @@ const ModuleViewer = ({
 }: {
   editable: boolean;
 }): React.ReactElement => {
-  const { courseID, moduleIndex }: ModuleEditorParams = useParams();
+  const {
+    courseID,
+    moduleIndex: moduleIndexString,
+  }: ModuleEditorParams = useParams();
+  const moduleIndex = Number(moduleIndexString);
+  const [completed, setCompleted] = useURLSearchFlag("completed");
 
   const [state, dispatch] = useReducer(EditorContextReducer, null);
   const [showSideBar, setShowSideBar] = useState<boolean>(true);
@@ -90,7 +97,9 @@ const ModuleViewer = ({
         value: {
           course: courseData.course,
           lessons: lessonsObj,
-          focusedLesson: courseData.course.modules[moduleIndex].lessons[0],
+          focusedLesson: completed
+            ? null
+            : courseData.course.modules[moduleIndex].lessons[0],
           hasChanged: {},
         },
       });
@@ -98,7 +107,7 @@ const ModuleViewer = ({
   }, [courseData, moduleIndex, lessonData]);
 
   if (state) {
-    if (state.course.modules[parseInt(moduleIndex, 10)] === undefined) {
+    if (state.course.modules[moduleIndex] === undefined) {
       return <p>Module not found!</p>;
     }
 
@@ -111,21 +120,59 @@ const ModuleViewer = ({
       <EditorContext.Provider value={{ state, dispatch }}>
         <Flex h="100vh">
           <DragDropContext onDragEnd={(result) => onDragEnd(dispatch, result)}>
-            {showSideBar ? <SideBar editable={editable} /> : null}
-            <IconButton
-              aria-label="Show sideBar"
-              borderRadius="0"
-              bg="white"
-              color="black"
-              alignSelf="center"
-              size="s"
-              w="20px"
-              height="45px"
-              onClick={() => setShowSideBar(!showSideBar)}
-            >
-              {sideBarIcon}
-            </IconButton>
-            <LessonViewer editable={editable} />
+            <Box position="relative">
+              {showSideBar ? (
+                <SideBar
+                  editable={editable}
+                  onLessonSelected={() => setCompleted(false)}
+                />
+              ) : null}
+              <Flex
+                height="100%"
+                position="absolute"
+                right="-20px"
+                zIndex="1000"
+                align="center"
+                justify="center"
+              >
+                <IconButton
+                  aria-label="Show sideBar"
+                  borderRadius="0"
+                  bg="white"
+                  color="black"
+                  size="s"
+                  w="20px"
+                  h="45px"
+                  onClick={() => setShowSideBar(!showSideBar)}
+                >
+                  {sideBarIcon}
+                </IconButton>
+              </Flex>
+            </Box>
+            <Box width="100%">
+              {completed && !editable ? (
+                <LessonCompleted />
+              ) : (
+                <LessonViewer
+                  editable={editable}
+                  onLessonCompleted={(lessonId) => {
+                    // TODO save progress on backend
+
+                    const { lessons } = state.course.modules[moduleIndex];
+                    const lessonIndex = lessons.indexOf(lessonId);
+                    if (lessonIndex === lessons.length - 1) {
+                      setCompleted(true);
+                      dispatch({ type: "set-focus", value: null });
+                    } else if (lessonIndex !== -1) {
+                      dispatch({
+                        type: "set-focus",
+                        value: lessons[lessonIndex + 1],
+                      });
+                    }
+                  }}
+                />
+              )}
+            </Box>
           </DragDropContext>
         </Flex>
       </EditorContext.Provider>

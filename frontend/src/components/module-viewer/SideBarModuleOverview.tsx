@@ -12,8 +12,10 @@ import LessonItem from "./LessonItem";
 
 const SideBarModuleOverview = ({
   editable,
+  onLessonSelected,
 }: {
   editable: boolean;
+  onLessonSelected: () => void;
 }): React.ReactElement => {
   const context = useContext(EditorContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -61,16 +63,20 @@ const SideBarModuleOverview = ({
 
   return (
     <VStack pt={editable ? "0px" : "30px"}>
-      {focusedLesson &&
-        orderedLessons.map((lesson, index) => (
-          <LessonItem
-            editable={editable}
-            text={lesson.title}
-            isFocused={state.lessons[focusedLesson] === lesson}
-            key={lesson.id}
-            setFocus={() => setFocus(index)}
-          />
-        ))}
+      {orderedLessons.map((lesson, index) => (
+        <LessonItem
+          editable={editable}
+          text={lesson.title}
+          isFocused={
+            focusedLesson !== null && state.lessons[focusedLesson] === lesson
+          }
+          key={lesson.id}
+          setFocus={() => {
+            onLessonSelected();
+            setFocus(index);
+          }}
+        />
+      ))}
       {editable && (
         <>
           <Button

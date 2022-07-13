@@ -46,7 +46,13 @@ import ModuleOverview from "./SideBarModuleOverview";
 import RouterLink from "../common/RouterLink";
 import { GET_COURSE } from "../../APIClients/queries/CourseQueries";
 
-const Sidebar = ({ editable }: { editable: boolean }): React.ReactElement => {
+const Sidebar = ({
+  editable,
+  onLessonSelected,
+}: {
+  editable: boolean;
+  onLessonSelected: () => void;
+}): React.ReactElement => {
   const {
     moduleIndex: moduleIndexString,
     courseID,
@@ -95,12 +101,9 @@ const Sidebar = ({ editable }: { editable: boolean }): React.ReactElement => {
     // Copy other modules by reference due to the immutability of the data
     if (newModule) {
       // If module index isn't valid, append the new module
-      if (
-        Number(moduleIndex) >= 0 &&
-        Number(moduleIndex) < state.course.modules.length
-      ) {
+      if (moduleIndex >= 0 && moduleIndex < state.course.modules.length) {
         newModules = state.course.modules.map((oldModule, index) =>
-          Number(moduleIndex) === index ? newModule : oldModule,
+          moduleIndex === index ? newModule : oldModule,
         );
       } else {
         newModules = [...state.course.modules, newModule];
@@ -108,7 +111,7 @@ const Sidebar = ({ editable }: { editable: boolean }): React.ReactElement => {
       // If no new module has been passed, remove the module
     } else {
       newModules = state.course.modules.filter(
-        (_, index) => Number(moduleIndex) !== index,
+        (_, index) => moduleIndex !== index,
       );
     }
 
@@ -159,14 +162,12 @@ const Sidebar = ({ editable }: { editable: boolean }): React.ReactElement => {
     state.hasChanged = {};
   };
 
-  const module = courseData?.course?.modules?.[
-    Number(moduleIndex)
-  ] as ModuleResponse;
+  const module = courseData?.course?.modules?.[moduleIndex] as ModuleResponse;
 
   return (
     <>
       {module && (
-        <Box w="20%" minW="300px">
+        <Box w="20vw" minW="300px">
           <Flex
             position="fixed"
             w="inherit"
@@ -214,7 +215,7 @@ const Sidebar = ({ editable }: { editable: boolean }): React.ReactElement => {
             </Box>
             {editable ? (
               <>
-                <EditorTabs />
+                <EditorTabs onLessonSelected={onLessonSelected} />
                 <Spacer />
                 {Object.values(state.hasChanged).length ? (
                   <Button
@@ -235,7 +236,10 @@ const Sidebar = ({ editable }: { editable: boolean }): React.ReactElement => {
                 )}
               </>
             ) : (
-              <ModuleOverview editable={editable} />
+              <ModuleOverview
+                editable={editable}
+                onLessonSelected={onLessonSelected}
+              />
             )}
           </Flex>
           <EditModuleModal
