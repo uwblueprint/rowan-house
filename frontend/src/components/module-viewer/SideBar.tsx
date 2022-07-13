@@ -9,6 +9,7 @@ import {
   Spacer,
   Text,
   useDisclosure,
+  VStack,
 } from "@chakra-ui/react";
 import { ChevronLeftIcon, EditIcon } from "@chakra-ui/icons";
 import { useMutation, useQuery } from "@apollo/client";
@@ -208,9 +209,14 @@ const Sidebar = ({
                     />
                   )}
                 </HStack>
-                <Text variant="display-sm-sb" color="white">
-                  {module?.title}
-                </Text>
+                <VStack align="start">
+                  <Text variant="display-xs" color="white">
+                    Module {moduleIndex + 1}
+                  </Text>
+                  <Text variant="display-sm-sb" color="white">
+                    {module?.title}
+                  </Text>
+                </VStack>
               </Flex>
             </Box>
             {editable ? (

@@ -22,6 +22,11 @@ const Text = {
       fontSize: "24px",
       lineHeight: "150%",
     },
+    "display-xs": {
+      fontWeight: "normal",
+      fontSize: "16px",
+      lineHeight: "150%",
+    },
     heading: {
       fontWeight: "semibold",
       fontSize: "20px",
