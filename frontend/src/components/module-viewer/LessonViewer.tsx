@@ -4,7 +4,6 @@ import { Droppable } from "react-beautiful-dnd";
 
 import EditorContext from "../../contexts/ModuleEditorContext";
 import ContentBlock from "./content/ContentBlock";
-import Banner from "../learner/Banner";
 
 const LessonViewer = ({
   editable,
@@ -26,7 +25,6 @@ const LessonViewer = ({
       <Droppable droppableId="EDITOR" isDropDisabled={!editable}>
         {(provided) => (
           <Flex ref={provided.innerRef} direction="column" flex="1">
-            {!editable && <Banner />}
             {lesson?.content.map((block, index) => (
               <ContentBlock
                 editable={editable}

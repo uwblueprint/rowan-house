@@ -13,7 +13,11 @@ const softActionButtonProps = {
   color: "brand.royal",
 };
 
-const Banner = (): React.ReactElement => {
+const Banner = ({
+  asBlock = false,
+}: {
+  asBlock?: boolean;
+}): React.ReactElement => {
   const { authenticatedUser } = useContext(AuthContext);
   const history = useHistory();
 
@@ -28,7 +32,7 @@ const Banner = (): React.ReactElement => {
         boxShadow="0px 2px 16px rgba(0, 0, 0, 0.1)"
         background="white"
         px="40px"
-        position="fixed"
+        position={asBlock ? "static" : "fixed"}
         width="100%"
         zIndex={999}
       >

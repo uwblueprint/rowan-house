@@ -5,7 +5,6 @@ import { Button, Flex, Heading, Text, VStack } from "@chakra-ui/react";
 import { ModuleEditorParams } from "../../types/ModuleEditorTypes";
 import EditorContext from "../../contexts/ModuleEditorContext";
 import { HOME_PAGE } from "../../constants/Routes";
-import Banner from "../learner/Banner";
 
 const LessonCompleted = () => {
   const history = useHistory();
@@ -20,7 +19,6 @@ const LessonCompleted = () => {
 
   return (
     <Flex w="100%" direction="column">
-      <Banner />
       <VStack align="start" px="154px" pt="20px" spacing="20px">
         <Heading as="h1" size="xl" color="brand.royal">
           Congratulations!

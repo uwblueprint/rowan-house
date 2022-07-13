@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Center, Box, Flex, IconButton, Spinner } from "@chakra-ui/react";
 import { ChevronRightIcon, ChevronLeftIcon } from "@chakra-ui/icons";
@@ -17,6 +17,7 @@ import EditorContext from "../../contexts/ModuleEditorContext";
 import SideBar from "./SideBar";
 import LessonViewer from "./LessonViewer";
 import LessonCompleted from "./LessonCompleted";
+import Banner from "../learner/Banner";
 import { LessonResponse } from "../../APIClients/types/LessonClientTypes";
 import { formatLessonResponse } from "../../utils/lessonUtils";
 import { useURLSearchFlag } from "../../hooks/useURLSearch";
@@ -106,6 +107,8 @@ const ModuleViewer = ({
     }
   }, [courseData, moduleIndex, lessonData]);
 
+  const scrollRef = useRef<HTMLDivElement>(null);
+
   if (state) {
     if (state.course.modules[moduleIndex] === undefined) {
       return <p>Module not found!</p>;
@@ -149,33 +152,36 @@ const ModuleViewer = ({
                 </IconButton>
               </Flex>
             </Box>
-            <Box width="100%">
-              {completed && !editable ? (
-                <LessonCompleted />
-              ) : (
-                <LessonViewer
-                  editable={editable}
-                  onLessonCompleted={(lessonId) => {
-                    // TODO save progress on backend
+            <Flex direction="column" flex="1" height="100%">
+              <Banner asBlock />
+              <Box overflow="auto" ref={scrollRef}>
+                {completed && !editable ? (
+                  <LessonCompleted />
+                ) : (
+                  <LessonViewer
+                    editable={editable}
+                    onLessonCompleted={(lessonId) => {
+                      // TODO save progress on backend
 
-                    const { lessons } = state.course.modules[moduleIndex];
-                    const lessonIndex = lessons.indexOf(lessonId);
-                    if (lessonIndex === lessons.length - 1) {
-                      setCompleted(true);
-                      dispatch({ type: "set-focus", value: null });
-                    } else if (lessonIndex !== -1) {
-                      dispatch({
-                        type: "set-focus",
-                        value: lessons[lessonIndex + 1],
-                      });
-                    }
+                      const { lessons } = state.course.modules[moduleIndex];
+                      const lessonIndex = lessons.indexOf(lessonId);
+                      if (lessonIndex === lessons.length - 1) {
+                        setCompleted(true);
+                        dispatch({ type: "set-focus", value: null });
+                      } else if (lessonIndex !== -1) {
+                        dispatch({
+                          type: "set-focus",
+                          value: lessons[lessonIndex + 1],
+                        });
+                      }
 
-                    // In case the browser doesn't do it automatically.
-                    window.scrollTo(0, 0);
-                  }}
-                />
-              )}
-            </Box>
+                      // In case the browser doesn't do it automatically.
+                      scrollRef.current?.scrollTo(0, 0);
+                    }}
+                  />
+                )}
+              </Box>
+            </Flex>
           </DragDropContext>
         </Flex>
       </EditorContext.Provider>
