@@ -12,23 +12,24 @@ import { ReactComponent as DocumentIcon } from "../../../assets/document.svg";
 import { DEFAULT_IMAGE } from "../../../constants/DummyData";
 import RouterLink from "../../common/RouterLink";
 import { COURSE_OVERVIEW_BASE_ROUTE } from "../../../constants/Routes";
-import { makeDeferredCallback } from "../../../utils/CallbackUtils";
 
 const CourseCard = (): React.ReactElement => {
   const [focused, setFocused] = useState<boolean>(false);
   const [hovered, setHovered] = useState<boolean>(false);
-  const onFocusChange = makeDeferredCallback(setFocused);
-  const onHoverChange = makeDeferredCallback(setHovered);
+  const handleFocus = () => setFocused(true);
+  const handleBlur = () => setFocused(false);
+  const handleMouseEnter = () => setHovered(true);
+  const handleMouseLeave = () => setHovered(false);
 
   const expanded = focused || hovered;
 
   return (
     <RouterLink
       to={`${COURSE_OVERVIEW_BASE_ROUTE}/123`}
-      onFocus={onFocusChange(true)}
-      onBlur={onFocusChange(false)}
-      onMouseEnter={onHoverChange(true)}
-      onMouseLeave={onHoverChange(false)}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <Flex
         boxShadow="0px 4px 12px rgba(0, 0, 0, 0.1)"
