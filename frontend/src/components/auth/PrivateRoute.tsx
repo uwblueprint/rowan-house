@@ -20,6 +20,10 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
   component,
   exact,
   path,
+  // Note: we're defaulting to Admin here since:
+  //  a) the majority of private pages are on the Admin side
+  //  b) we want new pages to default to the most restrictive permission in
+  //     order to prevent bugs
   roles = ["Admin"],
 }: PrivateRouteProps) => {
   const { authenticatedUser } = useContext(AuthContext);
