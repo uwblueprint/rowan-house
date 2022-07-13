@@ -37,7 +37,10 @@ const LessonViewer = ({
             ))}
             {!editable && (
               <Flex py="22px" justify="center">
-                <Button onClick={() => onLessonCompleted(focusedLesson)}>
+                <Button
+                  key={focusedLesson}
+                  onClick={() => onLessonCompleted(focusedLesson)}
+                >
                   Continue
                 </Button>
               </Flex>

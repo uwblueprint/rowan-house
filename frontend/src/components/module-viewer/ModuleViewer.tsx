@@ -169,6 +169,9 @@ const ModuleViewer = ({
                         value: lessons[lessonIndex + 1],
                       });
                     }
+
+                    // In case the browser doesn't do it automatically.
+                    window.scrollTo(0, 0);
                   }}
                 />
               )}
