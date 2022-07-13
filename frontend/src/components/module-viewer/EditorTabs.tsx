@@ -4,7 +4,11 @@ import { Box, Tab, Tabs, TabList, TabPanel, TabPanels } from "@chakra-ui/react";
 import ModuleOverview from "./SideBarModuleOverview";
 import ContentKiosk from "./SideBarContentKiosk";
 
-const EditorTabs = ({ onLessonSelected }: { onLessonSelected: () => void }) => (
+const EditorTabs = ({
+  onLessonSelected,
+}: {
+  onLessonSelected: () => void;
+}): React.ReactElement => (
   <Tabs variant="unstyled" height="100%" overflowY="hidden">
     <Box
       bg="background.light"

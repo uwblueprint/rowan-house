@@ -1,13 +1,9 @@
-import React, { useContext, useState } from "react";
-import { Box, Flex, Heading, SimpleGrid, VStack } from "@chakra-ui/react";
-import AuthContext from "../../contexts/AuthContext";
+import React from "react";
+import { Box, Flex, VStack } from "@chakra-ui/react";
 import Banner from "../learner/Banner";
 import ModuleLessonCount from "../learner/ModuleLessonCount";
-import { CourseType } from "../../types/ModuleEditorTypes";
 
 const ViewCourse = (): React.ReactElement => {
-  const { authenticatedUser } = useContext(AuthContext);
-
   return (
     <Flex direction="column">
       <Banner />

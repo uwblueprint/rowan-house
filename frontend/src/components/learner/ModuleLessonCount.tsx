@@ -12,7 +12,7 @@ const ModuleLessonCount = ({
   moduleCount,
   lessonCount,
   color = "text.default",
-}: ModuleLessonCountProps) => {
+}: ModuleLessonCountProps): React.ReactElement => {
   return (
     <Box>
       <Icon

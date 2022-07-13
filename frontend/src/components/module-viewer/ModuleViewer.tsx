@@ -16,7 +16,7 @@ import EditorContextReducer from "../../reducers/ModuleEditorContextReducer";
 import EditorContext from "../../contexts/ModuleEditorContext";
 import SideBar from "./SideBar";
 import LessonViewer from "./LessonViewer";
-import LessonCompleted from "./LessonCompleted";
+import ModuleCompleted from "./ModuleCompleted";
 import Banner from "../learner/Banner";
 import { LessonResponse } from "../../APIClients/types/LessonClientTypes";
 import { formatLessonResponse } from "../../utils/lessonUtils";
@@ -105,7 +105,7 @@ const ModuleViewer = ({
         },
       });
     }
-  }, [courseData, moduleIndex, lessonData]);
+  }, [courseData, moduleIndex, lessonData, completed]);
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -156,7 +156,7 @@ const ModuleViewer = ({
               <Banner asBlock />
               <Box overflow="auto" ref={scrollRef}>
                 {completed && !editable ? (
-                  <LessonCompleted />
+                  <ModuleCompleted />
                 ) : (
                   <LessonViewer
                     editable={editable}

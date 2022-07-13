@@ -4,7 +4,6 @@ import {
   Box,
   Button,
   Flex,
-  Link,
   HStack,
   Spacer,
   Text,

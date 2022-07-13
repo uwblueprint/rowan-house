@@ -6,7 +6,7 @@ import { ModuleEditorParams } from "../../types/ModuleEditorTypes";
 import EditorContext from "../../contexts/ModuleEditorContext";
 import { HOME_PAGE } from "../../constants/Routes";
 
-const LessonCompleted = () => {
+const ModuleCompleted = (): React.ReactElement => {
   const history = useHistory();
   const { moduleIndex: moduleIndexString } = useParams<ModuleEditorParams>();
   const moduleIndex = Number(moduleIndexString);
@@ -53,4 +53,4 @@ const LessonCompleted = () => {
   );
 };
 
-export default LessonCompleted;
+export default ModuleCompleted;
