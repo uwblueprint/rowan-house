@@ -1,4 +1,3 @@
-/* eslint  react/jsx-props-no-spreading: 0 */ // --> OFF
 import React, { useState } from "react";
 import BTable from "react-bootstrap/Table";
 import { HeaderGroup, useTable, Column } from "react-table";

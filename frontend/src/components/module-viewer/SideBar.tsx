@@ -4,23 +4,19 @@ import {
   Box,
   Button,
   Flex,
-  Link,
   HStack,
   Spacer,
-  Tabs,
-  TabList,
-  Tab,
-  TabPanels,
-  TabPanel,
   Text,
   useDisclosure,
+  VStack,
 } from "@chakra-ui/react";
 import { ChevronLeftIcon, EditIcon } from "@chakra-ui/icons";
 import { useMutation, useQuery } from "@apollo/client";
-import ModuleOverview from "./SideBarModuleOverview";
-import ContentKiosk from "./SideBarContentKiosk";
 import { ReactComponent as SaveIcon } from "../../assets/Save.svg";
-import { MANAGE_COURSES_PAGE } from "../../constants/Routes";
+import {
+  COURSE_OVERVIEW_BASE_ROUTE,
+  MANAGE_COURSES_PAGE,
+} from "../../constants/Routes";
 import EditorContext from "../../contexts/ModuleEditorContext";
 import {
   EditorChangeStatuses,
@@ -45,9 +41,18 @@ import {
 } from "../../APIClients/types/CourseClientTypes";
 import { formatLessonRequest } from "../../utils/lessonUtils";
 import EditModuleModal from "../common/EditModuleModal";
+import EditorTabs from "./EditorTabs";
+import ModuleOverview from "./SideBarModuleOverview";
+import RouterLink from "../common/RouterLink";
 import { GET_COURSE } from "../../APIClients/queries/CourseQueries";
 
-const Sidebar = (): React.ReactElement => {
+const Sidebar = ({
+  editable,
+  onLessonSelected,
+}: {
+  editable: boolean;
+  onLessonSelected: () => void;
+}): React.ReactElement => {
   const {
     moduleIndex: moduleIndexString,
     courseID,
@@ -96,12 +101,9 @@ const Sidebar = (): React.ReactElement => {
     // Copy other modules by reference due to the immutability of the data
     if (newModule) {
       // If module index isn't valid, append the new module
-      if (
-        Number(moduleIndex) >= 0 &&
-        Number(moduleIndex) < state.course.modules.length
-      ) {
+      if (moduleIndex >= 0 && moduleIndex < state.course.modules.length) {
         newModules = state.course.modules.map((oldModule, index) =>
-          Number(moduleIndex) === index ? newModule : oldModule,
+          moduleIndex === index ? newModule : oldModule,
         );
       } else {
         newModules = [...state.course.modules, newModule];
@@ -109,7 +111,7 @@ const Sidebar = (): React.ReactElement => {
       // If no new module has been passed, remove the module
     } else {
       newModules = state.course.modules.filter(
-        (_, index) => Number(moduleIndex) !== index,
+        (_, index) => moduleIndex !== index,
       );
     }
 
@@ -160,14 +162,12 @@ const Sidebar = (): React.ReactElement => {
     state.hasChanged = {};
   };
 
-  const module = courseData?.course?.modules?.[
-    Number(moduleIndex)
-  ] as ModuleResponse;
+  const module = courseData?.course?.modules?.[moduleIndex] as ModuleResponse;
 
   return (
     <>
       {module && (
-        <Box w="20%" minW="300px">
+        <Box w="20vw" minW="300px">
           <Flex
             position="fixed"
             w="inherit"
@@ -189,91 +189,62 @@ const Sidebar = (): React.ReactElement => {
                 justifyContent="space-between"
                 p="35px"
               >
-                <HStack justify="space-between">
-                  <Link href={MANAGE_COURSES_PAGE}>
+                <HStack justify="space-between" align="start">
+                  <RouterLink
+                    to={
+                      editable
+                        ? MANAGE_COURSES_PAGE
+                        : `${COURSE_OVERVIEW_BASE_ROUTE}/${courseID}`
+                    }
+                  >
                     <ChevronLeftIcon color="white" h={6} w={6} />
-                  </Link>
-                  <Button
-                    variant="md"
-                    leftIcon={<EditIcon color="white" h={5} w={5} />}
-                    onClick={onOpen}
-                    backgroundColor="transparent"
-                  />
+                  </RouterLink>
+                  {editable && (
+                    <Button
+                      variant="md"
+                      leftIcon={<EditIcon color="white" h={5} w={5} />}
+                      onClick={onOpen}
+                      backgroundColor="transparent"
+                    />
+                  )}
                 </HStack>
-                <Text variant="display-sm-sb" color="white">
-                  {module?.title}
-                </Text>
+                <VStack align="start">
+                  <Text variant="display-xs" color="white">
+                    Module {moduleIndex + 1}
+                  </Text>
+                  <Text variant="display-sm-sb" color="white">
+                    {module?.title}
+                  </Text>
+                </VStack>
               </Flex>
             </Box>
-            <Tabs variant="unstyled" height="100%" overflowY="hidden">
-              <Box
-                bg="background.light"
-                borderRadius="md"
-                p="6px"
-                margin="auto"
-                maxW="min-content"
-                my="43px"
-              >
-                <TabList>
-                  <Tab
-                    style={{ paddingInline: "35px", height: "32px" }}
-                    _selected={{
-                      color: "white",
-                      bg: "brand.royal",
-                      borderRadius: "md",
-                    }}
+            {editable ? (
+              <>
+                <EditorTabs onLessonSelected={onLessonSelected} />
+                <Spacer />
+                {Object.values(state.hasChanged).length ? (
+                  <Button
+                    bg="#5FCA89"
+                    color="white"
+                    leftIcon={<SaveIcon />}
+                    borderRadius="0"
+                    pl="35px"
+                    width="100%"
+                    h="55px"
+                    justifyContent="left"
+                    onClick={() => saveChanges(state.hasChanged)}
                   >
-                    Overview
-                  </Tab>
-                  <Tab
-                    style={{ paddingInline: "23px", height: "32px" }}
-                    _selected={{
-                      color: "white",
-                      bg: "brand.royal",
-                      borderRadius: "md",
-                    }}
-                  >
-                    Components
-                  </Tab>
-                </TabList>
-              </Box>
-              <TabPanels height="100%" overflowY="hidden">
-                <TabPanel
-                  p="0"
-                  pb="200px"
-                  height="100%"
-                  overflowY="auto"
-                  className="tabScroll"
-                >
-                  <ModuleOverview />
-                </TabPanel>
-                <TabPanel
-                  pb="200px"
-                  height="100%"
-                  overflowY="auto"
-                  className="tabScroll"
-                >
-                  <ContentKiosk />
-                </TabPanel>
-              </TabPanels>
-            </Tabs>
-            <Spacer />
-            {Object.values(state.hasChanged).length ? (
-              <Button
-                bg="#5FCA89"
-                color="white"
-                leftIcon={<SaveIcon />}
-                borderRadius="0"
-                pl="35px"
-                width="100%"
-                h="55px"
-                justifyContent="left"
-                onClick={() => saveChanges(state.hasChanged)}
-              >
-                Save Changes
-              </Button>
+                    Save Changes
+                  </Button>
+                ) : (
+                  <></>
+                )}
+              </>
             ) : (
-              <></>
+              <ModuleOverview
+                editable={editable}
+                onLessonSelected={onLessonSelected}
+              />
             )}
           </Flex>
           <EditModuleModal

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Button } from "@chakra-ui/react";
+import { Button, ButtonProps } from "@chakra-ui/react";
 
 import useLogout from "../../hooks/useLogout";
 
-const LogoutButton = (): React.ReactElement => {
+const LogoutButton = (props: ButtonProps): React.ReactElement => {
   const [loading, setLoading] = useState<boolean>(false);
   const logout = useLogout();
 
@@ -19,6 +19,7 @@ const LogoutButton = (): React.ReactElement => {
       onClick={handleClick}
       isLoading={loading}
       loadingText="Processing..."
+      {...props}
     >
       Log Out
     </Button>

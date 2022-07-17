@@ -13,6 +13,7 @@ import defaultTheme from "./theme";
 import Login from "./components/auth/Login";
 import Signup from "./components/auth/Signup";
 import PrivateRoute from "./components/auth/PrivateRoute";
+import CourseOverview from "./components/pages/CourseOverview";
 import CreatePage from "./components/pages/CreatePage";
 import Default from "./components/pages/Default";
 import DisplayPage from "./components/pages/DisplayPage";
@@ -20,9 +21,11 @@ import Logout from "./components/pages/Logout";
 import NotFound from "./components/pages/NotFound";
 import UpdatePage from "./components/pages/UpdatePage";
 import ModuleEditor from "./components/pages/ModuleEditor";
+import ModuleViewer from "./components/pages/ModuleViewer";
 import VerifyEmail from "./components/pages/VerifyEmail";
 import * as Routes from "./constants/Routes";
 import AUTHENTICATED_USER_KEY from "./constants/AuthConstants";
+import USER_ROLES from "./constants/UserConstants";
 import AuthContext from "./contexts/AuthContext";
 import { getLocalStorageObj } from "./utils/LocalStorageUtils";
 import SampleContext, {
@@ -68,10 +71,17 @@ const App = (): React.ReactElement => {
                 <Switch>
                   <Route exact path={Routes.LOGIN_PAGE} component={Login} />
                   <Route exact path={Routes.SIGNUP_PAGE} component={Signup} />
+                  <Route exact path={Routes.HOME_PAGE} component={Default} />
+                  <Route
+                    exact
+                    path={`${Routes.COURSE_OVERVIEW_BASE_ROUTE}/:courseID`}
+                    component={CourseOverview}
+                  />
                   <PrivateRoute
                     exact
-                    path={Routes.HOME_PAGE}
-                    component={Default}
+                    path={`${Routes.COURSE_OVERVIEW_BASE_ROUTE}/:courseID/:moduleIndex`}
+                    component={ModuleViewer}
+                    roles={USER_ROLES}
                   />
                   <PrivateRoute
                     exact

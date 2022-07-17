@@ -63,7 +63,7 @@ export type EditorContextAction =
     }
   | {
       type: "set-focus";
-      value: string;
+      value: string | null;
     }
   | {
       type: "create-lesson";
