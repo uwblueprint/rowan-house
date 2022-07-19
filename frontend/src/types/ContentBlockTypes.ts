@@ -19,7 +19,12 @@ export type ImageBlockState = ContentBlockStateType<
     link: string;
   }
 >;
-export type VideoBlockState = ContentBlockStateType<"video">;
+export type VideoBlockState = ContentBlockStateType<
+  "video",
+  {
+    link: string;
+  }
+>;
 export type AudioBlockState = ContentBlockStateType<"audio">;
 
 export type ContentBlockState = RequireAllContentTypesArePresent<
