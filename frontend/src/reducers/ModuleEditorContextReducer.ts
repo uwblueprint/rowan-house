@@ -147,7 +147,7 @@ const createLessonContentBlock = (
         type: ContentTypeEnum.VIDEO,
         id: uuid(),
         content: {
-          link: "https://www.youtube.com/watch?v=kMlkCYL9qo0",
+          link: "",
         },
       };
       break;

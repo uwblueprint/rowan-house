@@ -14,9 +14,9 @@ const InvalidLinkPreview = (): React.ReactElement => {
       height="350px"
       justifyContent="center"
       alignItems="center"
-      background="grey"
+      background="#383838"
     >
-      <Text variant="sm" color="black">
+      <Text variant="sm" color="white">
         Invalid Link
       </Text>
     </Flex>
@@ -30,7 +30,7 @@ const EditVideoModal = ({
   onClose,
 }: EditContentModalProps<VideoBlockState>): React.ReactElement => {
   const [link, setLink] = useState(block.content.link ?? "");
-  const [invalid, setInvalid] = useState(false);
+  const [invalid, setInvalid] = useState(true);
   const context = useContext(EditorContext);
 
   if (!context) return <></>;
@@ -66,7 +66,7 @@ const EditVideoModal = ({
       onConfirm={onSave}
       onCancel={onClose}
       isOpen={isOpen}
-      canSubmit={invalid}
+      canSubmit={!invalid}
     >
       <Flex>
         <VStack flex="1" alignItems="left">
@@ -78,7 +78,7 @@ const EditVideoModal = ({
               setLink(e);
             }}
             isInvalid={invalid}
-            errorMessage={link ? "invalid link" : "This field is required."}
+            errorMessage={link ? "Invalid Link" : "This field is required."}
           />
           <Text variant="sm">Preview:</Text>
           <div style={{ display: `${invalid ? "initial" : "none"}` }}>

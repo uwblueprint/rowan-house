@@ -53,7 +53,7 @@ export const Modal = ({
         </ModalBody>
         <ModalFooter>
           <Button
-            backgroundColor={`${canSubmit ? "grey" : ""}`}
+            backgroundColor={`${canSubmit ? "" : "grey"}`}
             onClick={onConfirm}
             mr="1rem"
           >
