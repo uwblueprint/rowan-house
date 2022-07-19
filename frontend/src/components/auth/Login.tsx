@@ -236,7 +236,7 @@ const Login = (): React.ReactElement => {
               />
               {loginFail && (
                 <FormErrorMessage marginBottom="3vh">
-                  The email or password you entered is incorrect
+                  The email or password you entered is incorrect.
                 </FormErrorMessage>
               )}
             </FormControl>
