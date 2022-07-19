@@ -73,7 +73,11 @@ export interface ModuleEditorParams {
   moduleIndex: string;
 }
 
-export type EditorChangeStatus = "CREATE" | "UPDATE" | "DELETE";
+export type EditorChangeStatus =
+  | "CREATE"
+  | "UPDATE"
+  | "DELETE"
+  | "COURSE-UPDATE";
 
 export interface EditorChangeStatuses {
   [doc_id: string]: EditorChangeStatus;
@@ -112,6 +116,14 @@ export type EditorContextAction =
   | {
       type: "delete-lesson";
       value: string;
+    }
+  | {
+      type: "reorder-lessons";
+      value: {
+        moduleID: number;
+        oldIndex: number;
+        newIndex: number;
+      };
     }
   | {
       type: "update-lesson-id";

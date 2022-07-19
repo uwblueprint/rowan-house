@@ -96,6 +96,53 @@ const replaceLessonID = (
   return newState;
 };
 
+const reorderLessons = (
+  state: EditorStateType,
+  moduleID: number,
+  oldIndex: number,
+  newIndex: number,
+): EditorStateType => {
+  // focusedLesson should exist in the same module as desired lesson
+  const lessonID = state.focusedLesson;
+  if (!lessonID) {
+    return state;
+  }
+
+  const { id: courseID } = state.course; // id refers to the course document id
+
+  const oldModule = state.course.modules[moduleID];
+
+  console.assert(oldIndex >= 0, "Old lesson index must be positive");
+  console.assert(
+    oldIndex < oldModule.lessons.length,
+    "Old lesson index exceeds lesson length",
+  );
+  console.assert(newIndex >= 0, "New lesson index must be positive");
+  console.assert(
+    newIndex < oldModule.lessons.length,
+    "New lesson index exceeds lesson length",
+  );
+
+  const newLessons = [...state.course.modules[moduleID].lessons];
+  const [draggedLesson] = newLessons.splice(oldIndex, 1);
+  newLessons.splice(newIndex, 0, draggedLesson);
+  const newModules = [...state.course.modules];
+  newModules[moduleID] = { ...newModules[moduleID], lessons: newLessons };
+  const newState = {
+    ...state,
+    course: {
+      ...state.course,
+      modules: newModules,
+    },
+  };
+  newState.hasChanged = updateChangeStatus(
+    state.hasChanged,
+    courseID,
+    "COURSE-UPDATE",
+  );
+  return newState;
+};
+
 const deleteLesson = (state: EditorStateType, id: string) => {
   if (Object.keys(state.lessons).includes(id)) return state;
 
@@ -252,6 +299,13 @@ export default function EditorContextReducer(
       return deleteLesson(state, action.value);
     case "update-lesson-id":
       return replaceLessonID(state, action.value.oldID, action.value.newID);
+    case "reorder-lessons":
+      return reorderLessons(
+        state,
+        action.value.moduleID,
+        action.value.oldIndex,
+        action.value.newIndex,
+      );
     case "create-block":
       return createLessonContentBlock(
         state,

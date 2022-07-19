@@ -3,12 +3,40 @@ import { AddIcon } from "@chakra-ui/icons";
 import React, { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 
+import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import EditorContext from "../../contexts/ModuleEditorContext";
-import { ModuleEditorParams } from "../../types/ModuleEditorTypes";
+import {
+  EditorContextAction,
+  ModuleEditorParams,
+} from "../../types/ModuleEditorTypes";
 import { Modal } from "../common/Modal";
 import { TextInput } from "../common/TextInput";
 
 import LessonItem from "./LessonItem";
+
+// Copy drag implementation based on https://github.com/atlassian/react-beautiful-dnd/issues/216#issuecomment-423708497
+const onDragEnd = (
+  dispatch: React.Dispatch<EditorContextAction>,
+  result: DropResult,
+  moduleID: number,
+) => {
+  const { source, destination } = result;
+  // dropped outside the list
+  if (
+    source?.droppableId !== "LESSON_EDITOR" ||
+    destination?.droppableId !== "LESSON_EDITOR"
+  ) {
+    return;
+  }
+  dispatch({
+    type: "reorder-lessons",
+    value: {
+      moduleID,
+      oldIndex: source.index,
+      newIndex: destination.index,
+    },
+  });
+};
 
 const SideBarModuleOverview = (): React.ReactElement => {
   const context = useContext(EditorContext);
@@ -24,8 +52,6 @@ const SideBarModuleOverview = (): React.ReactElement => {
 
   const { lessons, course, focusedLesson } = state;
   const module = course.modules[moduleID];
-
-  const orderedLessons = module.lessons.map((id) => lessons[id]);
 
   const setFocus = (index: number) =>
     dispatch({ type: "set-focus", value: module.lessons[index] });
@@ -57,15 +83,29 @@ const SideBarModuleOverview = (): React.ReactElement => {
 
   return (
     <VStack>
-      {focusedLesson &&
-        orderedLessons.map((lesson, index) => (
-          <LessonItem
-            text={lesson.title}
-            isFocused={state.lessons[focusedLesson] === lesson}
-            key={lesson.id}
-            setFocus={() => setFocus(index)}
-          />
-        ))}
+      {focusedLesson && (
+        <DragDropContext
+          onDragEnd={(result) => onDragEnd(dispatch, result, moduleID)}
+        >
+          <Droppable droppableId="LESSON_EDITOR">
+            {(provided) => (
+              <VStack w="100%" ref={provided.innerRef}>
+                {module.lessons.map((id, index) => (
+                  <LessonItem
+                    id={id}
+                    text={lessons[id].title}
+                    isFocused={state.lessons[focusedLesson] === lessons[id]}
+                    key={id}
+                    setFocus={() => setFocus(index)}
+                    index={index}
+                  />
+                ))}
+                {provided.placeholder}
+              </VStack>
+            )}
+          </Droppable>
+        </DragDropContext>
+      )}
       <Button
         onClick={onOpen}
         color="brand.royal"

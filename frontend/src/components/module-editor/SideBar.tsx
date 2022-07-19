@@ -136,6 +136,10 @@ const Sidebar = (): React.ReactElement => {
 
   const saveChanges = async (changeObj: EditorChangeStatuses) => {
     Object.entries(changeObj).forEach(async ([doc_id, action]) => {
+      if (action === "COURSE-UPDATE") {
+        // Nothing happens because the updateCourse mutation is already called at the end anyway
+        return;
+      }
       const changedLesson = formatLessonRequest(state.lessons[doc_id]);
       switch (action) {
         case "CREATE":
@@ -152,9 +156,9 @@ const Sidebar = (): React.ReactElement => {
         default:
           break;
       }
-      updateCourse({
-        variables: { id: changedLesson.course, course: state.course },
-      });
+    });
+    updateCourse({
+      variables: { id: courseID, course: state.course },
     });
     state.hasChanged = {};
   };
