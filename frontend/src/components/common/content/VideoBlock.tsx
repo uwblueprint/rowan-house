@@ -13,7 +13,12 @@ const VideoBlock = ({
     <ReactPlayer
       url={content.link}
       fallback={<Spinner />}
-      alt="video alt here"
+      config={{
+        youtube: {
+          playerVars: { modestbranding: 1 },
+        },
+      }}
+      controls
     />
   );
 };
