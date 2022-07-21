@@ -48,6 +48,7 @@ const Login = (): React.ReactElement => {
   const [password, setPassword] = useState("");
   const [loginState, setLoginState] = useState(LoginState.EnterEmail);
   const [loginFail, setLoginFail] = useState(false);
+  const [invalidEmail, setInvalidEmail] = useState(false);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const forgetPasswordRef = useRef<HTMLInputElement>(null);
@@ -78,6 +79,8 @@ const Login = (): React.ReactElement => {
       case LoginState.EnterEmail:
         if (emailRef.current?.validity.valid) {
           setLoginState(LoginState.EnterPassword);
+        } else {
+          setInvalidEmail(true);
         }
         break;
       case LoginState.EnterPassword:
@@ -101,9 +104,11 @@ const Login = (): React.ReactElement => {
     switch (currentLoginState) {
       case LoginState.EnterPassword:
         setLoginFail(false);
+        setInvalidEmail(false);
         return setLoginState(LoginState.EnterEmail);
       case LoginState.ForgetPassword:
         setLoginFail(false);
+        setInvalidEmail(false);
         return setLoginState(LoginState.EnterPassword);
       default:
         throw new Error("Unexpected Error");
@@ -128,7 +133,7 @@ const Login = (): React.ReactElement => {
         return (
           <Box>
             <Text variant="display-sm-sb">Sign in to access courses</Text>
-            <FormControl>
+            <FormControl isInvalid={invalidEmail}>
               <FormLabel
                 htmlFor="email"
                 variant="caption-md"
@@ -142,16 +147,16 @@ const Login = (): React.ReactElement => {
                 type="email"
                 value={email}
                 placeholder="you@rowanhouse.ca"
-                onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                  setEmail(event.target.value)
-                }
+                onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                  setEmail(event.target.value);
+                  setPassword("");
+                }}
                 onKeyPress={(event: KeyboardEvent<HTMLInputElement>) => {
                   if (event.key === "Enter" && email?.length) {
                     onLogInClick();
                   }
                 }}
-                marginBottom="3vh"
-                autofill
+                marginBottom={invalidEmail ? "0vh" : "3vh"}
               />
               <Input
                 ref={passwordRef}
@@ -161,8 +166,13 @@ const Login = (): React.ReactElement => {
                   setPassword(event.target.value)
                 }
                 marginBottom="3vh"
-                style={{ display: "none" }}
+                display="none"
               />
+              {invalidEmail && (
+                <FormErrorMessage marginBottom="3vh">
+                  The email you entered is invalid.
+                </FormErrorMessage>
+              )}
             </FormControl>
             <Button
               variant="sm"
@@ -217,8 +227,7 @@ const Login = (): React.ReactElement => {
                   setEmail(event.target.value)
                 }
                 marginBottom="3vh"
-                autofill
-                style={{ display: "none" }}
+                display="none"
               />
               <Input
                 ref={passwordRef}

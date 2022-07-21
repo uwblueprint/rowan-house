@@ -54,6 +54,11 @@ const Signup = (): React.ReactElement => {
       password,
       register,
     );
+
+    if(user === null){
+      setErrorState(true);
+    }
+
     setAuthenticatedUser(user);
   };
 
@@ -88,7 +93,7 @@ const Signup = (): React.ReactElement => {
             </Center>
             <FormControl
               isRequired
-              isInvalid={errorState && !(isMatch && meetsLengthRequirements)}
+              isInvalid={errorState && (firstName === '' || lastName === '')}
             >
               <FormLabel
                 variant="caption-md"
@@ -122,6 +127,11 @@ const Signup = (): React.ReactElement => {
                   marginBottom="2vh"
                 />
               </Box>
+            </FormControl>
+            <FormControl
+              isRequired
+              isInvalid={errorState && email === ''}
+            >
               <FormLabel variant="caption-md" marginBottom="1vh">
                 Email Address
               </FormLabel>
@@ -135,6 +145,11 @@ const Signup = (): React.ReactElement => {
                 }
                 marginBottom="2vh"
               />
+            </FormControl>
+            <FormControl
+              isRequired
+              isInvalid={errorState && town === ''}
+            >
               <FormLabel variant="caption-md" marginBottom="1vh">
                 City/Town
               </FormLabel>
@@ -148,6 +163,11 @@ const Signup = (): React.ReactElement => {
                 }
                 marginBottom="2vh"
               />
+            </FormControl>
+            <FormControl
+              isRequired
+              isInvalid={errorState && !(isMatch && meetsLengthRequirements)}
+            >
               <FormLabel variant="caption-md" marginBottom="1vh">
                 Password
               </FormLabel>
@@ -160,6 +180,11 @@ const Signup = (): React.ReactElement => {
                 }
                 marginBottom="2vh"
               />
+            </FormControl>
+            <FormControl
+              isRequired
+              isInvalid={errorState && !(isMatch && meetsLengthRequirements)}
+            >
               <FormLabel variant="caption-md" marginBottom="1vh">
                 Confirm Password
               </FormLabel>
@@ -189,7 +214,6 @@ const Signup = (): React.ReactElement => {
               width="full"
               onClick={() => {
                 onSignupClick();
-                setErrorState(true);
               }}
               marginBottom="2vh"
             >
