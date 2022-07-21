@@ -55,7 +55,7 @@ const Signup = (): React.ReactElement => {
       register,
     );
 
-    if(user === null){
+    if (user === null) {
       setErrorState(true);
     }
 
@@ -93,7 +93,7 @@ const Signup = (): React.ReactElement => {
             </Center>
             <FormControl
               isRequired
-              isInvalid={errorState && (firstName === '' || lastName === '')}
+              isInvalid={errorState && (firstName === "" || lastName === "")}
             >
               <FormLabel
                 variant="caption-md"
@@ -128,10 +128,7 @@ const Signup = (): React.ReactElement => {
                 />
               </Box>
             </FormControl>
-            <FormControl
-              isRequired
-              isInvalid={errorState && email === ''}
-            >
+            <FormControl isRequired isInvalid={errorState && email === ""}>
               <FormLabel variant="caption-md" marginBottom="1vh">
                 Email Address
               </FormLabel>
@@ -146,10 +143,7 @@ const Signup = (): React.ReactElement => {
                 marginBottom="2vh"
               />
             </FormControl>
-            <FormControl
-              isRequired
-              isInvalid={errorState && town === ''}
-            >
+            <FormControl isRequired isInvalid={errorState && town === ""}>
               <FormLabel variant="caption-md" marginBottom="1vh">
                 City/Town
               </FormLabel>
