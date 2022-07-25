@@ -35,7 +35,7 @@ const login = async (
     }
   } catch (e: unknown) {
     // eslint-disable-next-line no-alert
-    window.alert("Failed to login");
+    console.error("Failed to login");
   }
   return user;
 };
@@ -74,7 +74,7 @@ const register = async (
     }
   } catch (e: unknown) {
     // eslint-disable-next-line no-alert
-    window.alert("Failed to sign up");
+    console.error("Failed to sign up");
   }
   return user;
 };
