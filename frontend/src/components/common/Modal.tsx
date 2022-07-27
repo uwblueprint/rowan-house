@@ -52,11 +52,7 @@ export const Modal = ({
           {children}
         </ModalBody>
         <ModalFooter>
-          <Button
-            backgroundColor={`${canSubmit ? "" : "grey"}`}
-            onClick={onConfirm}
-            mr="1rem"
-          >
+          <Button disabled={!canSubmit} onClick={onConfirm} mr="1rem">
             {confirmText}
           </Button>
           {spreadButtons && <Spacer />}

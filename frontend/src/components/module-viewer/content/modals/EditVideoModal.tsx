@@ -1,23 +1,26 @@
-import { Box, Flex, Spinner, Text, VStack } from "@chakra-ui/react";
+import { Box, Flex, Text, VStack } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
-import ReactPlayer from "react-player";
 import { VideoBlockState } from "../../../../types/ContentBlockTypes";
 import { Modal } from "../../../common/Modal";
 import EditorContext from "../../../../contexts/ModuleEditorContext";
-
+import VideoPlayer from "../../../common/VideoPlayer";
 import { TextInput } from "../../../common/TextInput";
 import { EditContentModalProps } from "../../../../types/ModuleEditorTypes";
 
-const InvalidLinkPreview = (): React.ReactElement => {
+interface InvalidLinkProps {
+  link: string;
+}
+
+const InvalidLinkPreview = ({ link }: InvalidLinkProps): React.ReactElement => {
   return (
     <Flex
       height="350px"
       justifyContent="center"
       alignItems="center"
-      background="#383838"
+      background="background.dark"
     >
       <Text variant="sm" color="white">
-        Invalid Link
+        {link ? "Invalid Link" : "Paste a link..."}
       </Text>
     </Flex>
   );
@@ -68,40 +71,30 @@ const EditVideoModal = ({
       isOpen={isOpen}
       canSubmit={!invalid}
     >
-      <Flex>
-        <VStack flex="1" alignItems="left">
-          <TextInput
-            label="Link:"
-            defaultValue={link}
-            onChange={(e) => {
-              setInvalid(true);
-              setLink(e);
-            }}
-            isInvalid={invalid}
-            errorMessage={link ? "Invalid Link" : "This field is required."}
+      <VStack alignItems="left">
+        <TextInput
+          label="Link"
+          defaultValue={link}
+          onChange={(newLink) => {
+            setInvalid(true);
+            setLink(newLink);
+          }}
+          isInvalid={invalid}
+        />
+        <Text variant="sm">Preview</Text>
+        <Box display={invalid ? "initial" : "none"}>
+          <InvalidLinkPreview link={link} />
+        </Box>
+        <Box display={invalid ? "none" : "initial"}>
+          <VideoPlayer
+            url={link}
+            inEditVideoModal
+            error={invalid}
+            onError={() => setInvalid(true)}
+            onReady={() => setInvalid(false)}
           />
-          <Text variant="sm">Preview:</Text>
-          <div style={{ display: `${invalid ? "initial" : "none"}` }}>
-            <InvalidLinkPreview />
-          </div>
-          <Box display={invalid ? "none" : "initial"}>
-            <ReactPlayer
-              url={link}
-              fallback={<Spinner />}
-              config={{
-                youtube: {
-                  playerVars: { modestbranding: 1 },
-                },
-              }}
-              controls
-              width="100%"
-              onError={() => setInvalid(true)}
-              onReady={() => setInvalid(false)}
-            />
-          </Box>
-          )
-        </VStack>
-      </Flex>
+        </Box>
+      </VStack>
     </Modal>
   );
 };
