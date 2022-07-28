@@ -1,11 +1,20 @@
 import { Schema, Document, model, Types } from "mongoose";
 
+export interface ModuleProgress {
+  completedAt?: Date;
+}
+
 export interface CourseProgress extends Document {
   user: Types.ObjectId;
   course: Types.ObjectId;
-  startedAt: Date;
-  completedAt: Date;
+  startedAt?: Date;
+  completedAt?: Date;
+  moduleProgress: Array<ModuleProgress | null>;
 }
+
+const ModuleProgressSchema = new Schema({
+  completedAt: Date,
+});
 
 const CourseProgressSchema = new Schema({
   user: {
@@ -20,6 +29,10 @@ const CourseProgressSchema = new Schema({
   },
   startedAt: Date,
   completedAt: Date,
+  moduleProgress: {
+    type: [ModuleProgressSchema],
+    required: true,
+  },
 });
 
 export default model<CourseProgress>("CourseProgress", CourseProgressSchema);

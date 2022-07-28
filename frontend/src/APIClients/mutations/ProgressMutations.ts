@@ -7,9 +7,17 @@ export const MARK_COURSE_AS_STARTED = gql`
   }
 `;
 
-export const MARK_COURSE_AS_COMPLETED = gql`
-  mutation MarkCourseAsCompleted($userId: ID!, $courseId: ID!) {
-    markCourseAsCompletedForUser(userId: $userId, courseId: $courseId)
+export const MARK_MODULE_AS_COMPLETED = gql`
+  mutation MarkModuleAsCompleted(
+    $userId: ID!
+    $courseId: ID!
+    $moduleIndex: Int!
+  ) {
+    markModuleAsCompletedForUser(
+      userId: $userId
+      courseId: $courseId
+      moduleIndex: $moduleIndex
+    )
     number
   }
 `;

@@ -117,7 +117,7 @@ const graphQLMiddlewares = {
     updateLesson: authorizedByAdmin(),
     deleteLesson: authorizedByAdmin(),
     markCourseAsStartedForUser: isAuthorizedByUserId("userId"),
-    markCourseAsCompletedForUser: isAuthorizedByUserId("userId"),
+    markModuleAsCompletedForUser: isAuthorizedByUserId("userId"),
     markLessonAsCompletedForUser: isAuthorizedByUserId("userId"),
   },
 };

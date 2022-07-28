@@ -21,7 +21,11 @@ const progressType = gql`
 
   extend type Mutation {
     markCourseAsStartedForUser(userId: ID!, courseId: ID!): Date!
-    markCourseAsCompletedForUser(userId: ID!, courseId: ID!): Date!
+    markModuleAsCompletedForUser(
+      userId: ID!
+      courseId: ID!
+      moduleIndex: Int!
+    ): Date!
     markLessonAsCompletedForUser(userId: ID!, lessonId: ID!): Date!
   }
 `;

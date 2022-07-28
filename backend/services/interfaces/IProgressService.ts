@@ -1,10 +1,10 @@
 export interface CourseProgressResponseDTO {
-  startedAt: Date;
-  completedAt: Date;
+  startedAt?: Date;
+  completedAt?: Date;
 }
 
 export interface LessonProgressResponseDTO {
-  completedAt: Date;
+  completedAt?: Date;
 }
 
 export interface IProgressService {
@@ -43,14 +43,20 @@ export interface IProgressService {
   markCourseAsStartedForUser(userId: string, courseId: string): Promise<Date>;
 
   /**
-   * mark a Course as completed for the provided user, returning the timestamp
-   * at which they completed it
+   * mark a Module as completed for the provided user, returning the timestamp
+   * at which they completed it. Will also mark the corresponding course as
+   * completed if all modules are completed.
    * @param userId the user's ID
-   * @param courseId the course's ID
+   * @param courseId the module's course's ID
+   * @param moduleIndex the module's index within the course
    * @returns the timestamp the course was completed at
    * @throws Error if creation fails
    */
-  markCourseAsCompletedForUser(userId: string, courseId: string): Promise<Date>;
+  markModuleAsCompletedForUser(
+    userId: string,
+    courseId: string,
+    moduleIndex: number,
+  ): Promise<Date>;
 
   /**
    * mark a Lesson as completed for the provided user, returning the timestamp

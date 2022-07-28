@@ -11,18 +11,21 @@ const testUsers = [
     lastName: "Pan",
     authId: "123",
     role: "Admin",
+    town: "Toronto",
   },
   {
     firstName: "Wendy",
     lastName: "Darling",
     authId: "321",
     role: "Learner",
+    town: "Toronto",
   },
   {
     firstName: "Tinker",
     lastName: "Bell",
     authId: "231",
     role: "Staff",
+    town: "Toronto",
   },
 ];
 

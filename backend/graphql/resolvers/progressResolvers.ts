@@ -1,11 +1,9 @@
-import { AuthenticationError, ExpressContext } from "apollo-server-express";
 import ProgressService from "../../services/implementations/progressService";
 import {
   CourseProgressResponseDTO,
   LessonProgressResponseDTO,
   IProgressService,
 } from "../../services/interfaces/IProgressService";
-import { getAccessToken } from "../../middlewares/auth";
 
 const progressService: IProgressService = new ProgressService();
 
@@ -14,14 +12,12 @@ const progressResolvers = {
     courseProgress: async (
       _parent: undefined,
       { userId, courseIds }: { userId: string; courseIds: Array<string> },
-      context: ExpressContext,
     ): Promise<Array<CourseProgressResponseDTO>> => {
       return progressService.getCourseProgressByIds(userId, courseIds);
     },
     lessonProgress: async (
       _parent: undefined,
       { userId, lessonIds }: { userId: string; lessonIds: Array<string> },
-      context: ExpressContext,
     ): Promise<Array<LessonProgressResponseDTO>> => {
       return progressService.getLessonProgressByIds(userId, lessonIds);
     },
@@ -33,11 +29,19 @@ const progressResolvers = {
     ): Promise<Date> => {
       return progressService.markCourseAsStartedForUser(userId, courseId);
     },
-    markCourseAsCompletedForUser: async (
+    markModuleAsCompletedForUser: async (
       _parent: undefined,
-      { userId, courseId }: { userId: string; courseId: string },
+      {
+        userId,
+        courseId,
+        moduleIndex,
+      }: { userId: string; courseId: string; moduleIndex: number },
     ): Promise<Date> => {
-      return progressService.markCourseAsCompletedForUser(userId, courseId);
+      return progressService.markModuleAsCompletedForUser(
+        userId,
+        courseId,
+        moduleIndex,
+      );
     },
     markLessonAsCompletedForUser: async (
       _parent: undefined,
