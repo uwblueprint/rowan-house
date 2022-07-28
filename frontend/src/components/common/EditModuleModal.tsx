@@ -2,7 +2,10 @@ import { Box, Flex, VStack, Text } from "@chakra-ui/react";
 <<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
+<<<<<<< HEAD
 <<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
+=======
+>>>>>>> 529613f (remove fileName from modules)
 import { TextInput } from "./TextInput";
 import { Modal } from "./Modal";
 import { SwitchInput } from "./SwitchInput";
@@ -34,6 +37,7 @@ import {
   UPDATE_COURSE,
   UPLOAD_IMAGE,
 } from "../../APIClients/mutations/CourseMutations";
+<<<<<<< HEAD
 <<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
 >>>>>>> 0964cb0 (create separate upload module image mutation):frontend/src/components/admin/EditModuleModal.tsx
 import { COURSES } from "../../APIClients/queries/CourseQueries";
@@ -43,6 +47,9 @@ import {
   GET_MODULE_IMAGE,
 } from "../../APIClients/queries/CourseQueries";
 >>>>>>> d3a7ed1 (display uploaded image in module preview card):frontend/src/components/admin/EditModuleModal.tsx
+=======
+import { COURSES, GET_COURSE } from "../../APIClients/queries/CourseQueries";
+>>>>>>> 529613f (remove fileName from modules)
 import { ReactComponent as ImageIcon } from "../../assets/image_white_outline.svg";
 >>>>>>> 70d4f30 (add file upload logic to courses be and fe):frontend/src/components/admin/EditModuleModal.tsx
 
@@ -70,6 +77,10 @@ const EditModuleModal = ({
 <<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
   const [invalid, setInvalid] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+<<<<<<< HEAD
+=======
+  const [previewImage, setPreviewImage] = useState<string | undefined>();
+>>>>>>> 529613f (remove fileName from modules)
 
   const [updateCourse] = useMutation<CourseResponse>(
 =======
@@ -99,7 +110,6 @@ const EditModuleModal = ({
     setDescription("");
     setTitle("");
     setPreviewImage(undefined);
-    setImageFile(undefined);
   };
   const onUpdateModule = async () => {
 >>>>>>> f1258e9 (display previewimage on module editor)
@@ -148,7 +158,6 @@ const EditModuleModal = ({
         description,
         published: isPublished,
         previewImage,
-        fileName: imageFile,
       };
 
       const [id, course] = formatCourseRequest(newModule);
@@ -181,7 +190,6 @@ const EditModuleModal = ({
           variables: { file: e.target.files[0] },
         });
         const result = imageUploadResult.data.uploadModuleImage ?? null;
-        setImageFile(result?.filePath);
         setPreviewImage(result?.previewImage ?? undefined);
       }
     }
@@ -193,16 +201,6 @@ const EditModuleModal = ({
       inputFile.current.click();
     }
   };
-
-  if (module?.fileName) {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useQuery(GET_MODULE_IMAGE, {
-      variables: { fileName: module.fileName },
-      onCompleted: (data) => {
-        setPreviewImage(data.moduleImage);
-      },
-    });
-  }
 
   return (
     <Modal

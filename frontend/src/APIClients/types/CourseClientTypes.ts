@@ -6,7 +6,6 @@ export interface ModuleRequest {
   previewImage?: string | null;
   published?: boolean;
   lessons?: string[] | null;
-  fileName?: string;
 }
 
 export interface ModuleResponse {

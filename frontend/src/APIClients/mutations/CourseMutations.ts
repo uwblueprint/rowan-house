@@ -15,7 +15,6 @@ export const CREATE_COURSE = gql`
         previewImage
         published
         lessons
-        fileName
       }
       private
     }
@@ -37,7 +36,6 @@ export const UPDATE_COURSE = gql`
         previewImage
         published
         lessons
-        fileName
       }
       private
     }

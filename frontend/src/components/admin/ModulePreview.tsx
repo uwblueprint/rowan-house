@@ -9,7 +9,7 @@ import {
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 
 import EditActionsKebabMenu from "./EditActionsKebabMenu";
 import DeleteModal from "../common/DeleteModal";
@@ -23,10 +23,7 @@ import {
   CourseResponse,
 } from "../../APIClients/types/CourseClientTypes";
 import { UPDATE_COURSE } from "../../APIClients/mutations/CourseMutations";
-import {
-  COURSES,
-  GET_MODULE_IMAGE,
-} from "../../APIClients/queries/CourseQueries";
+import { COURSES } from "../../APIClients/queries/CourseQueries";
 
 const buildEditModuleRoute = (courseId: string, index: number): string =>
   `${ADMIN_MODULE_EDITOR_BASE_ROUTE}/${courseId}/${index}`;
@@ -57,21 +54,12 @@ const ModulePreview = ({
   const EDIT_MODULE_ROUTE = buildEditModuleRoute(courseId, index);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [modalType, setModalType] = useState(ModalType.EDIT); // determines which modal is shown when isOpen is true
-  const [previewImage, setPreviewImage] = useState<string | undefined>();
   const [updateCourse] = useMutation<CourseResponse>(
     UPDATE_COURSE,
     refetchQueries,
   );
 
-  const { title, fileName, published } = module;
-
-  useQuery(GET_MODULE_IMAGE, {
-    variables: { fileName },
-    onCompleted: (data) => {
-      setPreviewImage(data.moduleImage);
-    },
-  });
-
+  const { title, previewImage, published } = module;
   const onClick = (type: ModalType) => {
     setModalType(type);
     onOpen();

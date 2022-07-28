@@ -8,7 +8,6 @@ export interface Module {
   previewImage: string;
   published: boolean;
   lessons: string[];
-  fileName: string;
 }
 
 export interface Course extends Document {
@@ -40,9 +39,6 @@ const ModuleSchema: Schema = new Schema({
     required: true,
   },
   lessons: [String],
-  fileName: {
-    type: String,
-  },
 });
 
 const CourseSchema: Schema = new Schema({

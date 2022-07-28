@@ -24,7 +24,6 @@ export interface ModuleType {
   image: string;
   previewImage: string;
   published: boolean;
-  fileName: string;
   lessons: string[];
 }
 
