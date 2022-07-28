@@ -142,6 +142,15 @@ const createLessonContentBlock = (
         },
       };
       break;
+    case ContentTypeEnum.VIDEO.id:
+      block = {
+        type: ContentTypeEnum.VIDEO,
+        id: uuid(),
+        content: {
+          link: "",
+        },
+      };
+      break;
     default:
       throw Error("Invalid block id");
   }
