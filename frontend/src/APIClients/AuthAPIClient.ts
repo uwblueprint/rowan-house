@@ -34,7 +34,7 @@ const login = async (
       localStorage.setItem(AUTHENTICATED_USER_KEY, JSON.stringify(user));
     }
   } catch (e: unknown) {
-    // eslint-disable-next-line no-alert
+    // eslint-disable-next-line no-console
     console.error("Failed to login");
   }
   return user;
@@ -73,7 +73,7 @@ const register = async (
       localStorage.setItem(AUTHENTICATED_USER_KEY, JSON.stringify(user));
     }
   } catch (e: unknown) {
-    // eslint-disable-next-line no-alert
+    // eslint-disable-next-line no-console
     console.error("Failed to sign up");
   }
   return user;
