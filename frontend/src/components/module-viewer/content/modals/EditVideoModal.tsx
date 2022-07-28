@@ -88,7 +88,6 @@ const EditVideoModal = ({
         <Box display={invalid ? "none" : "initial"}>
           <VideoPlayer
             url={link}
-            inEditVideoModal
             error={invalid}
             onError={() => setInvalid(true)}
             onReady={() => setInvalid(false)}

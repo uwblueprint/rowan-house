@@ -1,11 +1,10 @@
-import { Box, Spinner } from "@chakra-ui/react";
+import { Center, Spinner } from "@chakra-ui/react";
 import React from "react";
 import ReactPlayer from "react-player";
 
 interface PlayerConfigProps {
   url: string;
   error?: boolean;
-  inEditVideoModal?: boolean;
   onError?: () => void;
   onReady?: () => void;
 }
@@ -13,26 +12,24 @@ interface PlayerConfigProps {
 const VideoPlayer = ({
   url,
   error = false,
-  inEditVideoModal = false,
   onError,
   onReady,
 }: PlayerConfigProps): React.ReactElement => {
   return (
-    <Box display={error ? "none" : "initial"}>
+    <Center display={error ? "none" : "flex"} width="100%">
       <ReactPlayer
         url={url}
         fallback={<Spinner />}
+        controls
         config={{
           youtube: {
             playerVars: { modestbranding: 1 },
           },
         }}
-        controls
-        width={inEditVideoModal ? "100%" : "640px"} // default 640
         onError={onError}
         onReady={onReady}
       />
-    </Box>
+    </Center>
   );
 };
 
