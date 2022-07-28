@@ -1,6 +1,6 @@
 import { Box, Flex, VStack, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { TextInput } from "./TextInput";
 import { Modal } from "./Modal";
 import { SwitchInput } from "./SwitchInput";
@@ -16,11 +16,7 @@ import {
   UPDATE_COURSE,
   UPLOAD_IMAGE,
 } from "../../APIClients/mutations/CourseMutations";
-import {
-  COURSES,
-  GET_COURSE,
-  GET_MODULE_IMAGE,
-} from "../../APIClients/queries/CourseQueries";
+import { COURSES, GET_COURSE } from "../../APIClients/queries/CourseQueries";
 import { ReactComponent as ImageIcon } from "../../assets/image_white_outline.svg";
 
 export interface EditModuleModalProps {
@@ -46,7 +42,6 @@ const EditModuleModal = ({
   const [invalid, setInvalid] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [previewImage, setPreviewImage] = useState<string | undefined>();
-  const [imageFile, setImageFile] = useState<string | undefined>();
 
   const [updateCourse] = useMutation<CourseResponse>(
     UPDATE_COURSE,
@@ -59,7 +54,6 @@ const EditModuleModal = ({
     setDescription("");
     setTitle("");
     setPreviewImage(undefined);
-    setImageFile(undefined);
   };
   const onUpdateModule = async () => {
     if (!title || title.length > MAX_TITLE_CHARACTERS) {
@@ -80,7 +74,6 @@ const EditModuleModal = ({
         description,
         published: isPublished,
         previewImage,
-        fileName: imageFile,
       };
 
       const [id, course] = formatCourseRequest(newModule);
@@ -108,7 +101,6 @@ const EditModuleModal = ({
           variables: { file: e.target.files[0] },
         });
         const result = imageUploadResult.data.uploadModuleImage ?? null;
-        setImageFile(result?.filePath);
         setPreviewImage(result?.previewImage ?? undefined);
       }
     }
@@ -120,16 +112,6 @@ const EditModuleModal = ({
       inputFile.current.click();
     }
   };
-
-  if (module?.fileName) {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useQuery(GET_MODULE_IMAGE, {
-      variables: { fileName: module.fileName },
-      onCompleted: (data) => {
-        setPreviewImage(data.moduleImage);
-      },
-    });
-  }
 
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading

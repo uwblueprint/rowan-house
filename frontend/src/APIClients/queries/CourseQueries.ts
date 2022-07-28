@@ -14,7 +14,6 @@ export const COURSES = gql`
         description
         image
         previewImage
-        fileName
         published
         lessons
       }
@@ -36,7 +35,6 @@ export const GET_COURSE = gql`
         description
         image
         previewImage
-        fileName
         published
         lessons
       }

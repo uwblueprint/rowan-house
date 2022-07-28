@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
 import {
   Box,
@@ -45,10 +45,7 @@ import {
 } from "../../APIClients/types/CourseClientTypes";
 import { formatLessonRequest } from "../../utils/lessonUtils";
 import EditModuleModal from "../common/EditModuleModal";
-import {
-  GET_COURSE,
-  GET_MODULE_IMAGE,
-} from "../../APIClients/queries/CourseQueries";
+import { GET_COURSE } from "../../APIClients/queries/CourseQueries";
 import { DEFAULT_IMAGE } from "../../constants/DummyData";
 
 const Sidebar = (): React.ReactElement => {
@@ -57,7 +54,6 @@ const Sidebar = (): React.ReactElement => {
     courseID,
   }: ModuleEditorParams = useParams();
   const moduleIndex = Number(moduleIndexString);
-  const [previewImage, setPreviewImage] = useState<string | undefined>();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -169,16 +165,6 @@ const Sidebar = (): React.ReactElement => {
     Number(moduleIndex)
   ] as ModuleResponse;
 
-  if (module.fileName) {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useQuery(GET_MODULE_IMAGE, {
-      variables: { fileName: module.fileName },
-      onCompleted: (data) => {
-        setPreviewImage(data.moduleImage);
-      },
-    });
-  }
-
   return (
     <>
       {module && (
@@ -196,7 +182,7 @@ const Sidebar = (): React.ReactElement => {
               <Flex
                 h="240px"
                 backgroundPosition="center"
-                backgroundImage={previewImage ?? DEFAULT_IMAGE}
+                backgroundImage={module.previewImage ?? DEFAULT_IMAGE}
                 backgroundSize="cover"
                 bgRepeat="no-repeat"
                 opacity="1"
