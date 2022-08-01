@@ -1,6 +1,7 @@
 import MgCourse from "../../models/course.model";
 import MgCourseProgress, {
   CourseProgress,
+  ModuleProgress,
 } from "../../models/courseProgress.model";
 import MgLessonProgress, {
   LessonProgress,
@@ -8,6 +9,7 @@ import MgLessonProgress, {
 import {
   IProgressService,
   CourseProgressResponseDTO,
+  ModuleProgressResponseDTO,
   LessonProgressResponseDTO,
 } from "../interfaces/IProgressService";
 import { getErrorMessage } from "../../utilities/errorUtils";
@@ -43,6 +45,31 @@ class ProgressService implements IProgressService {
     }));
   }
 
+  async getModuleProgressByIds(
+    userId: string,
+    courseId: string,
+  ): Promise<Array<ModuleProgressResponseDTO>> {
+    try {
+      const courseProgress = await MgCourseProgress.findOne({
+        user: userId,
+        course: courseId,
+      });
+      if (!courseProgress) {
+        return [];
+      }
+
+      const { moduleProgress } = courseProgress;
+      return moduleProgress
+        .map((progress) => progress || {})
+        .map(({ startedAt, completedAt }) => ({ startedAt, completedAt }));
+    } catch (error: unknown) {
+      Logger.error(
+        `Failed to get course progress. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
+  }
+
   async getLessonProgressByIds(
     userId: string,
     lessonIds: Array<string>,
@@ -66,21 +93,67 @@ class ProgressService implements IProgressService {
     }));
   }
 
-  async markCourseAsStartedForUser(
+  private async getOrCreateModuleProgress(
     userId: string,
     courseId: string,
+    moduleIndex: number,
+    serviceInvokedAt: Date,
+  ): Promise<CourseProgress> {
+    const courseProgress = await MgCourseProgress.findOneAndUpdate(
+      { user: userId, course: courseId },
+      {
+        $setOnInsert: {
+          user: userId,
+          course: courseId,
+          startedAt: serviceInvokedAt,
+          moduleProgress: [],
+        },
+      },
+      {
+        new: true,
+        upsert: true,
+      },
+    );
+
+    // Add progress up until the current index.
+    courseProgress.moduleProgress = [
+      ...courseProgress.moduleProgress,
+      ...Array(
+        Math.max(moduleIndex + 1 - courseProgress.moduleProgress.length, 0),
+      ).fill(null),
+    ];
+    return courseProgress;
+  }
+
+  async markModuleAsStartedForUser(
+    userId: string,
+    courseId: string,
+    moduleIndex: number,
   ): Promise<Date> {
     const functionCalledAt = now();
     try {
-      await MgCourseProgress.findOneAndUpdate(
-        { user: userId, course: courseId },
-        { startedAt: functionCalledAt },
-        {
-          new: true,
-          upsert: true,
-        },
+      const courseProgress = await this.getOrCreateModuleProgress(
+        userId,
+        courseId,
+        moduleIndex,
+        functionCalledAt,
       );
-      return functionCalledAt;
+
+      // Mark the specified module as started.
+      const { moduleProgress } = courseProgress;
+      const module = moduleProgress[moduleIndex];
+      if (!module?.startedAt) {
+        if (module == null) {
+          moduleProgress[moduleIndex] = {
+            startedAt: functionCalledAt,
+          };
+        } else {
+          module.startedAt = functionCalledAt;
+        }
+      }
+
+      await courseProgress.save();
+      return module?.startedAt || functionCalledAt;
     } catch (error: unknown) {
       Logger.error(
         `Failed to start course. Reason = ${getErrorMessage(error)}`,
@@ -96,49 +169,47 @@ class ProgressService implements IProgressService {
   ): Promise<Date> {
     const functionCalledAt = now();
     try {
-      const courseProgress =
-        (await MgCourseProgress.findOne({ user: userId, course: courseId })) ||
-        (await MgCourseProgress.create({
-          user: userId,
-          course: courseId,
-          moduleProgress: [],
-        }));
-
-      // Add progress up until the current index.
-      let { moduleProgress } = courseProgress;
-      moduleProgress = [
-        ...moduleProgress,
-        ...Array(Math.max(moduleIndex + 1 - moduleProgress.length, 0)).fill(
-          null,
-        ),
-      ];
+      const courseProgress = await this.getOrCreateModuleProgress(
+        userId,
+        courseId,
+        moduleIndex,
+        functionCalledAt,
+      );
 
       // Mark the specified module as completed.
-      moduleProgress[moduleIndex] = {
-        ...(moduleProgress[moduleIndex] || {}),
-        completedAt: functionCalledAt,
-      };
-      const courseProgressUpdates: Partial<CourseProgress> = { moduleProgress };
+      const { moduleProgress } = courseProgress;
+      const module = moduleProgress[moduleIndex];
+      if (!module?.completedAt) {
+        if (module == null) {
+          moduleProgress[moduleIndex] = {
+            completedAt: functionCalledAt,
+          };
+        } else {
+          module.completedAt = functionCalledAt;
+        }
+      }
 
       // Mark the course as completed if all modules are completed.
-      if (moduleProgress.every((progress) => progress?.completedAt)) {
+      if (
+        courseProgress.completedAt == null &&
+        courseProgress.moduleProgress.every(
+          (progress: ModuleProgress | null) => progress?.completedAt,
+        )
+      ) {
         // Need to make sure the user has created progress for all modules as well.
         const course = await MgCourse.findById(courseId);
         if (course == null) {
           throw new Error("Course ID not found");
         }
 
-        if (course.modules.length === moduleProgress.length) {
-          courseProgressUpdates.completedAt = functionCalledAt;
+        if (course.modules.length <= courseProgress.moduleProgress.length) {
+          courseProgress.completedAt = functionCalledAt;
         }
       }
 
-      await MgCourseProgress.update(
-        { user: userId, course: courseId },
-        courseProgressUpdates,
-      );
+      await courseProgress.save();
 
-      return functionCalledAt;
+      return module?.completedAt || functionCalledAt;
     } catch (error: unknown) {
       Logger.error(
         `Failed to complete module. Reason = ${getErrorMessage(error)}`,

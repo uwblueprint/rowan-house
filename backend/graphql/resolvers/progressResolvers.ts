@@ -15,6 +15,12 @@ const progressResolvers = {
     ): Promise<Array<CourseProgressResponseDTO>> => {
       return progressService.getCourseProgressByIds(userId, courseIds);
     },
+    moduleProgress: async (
+      _parent: undefined,
+      { userId, courseId }: { userId: string; courseId: string },
+    ): Promise<Array<CourseProgressResponseDTO>> => {
+      return progressService.getModuleProgressByIds(userId, courseId);
+    },
     lessonProgress: async (
       _parent: undefined,
       { userId, lessonIds }: { userId: string; lessonIds: Array<string> },
@@ -23,11 +29,19 @@ const progressResolvers = {
     },
   },
   Mutation: {
-    markCourseAsStartedForUser: async (
+    markModuleAsStartedForUser: async (
       _parent: undefined,
-      { userId, courseId }: { userId: string; courseId: string },
+      {
+        userId,
+        courseId,
+        moduleIndex,
+      }: { userId: string; courseId: string; moduleIndex: number },
     ): Promise<Date> => {
-      return progressService.markCourseAsStartedForUser(userId, courseId);
+      return progressService.markModuleAsStartedForUser(
+        userId,
+        courseId,
+        moduleIndex,
+      );
     },
     markModuleAsCompletedForUser: async (
       _parent: undefined,

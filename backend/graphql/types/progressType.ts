@@ -9,6 +9,11 @@ const progressType = gql`
     completedAt: Date
   }
 
+  type ModuleProgressResponseDTO {
+    startedAt: Date
+    completedAt: Date
+  }
+
   type LessonProgressResponseDTO {
     lessonId: ID!
     completedAt: Date
@@ -16,11 +21,16 @@ const progressType = gql`
 
   extend type Query {
     courseProgress(userId: ID!, courseIds: [ID!]): [CourseProgressResponseDTO!]
+    moduleProgress(userId: ID!, courseId: ID!): [ModuleProgressResponseDTO]
     lessonProgress(userId: ID!, lessonIds: [ID!]): [LessonProgressResponseDTO!]
   }
 
   extend type Mutation {
-    markCourseAsStartedForUser(userId: ID!, courseId: ID!): Date!
+    markModuleAsStartedForUser(
+      userId: ID!
+      courseId: ID!
+      moduleIndex: Int!
+    ): Date!
     markModuleAsCompletedForUser(
       userId: ID!
       courseId: ID!

@@ -1,6 +1,7 @@
 import { Schema, Document, model, Types } from "mongoose";
 
 export interface ModuleProgress {
+  startedAt?: Date;
   completedAt?: Date;
 }
 
@@ -13,6 +14,7 @@ export interface CourseProgress extends Document {
 }
 
 const ModuleProgressSchema = new Schema({
+  startedAt: Date,
   completedAt: Date,
 });
 

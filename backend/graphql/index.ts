@@ -97,6 +97,7 @@ const graphQLMiddlewares = {
     lessonById: authorizedByAllRoles(),
     lessons: authorizedByAllRoles(),
     courseProgress: isAuthorizedByUserId("userId"),
+    moduleProgress: isAuthorizedByUserId("userId"),
     lessonProgress: isAuthorizedByUserId("userId"),
   },
   Mutation: {
@@ -116,7 +117,7 @@ const graphQLMiddlewares = {
     createLesson: authorizedByAdmin(),
     updateLesson: authorizedByAdmin(),
     deleteLesson: authorizedByAdmin(),
-    markCourseAsStartedForUser: isAuthorizedByUserId("userId"),
+    markModuleAsStartedForUser: isAuthorizedByUserId("userId"),
     markModuleAsCompletedForUser: isAuthorizedByUserId("userId"),
     markLessonAsCompletedForUser: isAuthorizedByUserId("userId"),
   },
