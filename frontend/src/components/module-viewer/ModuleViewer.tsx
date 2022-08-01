@@ -154,7 +154,7 @@ const ModuleViewer = ({
             </Box>
             <Flex direction="column" flex="1" height="100%">
               <Banner asBlock />
-              <Box overflow="auto" ref={scrollRef}>
+              <Box overflow="auto" height="100%" ref={scrollRef}>
                 {completed && !editable ? (
                   <ModuleCompleted />
                 ) : (
