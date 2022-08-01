@@ -108,8 +108,6 @@ const reorderLessons = (
     return state;
   }
 
-  const { id: courseID } = state.course; // id refers to the course document id
-
   const oldModule = state.course.modules[moduleID];
 
   console.assert(oldIndex >= 0, "Old lesson index must be positive");
@@ -137,7 +135,7 @@ const reorderLessons = (
   };
   newState.hasChanged = updateChangeStatus(
     state.hasChanged,
-    courseID,
+    "<REORDER-LESSONS>",
     "COURSE-UPDATE",
   );
   return newState;

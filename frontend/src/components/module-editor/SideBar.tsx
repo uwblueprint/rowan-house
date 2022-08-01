@@ -69,6 +69,7 @@ const Sidebar = (): React.ReactElement => {
       refetchQueries: [
         {
           query: GET_COURSE,
+          variables: { id: courseID }
         },
       ],
     },
@@ -124,42 +125,45 @@ const Sidebar = (): React.ReactElement => {
     oldID: string,
     changedLesson: LessonRequest,
   ) => {
+    console.log(oldID);
     const { data } = await createLesson({
       variables: { lesson: changedLesson },
     });
     if (!data) throw Error("Failed to create new lesson");
-    const lesson = data.createLesson;
-    const { id: newID } = lesson;
+    // const lesson = data.createLesson;
+    // const { id: newID } = lesson;
     // Update lesson ID in state with response
-    dispatch({ type: "update-lesson-id", value: { oldID, newID } });
+    dispatch({ type: "update-lesson-id", value: { oldID, newID: 'test' } });
   };
 
   const saveChanges = async (changeObj: EditorChangeStatuses) => {
+    console.log(changeObj);
     Object.entries(changeObj).forEach(async ([doc_id, action]) => {
-      if (action === "COURSE-UPDATE") {
-        // Nothing happens because the updateCourse mutation is already called at the end anyway
-        return;
-      }
-      const changedLesson = formatLessonRequest(state.lessons[doc_id]);
+
       switch (action) {
         case "CREATE":
           // Await required so we can get a new ID
-          await createNewLesson(doc_id, changedLesson);
+          await createNewLesson(doc_id, formatLessonRequest(state.lessons[doc_id]));
           break;
         case "UPDATE":
-          updateLesson({ variables: { id: doc_id, lesson: changedLesson } });
+          updateLesson({ variables: { id: doc_id, lesson: formatLessonRequest(state.lessons[doc_id]) } });
           break;
         case "DELETE":
           deleteLesson({ variables: { id: doc_id } });
           break;
+        case "COURSE-UPDATE":
+          // Nothing happens because the updateCourse mutation is already called at the end anyway
+          break;
         // Make compiler happy
         default:
           break;
-      }
+      }    
     });
+    return;
     updateCourse({
       variables: { id: courseID, course: state.course },
     });
+
     state.hasChanged = {};
   };
 
