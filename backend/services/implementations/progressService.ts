@@ -78,7 +78,7 @@ class ProgressService implements IProgressService {
     try {
       lessonProgress = await MgLessonProgress.find({
         user: userId,
-        course: { $in: lessonIds },
+        lesson: { $in: lessonIds },
       });
     } catch (error: unknown) {
       Logger.error(
@@ -224,15 +224,15 @@ class ProgressService implements IProgressService {
   ): Promise<Date> {
     const functionCalledAt = now();
     try {
-      await MgLessonProgress.findOneAndUpdate(
+      const lessonProgress = await MgLessonProgress.findOneAndUpdate(
         { user: userId, lesson: lessonId },
-        { completedAt: functionCalledAt },
+        { $setOnInsert: { completedAt: functionCalledAt } },
         {
           new: true,
           upsert: true,
         },
       );
-      return functionCalledAt;
+      return lessonProgress.completedAt || functionCalledAt;
     } catch (error: unknown) {
       Logger.error(
         `Failed to complete lesson. Reason = ${getErrorMessage(error)}`,

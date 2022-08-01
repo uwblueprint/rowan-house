@@ -20,9 +20,9 @@ const progressType = gql`
   }
 
   extend type Query {
-    courseProgress(userId: ID!, courseIds: [ID!]): [CourseProgressResponseDTO!]
+    courseProgress(userId: ID!, courseIds: [ID!]!): [CourseProgressResponseDTO!]
     moduleProgress(userId: ID!, courseId: ID!): [ModuleProgressResponseDTO]
-    lessonProgress(userId: ID!, lessonIds: [ID!]): [LessonProgressResponseDTO!]
+    lessonProgress(userId: ID!, lessonIds: [ID!]!): [LessonProgressResponseDTO!]
   }
 
   extend type Mutation {
