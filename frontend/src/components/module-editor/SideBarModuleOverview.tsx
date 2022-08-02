@@ -9,6 +9,13 @@ import { Modal } from "../common/Modal";
 import { TextInput } from "../common/TextInput";
 
 import LessonItem from "./LessonItem";
+import DeleteModal from "../common/DeleteModal";
+
+enum ModalType {
+  EDIT = "edit",
+  DELETE = "delete",
+  CREATE_LESSON = "create-lesson",
+}
 
 const SideBarModuleOverview = (): React.ReactElement => {
   const context = useContext(EditorContext);
@@ -16,8 +23,10 @@ const SideBarModuleOverview = (): React.ReactElement => {
   const [title, setTitle] = useState("");
   const [isInvalid, setIsInvalid] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [modalType, setModalType] = useState(ModalType.EDIT); // determines which modal is shown when isOpen is true
   const { courseID, moduleIndex }: ModuleEditorParams = useParams();
   const moduleID = parseInt(moduleIndex, 10);
+  const [selectedLessonIndex, setSelectedLessonIndex] = useState(0);
 
   if (!context) return <></>;
   const { state, dispatch } = context;
@@ -26,7 +35,6 @@ const SideBarModuleOverview = (): React.ReactElement => {
   const module = course.modules[moduleID];
 
   const orderedLessons = module.lessons.map((id) => lessons[id]);
-
   const setFocus = (index: number) =>
     dispatch({ type: "set-focus", value: module.lessons[index] });
 
@@ -36,15 +44,28 @@ const SideBarModuleOverview = (): React.ReactElement => {
     setIsInvalid(false);
   };
 
+  const onClick = (type: ModalType) => {
+    setModalType(type);
+    onOpen();
+  };
+
+  const onDeleteClick = (index: number) => {
+    onClick(ModalType.DELETE);
+    setSelectedLessonIndex(index);
+  };
+
   const createLesson = (lessonTitle: string) => {
     if (title) {
       dispatch({
         type: "create-lesson",
         value: {
-          course: courseID,
-          module: course.modules[moduleID].id,
-          title: lessonTitle,
-          content: [],
+          lesson: {
+            course: courseID,
+            module: course.modules[moduleID].id,
+            title: lessonTitle,
+            content: [],
+          },
+          moduleIndex: Number(moduleIndex),
         },
       });
       resetState();
@@ -55,19 +76,31 @@ const SideBarModuleOverview = (): React.ReactElement => {
     }
   };
 
+  const deleteLesson = () => {
+    dispatch({
+      type: "delete-lesson",
+      value: {
+        lessonId: module.lessons[selectedLessonIndex],
+        moduleIndex: Number(moduleIndex),
+      },
+    });
+    onClose();
+  };
+
   return (
     <VStack>
-      {focusedLesson &&
-        orderedLessons.map((lesson, index) => (
-          <LessonItem
-            text={lesson.title}
-            isFocused={state.lessons[focusedLesson] === lesson}
-            key={lesson.id}
-            setFocus={() => setFocus(index)}
-          />
-        ))}
+      {orderedLessons.map((lesson, index) => (
+        <LessonItem
+          text={lesson.title}
+          isFocused={!!focusedLesson && state.lessons[focusedLesson] === lesson}
+          key={lesson.id}
+          id={lesson.id}
+          setFocus={() => setFocus(index)}
+          onDeleteClick={() => onDeleteClick(index)}
+        />
+      ))}
       <Button
-        onClick={onOpen}
+        onClick={() => onClick(ModalType.CREATE_LESSON)}
         color="brand.royal"
         variant="unstyled"
         leftIcon={<AddIcon />}
@@ -78,26 +111,36 @@ const SideBarModuleOverview = (): React.ReactElement => {
       >
         New Lesson
       </Button>
-      <Modal
-        header="Edit lesson title"
-        isOpen={isOpen}
-        onConfirm={() => createLesson(title)}
-        onCancel={() => {
-          resetState();
-          onClose();
-        }}
-      >
-        <TextInput
-          placeholder="New Lesson"
-          onChange={(currTitle) => {
-            setTitle(currTitle);
-            setIsInvalid(false);
+      {modalType === ModalType.CREATE_LESSON && (
+        <Modal
+          header="Edit lesson title"
+          isOpen={isOpen}
+          onConfirm={() => createLesson(title)}
+          onCancel={() => {
+            resetState();
+            onClose();
           }}
-          errorMessage={errorMessage}
-          isInvalid={isInvalid}
-          isRequired
+        >
+          <TextInput
+            placeholder="New Lesson"
+            onChange={(currTitle) => {
+              setTitle(currTitle);
+              setIsInvalid(false);
+            }}
+            errorMessage={errorMessage}
+            isInvalid={isInvalid}
+            isRequired
+          />
+        </Modal>
+      )}
+      {modalType === ModalType.DELETE && (
+        <DeleteModal
+          name="Lesson"
+          isOpen={isOpen}
+          onConfirm={deleteLesson}
+          onCancel={onClose}
         />
-      </Modal>
+      )}
     </VStack>
   );
 };

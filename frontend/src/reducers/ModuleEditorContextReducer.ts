@@ -16,8 +16,12 @@ const updateChangeStatus = (
   docID: string,
   status: EditorChangeStatus,
 ): EditorChangeStatuses => {
-  // TODO: Doesn't work with DELETE. Logic needs to be flushed out.
-  // ! e.g. if a doc has CREATE, but then a DELETE status comes, remove it
+  // extra logic to make DELETE work
+  if (status === "DELETE" && docID in hasChanged) {
+    const newHasChanged = hasChanged;
+    delete newHasChanged[docID];
+    return newHasChanged;
+  }
   if (!(docID in hasChanged)) return { ...hasChanged, [docID]: status };
   return hasChanged;
 };
@@ -26,15 +30,17 @@ const updateChangeStatus = (
 const createLesson = (
   state: EditorStateType,
   lesson: LessonType,
+  moduleIndex: number,
 ): EditorStateType => {
   // Create deep copy of state since state properties are readonly
   // TODO: This is dangerous, we should use immutable ways to edit this data
   const newState = JSON.parse(JSON.stringify(state));
-  const moduleIndex = state.course.modules.findIndex(
-    (module) => module.id === lesson.module,
-  );
+  // const moduleIndex = state.course.modules.findIndex(
+  //   (module) => module.id === lesson.module,
+  // );
   // Check to make sure moduleID exists
   console.assert(moduleIndex !== -1, `Invalid moduleID ${lesson.module}`);
+  console.log(`MODULE INDEX ${moduleIndex} ${lesson.module}`);
   // Temporary lesson that is used until save
   const lessonID = uuid();
   // Create the new lesson object
@@ -71,10 +77,10 @@ const replaceLessonID = (
   state: EditorStateType,
   oldID: string,
   newID: string,
+  moduleIndex: number,
 ): EditorStateType => {
   const newState = { ...state };
-  // Store lesson
-  const lesson = state.lessons[oldID];
+
   // Remove old ID & add new one
   const rename = (oID: string, neID: string, { [oID]: old, ...rest }) => ({
     [neID]: old,
@@ -82,9 +88,9 @@ const replaceLessonID = (
   });
   newState.lessons = rename(oldID, newID, state.lessons);
   // Replace lesson ID in the course
-  const moduleIndex = state.course.modules.findIndex(
-    (module) => module.id === lesson.module,
-  );
+  // const moduleIndex = state.course.modules.findIndex(
+  //   (module) => module.id === lesson.module,
+  // );
   const oldIndex = newState.course.modules[moduleIndex].lessons.findIndex(
     (id) => id === oldID,
   );
@@ -96,13 +102,35 @@ const replaceLessonID = (
   return newState;
 };
 
-const deleteLesson = (state: EditorStateType, id: string) => {
-  if (Object.keys(state.lessons).includes(id)) return state;
+const deleteLesson = (
+  state: EditorStateType,
+  id: string,
+  moduleIndex: number,
+) => {
+  if (!id || !Object.keys(state.lessons).includes(id)) return state;
+  const newState = JSON.parse(JSON.stringify(state));
 
-  const newState = { ...state };
   delete newState.lessons[id];
-  // TODO: Remove lesson from module
-  // TODO: If focused lesson is the lesson to delete, change focused lesson
+
+  const lessonIndex = state.course.modules[moduleIndex].lessons.findIndex(
+    (l) => l === id,
+  );
+
+  newState.course.modules[moduleIndex].lessons.splice(lessonIndex, 1);
+
+  // // If focused lesson is the lesson to delete, change focused lesson
+  if (state.focusedLesson === id) {
+    if (lessonIndex > 0) {
+      // set to previous lesson
+      newState.focusedLesson = newState.lessons[lessonIndex - 1];
+    } else if (lessonIndex < newState.lessons.length - 1) {
+      // set to next lesson
+      newState.focusedLesson = newState.lessons[lessonIndex + 1];
+    } else {
+      // set to null
+      newState.focusedLesson = null;
+    }
+  }
   // Update to let the state know things have changed
   newState.hasChanged = updateChangeStatus(state.hasChanged, id, "DELETE");
   return newState;
@@ -245,13 +273,22 @@ export default function EditorContextReducer(
         focusedLesson: action.value,
       };
     case "create-lesson":
-      return createLesson(state, action.value);
+      return createLesson(state, action.value.lesson, action.value.moduleIndex);
     case "update-lesson":
       return updateLesson(state, action.value);
     case "delete-lesson":
-      return deleteLesson(state, action.value);
+      return deleteLesson(
+        state,
+        action.value.lessonId,
+        action.value.moduleIndex,
+      );
     case "update-lesson-id":
-      return replaceLessonID(state, action.value.oldID, action.value.newID);
+      return replaceLessonID(
+        state,
+        action.value.oldID,
+        action.value.newID,
+        action.value.moduleIndex,
+      );
     case "create-block":
       return createLessonContentBlock(
         state,

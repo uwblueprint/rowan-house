@@ -103,7 +103,7 @@ export type EditorContextAction =
     }
   | {
       type: "create-lesson";
-      value: LessonType;
+      value: { lesson: LessonType; moduleIndex: number };
     }
   | {
       type: "update-lesson";
@@ -111,11 +111,11 @@ export type EditorContextAction =
     }
   | {
       type: "delete-lesson";
-      value: string;
+      value: { lessonId: string; moduleIndex: number };
     }
   | {
       type: "update-lesson-id";
-      value: { oldID: string; newID: string };
+      value: { oldID: string; newID: string; moduleIndex: number };
     }
   | {
       type: "create-block";
