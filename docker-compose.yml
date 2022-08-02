@@ -41,6 +41,7 @@ services:
       - 8.8.8.8
     env_file:
       - ./.env
+      - ./.env.local
     entrypoint:
       - /bin/bash
       - /.dev/launch_dev.sh
