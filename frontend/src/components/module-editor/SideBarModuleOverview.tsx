@@ -94,7 +94,6 @@ const SideBarModuleOverview = (): React.ReactElement => {
           text={lesson.title}
           isFocused={!!focusedLesson && state.lessons[focusedLesson] === lesson}
           key={lesson.id}
-          id={lesson.id}
           setFocus={() => setFocus(index)}
           onDeleteClick={() => onDeleteClick(index)}
         />
