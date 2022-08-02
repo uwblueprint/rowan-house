@@ -6,7 +6,7 @@ export interface CreateCourseRequestDTO {
   description: string;
   image: string;
   previewImage: string;
-  modules: ModuleDTO[];
+  modules: (ModuleDTO | null)[];
   private: boolean;
 }
 
@@ -16,7 +16,7 @@ export interface UpdateCourseRequestDTO {
   image: string;
   previewImage: string;
   private: boolean;
-  modules: Module[];
+  modules: (Module | null)[];
 }
 
 export interface CourseResponseDTO {
@@ -26,7 +26,7 @@ export interface CourseResponseDTO {
   image: string;
   previewImage: string;
   private: boolean;
-  modules: Module[];
+  modules: (Module | null)[];
 }
 
 export interface ICourseService {
