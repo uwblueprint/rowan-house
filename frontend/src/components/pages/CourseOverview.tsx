@@ -1,9 +1,37 @@
 import React from "react";
-import { Box, Flex, VStack } from "@chakra-ui/react";
+import { useHistory, useParams } from "react-router-dom";
+import { ChevronLeftIcon } from "@chakra-ui/icons";
+import { Box, Button, Flex, Text, VStack } from "@chakra-ui/react";
+import { useQuery } from "@apollo/client";
 import Banner from "../learner/Banner";
 import ModuleLessonCount from "../learner/ModuleLessonCount";
+import { GET_COURSE } from "../../APIClients/queries/CourseQueries";
+import { COURSE_OVERVIEW_BASE_ROUTE } from "../../constants/Routes";
+import { CourseOverviewParams } from "../../types/CourseOverviewTypes";
 
 const ViewCourse = (): React.ReactElement => {
+  const history = useHistory();
+  const { courseID }: CourseOverviewParams = useParams();
+  const { data: courseData } = useQuery(GET_COURSE, {
+    variables: {
+      id: courseID,
+    },
+  });
+
+  const onReturnToCourseOverviewClick = () => {
+    history.push(COURSE_OVERVIEW_BASE_ROUTE);
+  };
+
+  const getLessonCount = () => {
+    let lessonCount = 0;
+
+    courseData?.course?.modules?.forEach((moduleContent: any) => {
+      lessonCount += moduleContent?.lessons?.length;
+    });
+
+    return lessonCount;
+  };
+
   return (
     <Flex direction="column">
       <Banner />
@@ -11,15 +39,29 @@ const ViewCourse = (): React.ReactElement => {
         px="120px"
         py="20px"
         height="400px"
-        background="background.dark"
+        background="background.lightgrey"
         color="white"
         align="center"
       >
         <VStack flex="2" align="start">
-          <span>breadcrumb here</span>
-          <span>title here</span>
-          <span>description here</span>
-          <ModuleLessonCount color="white" moduleCount={10} lessonCount={24} />
+          <Box display="flex">
+            <Button onClick={onReturnToCourseOverviewClick} variant="link">
+              <ChevronLeftIcon color="brand.royal" mr="15px" boxSize={30} />
+              <Text variant="display-xs" color="brand.royal">
+                Return to Course browsing
+              </Text>
+            </Button>
+          </Box>
+          <Text variant="display-lg" color="text.default" mb="16px !important">
+            {courseData?.course?.title}
+          </Text>
+          <Text variant="body" color="text.default" mb="16px !important">
+            {courseData?.course?.description}
+          </Text>
+          <ModuleLessonCount
+            moduleCount={courseData?.course?.modules?.length}
+            lessonCount={getLessonCount()}
+          />
         </VStack>
         <Flex
           direction="column"
