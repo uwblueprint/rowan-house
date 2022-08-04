@@ -10,6 +10,15 @@ export const GET_COURSE_PROGRESS = gql`
   }
 `;
 
+export const GET_MODULE_PROGRESS = gql`
+  query GetModuleProgress($userId: ID!, $courseId: ID!) {
+    moduleProgress(userId: $userId, courseId: $courseId) {
+      startedAt
+      completedAt
+    }
+  }
+`;
+
 export const GET_LESSON_PROGRESS = gql`
   query GetLessonProgress($userId: ID!, $lessonIds: [ID!]!) {
     lessonProgress(userId: $userId, lessonIds: $lessonIds) {
