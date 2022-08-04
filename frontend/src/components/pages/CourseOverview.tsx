@@ -8,7 +8,7 @@ import ModuleLessonCount from "../learner/ModuleLessonCount";
 import { GET_COURSE } from "../../APIClients/queries/CourseQueries";
 import { COURSE_OVERVIEW_BASE_ROUTE } from "../../constants/Routes";
 import { CourseOverviewParams } from "../../types/CourseOverviewTypes";
-import { ModuleType } from '../../types/ModuleEditorTypes';
+import { ModuleType } from "../../types/ModuleEditorTypes";
 
 const CourseOverview = (): React.ReactElement => {
   const history = useHistory();
@@ -53,10 +53,18 @@ const CourseOverview = (): React.ReactElement => {
               </Text>
             </Button>
           </Box>
-          <Text variant="display-lg" color="text.default" style={{ marginBottom: '16px' }}>
+          <Text
+            variant="display-lg"
+            color="text.default"
+            style={{ marginBottom: "16px" }}
+          >
             {courseData?.course?.title}
           </Text>
-          <Text variant="body" color="text.default" style={{ marginBottom: '16px' }}>
+          <Text
+            variant="body"
+            color="text.default"
+            style={{ marginBottom: "16px" }}
+          >
             {courseData?.course?.description}
           </Text>
           <ModuleLessonCount
