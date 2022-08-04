@@ -8,8 +8,9 @@ import ModuleLessonCount from "../learner/ModuleLessonCount";
 import { GET_COURSE } from "../../APIClients/queries/CourseQueries";
 import { COURSE_OVERVIEW_BASE_ROUTE } from "../../constants/Routes";
 import { CourseOverviewParams } from "../../types/CourseOverviewTypes";
+import { ModuleType } from '../../types/ModuleEditorTypes';
 
-const ViewCourse = (): React.ReactElement => {
+const CourseOverview = (): React.ReactElement => {
   const history = useHistory();
   const { courseID }: CourseOverviewParams = useParams();
   const { data: courseData } = useQuery(GET_COURSE, {
@@ -25,7 +26,7 @@ const ViewCourse = (): React.ReactElement => {
   const getLessonCount = () => {
     let lessonCount = 0;
 
-    courseData?.course?.modules?.forEach((moduleContent: any) => {
+    courseData?.course?.modules?.forEach((moduleContent: ModuleType) => {
       lessonCount += moduleContent?.lessons?.length;
     });
 
@@ -48,14 +49,14 @@ const ViewCourse = (): React.ReactElement => {
             <Button onClick={onReturnToCourseOverviewClick} variant="link">
               <ChevronLeftIcon color="brand.royal" mr="15px" boxSize={30} />
               <Text variant="display-xs" color="brand.royal">
-                Return to Course browsing
+                Return to Course Browsing
               </Text>
             </Button>
           </Box>
-          <Text variant="display-lg" color="text.default" mb="16px !important">
+          <Text variant="display-lg" color="text.default" style={{ marginBottom: '16px' }}>
             {courseData?.course?.title}
           </Text>
-          <Text variant="body" color="text.default" mb="16px !important">
+          <Text variant="body" color="text.default" style={{ marginBottom: '16px' }}>
             {courseData?.course?.description}
           </Text>
           <ModuleLessonCount
@@ -83,4 +84,4 @@ const ViewCourse = (): React.ReactElement => {
   );
 };
 
-export default ViewCourse;
+export default CourseOverview;
