@@ -71,6 +71,8 @@ interface IAuthService {
    * @throws Error if no user role found
    */
   getUserRoleByAccessToken(accessToken: string): Promise<Role>;
+  getUserRoleByAccessToken(accessToken: null): Promise<null>;
+  getUserRoleByAccessToken(accessToken: string | null): Promise<Role | null>;
 
   /**
    * Determine if the provided access token is valid and issued to the requested user

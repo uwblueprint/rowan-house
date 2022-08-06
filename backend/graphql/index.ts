@@ -9,6 +9,7 @@ import {
   isAuthorizedByRole,
   isAuthorizedByUserId,
   idNotSameAsActiveUser,
+  publicRoute,
 } from "../middlewares/auth";
 import and from "../middlewares/utils/combinatorsUtils";
 import authResolvers from "./resolvers/authResolvers";
@@ -86,8 +87,8 @@ const authorizeRoleChange = (id: string) => {
 
 const graphQLMiddlewares = {
   Query: {
-    course: authorizedByAllRoles(),
-    courses: authorizedByAllRoles(),
+    course: publicRoute,
+    courses: publicRoute,
     entity: authorizedByAllRoles(),
     entities: authorizedByAllRoles(),
     userById: authorizedByAdmin(),
