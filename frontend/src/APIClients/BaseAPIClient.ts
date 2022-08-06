@@ -5,14 +5,17 @@ import {
   Observable,
   ObservableSubscription,
   Operation,
+  NormalizedCacheObject,
 } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
 import { setContext } from "@apollo/client/link/context";
 import { RetryLink } from "@apollo/client/link/retry";
 import { createUploadLink } from "apollo-upload-client";
-import jwt from "jsonwebtoken";
-import AUTHENTICATED_USER_KEY from "../constants/AuthConstants";
-import { getLocalStorageObjProperty } from "../utils/LocalStorageUtils";
+import {
+  getLocalAccessToken,
+  isAccessTokenExpired,
+  refreshAccessToken,
+} from "../utils/AuthUtils";
 
 const httpLink = (createUploadLink({
   uri: `${process.env.REACT_APP_BACKEND_URL}/graphql`,
@@ -20,10 +23,7 @@ const httpLink = (createUploadLink({
 }) as unknown) as ApolloLink;
 
 const authFromLocalLink = setContext(async (_, { headers }) => {
-  const accessToken = getLocalStorageObjProperty(
-    AUTHENTICATED_USER_KEY,
-    "accessToken",
-  );
+  const accessToken = getLocalAccessToken();
   return {
     headers: {
       ...headers,
@@ -32,30 +32,24 @@ const authFromLocalLink = setContext(async (_, { headers }) => {
   };
 });
 
+// So that we can use the client in token injection code.
+let moduleClient: ApolloClient<NormalizedCacheObject>;
+
+const getValidAccessToken = async () => {
+  const accessToken = getLocalAccessToken();
+  if (isAccessTokenExpired(accessToken)) {
+    // eslint-disable-next-line no-console
+    console.log("Access token expired, fetching a new one...");
+    return refreshAccessToken(moduleClient);
+  }
+  return accessToken;
+};
+
 const injectAccessToken = async (operation: Operation) => {
-  const accessToken = getLocalStorageObjProperty(
-    AUTHENTICATED_USER_KEY,
-    "accessToken",
-  );
+  const accessToken = await getValidAccessToken();
   operation.setContext({
     headers: { Authorization: `Bearer ${accessToken}` },
   });
-  const decodedToken = jwt.decode(String(accessToken));
-  const currTime = Math.round(new Date().getTime() / 1000);
-  if (
-    typeof decodedToken === "object" &&
-    decodedToken?.exp &&
-    decodedToken?.exp <= currTime
-  ) {
-    localStorage.clear();
-    window.location.reload();
-    throw Error("Token expired, sign out");
-  }
-  if (!decodedToken) {
-    // TODO handle this case better.
-    // eslint-disable-next-line no-console
-    console.warn("null access token - failed to inject into API call");
-  }
 };
 
 // https://www.apollographql.com/blog/apollo-client/using-apollo-link-to-handle-dependent-queries/
@@ -144,5 +138,6 @@ const client = new ApolloClient({
     addTypename: false,
   }),
 });
+moduleClient = client;
 
 export default client;
