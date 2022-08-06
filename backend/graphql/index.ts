@@ -97,6 +97,7 @@ const graphQLMiddlewares = {
     userCountByTown: authorizedByAdmin(),
     lessonById: authorizedByAllRoles(),
     lessons: authorizedByAllRoles(),
+    lessonTitles: publicRoute,
     courseProgress: isAuthorizedByUserId("userId"),
     moduleProgress: isAuthorizedByUserId("userId"),
     lessonProgress: isAuthorizedByUserId("userId"),
