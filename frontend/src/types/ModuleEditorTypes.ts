@@ -104,7 +104,7 @@ export type EditorContextAction =
     }
   | {
       type: "update-lesson";
-      value: LessonType;
+      value: Partial<LessonType>;
     }
   | {
       type: "delete-lesson";

@@ -56,7 +56,7 @@ const createLesson = (
 
 const updateLesson = (
   state: EditorStateType,
-  lesson: LessonType,
+  lesson: Partial<LessonType>,
 ): EditorStateType => {
   const id = state.focusedLesson;
 
