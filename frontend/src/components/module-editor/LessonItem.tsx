@@ -45,10 +45,7 @@ const LessonItem = ({
       dispatch({
         type: "update-lesson",
         value: {
-          course: courseID,
-          module: course.modules[moduleID].id,
           title: lessonTitle,
-          content: [],
         },
       });
       resetState();
