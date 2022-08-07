@@ -86,16 +86,50 @@ const refreshDirectionalLink = new RetryLink().split(
   accessTokenInjectionLink.concat(httpLink),
 );
 
+const pluralize = <T>(
+  singularLabel: string,
+  pluralLabel: string,
+  ts: Readonly<Array<T>>,
+): [string, T | Readonly<Array<T>>] => {
+  return ts.length === 1 ? [singularLabel, ts[0]] : [pluralLabel, ts];
+};
+
 const errorLink = onError(({ graphQLErrors, networkError }) => {
-  if (graphQLErrors)
-    graphQLErrors.forEach(({ message, locations, path }) =>
-      // eslint-disable-next-line no-console
-      console.log(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
-      ),
-    );
+  if (graphQLErrors) {
+    graphQLErrors.forEach(({ message, locations, path, extensions }) => {
+      /* eslint-disable no-console */
+      if (process.env.NODE_ENV === "development") {
+        const { code, exception } = extensions || {};
+        const { stacktrace } = exception || {};
+
+        console.group("[GraphQL error]", message);
+        if (path) {
+          console.log(...pluralize("Endpoint:", "Endpoints:", path));
+        }
+        if (code) {
+          console.log("Code:", code);
+        }
+        if (stacktrace) {
+          console.log(stacktrace.join("\n"));
+        }
+        if (locations) {
+          console.log(
+            ...pluralize(
+              "Location (in query):",
+              "Locations (in query):",
+              locations,
+            ),
+          );
+        }
+        console.groupEnd();
+      } else {
+        console.error("[GraphQL error]", message);
+      }
+      /* eslint-enable no-console */
+    });
+  }
   // eslint-disable-next-line no-console
-  if (networkError) console.log(`[Network error]: ${networkError}`);
+  if (networkError) console.log("[Network error]", networkError);
 });
 
 /*
