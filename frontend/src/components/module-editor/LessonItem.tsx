@@ -35,7 +35,7 @@ const LessonItem = ({
   const { course } = state;
 
   const resetState = () => {
-    setTitle("");
+    setTitle(text);
     setErrorMessage("");
     setIsInvalid(false);
   };
@@ -121,6 +121,7 @@ const LessonItem = ({
                 }}
                 errorMessage={errorMessage}
                 isInvalid={isInvalid}
+                defaultValue={text}
               />
             </Modal>
 
