@@ -1,76 +1,60 @@
-import { useLazyQuery, useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import React, { useContext, useState, useEffect } from "react";
 import { GET_MODULE_PROGRESS } from "../../APIClients/queries/ProgressQueries";
 import {
-  ModuleProgress,
   ModuleProgressRequest,
   ModuleProgressResponse,
 } from "../../APIClients/types/ProgressClientTypes";
 import AuthContext from "../../contexts/AuthContext";
-import { AuthenticatedUser } from "../../types/AuthTypes";
+import { CourseType } from "../../types/ModuleEditorTypes";
 
-const UpNext = (courseID: string): React.ReactElement => {
+const UpNext = (courseData: CourseType): React.ReactElement => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
 
   const [nextModuleIndex, setNextModuleIndex] = useState<number>();
-
-  // const { refetch } = useQuery<
-  //     ModuleProgressResponse,
-  //     ModuleProgressRequest
-  // // skip set to true prevents premature query call without valid authenticatedUser
-  // >(GET_MODULE_PROGRESS, { skip: true });
 
   const [getModuleProgress, { data: moduleProgressData }] = useLazyQuery<
     ModuleProgressResponse,
     ModuleProgressRequest
   >(GET_MODULE_PROGRESS);
 
-  // const getModuleProgress = async (
-  //     moduleProgressAuthenticatedUser: AuthenticatedUser,
-  //     moduleProgressCourseID: string,
-  // ): Promise<ModuleProgressResponse | null> => {
-  //     if (!moduleProgressAuthenticatedUser) {
-  //         return null;
-  //     }
-  //     const res = await refetch({
-  //         userId: moduleProgressAuthenticatedUser.id,
-  //         courseId: moduleProgressCourseID,
-  //     });
-  //     const { data, error } = res;
-  //     // TODO: Check if it's possible for data to be undefined
-  //     // This code is inspired by AuthAPIClient.updateAuthenticatedUser
-  //     if (error) {
-  //         // TODO: add proper frontend logging
-  //         // eslint-disable-next-line no-console
-  //         console.log(error, data);
-  //         return null;
-  //     }
-  //     return data;
-  // };
-
-  // const getNextModule = (nextModuleAuthenticatedUser: AuthenticatedUser, nextModuleCourseID: string) => {
-  //     const moduleProgressResponse = getModuleProgress(nextModuleAuthenticatedUser, nextModuleCourseID);
-  //     if (!moduleProgressResponse) {
-  //         return;
-  //     }
-  //     for (const )
-  //     for (const module of modulePRo) {
-  //             if (!module.completedAt) {
-  //                 return;
-  //             }
-  //         }
-  // };
+  const getNextModule = (
+    nextModuleModuleProgressData: ModuleProgressResponse,
+  ): number => {
+    const { moduleProgress } = nextModuleModuleProgressData;
+    for (let i = 0; i < moduleProgress.length; i += 1) {
+      if (!moduleProgress[i].completedAt) {
+        return i;
+      }
+    }
+    return -1;
+  };
 
   useEffect(() => {
     if (authenticatedUser) {
       getModuleProgress({
         variables: {
           userId: authenticatedUser.id,
-          courseId: courseID,
+          courseId: courseData.id,
         },
       });
     }
-  }, [authenticatedUser, setAuthenticatedUser, getModuleProgress, courseID]);
+  }, [
+    authenticatedUser,
+    setAuthenticatedUser,
+    getModuleProgress,
+    courseData.id,
+  ]);
+
+  useEffect(() => {
+    if (moduleProgressData) {
+      const index = getNextModule(moduleProgressData);
+      if (index !== -1) {
+        setNextModuleIndex(index);
+      }
+    }
+  }, [moduleProgressData]);
+
   return <></>;
 };
 
