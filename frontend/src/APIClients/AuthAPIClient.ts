@@ -132,17 +132,19 @@ type RefreshFunction = (
   >
 >;
 
-const refresh = async (refreshFunction: RefreshFunction): Promise<boolean> => {
+const refresh = async (
+  refreshFunction: RefreshFunction,
+): Promise<string | null> => {
   try {
     const result = await refreshFunction({ variables: {} });
     const token = result.data?.refresh;
     if (!token) {
-      return false;
+      return null;
     }
     setLocalStorageObjProperty(AUTHENTICATED_USER_KEY, "accessToken", token);
-    return true;
+    return token;
   } catch (error) {
-    return false;
+    return null;
   }
 };
 
