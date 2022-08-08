@@ -35,6 +35,25 @@ class LessonService implements ILessonService {
     };
   }
 
+  async getLessonTitlesByIds(ids: Array<string>): Promise<Array<string>> {
+    let lessons: Array<Lesson> | null;
+    try {
+      lessons = await MgLesson.find({ _id: { $in: ids } }, { title: 1 });
+      if (!lessons) {
+        throw new Error(`Lesson id from ${ids} not found`);
+      }
+    } catch (error: unknown) {
+      Logger.error(`Failed to get lesson. Reason = ${getErrorMessage(error)}`);
+      throw error;
+    }
+
+    const idToTitle: { [key: string]: string } = {};
+    lessons.forEach((lesson) => {
+      idToTitle[lesson.id] = lesson.title;
+    });
+    return ids.map((id) => idToTitle[id]);
+  }
+
   async createLesson(
     lesson: CreateLessonRequestDTO,
   ): Promise<LessonResponseDTO> {
