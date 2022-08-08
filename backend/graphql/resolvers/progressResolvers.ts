@@ -3,6 +3,7 @@ import {
   CourseProgressResponseDTO,
   LessonProgressResponseDTO,
   IProgressService,
+  ModuleProgressResponseDTO,
 } from "../../services/interfaces/IProgressService";
 
 const progressService: IProgressService = new ProgressService();
@@ -18,7 +19,7 @@ const progressResolvers = {
     moduleProgress: async (
       _parent: undefined,
       { userId, courseId }: { userId: string; courseId: string },
-    ): Promise<Array<CourseProgressResponseDTO>> => {
+    ): Promise<Array<ModuleProgressResponseDTO>> => {
       return progressService.getModuleProgressByIds(userId, courseId);
     },
     lessonProgress: async (
