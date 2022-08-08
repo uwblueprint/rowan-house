@@ -11,14 +11,14 @@ const authService: IAuthService = new AuthService(new UserService());
 
 export const getAccessToken = (req: Request): string | null => {
   const [scheme, token] = req.headers.authorization?.split(" ") || [];
-  if (scheme.toLowerCase() === "bearer") {
+  if (scheme?.toLowerCase() === "bearer") {
     return token === "null" ? null : token;
   }
   return null;
 };
 
-/* Determine if the user whose role is to be changed does not match the currently 
-logged in user. 
+/* Determine if the user whose role is to be changed does not match the currently
+logged in user.
  * Note: userIdField is the name of the request parameter containing the requested userId */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
