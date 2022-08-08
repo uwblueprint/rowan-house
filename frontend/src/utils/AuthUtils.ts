@@ -35,11 +35,10 @@ const getRefreshedAccessToken = async (
   return token;
 };
 
+// Implementation idea thanks to https://stackoverflow.com/a/70324598/3761440.
 export const refreshAccessToken = (() => {
   let pendingRefreshPromise: Promise<string> | null = null;
-  return async (
-    client: ApolloClient<NormalizedCacheObject>,
-  ): Promise<string> => {
+  return (client: ApolloClient<NormalizedCacheObject>): Promise<string> => {
     if (!pendingRefreshPromise) {
       pendingRefreshPromise = getRefreshedAccessToken(client).finally(() => {
         pendingRefreshPromise = null;
