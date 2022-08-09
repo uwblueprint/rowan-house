@@ -151,6 +151,26 @@ const createLessonContentBlock = (
 
   let block: ContentBlockState | null;
   switch (blockID) {
+    case ContentTypeEnum.BUTTON.id:
+      block = {
+        type: ContentTypeEnum.BUTTON,
+        id: uuid(),
+        content: {
+          link: "https://rowanhouse.ca",
+          text: "Click Here",
+        },
+      };
+      break;
+    case ContentTypeEnum.COLUMN.id:
+      block = {
+        type: ContentTypeEnum.COLUMN,
+        id: uuid(),
+        content: {
+          left: "1",
+          right: "2",
+        },
+      };
+      break;
     case ContentTypeEnum.TEXT.id:
       block = {
         type: ContentTypeEnum.TEXT,

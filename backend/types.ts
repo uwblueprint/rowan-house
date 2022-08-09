@@ -1,9 +1,17 @@
 export type Role = "Learner" | "Admin" | "Staff";
 
+<<<<<<< HEAD
 export type ContentType = "text" | "image" | "video" | "heading";
+=======
+export type ContentType = "button" | "text" | "image" | "video";
+>>>>>>> 7330b6d (Added button, column)
 export interface ContentBlock {
   type: ContentType;
   content: Record<string, unknown>;
+}
+
+export interface ButtonBlock extends ContentBlock {
+  content: { link: string, text: string };
 }
 
 export interface TextBlock extends ContentBlock {

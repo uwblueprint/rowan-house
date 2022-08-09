@@ -3,7 +3,6 @@ import { ContentType } from "../APIClients/types/LessonClientTypes";
 
 export const ContentTypeCategories = ["Layout", "Basic", "Media"];
 
-export type ColumnBlockState = ContentBlockStateType<"column">;
 export type HeadingBlockState = ContentBlockStateType<
   "heading",
   {
@@ -18,7 +17,13 @@ export type TextBlockState = ContentBlockStateType<
   }
 >;
 export type LinkBlockState = ContentBlockStateType<"link">;
-export type ButtonBlockState = ContentBlockStateType<"button">;
+export type ButtonBlockState = ContentBlockStateType<
+  "button",
+  {
+    link: string;
+    text: string;
+  }
+>;
 export type ImageBlockState = ContentBlockStateType<
   "image",
   {
@@ -32,6 +37,22 @@ export type VideoBlockState = ContentBlockStateType<
   }
 >;
 export type AudioBlockState = ContentBlockStateType<"audio">;
+
+type ColumnValidBlockState = RequireAllContentTypesArePresent<
+  | HeadingBlockState
+  | TextBlockState
+  | LinkBlockState
+  | ButtonBlockState
+  | ImageBlockState
+>;
+
+export type ColumnBlockState = ContentBlockStateType<
+  "column",
+  {
+    left: string;
+    right: string;
+  }
+>;
 
 export type ContentBlockState = RequireAllContentTypesArePresent<
   | ColumnBlockState

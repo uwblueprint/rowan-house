@@ -3,22 +3,30 @@ import React, { useContext, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 
 import { ContentBlockState } from "../../../types/ContentBlockTypes";
+<<<<<<< HEAD
 import {
   TextBlock,
   ImageBlock,
   VideoBlock,
   HeadingBlock,
 } from "../../common/content";
+=======
+import { ButtonBlock, ColumnBlock, TextBlock, ImageBlock, VideoBlock } from "../../common/content";
+>>>>>>> 7330b6d (Added button, column)
 import DeleteModal from "../../common/DeleteModal";
 import EditContentOptionsMenu from "../EditContentOptionsMenu";
 
 import { ReactComponent as DragHandleIconSvg } from "../../../assets/DragHandle.svg";
+<<<<<<< HEAD
 import {
   EditTextModal,
   EditImageModal,
   EditVideoModal,
   EditHeadingModal,
 } from "./modals";
+=======
+import { EditButtonModal, EditTextModal, EditImageModal, EditVideoModal } from "./modals";
+>>>>>>> 7330b6d (Added button, column)
 import createContentBlockRenderers, {
   EmptyConfigEntry as Empty,
 } from "../../common/content/ContentBlockRenderer";
@@ -26,17 +34,28 @@ import createContentBlockRenderers, {
 import EditorContext from "../../../contexts/ModuleEditorContext";
 
 const [CONTENT_BLOCKS, EDIT_MODALS] = createContentBlockRenderers({
+<<<<<<< HEAD
   column: Empty,
   heading: {
     renderBlock: HeadingBlock,
     renderEditModal: EditHeadingModal,
   },
+=======
+  column: {
+    renderBlock: ColumnBlock,
+    renderEditModal: () => null,
+  },
+  heading: Empty,
+>>>>>>> 7330b6d (Added button, column)
   text: {
     renderBlock: TextBlock,
     renderEditModal: EditTextModal,
   },
   link: Empty,
-  button: Empty,
+  button: {
+    renderBlock: ButtonBlock,
+    renderEditModal: EditButtonModal,
+  },
   image: {
     renderBlock: ImageBlock,
     renderEditModal: EditImageModal,
@@ -110,7 +129,7 @@ const ContentBlock = ({
                 {CONTENT_BLOCKS.render({ block })}
                 <EditContentOptionsMenu
                   isVisible={isHovered}
-                  onEditClick={onEditModalOpen}
+                  onEditClick={onEditModalOpen} // block.type.clientType !== 'column' ? onEditModalOpen : null
                   onCopyClick={() => {}}
                   onDeleteClick={onDeleteModalOpen}
                 />

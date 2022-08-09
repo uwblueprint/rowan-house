@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {
   ContentBlock,
   HeadingBlock,
@@ -5,6 +6,9 @@ import {
   TextBlock,
   VideoBlock,
 } from "../../types";
+=======
+import { ButtonBlock, ContentBlock, ImageBlock, TextBlock, VideoBlock } from "../../types";
+>>>>>>> 7330b6d (Added button, column)
 
 type Type = "string" | "integer" | "boolean";
 
@@ -83,9 +87,15 @@ export const validateContent = (content: ContentBlock): boolean => {
       const video = content as VideoBlock;
       return video.content.link != null;
     }
+<<<<<<< HEAD
     case "heading": {
       const heading = content as HeadingBlock;
       return heading.content.size != null && heading.content.text != null;
+=======
+    case "button": {
+      const button = content as ButtonBlock;
+      return (button.content.link != null && button.content.text != null);
+>>>>>>> 7330b6d (Added button, column)
     }
     default: {
       return false;
