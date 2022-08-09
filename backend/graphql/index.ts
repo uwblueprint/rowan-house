@@ -6,7 +6,9 @@ import {
   isAuthorizedByEmail,
   isAuthorizedByRole,
   isAuthorizedByUserId,
+  idNotSameAsActiveUser,
 } from "../middlewares/auth";
+import and from "../middlewares/utils/combinatorsUtils";
 import authResolvers from "./resolvers/authResolvers";
 import authType from "./types/authType";
 import courseResolvers from "./resolvers/courseResolvers";
@@ -50,8 +52,11 @@ const executableSchema = makeExecutableSchema({
 });
 
 const authorizedByAllRoles = () =>
-  isAuthorizedByRole(new Set(["User", "Admin", "Staff"]));
+  isAuthorizedByRole(new Set(["Learner", "Admin", "Staff"]));
 const authorizedByAdmin = () => isAuthorizedByRole(new Set(["Admin"]));
+const authorizeRoleChange = (id: string) => {
+  return and(authorizedByAdmin(), idNotSameAsActiveUser(id));
+};
 
 const graphQLMiddlewares = {
   Query: {
@@ -75,7 +80,7 @@ const graphQLMiddlewares = {
     deleteEntity: authorizedByAllRoles(),
     createUser: authorizedByAdmin(),
     updateUser: authorizedByAdmin(),
-    updateUserRole: authorizedByAdmin(),
+    updateUserRole: authorizeRoleChange("id"),
     deleteUserById: authorizedByAdmin(),
     deleteUserByEmail: authorizedByAdmin(),
     logout: isAuthorizedByUserId("userId"),

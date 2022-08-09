@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Button, IconButton, Flex } from "@chakra-ui/react";
-import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
+import { DeleteIcon, EditIcon, LockIcon } from "@chakra-ui/icons";
 import { ReactComponent as DragHandleIconSvg } from "../../assets/DragHandle.svg";
 
 interface OptionsProps {
+  editable: boolean;
   text: string;
   isFocused: boolean;
   setFocus: () => void;
@@ -11,12 +12,17 @@ interface OptionsProps {
 }
 
 const LessonItem = ({
+  editable,
   text = "",
   isFocused,
   setFocus,
   onDeleteClick,
 }: OptionsProps): React.ReactElement => {
   const [isHovered, setIsHovered] = useState(false);
+
+  const showEditButtons = isHovered && editable;
+
+  const progressIcon = <LockIcon />;
 
   return (
     <>
@@ -44,17 +50,17 @@ const LessonItem = ({
         <Flex align="center" justify="space-between" pr="8px">
           <Flex align="center">
             <IconButton
-              visibility={isHovered ? "visible" : "hidden"}
+              visibility={!editable || isHovered ? "visible" : "hidden"}
               aria-label="Drag Lesson"
               variant="unstyled"
               size="xs"
-              icon={<DragHandleIconSvg />}
+              icon={editable ? <DragHandleIconSvg /> : progressIcon}
             />
             <p style={{ marginLeft: "10px" }}>{text}</p>
           </Flex>
           <Flex align="center" pb="5px">
             <IconButton
-              visibility={isHovered ? "visible" : "hidden"}
+              visibility={showEditButtons ? "visible" : "hidden"}
               aria-label="Edit Lesson"
               variant="unstyled"
               fontSize="18px"
@@ -62,7 +68,7 @@ const LessonItem = ({
               icon={<EditIcon />}
             />
             <IconButton
-              visibility={isHovered ? "visible" : "hidden"}
+              visibility={showEditButtons ? "visible" : "hidden"}
               aria-label="Delete Lesson"
               variant="unstyled"
               fontSize="18px"

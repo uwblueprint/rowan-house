@@ -5,7 +5,7 @@ import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
 import {
   ContentTypeEnum,
   ContentTypeCategories,
-} from "../../types/ModuleEditorTypes";
+} from "../../types/ContentBlockTypes";
 import BlockPreview from "./BlockPreview";
 
 const options: Record<string, Array<ContentTypeEnum>> = {

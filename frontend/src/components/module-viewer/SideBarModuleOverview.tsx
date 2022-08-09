@@ -11,7 +11,13 @@ import { TextInput } from "../common/TextInput";
 import LessonItem from "./LessonItem";
 import DeleteModal from "../common/DeleteModal";
 
-const SideBarModuleOverview = (): React.ReactElement => {
+const SideBarModuleOverview = ({
+  editable,
+  onLessonSelected,
+}: {
+  editable: boolean;
+  onLessonSelected: () => void;
+}): React.ReactElement => {
   const context = useContext(EditorContext);
   const {
     isOpen: isDeleteOpen,
@@ -93,54 +99,62 @@ const SideBarModuleOverview = (): React.ReactElement => {
   };
 
   return (
-    <VStack>
+    <VStack pt={editable ? "0px" : "30px"}>
       {orderedLessons.map((lesson, index) => (
         <LessonItem
+          editable={editable}
           text={lesson.title}
           isFocused={!!focusedLesson && state.lessons[focusedLesson] === lesson}
           key={lesson.id}
-          setFocus={() => setFocus(index)}
+          setFocus={() => {
+            onLessonSelected();
+            setFocus(index);
+          }}
           onDeleteClick={() => onDeleteClick(index)}
         />
       ))}
-      <Button
-        onClick={() => onClick("create")}
-        color="brand.royal"
-        variant="unstyled"
-        leftIcon={<AddIcon />}
-        textAlign="left"
-        pl="35px"
-        minH="55px"
-        w="100%"
-      >
-        New Lesson
-      </Button>
-      <Modal
-        header="Edit lesson title"
-        isOpen={isCreateOpen}
-        onConfirm={() => createLesson(title)}
-        onCancel={() => {
-          resetState();
-          onCreateClose();
-        }}
-      >
-        <TextInput
-          placeholder="New Lesson"
-          onChange={(currTitle) => {
-            setTitle(currTitle);
-            setIsInvalid(false);
-          }}
-          errorMessage={errorMessage}
-          isInvalid={isInvalid}
-          isRequired
-        />
-      </Modal>
-      <DeleteModal
-        name="Lesson"
-        isOpen={isDeleteOpen}
-        onConfirm={deleteLesson}
-        onCancel={onDeleteClose}
-      />
+      {editable && (
+        <>
+          <Button
+            onClick={() => onClick("create")}
+            color="brand.royal"
+            variant="unstyled"
+            leftIcon={<AddIcon />}
+            textAlign="left"
+            pl="35px"
+            minH="55px"
+            w="100%"
+          >
+            New Lesson
+          </Button>
+          <Modal
+            header="Edit lesson title"
+            isOpen={isCreateOpen}
+            onConfirm={() => createLesson(title)}
+            onCancel={() => {
+              resetState();
+              onCreateClose();
+            }}
+          >
+            <TextInput
+              placeholder="New Lesson"
+              isInvalid={isInvalid}
+              errorMessage={errorMessage}
+              onChange={(currTitle) => {
+                setTitle(currTitle);
+                setIsInvalid(false);
+              }}
+            />
+          </Modal>
+
+          <DeleteModal
+            name="Lesson"
+            isOpen={isDeleteOpen}
+            onConfirm={deleteLesson}
+            onCancel={onDeleteClose}
+          />
+        </>
+      )}
     </VStack>
   );
 };

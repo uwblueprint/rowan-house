@@ -14,7 +14,6 @@ const DeleteModal = (props: DeleteModalProps): React.ReactElement => {
       header={`Delete ${name}`}
       bodyText={`Are you sure? You can't undo this action afterwards.`}
       // cancelButtonColorScheme="ghost"
-      // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
     />
   );

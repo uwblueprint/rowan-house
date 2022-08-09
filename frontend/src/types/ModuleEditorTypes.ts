@@ -1,4 +1,4 @@
-import { v4 as uuid } from "uuid";
+import { ContentBlockState } from "./ContentBlockTypes";
 
 export interface LessonType {
   course: string;
@@ -7,7 +7,7 @@ export interface LessonType {
   id?: string;
   description?: string;
   image?: string;
-  content: ContentBlock[];
+  content: ContentBlockState[];
 }
 
 export type LessonsType = Record<string, LessonType>;
@@ -30,42 +30,6 @@ export interface CourseType {
   previewImage: string | null;
   private: boolean;
   modules: ModuleType[];
-}
-
-export const ContentTypeCategories = ["Layout", "Basic", "Media"];
-export class ContentTypeEnum {
-  static COLUMN = new ContentTypeEnum("Column", "column.svg", uuid());
-
-  static HEADING = new ContentTypeEnum("Heading", "heading.svg", uuid());
-
-  static TEXT = new ContentTypeEnum("Text", "text.svg", uuid());
-
-  static LINK = new ContentTypeEnum("Link", "link.svg", uuid());
-
-  static BUTTON = new ContentTypeEnum("Button", "button.svg", uuid());
-
-  static IMAGE = new ContentTypeEnum("Image", "image.svg", uuid());
-
-  static VIDEO = new ContentTypeEnum("Video", "video.svg", uuid());
-
-  static AUDIO = new ContentTypeEnum("Audio", "audio.svg", uuid());
-
-  constructor(
-    public readonly title: string,
-    public readonly preview: string,
-    public readonly id: string,
-  ) {}
-}
-
-export type ContentProps = {
-  text?: string;
-  link?: string;
-};
-
-export interface ContentBlock {
-  type: ContentTypeEnum;
-  content: ContentProps;
-  id: string;
 }
 
 export interface ModuleEditorParams {
@@ -99,7 +63,7 @@ export type EditorContextAction =
     }
   | {
       type: "set-focus";
-      value: string;
+      value: string | null;
     }
   | {
       type: "create-lesson";
@@ -127,7 +91,7 @@ export type EditorContextAction =
     }
   | {
       type: "update-block";
-      value: { index: number; block: ContentBlock };
+      value: { index: number; block: ContentBlockState };
     }
   | {
       type: "delete-block";
@@ -139,4 +103,11 @@ export interface EditContentOptionsMenuProps {
   onEditClick: () => void;
   onCopyClick: () => void;
   onDeleteClick: () => void;
+}
+
+export interface EditContentModalProps<BlockType extends ContentBlockState> {
+  onClose: () => void;
+  isOpen: boolean;
+  block: BlockType;
+  index: number;
 }

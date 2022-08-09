@@ -1,4 +1,4 @@
-export type Role = "User" | "Admin" | "Staff";
+export type Role = "Learner" | "Admin" | "Staff";
 
 export type ContentType = "text" | "image" | "video";
 export interface ContentBlock {

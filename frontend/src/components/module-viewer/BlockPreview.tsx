@@ -1,7 +1,7 @@
 import React from "react";
 import { Box } from "@chakra-ui/react";
 import { Draggable, DraggableProvided } from "react-beautiful-dnd";
-import { ContentTypeEnum } from "../../types/ModuleEditorTypes";
+import { ContentTypeEnum } from "../../types/ContentBlockTypes";
 import { ReactComponent as ImageIcon } from "../../assets/image.svg";
 import { ReactComponent as ColumnIcon } from "../../assets/column.svg";
 import { ReactComponent as HeadingIcon } from "../../assets/heading.svg";
@@ -10,8 +10,6 @@ import { ReactComponent as LinkIcon } from "../../assets/link.svg";
 import { ReactComponent as ButtonIcon } from "../../assets/button.svg";
 import { ReactComponent as VideoIcon } from "../../assets/video.svg";
 import { ReactComponent as AudioIcon } from "../../assets/audio.svg";
-
-/* eslint-disable react/jsx-props-no-spreading */
 
 const BlockStyle = ({
   content,
