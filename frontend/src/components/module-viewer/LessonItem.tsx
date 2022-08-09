@@ -1,7 +1,12 @@
-import React, { useState } from "react";
-import { Button, IconButton, Flex } from "@chakra-ui/react";
-import { DeleteIcon, EditIcon, LockIcon } from "@chakra-ui/icons";
+import React, { useState, useContext } from "react";
+import { useParams } from "react-router-dom";
+import { Button, IconButton, Flex, useDisclosure } from "@chakra-ui/react";
+import { EditIcon, DeleteIcon, LockIcon } from "@chakra-ui/icons";
 import { ReactComponent as DragHandleIconSvg } from "../../assets/DragHandle.svg";
+import { TextInput } from "../common/TextInput";
+import { Modal } from "../common/Modal";
+import EditorContext from "../../contexts/ModuleEditorContext";
+import { ModuleEditorParams } from "../../types/ModuleEditorTypes";
 
 interface OptionsProps {
   editable: boolean;
@@ -18,6 +23,40 @@ const LessonItem = ({
 }: OptionsProps): React.ReactElement => {
   const [isHovered, setIsHovered] = useState(false);
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [title, setTitle] = useState(text);
+  const [isInvalid, setIsInvalid] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const { courseID, moduleIndex }: ModuleEditorParams = useParams();
+  const moduleID = parseInt(moduleIndex, 10);
+
+  const context = useContext(EditorContext);
+  if (!context) return <></>;
+  const { state, dispatch } = context;
+
+  const { course } = state;
+
+  const resetState = () => {
+    setTitle(text);
+    setErrorMessage("");
+    setIsInvalid(false);
+  };
+
+  const updateLessonName = (lessonTitle: string) => {
+    if (title) {
+      dispatch({
+        type: "update-lesson",
+        value: {
+          title: lessonTitle,
+        },
+      });
+      resetState();
+      onClose();
+    } else {
+      setErrorMessage("Error: Title cannot be empty.");
+      setIsInvalid(true);
+    }
+  };
   const showEditButtons = isHovered && editable;
 
   const progressIcon = <LockIcon />;
@@ -64,7 +103,30 @@ const LessonItem = ({
               fontSize="18px"
               size="sm"
               icon={<EditIcon />}
+              onClick={onOpen}
             />
+
+            <Modal
+              header="Edit lesson title"
+              isOpen={isOpen}
+              onConfirm={() => updateLessonName(title)}
+              onCancel={() => {
+                resetState();
+                onClose();
+              }}
+            >
+              <TextInput
+                placeholder="New lesson name"
+                onChange={(currTitle) => {
+                  setTitle(currTitle);
+                  setIsInvalid(false);
+                }}
+                errorMessage={errorMessage}
+                isInvalid={isInvalid}
+                defaultValue={text}
+              />
+            </Modal>
+
             <IconButton
               visibility={showEditButtons ? "visible" : "hidden"}
               aria-label="Delete Lesson"
