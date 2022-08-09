@@ -13,6 +13,7 @@ interface OptionsProps {
   text: string;
   isFocused: boolean;
   setFocus: () => void;
+  onDeleteClick: () => void;
 }
 
 const LessonItem = ({
@@ -20,6 +21,7 @@ const LessonItem = ({
   text = "",
   isFocused,
   setFocus,
+  onDeleteClick,
 }: OptionsProps): React.ReactElement => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -133,6 +135,7 @@ const LessonItem = ({
               variant="unstyled"
               fontSize="18px"
               size="sm"
+              onClick={onDeleteClick}
               icon={<DeleteIcon />}
             />
           </Flex>

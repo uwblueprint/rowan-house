@@ -42,8 +42,6 @@ export const UPDATE_LESSON = gql`
 
 export const DELETE_LESSON = gql`
   mutation deleteLesson($id: ID!) {
-    deleteLesson(id: $id) {
-      id
-    }
+    deleteLesson(id: $id)
   }
 `;

@@ -134,29 +134,39 @@ const Sidebar = ({
     const lesson = data.createLesson;
     const { id: newID } = lesson;
     // Update lesson ID in state with response
-    dispatch({ type: "update-lesson-id", value: { oldID, newID } });
+    dispatch({
+      type: "update-lesson-id",
+      value: { oldID, newID, moduleIndex },
+    });
   };
 
   const saveChanges = async (changeObj: EditorChangeStatuses) => {
-    Object.entries(changeObj).forEach(async ([doc_id, action]) => {
-      const changedLesson = formatLessonRequest(state.lessons[doc_id]);
+    Object.entries(changeObj).forEach(async ([lessonID, action]) => {
       switch (action) {
         case "CREATE":
           // Await required so we can get a new ID
-          await createNewLesson(doc_id, changedLesson);
+          await createNewLesson(
+            lessonID,
+            formatLessonRequest(state.lessons[lessonID]),
+          );
           break;
         case "UPDATE":
-          updateLesson({ variables: { id: doc_id, lesson: changedLesson } });
+          updateLesson({
+            variables: {
+              id: lessonID,
+              lesson: formatLessonRequest(state.lessons[lessonID]),
+            },
+          });
           break;
         case "DELETE":
-          deleteLesson({ variables: { id: doc_id } });
+          deleteLesson({ variables: { id: lessonID } });
           break;
         // Make compiler happy
         default:
           break;
       }
       updateCourse({
-        variables: { id: changedLesson.course, course: state.course },
+        variables: { id: courseID, course: state.course },
       });
     });
     state.hasChanged = {};

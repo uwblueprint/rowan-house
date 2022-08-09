@@ -9,6 +9,7 @@ import { Modal } from "../common/Modal";
 import { TextInput } from "../common/TextInput";
 
 import LessonItem from "./LessonItem";
+import DeleteModal from "../common/DeleteModal";
 
 const SideBarModuleOverview = ({
   editable,
@@ -18,12 +19,22 @@ const SideBarModuleOverview = ({
   onLessonSelected: () => void;
 }): React.ReactElement => {
   const context = useContext(EditorContext);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isDeleteOpen,
+    onOpen: onDeleteOpen,
+    onClose: onDeleteClose,
+  } = useDisclosure();
+  const {
+    isOpen: isCreateOpen,
+    onOpen: onCreateOpen,
+    onClose: onCreateClose,
+  } = useDisclosure();
   const [title, setTitle] = useState("");
   const [isInvalid, setIsInvalid] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const { courseID, moduleIndex }: ModuleEditorParams = useParams();
   const moduleID = parseInt(moduleIndex, 10);
+  const [selectedLessonIndex, setSelectedLessonIndex] = useState(0);
 
   if (!context) return <></>;
   const { state, dispatch } = context;
@@ -32,7 +43,6 @@ const SideBarModuleOverview = ({
   const module = course.modules[moduleID];
 
   const orderedLessons = module.lessons.map((id) => lessons[id]);
-
   const setFocus = (index: number) =>
     dispatch({ type: "set-focus", value: module.lessons[index] });
 
@@ -42,23 +52,50 @@ const SideBarModuleOverview = ({
     setIsInvalid(false);
   };
 
+  const onClick = (type: string) => {
+    if (type === "delete") {
+      onDeleteOpen();
+    } else if (type === "create") {
+      onCreateOpen();
+    }
+  };
+
+  const onDeleteClick = (index: number) => {
+    onClick("delete");
+    setSelectedLessonIndex(index);
+  };
+
   const createLesson = (lessonTitle: string) => {
     if (title) {
       dispatch({
         type: "create-lesson",
         value: {
-          course: courseID,
-          module: course.modules[moduleID].id,
-          title: lessonTitle,
-          content: [],
+          lesson: {
+            course: courseID,
+            module: course.modules[moduleID].id,
+            title: lessonTitle,
+            content: [],
+          },
+          moduleIndex: Number(moduleIndex),
         },
       });
       resetState();
-      onClose();
+      onCreateClose();
     } else {
       setErrorMessage("Error: Title cannot be empty.");
       setIsInvalid(true);
     }
+  };
+
+  const deleteLesson = () => {
+    dispatch({
+      type: "delete-lesson",
+      value: {
+        lessonId: module.lessons[selectedLessonIndex],
+        moduleIndex: Number(moduleIndex),
+      },
+    });
+    onDeleteClose();
   };
 
   return (
@@ -67,20 +104,19 @@ const SideBarModuleOverview = ({
         <LessonItem
           editable={editable}
           text={lesson.title}
-          isFocused={
-            focusedLesson !== null && state.lessons[focusedLesson] === lesson
-          }
+          isFocused={!!focusedLesson && state.lessons[focusedLesson] === lesson}
           key={lesson.id}
           setFocus={() => {
             onLessonSelected();
             setFocus(index);
           }}
+          onDeleteClick={() => onDeleteClick(index)}
         />
       ))}
       {editable && (
         <>
           <Button
-            onClick={onOpen}
+            onClick={() => onClick("create")}
             color="brand.royal"
             variant="unstyled"
             leftIcon={<AddIcon />}
@@ -93,23 +129,30 @@ const SideBarModuleOverview = ({
           </Button>
           <Modal
             header="Edit lesson title"
-            isOpen={isOpen}
+            isOpen={isCreateOpen}
             onConfirm={() => createLesson(title)}
             onCancel={() => {
               resetState();
-              onClose();
+              onCreateClose();
             }}
           >
             <TextInput
               placeholder="New lesson"
+              isInvalid={isInvalid}
+              errorMessage={errorMessage}
               onChange={(currTitle) => {
                 setTitle(currTitle);
                 setIsInvalid(false);
               }}
-              errorMessage={errorMessage}
-              isInvalid={isInvalid}
             />
           </Modal>
+
+          <DeleteModal
+            name="lesson"
+            isOpen={isDeleteOpen}
+            onConfirm={deleteLesson}
+            onCancel={onDeleteClose}
+          />
         </>
       )}
     </VStack>
