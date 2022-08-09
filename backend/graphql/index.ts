@@ -1,3 +1,5 @@
+import { GraphQLScalarType } from "graphql";
+import { Kind } from "graphql/language";
 import { makeExecutableSchema, gql } from "apollo-server-express";
 import { applyMiddleware } from "graphql-middleware";
 import { merge } from "lodash";
@@ -7,6 +9,7 @@ import {
   isAuthorizedByRole,
   isAuthorizedByUserId,
   idNotSameAsActiveUser,
+  publicRoute,
 } from "../middlewares/auth";
 import and from "../middlewares/utils/combinatorsUtils";
 import authResolvers from "./resolvers/authResolvers";
@@ -19,6 +22,8 @@ import userResolvers from "./resolvers/userResolvers";
 import userType from "./types/userType";
 import lessonResolvers from "./resolvers/lessonResolvers";
 import lessonType from "./types/lessonType";
+import progressResolvers from "./resolvers/progressResolvers";
+import progressType from "./types/progressType";
 
 const query = gql`
   type Query {
@@ -32,6 +37,25 @@ const mutation = gql`
   }
 `;
 
+const scalarTypes = {
+  Date: new GraphQLScalarType({
+    name: "Date",
+    description: "Date scalar type",
+    parseValue(value) {
+      return new Date(value);
+    },
+    serialize(value) {
+      return value.getTime();
+    },
+    parseLiteral(ast) {
+      if (ast.kind === Kind.INT) {
+        return new Date(ast.value);
+      }
+      return null;
+    },
+  }),
+};
+
 const executableSchema = makeExecutableSchema({
   typeDefs: [
     query,
@@ -41,13 +65,16 @@ const executableSchema = makeExecutableSchema({
     entityType,
     userType,
     lessonType,
+    progressType,
   ],
   resolvers: merge(
+    scalarTypes,
     authResolvers,
     courseResolvers,
     entityResolvers,
     userResolvers,
     lessonResolvers,
+    progressResolvers,
   ),
 });
 
@@ -60,8 +87,8 @@ const authorizeRoleChange = (id: string) => {
 
 const graphQLMiddlewares = {
   Query: {
-    course: authorizedByAllRoles(),
-    courses: authorizedByAllRoles(),
+    course: publicRoute,
+    courses: publicRoute,
     entity: authorizedByAllRoles(),
     entities: authorizedByAllRoles(),
     userById: authorizedByAdmin(),
@@ -70,6 +97,10 @@ const graphQLMiddlewares = {
     userCountByTown: authorizedByAdmin(),
     lessonById: authorizedByAllRoles(),
     lessons: authorizedByAllRoles(),
+    lessonTitles: publicRoute,
+    courseProgress: isAuthorizedByUserId("userId"),
+    moduleProgress: isAuthorizedByUserId("userId"),
+    lessonProgress: isAuthorizedByUserId("userId"),
   },
   Mutation: {
     createCourse: authorizedByAdmin(),
@@ -88,6 +119,9 @@ const graphQLMiddlewares = {
     createLesson: authorizedByAdmin(),
     updateLesson: authorizedByAdmin(),
     deleteLesson: authorizedByAdmin(),
+    markModuleAsStartedForUser: isAuthorizedByUserId("userId"),
+    markModuleAsCompletedForUser: isAuthorizedByUserId("userId"),
+    markLessonAsCompletedForUser: isAuthorizedByUserId("userId"),
   },
 };
 

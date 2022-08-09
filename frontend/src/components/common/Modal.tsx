@@ -23,6 +23,7 @@ export interface ModalProps {
   cancelText?: string;
   confirmText?: string;
   spreadButtons?: boolean;
+  canSubmit?: boolean;
   size?: string;
   children?: React.ReactNode;
 }
@@ -36,6 +37,7 @@ export const Modal = ({
   cancelText = "Cancel",
   confirmText = "Confirm",
   spreadButtons = false,
+  canSubmit = true,
   children,
   ...rest
 }: ModalProps): React.ReactElement => {
@@ -50,7 +52,7 @@ export const Modal = ({
           {children}
         </ModalBody>
         <ModalFooter>
-          <Button onClick={onConfirm} mr="1rem">
+          <Button disabled={!canSubmit} onClick={onConfirm} mr="1rem">
             {confirmText}
           </Button>
           {spreadButtons && <Spacer />}

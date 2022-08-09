@@ -82,7 +82,7 @@ const SideBarModuleOverview = ({
       resetState();
       onCreateClose();
     } else {
-      setErrorMessage("Error: title cannot be empty.");
+      setErrorMessage("Error: Title cannot be empty.");
       setIsInvalid(true);
     }
   };

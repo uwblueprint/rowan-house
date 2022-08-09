@@ -1,4 +1,5 @@
-import ImageBlock from "./ImageBlock";
 import TextBlock from "./TextBlock";
+import ImageBlock from "./ImageBlock";
+import VideoBlock from "./VideoBlock";
 
-export { ImageBlock, TextBlock };
+export { TextBlock, ImageBlock, VideoBlock };

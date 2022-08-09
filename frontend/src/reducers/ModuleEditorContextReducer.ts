@@ -60,10 +60,11 @@ const createLesson = (
 
 const updateLesson = (
   state: EditorStateType,
-  lesson: LessonType,
+  lesson: Partial<LessonType>,
 ): EditorStateType => {
   const id = state.focusedLesson;
-  if (!id || Object.keys(state.lessons).includes(id)) return state;
+
+  if (!id || !Object.keys(state.lessons).includes(id)) return state;
 
   const newState = { ...state };
   newState.lessons[id] = { ...state.lessons[id], ...lesson };
@@ -165,6 +166,15 @@ const createLessonContentBlock = (
         content: {
           link:
             "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
+        },
+      };
+      break;
+    case ContentTypeEnum.VIDEO.id:
+      block = {
+        type: ContentTypeEnum.VIDEO,
+        id: uuid(),
+        content: {
+          link: "",
         },
       };
       break;

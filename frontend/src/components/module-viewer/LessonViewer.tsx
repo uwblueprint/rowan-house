@@ -24,7 +24,12 @@ const LessonViewer = ({
     return (
       <Droppable droppableId="EDITOR" isDropDisabled={!editable}>
         {(provided) => (
-          <Flex ref={provided.innerRef} direction="column" flex="1">
+          <Flex
+            ref={provided.innerRef}
+            height="100%"
+            direction="column"
+            flex="1"
+          >
             {lesson?.content.map((block, index) => (
               <ContentBlock
                 editable={editable}

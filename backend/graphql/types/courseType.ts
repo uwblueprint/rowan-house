@@ -27,7 +27,7 @@ const courseType = gql`
     description: String
     image: String
     previewImage: String
-    modules: [ModuleResponseDTO!]
+    modules: [ModuleResponseDTO]
     private: Boolean!
   }
 
@@ -36,7 +36,7 @@ const courseType = gql`
     description: String
     image: String
     previewImage: String
-    modules: [ModuleRequestDTO!]
+    modules: [ModuleRequestDTO]
     private: Boolean
   }
 
@@ -45,7 +45,7 @@ const courseType = gql`
     description: String
     image: String
     previewImage: String
-    modules: [ModuleRequestDTO!]
+    modules: [ModuleRequestDTO]
     private: Boolean
   }
 

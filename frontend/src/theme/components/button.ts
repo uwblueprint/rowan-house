@@ -33,6 +33,9 @@ const Button = {
       fontWeight: "590",
       fontSize: "14px",
       lineHeight: "28px",
+      "&[disabled]": {
+        _hover: { bg: "brand.royal" },
+      },
     },
     xs: {
       bg: "brand.royal",

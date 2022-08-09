@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Redirect, useHistory } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import {
@@ -35,9 +35,15 @@ const Signup = (): React.ReactElement => {
   const [town, setTown] = useState("");
   const [password, setPassword] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
+  const [errorState, setErrorState] = useState(false);
   const history = useHistory();
 
   const [register] = useMutation<{ register: AuthenticatedUser }>(REGISTER);
+  const nameRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    nameRef.current?.focus();
+  }, []);
 
   const onSignupClick = async () => {
     const user: AuthenticatedUser = await authAPIClient.register(
@@ -48,6 +54,11 @@ const Signup = (): React.ReactElement => {
       password,
       register,
     );
+
+    if (user === null) {
+      setErrorState(true);
+    }
+
     setAuthenticatedUser(user);
   };
 
@@ -82,7 +93,7 @@ const Signup = (): React.ReactElement => {
             </Center>
             <FormControl
               isRequired
-              isInvalid={!(isMatch && meetsLengthRequirements)}
+              isInvalid={errorState && (firstName === "" || lastName === "")}
             >
               <FormLabel
                 variant="caption-md"
@@ -94,6 +105,8 @@ const Signup = (): React.ReactElement => {
 
               <Box display="flex">
                 <Input
+                  ref={nameRef}
+                  autocomplete="given-name"
                   type="text"
                   placeholder="First"
                   value={firstName}
@@ -104,6 +117,7 @@ const Signup = (): React.ReactElement => {
                   marginRight="1vh"
                 />
                 <Input
+                  autocomplete="family-name"
                   type="text"
                   placeholder="Last"
                   value={lastName}
@@ -113,11 +127,14 @@ const Signup = (): React.ReactElement => {
                   marginBottom="2vh"
                 />
               </Box>
+            </FormControl>
+            <FormControl isRequired isInvalid={errorState && email === ""}>
               <FormLabel variant="caption-md" marginBottom="1vh">
                 Email Address
               </FormLabel>
               <Input
                 type="email"
+                autocomplete="email"
                 value={email}
                 placeholder="you@rowanhouse.ca"
                 onChange={(event: React.FormEvent<HTMLInputElement>) =>
@@ -125,10 +142,13 @@ const Signup = (): React.ReactElement => {
                 }
                 marginBottom="2vh"
               />
+            </FormControl>
+            <FormControl isRequired isInvalid={errorState && town === ""}>
               <FormLabel variant="caption-md" marginBottom="1vh">
                 City/Town
               </FormLabel>
               <Input
+                autocomplete="address-level2"
                 type="text"
                 value={town}
                 placeholder="Shaughnessy"
@@ -137,6 +157,11 @@ const Signup = (): React.ReactElement => {
                 }
                 marginBottom="2vh"
               />
+            </FormControl>
+            <FormControl
+              isRequired
+              isInvalid={errorState && !(isMatch && meetsLengthRequirements)}
+            >
               <FormLabel variant="caption-md" marginBottom="1vh">
                 Password
               </FormLabel>
@@ -149,6 +174,11 @@ const Signup = (): React.ReactElement => {
                 }
                 marginBottom="2vh"
               />
+            </FormControl>
+            <FormControl
+              isRequired
+              isInvalid={errorState && !(isMatch && meetsLengthRequirements)}
+            >
               <FormLabel variant="caption-md" marginBottom="1vh">
                 Confirm Password
               </FormLabel>
@@ -159,10 +189,14 @@ const Signup = (): React.ReactElement => {
                 onChange={(event: React.FormEvent<HTMLInputElement>) =>
                   setCurrentPassword(event.currentTarget.value)
                 }
-                marginBottom="2vh"
+                marginBottom={
+                  errorState && !(isMatch && meetsLengthRequirements)
+                    ? "0vh"
+                    : "2vh"
+                }
               />
-              {!(isMatch && meetsLengthRequirements) && (
-                <FormErrorMessage>
+              {errorState && !(isMatch && meetsLengthRequirements) && (
+                <FormErrorMessage marginBottom="2vh">
                   {!meetsLengthRequirements
                     ? "Password should be at least 6 characters."
                     : "Passwords must match."}
@@ -172,7 +206,9 @@ const Signup = (): React.ReactElement => {
             <Button
               variant="sm"
               width="full"
-              onClick={onSignupClick}
+              onClick={() => {
+                onSignupClick();
+              }}
               marginBottom="2vh"
             >
               Sign Up

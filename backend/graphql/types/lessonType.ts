@@ -52,6 +52,7 @@ const lessonType = gql`
   extend type Query {
     lessonById(id: ID!): LessonResponseDTO!
     lessons(ids: [ID!]!): [LessonResponseDTO!]!
+    lessonTitles(ids: [ID!]!): [String!]!
   }
 
   extend type Mutation {
