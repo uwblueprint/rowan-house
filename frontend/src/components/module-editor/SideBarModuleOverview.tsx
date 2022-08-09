@@ -11,19 +11,21 @@ import { TextInput } from "../common/TextInput";
 import LessonItem from "./LessonItem";
 import DeleteModal from "../common/DeleteModal";
 
-enum ModalType {
-  EDIT = "edit",
-  DELETE = "delete",
-  CREATE_LESSON = "create-lesson",
-}
-
 const SideBarModuleOverview = (): React.ReactElement => {
   const context = useContext(EditorContext);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isDeleteOpen,
+    onOpen: onDeleteOpen,
+    onClose: onDeleteClose,
+  } = useDisclosure();
+  const {
+    isOpen: isCreateOpen,
+    onOpen: onCreateOpen,
+    onClose: onCreateClose,
+  } = useDisclosure();
   const [title, setTitle] = useState("");
   const [isInvalid, setIsInvalid] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [modalType, setModalType] = useState(ModalType.EDIT); // determines which modal is shown when isOpen is true
   const { courseID, moduleIndex }: ModuleEditorParams = useParams();
   const moduleID = parseInt(moduleIndex, 10);
   const [selectedLessonIndex, setSelectedLessonIndex] = useState(0);
@@ -44,13 +46,16 @@ const SideBarModuleOverview = (): React.ReactElement => {
     setIsInvalid(false);
   };
 
-  const onClick = (type: ModalType) => {
-    setModalType(type);
-    onOpen();
+  const onClick = (type: string) => {
+    if (type === "delete") {
+      onDeleteOpen();
+    } else if (type === "create") {
+      onCreateOpen();
+    }
   };
 
   const onDeleteClick = (index: number) => {
-    onClick(ModalType.DELETE);
+    onClick("delete");
     setSelectedLessonIndex(index);
   };
 
@@ -69,7 +74,7 @@ const SideBarModuleOverview = (): React.ReactElement => {
         },
       });
       resetState();
-      onClose();
+      onCreateClose();
     } else {
       setErrorMessage("Error: title cannot be empty.");
       setIsInvalid(true);
@@ -84,7 +89,7 @@ const SideBarModuleOverview = (): React.ReactElement => {
         moduleIndex: Number(moduleIndex),
       },
     });
-    onClose();
+    onDeleteClose();
   };
 
   return (
@@ -99,7 +104,7 @@ const SideBarModuleOverview = (): React.ReactElement => {
         />
       ))}
       <Button
-        onClick={() => onClick(ModalType.CREATE_LESSON)}
+        onClick={() => onClick("create")}
         color="brand.royal"
         variant="unstyled"
         leftIcon={<AddIcon />}
@@ -110,36 +115,32 @@ const SideBarModuleOverview = (): React.ReactElement => {
       >
         New Lesson
       </Button>
-      {modalType === ModalType.CREATE_LESSON && (
-        <Modal
-          header="Edit lesson title"
-          isOpen={isOpen}
-          onConfirm={() => createLesson(title)}
-          onCancel={() => {
-            resetState();
-            onClose();
+      <Modal
+        header="Edit lesson title"
+        isOpen={isCreateOpen}
+        onConfirm={() => createLesson(title)}
+        onCancel={() => {
+          resetState();
+          onCreateClose();
+        }}
+      >
+        <TextInput
+          placeholder="New Lesson"
+          onChange={(currTitle) => {
+            setTitle(currTitle);
+            setIsInvalid(false);
           }}
-        >
-          <TextInput
-            placeholder="New Lesson"
-            onChange={(currTitle) => {
-              setTitle(currTitle);
-              setIsInvalid(false);
-            }}
-            errorMessage={errorMessage}
-            isInvalid={isInvalid}
-            isRequired
-          />
-        </Modal>
-      )}
-      {modalType === ModalType.DELETE && (
-        <DeleteModal
-          name="Lesson"
-          isOpen={isOpen}
-          onConfirm={deleteLesson}
-          onCancel={onClose}
+          errorMessage={errorMessage}
+          isInvalid={isInvalid}
+          isRequired
         />
-      )}
+      </Modal>
+      <DeleteModal
+        name="Lesson"
+        isOpen={isDeleteOpen}
+        onConfirm={deleteLesson}
+        onCancel={onDeleteClose}
+      />
     </VStack>
   );
 };

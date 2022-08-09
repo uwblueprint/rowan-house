@@ -17,7 +17,11 @@ const updateChangeStatus = (
   status: EditorChangeStatus,
 ): EditorChangeStatuses => {
   // extra logic to make DELETE work
-  if (status === "DELETE" && docID in hasChanged) {
+  if (
+    status === "DELETE" &&
+    docID in hasChanged &&
+    hasChanged[docID] === "CREATE"
+  ) {
     const newHasChanged = hasChanged;
     delete newHasChanged[docID];
     return newHasChanged;
@@ -35,12 +39,8 @@ const createLesson = (
   // Create deep copy of state since state properties are readonly
   // TODO: This is dangerous, we should use immutable ways to edit this data
   const newState = JSON.parse(JSON.stringify(state));
-  // const moduleIndex = state.course.modules.findIndex(
-  //   (module) => module.id === lesson.module,
-  // );
   // Check to make sure moduleID exists
   console.assert(moduleIndex !== -1, `Invalid moduleID ${lesson.module}`);
-  console.log(`MODULE INDEX ${moduleIndex} ${lesson.module}`);
   // Temporary lesson that is used until save
   const lessonID = uuid();
   // Create the new lesson object
@@ -88,9 +88,6 @@ const replaceLessonID = (
   });
   newState.lessons = rename(oldID, newID, state.lessons);
   // Replace lesson ID in the course
-  // const moduleIndex = state.course.modules.findIndex(
-  //   (module) => module.id === lesson.module,
-  // );
   const oldIndex = newState.course.modules[moduleIndex].lessons.findIndex(
     (id) => id === oldID,
   );
@@ -108,6 +105,7 @@ const deleteLesson = (
   moduleIndex: number,
 ) => {
   if (!id || !Object.keys(state.lessons).includes(id)) return state;
+  // TODO: This is dangerous, we should use immutable ways to edit this data
   const newState = JSON.parse(JSON.stringify(state));
 
   delete newState.lessons[id];

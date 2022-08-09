@@ -139,25 +139,25 @@ const Sidebar = (): React.ReactElement => {
   };
 
   const saveChanges = async (changeObj: EditorChangeStatuses) => {
-    Object.entries(changeObj).forEach(async ([doc_id, action]) => {
+    Object.entries(changeObj).forEach(async ([lessonID, action]) => {
       switch (action) {
         case "CREATE":
           // Await required so we can get a new ID
           await createNewLesson(
-            doc_id,
-            formatLessonRequest(state.lessons[doc_id]),
+            lessonID,
+            formatLessonRequest(state.lessons[lessonID]),
           );
           break;
         case "UPDATE":
           updateLesson({
             variables: {
-              id: doc_id,
-              lesson: formatLessonRequest(state.lessons[doc_id]),
+              id: lessonID,
+              lesson: formatLessonRequest(state.lessons[lessonID]),
             },
           });
           break;
         case "DELETE":
-          deleteLesson({ variables: { id: doc_id } });
+          deleteLesson({ variables: { id: lessonID } });
           break;
         // Make compiler happy
         default:
