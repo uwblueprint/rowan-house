@@ -56,7 +56,7 @@ const SideBarModuleOverview = ({
       resetState();
       onClose();
     } else {
-      setErrorMessage("Error: title cannot be empty.");
+      setErrorMessage("Error: Title cannot be empty.");
       setIsInvalid(true);
     }
   };
@@ -101,14 +101,13 @@ const SideBarModuleOverview = ({
             }}
           >
             <TextInput
-              placeholder="New Lesson"
+              placeholder="New lesson"
               onChange={(currTitle) => {
                 setTitle(currTitle);
                 setIsInvalid(false);
               }}
               errorMessage={errorMessage}
               isInvalid={isInvalid}
-              isRequired
             />
           </Modal>
         </>
