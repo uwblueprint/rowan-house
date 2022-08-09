@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Button } from "@chakra-ui/react"
+import { Button } from "@chakra-ui/react";
 
 import {
   ContentBlockProps,
@@ -10,7 +10,11 @@ import {
 const ButtonBlock = ({
   block: { content },
 }: ContentBlockProps<ButtonBlockState>): React.ReactElement => {
-  return <a href={content.link} target="_blank"><Button>{content.text}</Button></a>;
+  return (
+    <a href={content.link} target="_blank" rel="noreferrer">
+      <Button>{content.text}</Button>
+    </a>
+  );
 };
 
 export default ButtonBlock;

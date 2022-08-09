@@ -1,11 +1,11 @@
 import React from "react";
-import { ContentType } from "../../../APIClients/types/LessonClientTypes";
+import { ContentType } from "../../../../APIClients/types/LessonClientTypes";
 import {
   ContentBlockProps,
   ContentBlockState,
   ContentBlockTypeToState,
-} from "../../../types/ContentBlockTypes";
-import { EditContentModalProps } from "../../../types/ModuleEditorTypes";
+} from "../../../../types/ContentBlockTypes";
+import { EditContentModalProps } from "../../../../types/ModuleEditorTypes";
 
 // Many thanks to https://github.com/Microsoft/TypeScript/issues/30581#issuecomment-1080979994.
 // This class provides a type-safe dispatch table for React components. In detail, it allows us
@@ -88,6 +88,17 @@ export type ContentBlockRendererConfig = {
   [Type in ContentType]: ConfigEntry<Type>;
 };
 
+export type ContentBlockRendererOverrideConfig = {
+  [Type in ContentType]?: ConfigEntry<Type>;
+};
+
+export type ContentBlocks = ContentBlockRenderer<
+  ContentBlockProps<ContentBlockState>
+>;
+export type ContentBlockModals = ContentBlockRenderer<
+  EditContentModalProps<ContentBlockState>
+>;
+
 const mapToObjectKey = <
   T extends keyof ContentBlockRendererConfig[ContentType]
 >(
@@ -100,10 +111,7 @@ const mapToObjectKey = <
 
 const createContentBlockRenderers = (
   config: ContentBlockRendererConfig,
-): [
-  ContentBlockRenderer<ContentBlockProps<ContentBlockState>>,
-  ContentBlockRenderer<EditContentModalProps<ContentBlockState>>,
-] => {
+): [ContentBlocks, ContentBlockModals] => {
   const contentBlockRenderer = new ContentBlockRenderer<
     ContentBlockProps<ContentBlockState>
   >(mapToObjectKey(config, "renderBlock"));

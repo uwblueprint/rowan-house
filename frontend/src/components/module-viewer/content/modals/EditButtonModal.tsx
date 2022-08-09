@@ -1,10 +1,14 @@
-import { Box, Button, Text, VStack } from "@chakra-ui/react";
+import { Center, Text, VStack } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
-import { ButtonBlockState } from "../../../../types/ContentBlockTypes";
+import {
+  ButtonBlockState,
+  ContentTypeEnum,
+} from "../../../../types/ContentBlockTypes";
 import { Modal } from "../../../common/Modal";
 import EditorContext from "../../../../contexts/ModuleEditorContext";
 import { TextInput } from "../../../common/TextInput";
 import { EditContentModalProps } from "../../../../types/ModuleEditorTypes";
+import { ButtonBlock } from "..";
 
 const EditButtonModal = ({
   block,
@@ -43,6 +47,12 @@ const EditButtonModal = ({
     onClose();
   };
 
+  // Append the prefix if it does not exist
+  const setLinkSafely = (str: string) => {
+    const newLink = str.includes("https://") ? str : `https://${str}`;
+    setLink(newLink);
+  };
+
   return (
     <Modal
       size="xl"
@@ -62,13 +72,24 @@ const EditButtonModal = ({
         <TextInput
           label="Link"
           defaultValue={link}
-          onChange={setLink}
+          onChange={setLinkSafely}
           isInvalid={link === ""}
         />
-        <Text variant="sm">Preview</Text>
-        <Box>
-          <a href={link} target="_blank" rel="noreferrer"><Button>{text.length ? text : "Text"}</Button></a>
-        </Box>
+        <Text variant="sm" marginTop="1rem">
+          Preview
+        </Text>
+        <Center borderWidth="1px" borderRadius="6px" padding="4rem">
+          <ButtonBlock
+            block={{
+              type: ContentTypeEnum.BUTTON,
+              id: "",
+              content: {
+                text: text.length ? text : "Text",
+                link,
+              },
+            }}
+          />
+        </Center>
       </VStack>
     </Modal>
   );

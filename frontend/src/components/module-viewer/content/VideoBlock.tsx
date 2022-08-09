@@ -1,5 +1,5 @@
 import React from "react";
-import VideoPlayer from "../VideoPlayer";
+import VideoPlayer from "../../common/VideoPlayer";
 import {
   ContentBlockProps,
   VideoBlockState,

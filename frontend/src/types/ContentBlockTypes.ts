@@ -38,19 +38,11 @@ export type VideoBlockState = ContentBlockStateType<
 >;
 export type AudioBlockState = ContentBlockStateType<"audio">;
 
-type ColumnValidBlockState = RequireAllContentTypesArePresent<
-  | HeadingBlockState
-  | TextBlockState
-  | LinkBlockState
-  | ButtonBlockState
-  | ImageBlockState
->;
-
 export type ColumnBlockState = ContentBlockStateType<
   "column",
   {
-    left: string;
-    right: string;
+    left: null | ContentBlockState;
+    right: null | ContentBlockState;
   }
 >;
 
@@ -167,6 +159,7 @@ export type ContentBlockTypeToState<Type extends ContentType> = Extract<
 
 export interface ContentBlockProps<BlockType extends ContentBlockState> {
   block: BlockType;
+  editable?: boolean;
 }
 
 // Custom logic to make sure there aren't duplicated types.

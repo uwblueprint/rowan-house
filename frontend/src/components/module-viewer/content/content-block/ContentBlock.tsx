@@ -1,70 +1,29 @@
-import { Box, Divider, Flex, useDisclosure, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  Divider,
+  Flex,
+  useDisclosure,
+  VStack,
+} from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 
-import { ContentBlockState } from "../../../types/ContentBlockTypes";
-<<<<<<< HEAD
-import {
-  TextBlock,
-  ImageBlock,
-  VideoBlock,
-  HeadingBlock,
-} from "../../common/content";
-=======
-import { ButtonBlock, ColumnBlock, TextBlock, ImageBlock, VideoBlock } from "../../common/content";
->>>>>>> 7330b6d (Added button, column)
-import DeleteModal from "../../common/DeleteModal";
-import EditContentOptionsMenu from "../EditContentOptionsMenu";
+import EditorContext from "../../../../contexts/ModuleEditorContext";
+import RenderComponents from "./ContentBlockRenderer";
+import { ContentBlockState } from "../../../../types/ContentBlockTypes";
 
-import { ReactComponent as DragHandleIconSvg } from "../../../assets/DragHandle.svg";
-<<<<<<< HEAD
-import {
-  EditTextModal,
-  EditImageModal,
-  EditVideoModal,
-  EditHeadingModal,
-} from "./modals";
-=======
-import { EditButtonModal, EditTextModal, EditImageModal, EditVideoModal } from "./modals";
->>>>>>> 7330b6d (Added button, column)
-import createContentBlockRenderers, {
-  EmptyConfigEntry as Empty,
-} from "../../common/content/ContentBlockRenderer";
+import ColumnBlock from "../column/ColumnBlock";
+import DeleteModal from "../../../common/DeleteModal";
+import EditContentOptionsMenu from "../../EditContentOptionsMenu";
+import { ReactComponent as DragHandleIconSvg } from "../../../../assets/DragHandle.svg";
 
-import EditorContext from "../../../contexts/ModuleEditorContext";
-
-const [CONTENT_BLOCKS, EDIT_MODALS] = createContentBlockRenderers({
-<<<<<<< HEAD
-  column: Empty,
-  heading: {
-    renderBlock: HeadingBlock,
-    renderEditModal: EditHeadingModal,
-  },
-=======
+// Create content block table, but add column since it defaults to Empty
+const [CONTENT_BLOCKS, EDIT_MODALS] = RenderComponents({
   column: {
     renderBlock: ColumnBlock,
-    renderEditModal: () => null,
+    renderEditModal: () => null, // TODO: Make parameter optional
   },
-  heading: Empty,
->>>>>>> 7330b6d (Added button, column)
-  text: {
-    renderBlock: TextBlock,
-    renderEditModal: EditTextModal,
-  },
-  link: Empty,
-  button: {
-    renderBlock: ButtonBlock,
-    renderEditModal: EditButtonModal,
-  },
-  image: {
-    renderBlock: ImageBlock,
-    renderEditModal: EditImageModal,
-  },
-  video: {
-    renderBlock: VideoBlock,
-    renderEditModal: EditVideoModal,
-  },
-  audio: Empty,
 });
 
 const ContentBlock = ({
@@ -126,7 +85,9 @@ const ContentBlock = ({
                 <Box opacity={isHovered ? 1 : 0} {...provided.dragHandleProps}>
                   <DragHandleIconSvg />
                 </Box>
-                {CONTENT_BLOCKS.render({ block })}
+                <Center w="100%" padding="2rem">
+                  {CONTENT_BLOCKS.render({ block, editable })}
+                </Center>
                 <EditContentOptionsMenu
                   isVisible={isHovered}
                   onEditClick={onEditModalOpen} // block.type.clientType !== 'column' ? onEditModalOpen : null
@@ -139,7 +100,7 @@ const ContentBlock = ({
                 isOpen: isEditModalOpen,
                 onClose: onEditModalClose,
                 block,
-                index,
+                index, // TODO: Replace with callback
               })}
               <DeleteModal
                 name="Content Block"
@@ -150,7 +111,7 @@ const ContentBlock = ({
             </>
           ) : (
             <Flex width="100%" justify="center">
-              {CONTENT_BLOCKS.render({ block })}
+              {CONTENT_BLOCKS.render({ block, editable })}
             </Flex>
           )}
         </VStack>

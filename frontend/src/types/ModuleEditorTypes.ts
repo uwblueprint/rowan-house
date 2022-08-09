@@ -96,6 +96,14 @@ export type EditorContextAction =
   | {
       type: "delete-block";
       value: number;
+    }
+  | {
+      type: "create-column-block";
+      value: {
+        blockID: string;
+        columnID: string;
+        columnSide: "left" | "right";
+      };
     };
 
 export enum ValidHeadingSizes {
