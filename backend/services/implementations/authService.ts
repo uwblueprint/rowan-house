@@ -148,7 +148,13 @@ class AuthService implements IAuthService {
     }
   }
 
-  async getUserRoleByAccessToken(accessToken: string): Promise<Role> {
+  getUserRoleByAccessToken(accessToken: string): Promise<Role>;
+  getUserRoleByAccessToken(accessToken: null): Promise<null>;
+  async getUserRoleByAccessToken(
+    accessToken: string | null,
+  ): Promise<Role | null> {
+    if (accessToken == null) return null;
+
     try {
       const decodedIdToken: firebaseAdmin.auth.DecodedIdToken = await firebaseAdmin
         .auth()
@@ -160,6 +166,23 @@ class AuthService implements IAuthService {
     } catch (error) {
       Logger.error(`Failed to get assigned user role`);
       throw error;
+    }
+  }
+
+  async idNotSameAsActiveUser(
+    accessToken: string,
+    requestedUserId: string,
+  ): Promise<boolean> {
+    try {
+      const decodedIdToken: firebaseAdmin.auth.DecodedIdToken = await firebaseAdmin
+        .auth()
+        .verifyIdToken(accessToken, true);
+      const tokenUserId = await this.userService.getUserIdByAuthId(
+        decodedIdToken.uid,
+      );
+      return String(tokenUserId) !== requestedUserId;
+    } catch (error) {
+      return false;
     }
   }
 

@@ -33,6 +33,9 @@ const Button = {
       fontWeight: "590",
       fontSize: "14px",
       lineHeight: "28px",
+      "&[disabled]": {
+        _hover: { bg: "brand.royal" },
+      },
     },
     xs: {
       bg: "brand.royal",
@@ -120,6 +123,11 @@ const Button = {
       borderRadius: "md",
       fontSize: "xs",
       height: "32px",
+      _loading: {
+        _hover: {
+          bg: "white",
+        },
+      },
     },
     transparent: {
       bg: "transparent",

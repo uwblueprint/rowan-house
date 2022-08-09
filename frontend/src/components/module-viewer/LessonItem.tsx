@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { Button, IconButton, Flex, useDisclosure } from "@chakra-ui/react";
-import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
+import { EditIcon, DeleteIcon, LockIcon } from "@chakra-ui/icons";
 import { ReactComponent as DragHandleIconSvg } from "../../assets/DragHandle.svg";
 import { TextInput } from "../common/TextInput";
 import { Modal } from "../common/Modal";
@@ -9,12 +9,14 @@ import EditorContext from "../../contexts/ModuleEditorContext";
 import { ModuleEditorParams } from "../../types/ModuleEditorTypes";
 
 interface OptionsProps {
+  editable: boolean;
   text: string;
   isFocused: boolean;
   setFocus: () => void;
 }
 
 const LessonItem = ({
+  editable,
   text = "",
   isFocused,
   setFocus,
@@ -55,6 +57,9 @@ const LessonItem = ({
       setIsInvalid(true);
     }
   };
+  const showEditButtons = isHovered && editable;
+
+  const progressIcon = <LockIcon />;
 
   return (
     <>
@@ -82,17 +87,17 @@ const LessonItem = ({
         <Flex align="center" justify="space-between" pr="8px">
           <Flex align="center">
             <IconButton
-              visibility={isHovered ? "visible" : "hidden"}
+              visibility={!editable || isHovered ? "visible" : "hidden"}
               aria-label="Drag Lesson"
               variant="unstyled"
               size="xs"
-              icon={<DragHandleIconSvg />}
+              icon={editable ? <DragHandleIconSvg /> : progressIcon}
             />
             <p style={{ marginLeft: "10px" }}>{text}</p>
           </Flex>
           <Flex align="center" pb="5px">
             <IconButton
-              visibility={isHovered ? "visible" : "hidden"}
+              visibility={showEditButtons ? "visible" : "hidden"}
               aria-label="Edit Lesson"
               variant="unstyled"
               fontSize="18px"
@@ -123,7 +128,7 @@ const LessonItem = ({
             </Modal>
 
             <IconButton
-              visibility={isHovered ? "visible" : "hidden"}
+              visibility={showEditButtons ? "visible" : "hidden"}
               aria-label="Delete Lesson"
               variant="unstyled"
               fontSize="18px"

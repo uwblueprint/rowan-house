@@ -10,16 +10,58 @@ import { Role } from "../types";
 const authService: IAuthService = new AuthService(new UserService());
 
 export const getAccessToken = (req: Request): string | null => {
-  const authHeaderParts = req.headers.authorization?.split(" ");
-  if (
-    authHeaderParts &&
-    authHeaderParts.length >= 2 &&
-    authHeaderParts[0].toLowerCase() === "bearer"
-  ) {
-    return authHeaderParts[1];
+  const [scheme, token] = req.headers.authorization?.split(" ") || [];
+  if (scheme?.toLowerCase() === "bearer") {
+    return token === "null" ? null : token;
   }
   return null;
 };
+
+/* Determine if the user whose role is to be changed does not match the currently
+logged in user.
+ * Note: userIdField is the name of the request parameter containing the requested userId */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+export const idNotSameAsActiveUser = (userIdField: string) => {
+  return async (
+    resolve: (
+      parent: any,
+      args: { [key: string]: any },
+      context: ExpressContext,
+      info: GraphQLResolveInfo,
+    ) => any,
+    parent: any,
+    args: { [key: string]: any },
+    context: ExpressContext,
+    info: GraphQLResolveInfo,
+  ) => {
+    const accessToken = getAccessToken(context.req);
+    const authorized =
+      accessToken &&
+      (await authService.idNotSameAsActiveUser(accessToken, args[userIdField]));
+
+    if (!authorized) {
+      throw new AuthenticationError("User ID cannot change its own role");
+    }
+    return resolve(parent, args, context, info);
+  };
+};
+
+/* Mark request as always authorized */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+export const publicRoute = async (
+  resolve: (
+    parent: any,
+    args: { [key: string]: any },
+    context: ExpressContext,
+    info: GraphQLResolveInfo,
+  ) => any,
+  parent: any,
+  args: { [key: string]: any },
+  context: ExpressContext,
+  info: GraphQLResolveInfo,
+) => resolve(parent, args, context, info);
 
 /* Determine if request is authorized based on accessToken validity and role of client */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -46,7 +88,6 @@ export const isAuthorizedByRole = (roles: Set<Role>) => {
         "Failed authentication and/or authorization by role",
       );
     }
-
     return resolve(parent, args, context, info);
   };
 };

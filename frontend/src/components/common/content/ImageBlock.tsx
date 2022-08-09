@@ -1,12 +1,13 @@
 import React from "react";
 
-import { ContentProps } from "../../../types/ModuleEditorTypes";
+import {
+  ContentBlockProps,
+  ImageBlockState,
+} from "../../../types/ContentBlockTypes";
 
 const ImageBlock = ({
-  content,
-}: {
-  content: ContentProps;
-}): React.ReactElement => {
+  block: { content },
+}: ContentBlockProps<ImageBlockState>): React.ReactElement => {
   return <img src={content.link} alt="We should put an alt" />;
 };
 

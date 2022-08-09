@@ -22,6 +22,12 @@ const lessonResolvers = {
     ): Promise<LessonResponseDTO[]> => {
       return Promise.all(ids.map(lessonService.getLessonById));
     },
+    lessonTitles: async (
+      _parent: undefined,
+      { ids }: { ids: string[] },
+    ): Promise<Array<string>> => {
+      return lessonService.getLessonTitlesByIds(ids);
+    },
   },
   Mutation: {
     createLesson: async (

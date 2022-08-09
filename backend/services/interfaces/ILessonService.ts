@@ -37,6 +37,14 @@ export interface ILessonService {
   getLessonById(id: string): Promise<LessonResponseDTO>;
 
   /**
+   * retrieve the title of the lessons with the given ids
+   * @param ids lesson ids
+   * @returns requested Lesson titles
+   * @throws Error if retrieval fails
+   */
+  getLessonTitlesByIds(ids: Array<string>): Promise<Array<string>>;
+
+  /**
    * create a Lesson with the fields given in the DTO, return created Lesson
    * @param lesson to be created
    * @returns the created Lesson

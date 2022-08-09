@@ -1,16 +1,16 @@
 import { v4 as uuid } from "uuid";
 
 import {
-  ContentType,
   LessonRequest,
   LessonResponse,
 } from "../APIClients/types/LessonClientTypes";
-import { ContentTypeEnum, LessonType } from "../types/ModuleEditorTypes";
+import { LessonType } from "../types/ModuleEditorTypes";
+import { ContentBlockState, ContentTypeEnum } from "../types/ContentBlockTypes";
 
 export const formatLessonRequest = (lesson: LessonType): LessonRequest => {
   // Remove IDs from content blocks, switch types to the titles
   const content = lesson.content.map((block) => ({
-    type: block.type.title.toLowerCase() as ContentType,
+    type: block.type.clientType,
     content: block.content,
   }));
   return { ...lesson, content };
@@ -18,24 +18,11 @@ export const formatLessonRequest = (lesson: LessonType): LessonRequest => {
 
 export const formatLessonResponse = (lesson: LessonResponse): LessonType => {
   // Add IDs back into content blocks, switch types to enum
-  const content = lesson.content?.map((block) => {
-    let type;
-    switch (block.type) {
-      case "text":
-        type = ContentTypeEnum.TEXT;
-        break;
-      case "image":
-        type = ContentTypeEnum.IMAGE;
-        break;
-      default:
-        throw new Error(`Invalid block type received "${block.type}"`);
-    }
-    return {
-      id: uuid(),
-      type,
-      content: block.content,
-    };
-  });
+  const content = lesson.content?.map(({ type, content: blockContent }) => ({
+    id: uuid(),
+    type: ContentTypeEnum.from(type),
+    content: blockContent,
+  }));
 
   return {
     course: lesson.course,
@@ -43,6 +30,6 @@ export const formatLessonResponse = (lesson: LessonResponse): LessonType => {
     title: lesson.title,
     description: lesson?.description ?? undefined,
     image: lesson?.image ?? undefined,
-    content: content ?? [],
+    content: (content ?? []) as ContentBlockState[],
   };
 };

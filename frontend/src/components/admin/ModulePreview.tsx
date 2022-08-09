@@ -13,7 +13,7 @@ import { useMutation } from "@apollo/client";
 
 import EditActionsKebabMenu from "./EditActionsKebabMenu";
 import DeleteModal from "../common/DeleteModal";
-import EditModuleModal from "./EditModuleModal";
+import EditModuleModal from "../common/EditModuleModal";
 import { ADMIN_MODULE_EDITOR_BASE_ROUTE } from "../../constants/Routes";
 import { DEFAULT_IMAGE } from "../../constants/DummyData";
 import {
@@ -59,7 +59,6 @@ const ModulePreview = ({
     UPDATE_COURSE,
     refetchQueries,
   );
-
   const { title, image, published } = module;
 
   const onClick = (type: ModalType) => {

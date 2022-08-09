@@ -19,7 +19,7 @@ import {
   CourseResponse,
   ModuleRequest,
 } from "../../APIClients/types/CourseClientTypes";
-import EditModuleModal from "./EditModuleModal";
+import EditModuleModal from "../common/EditModuleModal";
 import { DELETE_COURSE } from "../../APIClients/mutations/CourseMutations";
 import { COURSES } from "../../APIClients/queries/CourseQueries";
 
@@ -54,25 +54,18 @@ const CoursePreview = ({ course }: CoursePreviewProps): React.ReactElement => {
 
   const formatCourseRequest = (
     moduleIndex: number,
-    newModule?: ModuleRequest,
+    newModule: ModuleRequest | null = null,
   ): [string, CourseRequest] => {
     if (!course.modules)
       throw Error(
         "Attempted to edit module when course does not contain modules",
       );
-    let newModules = [];
+    const newModules = [...course.modules];
     // Copy other modules by reference due to the immutability of the data
-    if (newModule) {
-      // If module index isn't valid, append the new module
-      if (moduleIndex >= 0 && moduleIndex < course.modules.length)
-        newModules = course.modules.map((oldModule, index) =>
-          moduleIndex === index ? newModule : oldModule,
-        );
-      else newModules = [...course.modules, newModule];
-      // If no new module has been passed, remove the module
-    } else {
-      newModules = course.modules.filter((_, index) => moduleIndex !== index);
-    }
+    if (moduleIndex >= 0 && moduleIndex < course.modules.length)
+      newModules[moduleIndex] = newModule;
+    // If module index isn't valid, append the new module
+    else if (newModule) newModules.push(newModule);
 
     const { id, ...newCourse } = { ...course, modules: newModules };
     return [id, newCourse];
@@ -125,15 +118,18 @@ const CoursePreview = ({ course }: CoursePreviewProps): React.ReactElement => {
         </Button>
       </Flex>
       <SimpleGrid templateColumns="repeat(auto-fit, 240px)" spacing={4}>
-        {modules?.map((module, index) => (
-          <ModulePreview
-            key={module.id}
-            courseId={course.id}
-            module={module}
-            index={index}
-            formatCourseRequest={formatCourseRequest}
-          />
-        ))}
+        {modules?.map(
+          (module, index) =>
+            module && (
+              <ModulePreview
+                key={module.id}
+                courseId={course.id}
+                module={module}
+                index={index}
+                formatCourseRequest={formatCourseRequest}
+              />
+            ),
+        )}
       </SimpleGrid>
       {modalType === ModalType.DELETE && (
         <DeleteModal

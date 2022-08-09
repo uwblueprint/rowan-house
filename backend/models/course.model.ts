@@ -16,7 +16,7 @@ export interface Course extends Document {
   description: string;
   image: string;
   previewImage: string;
-  modules: Module[];
+  modules: (Module | null)[];
   private: boolean;
 }
 
