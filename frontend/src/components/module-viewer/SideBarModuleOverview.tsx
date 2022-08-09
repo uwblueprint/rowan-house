@@ -137,7 +137,7 @@ const SideBarModuleOverview = ({
             }}
           >
             <TextInput
-              placeholder="New Lesson"
+              placeholder="New lesson"
               isInvalid={isInvalid}
               errorMessage={errorMessage}
               onChange={(currTitle) => {
@@ -148,7 +148,7 @@ const SideBarModuleOverview = ({
           </Modal>
 
           <DeleteModal
-            name="Lesson"
+            name="lesson"
             isOpen={isDeleteOpen}
             onConfirm={deleteLesson}
             onCancel={onDeleteClose}
