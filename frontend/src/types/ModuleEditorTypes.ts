@@ -121,8 +121,8 @@ export interface EditContentOptionsMenuProps {
 }
 
 export interface EditContentModalProps<BlockType extends ContentBlockState> {
-  onClose: () => void;
   isOpen: boolean;
   block: BlockType;
-  index: number;
+  onClose: () => void;
+  onSave: (newBlock: BlockType) => void;
 }

@@ -75,22 +75,24 @@ interface ConfigEntry<T extends ContentType> {
     | typeof EmptyConfigComponent;
   renderEditModal:
     | React.ComponentType<EditContentModalProps<ContentBlockTypeToState<T>>>
-    | typeof EmptyConfigComponent;
+    | ReturnType<typeof EmptyConfigModal>;
 }
 
-export const EmptyConfigComponent = (): null => null;
-export const EmptyConfigEntry = {
-  renderBlock: EmptyConfigComponent,
-  renderEditModal: EmptyConfigComponent,
+const EmptyConfigComponent = (): null => null;
+const EmptyConfigModal = <T extends ContentBlockState>() => (props: EditContentModalProps<T>) => null;
+
+export const EmptyConfigEntry = <T extends ContentBlockState>() => {
+  return {
+    renderBlock: EmptyConfigComponent,
+    renderEditModal: EmptyConfigModal<T>(),
+  }
 };
 
 export type ContentBlockRendererConfig = {
   [Type in ContentType]: ConfigEntry<Type>;
 };
 
-export type ContentBlockRendererOverrideConfig = {
-  [Type in ContentType]?: ConfigEntry<Type>;
-};
+export type ContentBlockRendererOverrideConfig = Partial<ContentBlockRendererConfig>;
 
 export type ContentBlocks = ContentBlockRenderer<
   ContentBlockProps<ContentBlockState>

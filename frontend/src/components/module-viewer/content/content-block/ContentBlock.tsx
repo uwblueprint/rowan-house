@@ -17,14 +17,10 @@ import ColumnBlock from "../column/ColumnBlock";
 import DeleteModal from "../../../common/DeleteModal";
 import EditContentOptionsMenu from "../../EditContentOptionsMenu";
 import { ReactComponent as DragHandleIconSvg } from "../../../../assets/DragHandle.svg";
+import { EmptyConfigEntry } from "./ContentBlockTableGen";
 
 // Create content block table, but add column since it defaults to Empty
-const [CONTENT_BLOCKS, EDIT_MODALS] = RenderComponents({
-  column: {
-    renderBlock: ColumnBlock,
-    renderEditModal: () => null, // TODO: Make parameter optional
-  },
-});
+const [CONTENT_BLOCKS, EDIT_MODALS] = RenderComponents();
 
 const ContentBlock = ({
   block,
@@ -58,6 +54,31 @@ const ContentBlock = ({
     });
 
     onDeleteModalClose();
+  };
+
+  const editContentBlock = (blockUpdates: ContentBlockState) => {
+    // if (!newContent) return;
+    // const newBlock = {
+    //   ...block,
+    //   content: {
+    //     ...block.content,
+    //     ...newContent,
+    //   },
+    // };
+
+    // const newBlock = {
+    //   ...block,
+    //   ...blockUpdates,
+    // };
+    // dispatch({
+    //   type: "update-block",
+    //   value: {
+    //     index,
+    //     block: newBlock,
+    //   },
+    // });
+    console.log(blockUpdates);
+    onEditModalClose();
   };
 
   return (
@@ -100,7 +121,7 @@ const ContentBlock = ({
                 isOpen: isEditModalOpen,
                 onClose: onEditModalClose,
                 block,
-                index, // TODO: Replace with callback
+                onSave: editContentBlock,
               })}
               <DeleteModal
                 name="Content Block"

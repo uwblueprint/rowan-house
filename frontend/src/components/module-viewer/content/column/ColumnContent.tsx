@@ -16,9 +16,9 @@ import EditContentOptionsMenu from "../../EditContentOptionsMenu";
 import { ReactComponent as DragHandleIconSvg } from "../../../../assets/DragHandle.svg";
 import EditorContext from "../../../../contexts/ModuleEditorContext";
 // TODO: Fix circular import
-// import RenderComponents from "../content-block/ContentBlockRenderer";
+import RenderComponents from "../content-block/ContentBlockRenderer";
 
-// const [CONTENT_BLOCKS, EDIT_MODALS] = RenderComponents();
+const [CONTENT_BLOCKS, EDIT_MODALS] = RenderComponents();
 
 const ColumnContent = ({
   block,
@@ -80,8 +80,7 @@ const ColumnContent = ({
                   <DragHandleIconSvg />
                 </Box>
                 <Center w="100%" padding="2rem">
-                  {block.type.title}
-                  {/* {CONTENT_BLOCKS.render({ block })} */}
+                  {CONTENT_BLOCKS.render({ block })}
                 </Center>
                 <EditContentOptionsMenu
                   isVisible={isHovered}
@@ -106,8 +105,7 @@ const ColumnContent = ({
             </>
           ) : (
             <Flex width="100%" justify="center">
-              {block.type.title}
-              {/* {CONTENT_BLOCKS.render({ block })} */}
+              {CONTENT_BLOCKS.render({ block })}
             </Flex>
           )}
         </VStack>

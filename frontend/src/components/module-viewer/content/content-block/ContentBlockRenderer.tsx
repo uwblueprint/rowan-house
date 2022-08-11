@@ -1,4 +1,5 @@
 import { ButtonBlock, TextBlock, ImageBlock, VideoBlock } from "..";
+import { AudioBlockState, ColumnBlockState, HeadingBlockState, LinkBlockState } from "../../../../types/ContentBlockTypes";
 import {
   EditButtonModal,
   EditTextModal,
@@ -17,13 +18,13 @@ export default (
   overrides: ContentBlockRendererOverrideConfig = {},
 ): [ContentBlocks, ContentBlockModals] => {
   const defaults = {
-    column: Empty,
-    heading: Empty,
+    column: Empty<ColumnBlockState>(),
+    heading: Empty<HeadingBlockState>(),
     text: {
       renderBlock: TextBlock,
       renderEditModal: EditTextModal,
     },
-    link: Empty,
+    link: Empty<LinkBlockState>(),
     button: {
       renderBlock: ButtonBlock,
       renderEditModal: EditButtonModal,
@@ -36,7 +37,7 @@ export default (
       renderBlock: VideoBlock,
       renderEditModal: EditVideoModal,
     },
-    audio: Empty,
+    audio: Empty<AudioBlockState>(),
   };
   return createContentBlockRenderers({
     ...defaults,

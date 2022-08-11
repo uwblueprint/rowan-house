@@ -1,50 +1,35 @@
 import { Center, Text, VStack } from "@chakra-ui/react";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {
   ButtonBlockState,
   ContentTypeEnum,
 } from "../../../../types/ContentBlockTypes";
 import { Modal } from "../../../common/Modal";
-import EditorContext from "../../../../contexts/ModuleEditorContext";
 import { TextInput } from "../../../common/TextInput";
 import { EditContentModalProps } from "../../../../types/ModuleEditorTypes";
 import { ButtonBlock } from "..";
 
 const EditButtonModal = ({
   block,
-  index,
   isOpen,
   onClose,
+  onSave,
 }: EditContentModalProps<ButtonBlockState>): React.ReactElement => {
   const [link, setLink] = useState(block.content.link ?? "");
   const [text, setText] = useState(block.content.text ?? "");
-  const context = useContext(EditorContext);
 
-  if (!context) return <></>;
-  const { dispatch } = context;
-
-  const onSave = () => {
-    if (link === "" || text === "") {
-      return;
+  const onConfirm = () => {
+    if (link !== "" && text !== "") {
+      const newBlock = {
+        ...block,
+        content: {
+          ...block.content,
+          link,
+          text,
+        }
+      }
+      onSave(newBlock);
     }
-    const newBlock = {
-      ...block,
-      content: {
-        ...block.content,
-        link,
-        text,
-      },
-    };
-
-    dispatch({
-      type: "update-block",
-      value: {
-        index,
-        block: newBlock,
-      },
-    });
-
-    onClose();
   };
 
   // Append the prefix if it does not exist
@@ -57,7 +42,7 @@ const EditButtonModal = ({
     <Modal
       size="xl"
       header="Edit button component"
-      onConfirm={onSave}
+      onConfirm={onConfirm}
       onCancel={onClose}
       isOpen={isOpen}
       canSubmit={link !== "" && text !== ""}

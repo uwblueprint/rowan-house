@@ -6,7 +6,7 @@ import {
   ContentBlockProps,
   ColumnBlockState,
 } from "../../../../types/ContentBlockTypes";
-// import ColumnContent from "./ColumnContent";
+import ColumnContent from "./ColumnContent";
 
 const ColumnBlock = ({
   block: { content, id },
@@ -26,8 +26,7 @@ const ColumnBlock = ({
             width="100%"
             minHeight="20rem"
           >
-            {content.left?.type.title}
-            {/* {content.left && <ColumnContent block={content.left} index={0} editable={editable}/>} */}
+            {content.left && <ColumnContent block={content.left} index={0} editable={editable}/>}
             {provided.placeholder}
           </Box>
         )}
@@ -42,8 +41,7 @@ const ColumnBlock = ({
             width="100%"
             minHeight="20rem"
           >
-            {content.right?.type.title}
-            {/* {content.right && <ColumnContent block={content.right} index={0} editable={editable}/>} */}
+            {content.right && <ColumnContent block={content.right} index={0} editable={editable}/>}
             {provided.placeholder}
           </Box>
         )}
