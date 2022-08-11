@@ -6,7 +6,7 @@ import { useQuery } from "@apollo/client";
 import Banner from "../learner/Banner";
 import ModuleLessonCount from "../learner/ModuleLessonCount";
 import { GET_COURSE } from "../../APIClients/queries/CourseQueries";
-import { COURSE_OVERVIEW_BASE_ROUTE } from "../../constants/Routes";
+import { HOME_PAGE } from "../../constants/Routes";
 import { CourseOverviewParams } from "../../types/CourseOverviewTypes";
 import { ModuleType } from "../../types/ModuleEditorTypes";
 
@@ -20,7 +20,7 @@ const CourseOverview = (): React.ReactElement => {
   });
 
   const onReturnToCourseOverviewClick = () => {
-    history.push(COURSE_OVERVIEW_BASE_ROUTE);
+    history.push(HOME_PAGE);
   };
 
   const getLessonCount = () => {
@@ -44,7 +44,7 @@ const CourseOverview = (): React.ReactElement => {
         color="white"
         align="center"
       >
-        <VStack flex="2" align="start">
+        <VStack flex="2" align="start" spacing={4} pr={6}>
           <Box display="flex">
             <Button onClick={onReturnToCourseOverviewClick} variant="link">
               <ChevronLeftIcon color="brand.royal" mr="15px" boxSize={30} />
@@ -53,18 +53,10 @@ const CourseOverview = (): React.ReactElement => {
               </Text>
             </Button>
           </Box>
-          <Text
-            variant="display-lg"
-            color="text.default"
-            style={{ marginBottom: "16px" }}
-          >
+          <Text variant="display-lg" color="text.default">
             {courseData?.course?.title}
           </Text>
-          <Text
-            variant="body"
-            color="text.default"
-            style={{ marginBottom: "16px" }}
-          >
+          <Text variant="body" color="text.default">
             {courseData?.course?.description}
           </Text>
           <ModuleLessonCount
