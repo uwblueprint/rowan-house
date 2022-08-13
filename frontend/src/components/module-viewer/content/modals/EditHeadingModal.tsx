@@ -66,7 +66,7 @@ const EditHeadingModal = ({
         <FormLabel
           htmlFor="headingSize"
           variant="caption-md"
-          marginTop="4vh"
+          marginTop="1vh"
           marginBottom="1vh"
         >
           Heading Style
