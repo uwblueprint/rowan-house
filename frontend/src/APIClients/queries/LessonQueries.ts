@@ -14,6 +14,7 @@ const GET_LESSONS = gql`
         content {
           link
           text
+          size
         }
       }
     }

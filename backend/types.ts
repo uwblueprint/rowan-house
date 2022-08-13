@@ -1,6 +1,6 @@
 export type Role = "Learner" | "Admin" | "Staff";
 
-export type ContentType = "text" | "image" | "video";
+export type ContentType = "text" | "image" | "video" | "heading";
 export interface ContentBlock {
   type: ContentType;
   content: Record<string, unknown>;
@@ -16,6 +16,10 @@ export interface ImageBlock extends ContentBlock {
 
 export interface VideoBlock extends ContentBlock {
   content: { link: string };
+}
+
+export interface HeadingBlock extends ContentBlock {
+  content: { text: string; size: string };
 }
 
 export type Token = {

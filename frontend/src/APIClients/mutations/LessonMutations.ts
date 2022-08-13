@@ -12,6 +12,7 @@ export const CREATE_LESSON = gql`
       content {
         type
         content {
+          size
           link
           text
         }
@@ -32,6 +33,7 @@ export const UPDATE_LESSON = gql`
       content {
         type
         content {
+          size
           link
           text
         }

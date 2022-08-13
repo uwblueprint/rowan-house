@@ -3,12 +3,22 @@ import React, { useContext, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 
 import { ContentBlockState } from "../../../types/ContentBlockTypes";
-import { TextBlock, ImageBlock, VideoBlock } from "../../common/content";
+import {
+  TextBlock,
+  ImageBlock,
+  VideoBlock,
+  HeadingBlock,
+} from "../../common/content";
 import DeleteModal from "../../common/DeleteModal";
 import EditContentOptionsMenu from "../EditContentOptionsMenu";
 
 import { ReactComponent as DragHandleIconSvg } from "../../../assets/DragHandle.svg";
-import { EditTextModal, EditImageModal, EditVideoModal } from "./modals";
+import {
+  EditTextModal,
+  EditImageModal,
+  EditVideoModal,
+  EditHeadingModal,
+} from "./modals";
 import createContentBlockRenderers, {
   EmptyConfigEntry as Empty,
 } from "../../common/content/ContentBlockRenderer";
@@ -17,7 +27,10 @@ import EditorContext from "../../../contexts/ModuleEditorContext";
 
 const [CONTENT_BLOCKS, EDIT_MODALS] = createContentBlockRenderers({
   column: Empty,
-  heading: Empty,
+  heading: {
+    renderBlock: HeadingBlock,
+    renderEditModal: EditHeadingModal,
+  },
   text: {
     renderBlock: TextBlock,
     renderEditModal: EditTextModal,

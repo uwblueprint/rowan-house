@@ -98,6 +98,13 @@ export type EditorContextAction =
       value: number;
     };
 
+export enum ValidHeadingSizes {
+  heading1 = "48px",
+  heading2 = "32px",
+  heading3 = "24px",
+  heading4 = "16px",
+}
+
 export interface EditContentOptionsMenuProps {
   isVisible: boolean;
   onEditClick: () => void;

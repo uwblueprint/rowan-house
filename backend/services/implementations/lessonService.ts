@@ -90,12 +90,16 @@ class LessonService implements ILessonService {
       if (!updatedLesson) {
         throw new Error(`Lesson id ${id} not found`);
       }
+      console.log("updated content is");
+      console.log(updatedLesson);
     } catch (error: unknown) {
       Logger.error(
         `Failed to update lesson. Reason = ${getErrorMessage(error)}`,
       );
       throw error;
     }
+    console.log("Updated lesson content is");
+    console.log(updatedLesson.content);
 
     return {
       id: updatedLesson.id,

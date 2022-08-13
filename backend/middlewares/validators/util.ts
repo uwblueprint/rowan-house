@@ -1,4 +1,10 @@
-import { ContentBlock, ImageBlock, TextBlock, VideoBlock } from "../../types";
+import {
+  ContentBlock,
+  HeadingBlock,
+  ImageBlock,
+  TextBlock,
+  VideoBlock,
+} from "../../types";
 
 type Type = "string" | "integer" | "boolean";
 
@@ -76,6 +82,10 @@ export const validateContent = (content: ContentBlock): boolean => {
     case "video": {
       const video = content as VideoBlock;
       return video.content.link != null;
+    }
+    case "heading": {
+      const heading = content as HeadingBlock;
+      return heading.content.size != null && heading.content.text != null;
     }
     default: {
       return false;

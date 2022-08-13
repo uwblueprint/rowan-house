@@ -5,6 +5,7 @@ import {
   LessonType,
   EditorChangeStatus,
   EditorChangeStatuses,
+  ValidHeadingSizes,
 } from "../types/ModuleEditorTypes";
 import { ContentBlockState, ContentTypeEnum } from "../types/ContentBlockTypes";
 
@@ -175,6 +176,16 @@ const createLessonContentBlock = (
         id: uuid(),
         content: {
           link: "",
+        },
+      };
+      break;
+    case ContentTypeEnum.HEADING.id:
+      block = {
+        type: ContentTypeEnum.HEADING,
+        id: uuid(),
+        content: {
+          text: "",
+          size: ValidHeadingSizes.heading1,
         },
       };
       break;
