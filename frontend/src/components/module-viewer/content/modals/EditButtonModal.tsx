@@ -7,7 +7,7 @@ import {
 import { Modal } from "../../../common/Modal";
 import { TextInput } from "../../../common/TextInput";
 import { EditContentModalProps } from "../../../../types/ModuleEditorTypes";
-import { ButtonBlock } from "..";
+import { ButtonBlock } from "../blocks";
 
 const EditButtonModal = ({
   block,

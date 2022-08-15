@@ -5,7 +5,7 @@ import { Button } from "@chakra-ui/react";
 import {
   ContentBlockProps,
   ButtonBlockState,
-} from "../../../types/ContentBlockTypes";
+} from "../../../../types/ContentBlockTypes";
 
 const ButtonBlock = ({
   block: { content },

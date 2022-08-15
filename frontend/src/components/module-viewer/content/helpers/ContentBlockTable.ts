@@ -1,17 +1,18 @@
-import { ButtonBlock, TextBlock, ImageBlock, VideoBlock } from "..";
+import { ButtonBlock, TextBlock, ImageBlock, VideoBlock } from "../blocks";
 import {
   EditButtonModal,
   EditTextModal,
   EditImageModal,
   EditVideoModal,
 } from "../modals";
-
+import {
+  ContentBlockModals,
+  ContentBlockRendererOverrideConfig,
+  ContentBlocks,
+} from "./ContentBlockTableTypes";
 import createContentBlockRenderers, {
   EmptyConfigEntry as Empty,
-  ContentBlockRendererOverrideConfig,
-  ContentBlockModals,
-  ContentBlocks,
-} from "./ContentBlockTableGen";
+} from "./ContentBlockTableUtils";
 
 export default (
   overrides: ContentBlockRendererOverrideConfig = {},

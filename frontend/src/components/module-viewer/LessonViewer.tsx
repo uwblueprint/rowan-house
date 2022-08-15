@@ -3,7 +3,7 @@ import { Button, Flex } from "@chakra-ui/react";
 import { Droppable } from "react-beautiful-dnd";
 
 import EditorContext from "../../contexts/ModuleEditorContext";
-import ContentBlock from "./content/content-block/ContentBlock";
+import ContentBlock from "./content/ContentBlock";
 import { ContentBlockState } from "../../types/ContentBlockTypes";
 
 const LessonViewer = ({

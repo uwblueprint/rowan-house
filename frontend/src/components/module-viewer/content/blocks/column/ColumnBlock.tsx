@@ -5,7 +5,7 @@ import { Droppable } from "react-beautiful-dnd";
 import {
   ContentBlockProps,
   ColumnBlockState,
-} from "../../../../types/ContentBlockTypes";
+} from "../../../../../types/ContentBlockTypes";
 import ColumnContent from "./ColumnContent";
 
 const ColumnBlock = ({

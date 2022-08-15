@@ -9,18 +9,25 @@ import {
 import React, { useContext, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 
-import { ContentBlockState } from "../../../../types/ContentBlockTypes";
-import DeleteModal from "../../../common/DeleteModal";
-import EditContentOptionsMenu from "../../EditContentOptionsMenu";
+import EditorContext from "../../../contexts/ModuleEditorContext";
+import RenderComponents from "./helpers/ContentBlockTable";
+import { ContentBlockState } from "../../../types/ContentBlockTypes";
 
-import { ReactComponent as DragHandleIconSvg } from "../../../../assets/DragHandle.svg";
-import EditorContext from "../../../../contexts/ModuleEditorContext";
-// TODO: Fix circular import
-import RenderComponents from "../content-block/ContentBlockRenderer";
+import ColumnBlock from "./blocks/column/ColumnBlock";
+import DeleteModal from "../../common/DeleteModal";
+import EditContentOptionsMenu from "../EditContentOptionsMenu";
+import { ReactComponent as DragHandleIconSvg } from "../../../assets/DragHandle.svg";
+import { EmptyConfigModal } from "./helpers/ContentBlockTableUtils";
 
-const [CONTENT_BLOCKS, EDIT_MODALS] = RenderComponents();
+// Create content block table, but add column since it defaults to Empty
+const [CONTENT_BLOCKS, EDIT_MODALS] = RenderComponents({
+  column: {
+    renderBlock: ColumnBlock,
+    renderEditModal: EmptyConfigModal,
+  },
+});
 
-const ColumnContent = ({
+const ContentBlock = ({
   block,
   index,
   editable = true,
@@ -54,6 +61,31 @@ const ColumnContent = ({
     onDeleteModalClose();
   };
 
+  const editContentBlock = <T extends ContentBlockState>(blockUpdates: T) => {
+    // if (!newContent) return;
+    // const newBlock = {
+    //   ...block,
+    //   content: {
+    //     ...block.content,
+    //     ...newContent,
+    //   },
+    // };
+
+    // const newBlock = {
+    //   ...block,
+    //   ...blockUpdates,
+    // };
+    // dispatch({
+    //   type: "update-block",
+    //   value: {
+    //     index,
+    //     block: newBlock,
+    //   },
+    // });
+    console.log(blockUpdates);
+    onEditModalClose();
+  };
+
   return (
     <Draggable
       key={block.id}
@@ -80,7 +112,7 @@ const ColumnContent = ({
                   <DragHandleIconSvg />
                 </Box>
                 <Center w="100%" padding="2rem">
-                  {CONTENT_BLOCKS.render({ block })}
+                  {CONTENT_BLOCKS.render({ block, editable })}
                 </Center>
                 <EditContentOptionsMenu
                   isVisible={isHovered}
@@ -90,12 +122,12 @@ const ColumnContent = ({
                 />
               </Flex>
               <Divider opacity={isHovered ? 1 : 0} />
-              {/* {EDIT_MODALS.render({
+              {EDIT_MODALS.render({
                 isOpen: isEditModalOpen,
                 onClose: onEditModalClose,
                 block,
-                index,
-              })} */}
+                onSave: editContentBlock,
+              })}
               <DeleteModal
                 name="Content Block"
                 isOpen={isDeleteModalOpen}
@@ -105,7 +137,7 @@ const ColumnContent = ({
             </>
           ) : (
             <Flex width="100%" justify="center">
-              {CONTENT_BLOCKS.render({ block })}
+              {CONTENT_BLOCKS.render({ block, editable })}
             </Flex>
           )}
         </VStack>
@@ -114,4 +146,4 @@ const ColumnContent = ({
   );
 };
 
-export default ColumnContent;
+export default ContentBlock;

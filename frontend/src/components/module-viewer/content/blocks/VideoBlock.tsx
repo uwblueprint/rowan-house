@@ -1,9 +1,9 @@
 import React from "react";
-import VideoPlayer from "../../common/VideoPlayer";
+import VideoPlayer from "../../../common/VideoPlayer";
 import {
   ContentBlockProps,
   VideoBlockState,
-} from "../../../types/ContentBlockTypes";
+} from "../../../../types/ContentBlockTypes";
 
 const VideoBlock = ({
   block: { content },
