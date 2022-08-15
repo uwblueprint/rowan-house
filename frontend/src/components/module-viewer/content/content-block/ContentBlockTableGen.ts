@@ -1,8 +1,8 @@
 import React from "react";
 import { ContentType } from "../../../../APIClients/types/LessonClientTypes";
 import {
+  MappedProps,
   ContentBlockProps,
-  ContentBlockState,
   ContentBlockTypeToState,
 } from "../../../../types/ContentBlockTypes";
 import { EditContentModalProps } from "../../../../types/ModuleEditorTypes";
@@ -12,59 +12,45 @@ import { EditContentModalProps } from "../../../../types/ModuleEditorTypes";
 // to conditionally render different React components depending on the requested type of the
 // provided component block, in a type-safe manner.
 
-type ValueOf<T> = T[keyof T];
-
-type ArgMap<D extends ContentType> = {
-  [K in D]: ContentBlockTypeToState<K>;
-};
-
 class ContentBlockRenderer<
-  PropType extends { block: ContentBlockState },
-  DispatchableT extends ContentType = ContentType
+  PropType extends MappedProps,
+  PropMap extends { [K in ContentType]: PropType }
 > {
   constructor(
     private dispatchTable: {
-      [K in keyof ArgMap<DispatchableT>]: React.ComponentType<
-        Omit<PropType, "block"> & { block: ArgMap<DispatchableT>[K] }
-      >;
+      [K in keyof PropMap]: React.ComponentType<PropMap[K]>;
     },
   ) {}
 
   private callWithMethodAndArgs(
     op: {
-      [P in keyof ArgMap<DispatchableT>]: {
+      [P in keyof PropMap]: {
         method: P;
-        arg: Omit<PropType, "block"> & { block: ArgMap<DispatchableT>[P] };
+        arg: PropMap[P];
       };
-    }[keyof ArgMap<DispatchableT>],
+    }[keyof PropMap],
   ) {
     return React.createElement(this.dispatchTable[op.method], op.arg);
   }
 
-  private callWithArgMap(
-    props: Omit<PropType, "block"> & { block: ValueOf<ArgMap<DispatchableT>> },
-  ) {
+  private callWithArgMap(props: PropMap[ContentType]) {
     return this.callWithMethodAndArgs({
       method: props.block.type.clientType,
       arg: props,
     });
   }
 
-  public canDispatch(
-    block: ContentBlockState,
-  ): block is ValueOf<ArgMap<DispatchableT>> {
-    return block.type.clientType in this.dispatchTable;
+  public canDispatch(props: PropType): props is PropMap[ContentType] {
+    return props.block.type.clientType in this.dispatchTable;
   }
 
   public render(props: PropType): React.ReactNode {
-    const { block, ...rest } = props;
-
-    if (this.canDispatch(block)) {
-      return this.callWithArgMap({ block, ...rest });
+    if (this.canDispatch(props)) {
+      return this.callWithArgMap(props);
     }
 
     throw new Error(
-      `Unknown content type given to ContentBlockDispatcher: "${block.type.clientType}"`,
+      `Unknown content type given to ContentBlockDispatcher: "${props.block.type.clientType}"`,
     );
   }
 }
@@ -75,17 +61,15 @@ interface ConfigEntry<T extends ContentType> {
     | typeof EmptyConfigComponent;
   renderEditModal:
     | React.ComponentType<EditContentModalProps<ContentBlockTypeToState<T>>>
-    | ReturnType<typeof EmptyConfigModal>;
+    | typeof EmptyConfigModal;
 }
 
-const EmptyConfigComponent = (): null => null;
-const EmptyConfigModal = <T extends ContentBlockState>() => (props: EditContentModalProps<T>) => null;
+export const EmptyConfigComponent = (): null => null;
+export const EmptyConfigModal = (): null => null;
 
-export const EmptyConfigEntry = <T extends ContentBlockState>() => {
-  return {
-    renderBlock: EmptyConfigComponent,
-    renderEditModal: EmptyConfigModal<T>(),
-  }
+export const EmptyConfigEntry = {
+  renderBlock: EmptyConfigComponent,
+  renderEditModal: EmptyConfigModal,
 };
 
 export type ContentBlockRendererConfig = {
@@ -94,11 +78,21 @@ export type ContentBlockRendererConfig = {
 
 export type ContentBlockRendererOverrideConfig = Partial<ContentBlockRendererConfig>;
 
+type ContentBlockPropsMap = {
+  [K in ContentType]: ContentBlockProps<ContentBlockTypeToState<K>>;
+};
+
+type EditContentModalPropsMap = {
+  [K in ContentType]: EditContentModalProps<ContentBlockTypeToState<K>>;
+};
+
 export type ContentBlocks = ContentBlockRenderer<
-  ContentBlockProps<ContentBlockState>
+  ContentBlockProps,
+  ContentBlockPropsMap
 >;
 export type ContentBlockModals = ContentBlockRenderer<
-  EditContentModalProps<ContentBlockState>
+  EditContentModalProps,
+  EditContentModalPropsMap
 >;
 
 const mapToObjectKey = <
@@ -115,10 +109,12 @@ const createContentBlockRenderers = (
   config: ContentBlockRendererConfig,
 ): [ContentBlocks, ContentBlockModals] => {
   const contentBlockRenderer = new ContentBlockRenderer<
-    ContentBlockProps<ContentBlockState>
+    ContentBlockProps,
+    ContentBlockPropsMap
   >(mapToObjectKey(config, "renderBlock"));
   const editModalRenderer = new ContentBlockRenderer<
-    EditContentModalProps<ContentBlockState>
+    EditContentModalProps,
+    EditContentModalPropsMap
   >(mapToObjectKey(config, "renderEditModal"));
 
   return [contentBlockRenderer, editModalRenderer];

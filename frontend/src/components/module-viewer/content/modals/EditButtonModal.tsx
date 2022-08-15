@@ -26,8 +26,8 @@ const EditButtonModal = ({
           ...block.content,
           link,
           text,
-        }
-      }
+        },
+      };
       onSave(newBlock);
     }
   };

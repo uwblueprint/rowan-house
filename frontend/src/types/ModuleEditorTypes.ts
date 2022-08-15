@@ -1,4 +1,4 @@
-import { ContentBlockState } from "./ContentBlockTypes";
+import { ContentBlockState, MappedProps } from "./ContentBlockTypes";
 
 export interface LessonType {
   course: string;
@@ -120,9 +120,10 @@ export interface EditContentOptionsMenuProps {
   onDeleteClick: () => void;
 }
 
-export interface EditContentModalProps<BlockType extends ContentBlockState> {
+export interface EditContentModalProps<
+  BlockType extends ContentBlockState = ContentBlockState
+> extends MappedProps<BlockType> {
   isOpen: boolean;
-  block: BlockType;
   onClose: () => void;
-  onSave: (newBlock: BlockType) => void;
+  onSave: <T extends BlockType>(newBlock: T) => void;
 }

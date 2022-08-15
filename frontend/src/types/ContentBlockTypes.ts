@@ -157,8 +157,15 @@ export type ContentBlockTypeToState<Type extends ContentType> = Extract<
   { ["type"]: { ["clientType"]: Type } }
 >;
 
-export interface ContentBlockProps<BlockType extends ContentBlockState> {
+export interface MappedProps<
+  BlockType extends ContentBlockState = ContentBlockState
+> {
   block: BlockType;
+}
+
+export interface ContentBlockProps<
+  BlockType extends ContentBlockState = ContentBlockState
+> extends MappedProps<BlockType> {
   editable?: boolean;
 }
 

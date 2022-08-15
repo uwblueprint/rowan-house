@@ -43,8 +43,8 @@ const EditVideoModal = ({
         content: {
           ...block.content,
           link,
-        }
-      }
+        },
+      };
       onSave(newBlock);
     }
   };

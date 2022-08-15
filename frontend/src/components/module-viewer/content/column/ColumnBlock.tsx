@@ -12,8 +12,6 @@ const ColumnBlock = ({
   block: { content, id },
   editable,
 }: ContentBlockProps<ColumnBlockState>): React.ReactElement => {
-  console.log(editable);
-
   return (
     <Grid templateColumns="repeat(2, 1fr)" w="100%">
       <Droppable droppableId={`${id} left column"`}>
@@ -26,7 +24,13 @@ const ColumnBlock = ({
             width="100%"
             minHeight="20rem"
           >
-            {content.left && <ColumnContent block={content.left} index={0} editable={editable}/>}
+            {content.left && (
+              <ColumnContent
+                block={content.left}
+                index={0}
+                editable={editable}
+              />
+            )}
             {provided.placeholder}
           </Box>
         )}
@@ -41,7 +45,13 @@ const ColumnBlock = ({
             width="100%"
             minHeight="20rem"
           >
-            {content.right && <ColumnContent block={content.right} index={0} editable={editable}/>}
+            {content.right && (
+              <ColumnContent
+                block={content.right}
+                index={0}
+                editable={editable}
+              />
+            )}
             {provided.placeholder}
           </Box>
         )}

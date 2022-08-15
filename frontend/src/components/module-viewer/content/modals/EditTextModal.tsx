@@ -24,8 +24,8 @@ const EditTextModal = ({
         content: {
           ...block.content,
           text,
-        }
-      }
+        },
+      };
       onSave(newBlock);
     }
   };

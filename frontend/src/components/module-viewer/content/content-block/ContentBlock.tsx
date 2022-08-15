@@ -17,10 +17,15 @@ import ColumnBlock from "../column/ColumnBlock";
 import DeleteModal from "../../../common/DeleteModal";
 import EditContentOptionsMenu from "../../EditContentOptionsMenu";
 import { ReactComponent as DragHandleIconSvg } from "../../../../assets/DragHandle.svg";
-import { EmptyConfigEntry } from "./ContentBlockTableGen";
+import { EmptyConfigModal } from "./ContentBlockTableGen";
 
 // Create content block table, but add column since it defaults to Empty
-const [CONTENT_BLOCKS, EDIT_MODALS] = RenderComponents();
+const [CONTENT_BLOCKS, EDIT_MODALS] = RenderComponents({
+  column: {
+    renderBlock: ColumnBlock,
+    renderEditModal: EmptyConfigModal,
+  },
+});
 
 const ContentBlock = ({
   block,
@@ -56,7 +61,7 @@ const ContentBlock = ({
     onDeleteModalClose();
   };
 
-  const editContentBlock = (blockUpdates: ContentBlockState) => {
+  const editContentBlock = <T extends ContentBlockState>(blockUpdates: T) => {
     // if (!newContent) return;
     // const newBlock = {
     //   ...block,
