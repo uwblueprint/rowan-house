@@ -14,14 +14,16 @@ const ModuleLessonCount = ({
   color = "text.default",
 }: ModuleLessonCountProps): React.ReactElement => {
   return (
-    <Box>
+    <Box color={color}>
       <Icon
         as={DocumentIcon}
         marginTop="-4px"
         marginRight="3px"
         color={color}
+        boxSize={25}
       />
-      {moduleCount} modules &bull; {lessonCount} lessons
+      {moduleCount} {`${moduleCount > 1 ? "modules" : "module"}`} &bull;{" "}
+      {lessonCount} {`${lessonCount > 1 ? "lessons" : "lesson"}`}
     </Box>
   );
 };
