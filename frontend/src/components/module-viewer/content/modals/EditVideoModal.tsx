@@ -38,14 +38,7 @@ const EditVideoModal = ({
     if (!link) {
       setInvalid(true);
     } else {
-      const newBlock = {
-        ...block,
-        content: {
-          ...block.content,
-          link,
-        },
-      };
-      onSave(newBlock);
+      onSave({link});
     }
   };
 

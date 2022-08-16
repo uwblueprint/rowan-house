@@ -20,15 +20,10 @@ const EditButtonModal = ({
 
   const onConfirm = () => {
     if (link !== "" && text !== "") {
-      const newBlock = {
-        ...block,
-        content: {
-          ...block.content,
-          link,
-          text,
-        },
-      };
-      onSave(newBlock);
+      onSave({
+        link,
+        text,
+      });
     }
   };
 

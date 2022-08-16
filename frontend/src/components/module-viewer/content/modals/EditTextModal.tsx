@@ -19,14 +19,7 @@ const EditTextModal = ({
     if (!text) {
       setInvalid(true);
     } else {
-      const newBlock = {
-        ...block,
-        content: {
-          ...block.content,
-          text,
-        },
-      };
-      onSave(newBlock);
+      onSave({text});
     }
   };
 

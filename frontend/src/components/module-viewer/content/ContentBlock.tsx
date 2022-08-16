@@ -61,28 +61,23 @@ const ContentBlock = ({
     onDeleteModalClose();
   };
 
-  const editContentBlock = <T extends ContentBlockState>(blockUpdates: T) => {
-    // if (!newContent) return;
-    // const newBlock = {
-    //   ...block,
-    //   content: {
-    //     ...block.content,
-    //     ...newContent,
-    //   },
-    // };
-
-    // const newBlock = {
-    //   ...block,
-    //   ...blockUpdates,
-    // };
-    // dispatch({
-    //   type: "update-block",
-    //   value: {
-    //     index,
-    //     block: newBlock,
-    //   },
-    // });
-    console.log(blockUpdates);
+  const editContentBlock = <T extends ContentBlockState>(newContent: T['content']) => {
+    if (!newContent) return;
+    const newBlock = {
+      ...block,
+      content: {
+        ...block.content,
+        ...newContent,
+      },
+    } as T; // TODO: Is this a problem?
+    dispatch({
+      type: "update-block",
+      value: {
+        index,
+        block: newBlock,
+      },
+    });
+    console.log(newContent);
     onEditModalClose();
   };
 

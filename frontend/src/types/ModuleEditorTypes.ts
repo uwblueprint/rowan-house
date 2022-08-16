@@ -125,5 +125,5 @@ export interface EditContentModalProps<
 > extends MappedProps<BlockType> {
   isOpen: boolean;
   onClose: () => void;
-  onSave: <T extends BlockType>(newBlock: T) => void;
+  onSave: <T extends BlockType>(newBlock: T['content']) => void;
 }
