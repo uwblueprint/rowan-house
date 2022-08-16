@@ -35,7 +35,6 @@ const onDragEnd = (
 
   if (destination.droppableId.includes("column")) {
     const [columnID, columnSide] = destination.droppableId.split(" ");
-    console.log(`Dropping into a column: ${columnID}, ${columnSide}`);
     if (columnSide !== "left" && columnSide !== "right") {
       throw Error(`Received column component with unknown side: ${columnSide}`);
     }

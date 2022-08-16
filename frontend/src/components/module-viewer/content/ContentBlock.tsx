@@ -57,27 +57,14 @@ const ContentBlock = ({
       type: "delete-block",
       value: index,
     });
-
     onDeleteModalClose();
   };
 
-  const editContentBlock = <T extends ContentBlockState>(newContent: T['content']) => {
-    if (!newContent) return;
-    const newBlock = {
-      ...block,
-      content: {
-        ...block.content,
-        ...newContent,
-      },
-    } as T; // TODO: Is this a problem?
+  const editContentBlock = <T extends ContentBlockState>(content: T['content']) => {
     dispatch({
       type: "update-block",
-      value: {
-        index,
-        block: newBlock,
-      },
+      value: { index, content },
     });
-    console.log(newContent);
     onEditModalClose();
   };
 
@@ -107,7 +94,7 @@ const ContentBlock = ({
                   <DragHandleIconSvg />
                 </Box>
                 <Center w="100%" padding="2rem">
-                  {CONTENT_BLOCKS.render({ block, editable })}
+                  {CONTENT_BLOCKS.render({ block, index, editable })}
                 </Center>
                 <EditContentOptionsMenu
                   isVisible={isHovered}
@@ -131,9 +118,9 @@ const ContentBlock = ({
               />
             </>
           ) : (
-            <Flex width="100%" justify="center">
-              {CONTENT_BLOCKS.render({ block, editable })}
-            </Flex>
+            <Center w="100%" padding="2rem">
+              {CONTENT_BLOCKS.render({ block, index, editable })}
+            </Center>
           )}
         </VStack>
       )}

@@ -10,8 +10,13 @@ import ColumnContent from "./ColumnContent";
 
 const ColumnBlock = ({
   block: { content, id },
+  index,
   editable,
 }: ContentBlockProps<ColumnBlockState>): React.ReactElement => {
+  if (index === undefined) {
+    throw Error("Index passed to column component was undefined");
+  }
+
   return (
     <Grid templateColumns="repeat(2, 1fr)" w="100%">
       <Droppable droppableId={`${id} left column"`}>
@@ -27,7 +32,8 @@ const ColumnBlock = ({
             {content.left && (
               <ColumnContent
                 block={content.left}
-                index={0}
+                index={index}
+                side='left'
                 editable={editable}
               />
             )}
@@ -48,7 +54,8 @@ const ColumnBlock = ({
             {content.right && (
               <ColumnContent
                 block={content.right}
-                index={0}
+                index={index}
+                side='right'
                 editable={editable}
               />
             )}

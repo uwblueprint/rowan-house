@@ -1,7 +1,6 @@
 import {
   Box,
   Center,
-  Divider,
   Flex,
   useDisclosure,
   VStack,
@@ -9,7 +8,7 @@ import {
 import React, { useContext, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 
-import { ContentBlockState } from "../../../../../types/ContentBlockTypes";
+import { ColumnBlockParam, ColumnBlockState, ContentBlockState } from "../../../../../types/ContentBlockTypes";
 import DeleteModal from "../../../../common/DeleteModal";
 import EditContentOptionsMenu from "../../../EditContentOptionsMenu";
 
@@ -22,10 +21,12 @@ const [CONTENT_BLOCKS, EDIT_MODALS] = RenderComponents();
 const ColumnContent = ({
   block,
   index,
+  side,
   editable = true,
 }: {
   block: ContentBlockState;
   index: number;
+  side: ColumnBlockParam;
   editable?: boolean;
 }): React.ReactElement => {
   const [isHovered, setIsHovered] = useState(false);
@@ -44,13 +45,33 @@ const ColumnContent = ({
   if (!context) return <></>;
   const { dispatch } = context;
 
-  const deleteContentBlock = () => {
+  const deleteColumn = () => {
+    const content = {
+      [side]: null
+    } as ColumnBlockState['content'];
     dispatch({
-      type: "delete-block",
-      value: index,
+      type: "update-block",
+      value: { index, content },
     });
-
     onDeleteModalClose();
+  };
+
+  const editColumn = <T extends ContentBlockState>(sideUpdates: T['content']) => {
+    const content = {
+      [side]: {
+        ...block,
+        content: {
+          ...block.content,
+          ...sideUpdates,
+        }
+      }
+    } as ColumnBlockState['content'];
+    console.log(content);
+    dispatch({
+      type: "update-block",
+      value: { index, content },
+    });
+    onEditModalClose();
   };
 
   return (
@@ -73,13 +94,12 @@ const ColumnContent = ({
         >
           {editable ? (
             <>
-              <Divider opacity={isHovered ? 1 : 0} />
               <Flex width="100%" justify="space-between">
                 <Box opacity={isHovered ? 1 : 0} {...provided.dragHandleProps}>
                   <DragHandleIconSvg />
                 </Box>
-                <Center w="100%" padding="2rem">
-                  {CONTENT_BLOCKS.render({ block })}
+                <Center w="100%" padding=".2rem">
+                  {CONTENT_BLOCKS.render({ block, index, editable })}
                 </Center>
                 <EditContentOptionsMenu
                   isVisible={isHovered}
@@ -88,24 +108,23 @@ const ColumnContent = ({
                   onDeleteClick={onDeleteModalOpen}
                 />
               </Flex>
-              <Divider opacity={isHovered ? 1 : 0} />
-              {/* {EDIT_MODALS.render({
+              {EDIT_MODALS.render({
                 isOpen: isEditModalOpen,
                 onClose: onEditModalClose,
                 block,
-                index,
-              })} */}
+                onSave: editColumn,
+              })}
               <DeleteModal
                 name="Content Block"
                 isOpen={isDeleteModalOpen}
-                onConfirm={deleteContentBlock}
+                onConfirm={deleteColumn}
                 onCancel={onDeleteModalClose}
               />
             </>
           ) : (
-            <Flex width="100%" justify="center">
-              {CONTENT_BLOCKS.render({ block })}
-            </Flex>
+            <Center w="100%" padding=".2rem">
+              {CONTENT_BLOCKS.render({ block, index, editable })}
+            </Center>
           )}
         </VStack>
       )}

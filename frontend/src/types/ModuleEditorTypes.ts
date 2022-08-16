@@ -1,4 +1,4 @@
-import { ContentBlockState, MappedProps } from "./ContentBlockTypes";
+import { ColumnBlockParam, ContentBlockState, MappedProps } from "./ContentBlockTypes";
 
 export interface LessonType {
   course: string;
@@ -91,7 +91,7 @@ export type EditorContextAction =
     }
   | {
       type: "update-block";
-      value: { index: number; block: ContentBlockState };
+      value: { index: number; content: ContentBlockState['content'] };
     }
   | {
       type: "delete-block";
@@ -102,7 +102,7 @@ export type EditorContextAction =
       value: {
         blockID: string;
         columnID: string;
-        columnSide: "left" | "right";
+        columnSide: ColumnBlockParam;
       };
     };
 

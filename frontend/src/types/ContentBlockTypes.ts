@@ -45,9 +45,9 @@ export type ColumnBlockState = ContentBlockStateType<
     right: null | ContentBlockState;
   }
 >;
+export type ColumnBlockParam = 'left' | 'right'; // TODO: Better method ?
 
 export type ContentBlockState = RequireAllContentTypesArePresent<
-  | ColumnBlockState
   | HeadingBlockState
   | TextBlockState
   | LinkBlockState
@@ -55,6 +55,7 @@ export type ContentBlockState = RequireAllContentTypesArePresent<
   | ImageBlockState
   | VideoBlockState
   | AudioBlockState
+  | ColumnBlockState
 >;
 
 export class ContentTypeEnum {
@@ -166,6 +167,7 @@ export interface MappedProps<
 export interface ContentBlockProps<
   BlockType extends ContentBlockState = ContentBlockState
 > extends MappedProps<BlockType> {
+  index?: number;
   editable?: boolean;
 }
 

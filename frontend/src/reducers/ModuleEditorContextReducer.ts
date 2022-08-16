@@ -7,7 +7,7 @@ import {
   EditorChangeStatuses,
   ValidHeadingSizes,
 } from "../types/ModuleEditorTypes";
-import { ContentBlockState, ContentTypeEnum } from "../types/ContentBlockTypes";
+import { ColumnBlockParam, ContentBlockState, ContentTypeEnum } from "../types/ContentBlockTypes";
 
 /* eslint-disable no-console */
 
@@ -254,7 +254,7 @@ const reorderLessonContentBlocks = (
 const updateLessonContentBlock = (
   state: EditorStateType,
   index: number,
-  block: ContentBlockState,
+  content: ContentBlockState['content'],
 ): EditorStateType => {
   const id = state.focusedLesson;
   if (!id || !Object.keys(state.lessons).includes(id)) return state;
@@ -265,6 +265,12 @@ const updateLessonContentBlock = (
     "Content block index exceeds content length",
   );
   const newState = { ...state };
+  // Retrieve the current block and replace its contents
+  const block = newState.lessons[id].content[index];
+  block.content = {
+    ...block.content,
+    ...content
+  };
   newState.lessons[id].content[index] = block;
   // Update to let the state know things have changed
   newState.hasChanged = updateChangeStatus(state.hasChanged, id, "UPDATE");
@@ -293,7 +299,7 @@ const addContentBlockToColumn = (
   state: EditorStateType,
   blockID: string,
   columnID: string,
-  columnSide: "left" | "right",
+  columnSide: ColumnBlockParam,
 ): EditorStateType => {
   const id = state.focusedLesson;
   if (!id || !Object.keys(state.lessons).includes(id)) return state;
@@ -365,7 +371,7 @@ export default function EditorContextReducer(
       return updateLessonContentBlock(
         state,
         action.value.index,
-        action.value.block,
+        action.value.content,
       );
     case "delete-block":
       return deleteLessonContentBlock(state, action.value);
