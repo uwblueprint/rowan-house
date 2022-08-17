@@ -60,7 +60,9 @@ const ContentBlock = ({
     onDeleteModalClose();
   };
 
-  const editContentBlock = <T extends ContentBlockState>(content: T['content']) => {
+  const editContentBlock = <T extends ContentBlockState>(
+    content: T["content"],
+  ) => {
     dispatch({
       type: "update-block",
       value: { index, content },
@@ -71,7 +73,7 @@ const ContentBlock = ({
   return (
     <Draggable
       key={block.id}
-      draggableId={block.id}
+      draggableId={`${block.type.id} ${block.id}`}
       index={index}
       isDragDisabled={!editable}
     >

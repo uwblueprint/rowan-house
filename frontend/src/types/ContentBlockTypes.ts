@@ -45,7 +45,7 @@ export type ColumnBlockState = ContentBlockStateType<
     right: null | ContentBlockState;
   }
 >;
-export type ColumnBlockParam = 'left' | 'right'; // TODO: Better method ?
+export type ColumnBlockParam = "left" | "right"; // TODO: Better method ?
 
 export type ContentBlockState = RequireAllContentTypesArePresent<
   | HeadingBlockState
@@ -57,6 +57,8 @@ export type ContentBlockState = RequireAllContentTypesArePresent<
   | AudioBlockState
   | ColumnBlockState
 >;
+
+export type ContentStateOverride = Partial<ContentBlockState["content"]>;
 
 export class ContentTypeEnum {
   private static CLIENT_TYPES: { [t in ContentType]?: ContentTypeEnum } = {};
@@ -143,6 +145,14 @@ export class ContentTypeEnum {
     this.id = uuid();
   }
 }
+
+export const ColumnBlockValidChildren = [
+  ContentTypeEnum.BUTTON.id,
+  ContentTypeEnum.HEADING.id,
+  ContentTypeEnum.TEXT.id,
+  ContentTypeEnum.IMAGE.id,
+  ContentTypeEnum.VIDEO.id,
+];
 
 export interface ContentBlockStateType<
   ClientType extends ContentType,

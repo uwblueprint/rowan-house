@@ -1,6 +1,5 @@
 import React from "react";
-import { Box, Grid } from "@chakra-ui/react";
-import { Droppable } from "react-beautiful-dnd";
+import { Grid } from "@chakra-ui/react";
 
 import {
   ContentBlockProps,
@@ -17,52 +16,40 @@ const ColumnBlock = ({
     throw Error("Index passed to column component was undefined");
   }
 
+  // If we are on the learner's side and one of the columns is empty
+  if (!editable && (content.left === null || content.right === null)) {
+    // Figure out which column has content, if any
+    const side = content.left ? "left" : "right";
+    // If both columns are empty, don't render anything
+    if (!content[side]) return <></>;
+    // If only one column has content, render w/ full width
+    return (
+      <ColumnContent
+        block={content[side]}
+        columnID={id}
+        index={index}
+        side={side}
+        editable={editable}
+      />
+    );
+  }
+
   return (
-    <Grid templateColumns="repeat(2, 1fr)" w="100%">
-      <Droppable droppableId={`${id} left column"`}>
-        {(provided) => (
-          <Box
-            ref={provided.innerRef}
-            borderWidth="3px"
-            borderRightWidth="1.5px"
-            margin="1rem"
-            width="100%"
-            minHeight="20rem"
-          >
-            {content.left && (
-              <ColumnContent
-                block={content.left}
-                index={index}
-                side='left'
-                editable={editable}
-              />
-            )}
-            {provided.placeholder}
-          </Box>
-        )}
-      </Droppable>
-      <Droppable droppableId={`${id} right column"`}>
-        {(provided) => (
-          <Box
-            ref={provided.innerRef}
-            borderWidth="3px"
-            borderLeftWidth="1.5px"
-            margin="1rem"
-            width="100%"
-            minHeight="20rem"
-          >
-            {content.right && (
-              <ColumnContent
-                block={content.right}
-                index={index}
-                side='right'
-                editable={editable}
-              />
-            )}
-            {provided.placeholder}
-          </Box>
-        )}
-      </Droppable>
+    <Grid templateColumns="repeat(2, 1fr)" gap="1rem" w="100%">
+      <ColumnContent
+        block={content.left}
+        columnID={id}
+        index={index}
+        side="left"
+        editable={editable}
+      />
+      <ColumnContent
+        block={content.right}
+        columnID={id}
+        index={index}
+        side="right"
+        editable={editable}
+      />
     </Grid>
   );
 };

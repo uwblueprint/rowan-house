@@ -13,6 +13,7 @@ export const formatLessonRequest = (lesson: LessonType): LessonRequest => {
     type: block.type.clientType,
     content: block.content,
   }));
+  
   return { ...lesson, content };
 };
 

@@ -7,7 +7,12 @@ import {
   EditorChangeStatuses,
   ValidHeadingSizes,
 } from "../types/ModuleEditorTypes";
-import { ColumnBlockParam, ContentBlockState, ContentTypeEnum } from "../types/ContentBlockTypes";
+import {
+  ColumnBlockParam,
+  ContentBlockState,
+  ContentStateOverride,
+  ContentTypeEnum,
+} from "../types/ContentBlockTypes";
 
 /* eslint-disable no-console */
 
@@ -254,7 +259,7 @@ const reorderLessonContentBlocks = (
 const updateLessonContentBlock = (
   state: EditorStateType,
   index: number,
-  content: ContentBlockState['content'],
+  content: ContentStateOverride,
 ): EditorStateType => {
   const id = state.focusedLesson;
   if (!id || !Object.keys(state.lessons).includes(id)) return state;
@@ -269,7 +274,7 @@ const updateLessonContentBlock = (
   const block = newState.lessons[id].content[index];
   block.content = {
     ...block.content,
-    ...content
+    ...content,
   };
   newState.lessons[id].content[index] = block;
   // Update to let the state know things have changed
@@ -317,6 +322,35 @@ const addContentBlockToColumn = (
     );
   }
   columnBlock.content[columnSide] = createContent(blockID);
+  // Update to let the state know things have changed
+  newState.hasChanged = updateChangeStatus(state.hasChanged, id, "UPDATE");
+  return newState;
+};
+
+const moveContentBlockToColumn = (
+  state: EditorStateType,
+  index: number,
+  columnID: string,
+  columnSide: ColumnBlockParam,
+): EditorStateType => {
+  const id = state.focusedLesson;
+  if (!id || !Object.keys(state.lessons).includes(id)) return state;
+
+  // Find column index by ID
+  const columnIndex = state.lessons[id].content.findIndex(
+    (block) => block.id === columnID,
+  );
+  // Add new block to the state
+  const newState = { ...state };
+  const columnBlock = newState.lessons[id].content[columnIndex];
+  if (!("left" in columnBlock.content) || !("right" in columnBlock.content)) {
+    throw Error(
+      "Column ID matches component, but component is not of type 'column'",
+    );
+  }
+  // Parse block out of the lesson and add it to the column
+  const [block] = newState.lessons[id].content.splice(index, 1);
+  columnBlock.content[columnSide] = block;
   // Update to let the state know things have changed
   newState.hasChanged = updateChangeStatus(state.hasChanged, id, "UPDATE");
   return newState;
@@ -375,10 +409,17 @@ export default function EditorContextReducer(
       );
     case "delete-block":
       return deleteLessonContentBlock(state, action.value);
-    case "create-column-block":
+    case "create-block-in-column":
       return addContentBlockToColumn(
         state,
         action.value.blockID,
+        action.value.columnID,
+        action.value.columnSide,
+      );
+    case "move-block-to-column":
+      return moveContentBlockToColumn(
+        state,
+        action.value.index,
         action.value.columnID,
         action.value.columnSide,
       );

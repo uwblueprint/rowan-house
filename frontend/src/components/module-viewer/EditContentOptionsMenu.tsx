@@ -15,27 +15,33 @@ const EditContentOptionsMenu = ({
       visibility={isVisible ? "visible" : "hidden"}
       align="start"
     >
-      <IconButton
-        aria-label="Edit this content block"
-        variant="transparent"
-        onClick={onEditClick}
-        m={0}
-        icon={<EditIcon color="background.dark" h={5} w={5} />}
-      />
-      <IconButton
-        aria-label="Duplicate this content block"
-        variant="transparent"
-        onClick={onCopyClick}
-        m={0}
-        icon={<CopyIcon color="background.dark" h={5} w={5} />}
-      />
-      <IconButton
-        aria-label="Delete this content block from lesson"
-        variant="transparent"
-        onClick={onDeleteClick}
-        m={0}
-        icon={<DeleteIcon color="background.dark" h={5} w={5} />}
-      />
+      {onEditClick && (
+        <IconButton
+          aria-label="Edit this content block"
+          variant="transparent"
+          onClick={onEditClick}
+          m={0}
+          icon={<EditIcon color="background.dark" h={5} w={5} />}
+        />
+      )}
+      {onCopyClick && (
+        <IconButton
+          aria-label="Duplicate this content block"
+          variant="transparent"
+          onClick={onCopyClick}
+          m={0}
+          icon={<CopyIcon color="background.dark" h={5} w={5} />}
+        />
+      )}
+      {onDeleteClick && (
+        <IconButton
+          aria-label="Delete this content block from lesson"
+          variant="transparent"
+          onClick={onDeleteClick}
+          m={0}
+          icon={<DeleteIcon color="background.dark" h={5} w={5} />}
+        />
+      )}
     </HStack>
   );
 };

@@ -1,6 +1,14 @@
 import React, { useEffect, useReducer, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Center, Box, Flex, IconButton, Spinner } from "@chakra-ui/react";
+import {
+  Center,
+  Box,
+  Flex,
+  IconButton,
+  Spinner,
+  useToast,
+  UseToastOptions,
+} from "@chakra-ui/react";
 import { ChevronRightIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import { DropResult, DragDropContext } from "react-beautiful-dnd";
 import { useQuery, useLazyQuery } from "@apollo/client";
@@ -21,11 +29,13 @@ import Banner from "../learner/Banner";
 import { LessonResponse } from "../../APIClients/types/LessonClientTypes";
 import { formatLessonResponse } from "../../utils/lessonUtils";
 import { useURLSearchFlag } from "../../hooks/useURLSearch";
+import { ColumnBlockValidChildren } from "../../types/ContentBlockTypes";
 
 // Copy drag implementation based on https://github.com/atlassian/react-beautiful-dnd/issues/216#issuecomment-423708497
 const onDragEnd = (
   dispatch: React.Dispatch<EditorContextAction>,
   result: DropResult,
+  toast: (options: UseToastOptions) => number | string | undefined,
 ) => {
   const { source, destination } = result;
   // dropped outside the list
@@ -38,19 +48,33 @@ const onDragEnd = (
     if (columnSide !== "left" && columnSide !== "right") {
       throw Error(`Received column component with unknown side: ${columnSide}`);
     }
-
+    // If the block is not meant to go into the column, show an error and cancel the drag
+    const [blockType] = result.draggableId.split(" ");
+    if (!ColumnBlockValidChildren.includes(blockType)) {
+      toast({
+        title: "Invalid component",
+        description: "This component cannot be used in a column layout",
+        status: "error",
+        position: "top",
+        isClosable: true,
+      });
+      return;
+    }
     switch (source.droppableId) {
       case "KIOSK":
         dispatch({
-          type: "create-column-block",
+          type: "create-block-in-column",
           value: { blockID: result.draggableId, columnID, columnSide },
         });
         break;
       case "EDITOR":
+        dispatch({
+          type: "move-block-to-column",
+          value: { index: source.index, columnID, columnSide },
+        });
         break;
-      // TODO: From another column ?
       default:
-        throw Error("Column Error");
+        throw Error("Drag & drop error: invalid drag involving a column");
     }
     return;
   }
@@ -90,6 +114,7 @@ const ModuleViewer = ({
   }: ModuleEditorParams = useParams();
   const moduleIndex = Number(moduleIndexString);
   const [completed, setCompleted] = useURLSearchFlag("completed");
+  const toast = useToast();
 
   const [state, dispatch] = useReducer(EditorContextReducer, null);
   const [showSideBar, setShowSideBar] = useState<boolean>(true);
@@ -145,7 +170,11 @@ const ModuleViewer = ({
     return (
       <EditorContext.Provider value={{ state, dispatch }}>
         <Flex h="100vh">
-          <DragDropContext onDragEnd={(result) => onDragEnd(dispatch, result)}>
+          <DragDropContext
+            onDragEnd={(result: DropResult) =>
+              onDragEnd(dispatch, result, toast)
+            }
+          >
             <Box position="relative">
               {showSideBar ? (
                 <SideBar

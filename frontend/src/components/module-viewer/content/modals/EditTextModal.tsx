@@ -19,7 +19,7 @@ const EditTextModal = ({
     if (!text) {
       setInvalid(true);
     } else {
-      onSave({text});
+      onSave({ text });
     }
   };
 
