@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   Box,
@@ -41,22 +41,14 @@ import {
 } from "../../APIClients/types/CourseClientTypes";
 import { formatLessonRequest } from "../../utils/lessonUtils";
 import EditModuleModal from "../common/EditModuleModal";
-<<<<<<< HEAD:frontend/src/components/module-viewer/SideBar.tsx
-<<<<<<< HEAD:frontend/src/components/module-viewer/SideBar.tsx
 import EditorTabs from "./EditorTabs";
 import ModuleOverview from "./SideBarModuleOverview";
 import RouterLink from "../common/RouterLink";
-import { GET_COURSE } from "../../APIClients/queries/CourseQueries";
-=======
 import {
   GET_COURSE,
   GET_MODULE_IMAGE,
 } from "../../APIClients/queries/CourseQueries";
-=======
-import { GET_COURSE } from "../../APIClients/queries/CourseQueries";
->>>>>>> 529613f (remove fileName from modules):frontend/src/components/module-editor/SideBar.tsx
 import { DEFAULT_IMAGE } from "../../constants/DummyData";
->>>>>>> f1258e9 (display previewimage on module editor):frontend/src/components/module-editor/SideBar.tsx
 
 const Sidebar = ({
   editable,
@@ -70,6 +62,7 @@ const Sidebar = ({
     courseID,
   }: ModuleEditorParams = useParams();
   const moduleIndex = Number(moduleIndexString);
+  const [previewImage, setPreviewImage] = useState<string | undefined>();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -185,6 +178,16 @@ const Sidebar = ({
 
   const module = courseData?.course?.modules?.[moduleIndex] as ModuleResponse;
 
+  if (module.fileName) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useQuery(GET_MODULE_IMAGE, {
+      variables: { fileName: module.fileName },
+      onCompleted: (data) => {
+        setPreviewImage(data.moduleImage);
+      },
+    });
+  }
+
   return (
     <>
       {module && (
@@ -202,7 +205,7 @@ const Sidebar = ({
               <Flex
                 h="240px"
                 backgroundPosition="center"
-                backgroundImage={module.previewImage ?? DEFAULT_IMAGE}
+                backgroundImage={previewImage ?? DEFAULT_IMAGE}
                 backgroundSize="cover"
                 bgRepeat="no-repeat"
                 opacity="1"

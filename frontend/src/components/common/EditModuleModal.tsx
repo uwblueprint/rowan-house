@@ -1,25 +1,10 @@
-import { Box, Flex, VStack, Text } from "@chakra-ui/react";
-<<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
+import { Box, Flex, VStack, Image, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
-<<<<<<< HEAD
-<<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
-=======
->>>>>>> 529613f (remove fileName from modules)
 import { TextInput } from "./TextInput";
 import { Modal } from "./Modal";
 import { SwitchInput } from "./SwitchInput";
 import { TextArea } from "./TextArea";
-=======
-=======
-import React, { useEffect, useState } from "react";
-import { useMutation, useQuery } from "@apollo/client";
->>>>>>> d3a7ed1 (display uploaded image in module preview card):frontend/src/components/admin/EditModuleModal.tsx
-import { TextInput } from "../common/TextInput";
-import { Modal } from "../common/Modal";
-import { SwitchInput } from "../common/SwitchInput";
-import { TextArea } from "../common/TextArea";
->>>>>>> 4b06be6 (display uploaded image on modal):frontend/src/components/admin/EditModuleModal.tsx
 import { DEFAULT_IMAGE } from "../../constants/DummyData";
 import {
   CourseRequest,
@@ -27,31 +12,12 @@ import {
   ModuleResponse,
   ModuleRequest,
 } from "../../APIClients/types/CourseClientTypes";
-<<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
-import { UPDATE_COURSE } from "../../APIClients/mutations/CourseMutations";
-<<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
-import { COURSES, GET_COURSE } from "../../APIClients/queries/CourseQueries";
-=======
-=======
 import {
   UPDATE_COURSE,
   UPLOAD_IMAGE,
 } from "../../APIClients/mutations/CourseMutations";
-<<<<<<< HEAD
-<<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
->>>>>>> 0964cb0 (create separate upload module image mutation):frontend/src/components/admin/EditModuleModal.tsx
-import { COURSES } from "../../APIClients/queries/CourseQueries";
-=======
-import {
-  COURSES,
-  GET_MODULE_IMAGE,
-} from "../../APIClients/queries/CourseQueries";
->>>>>>> d3a7ed1 (display uploaded image in module preview card):frontend/src/components/admin/EditModuleModal.tsx
-=======
 import { COURSES, GET_COURSE } from "../../APIClients/queries/CourseQueries";
->>>>>>> 529613f (remove fileName from modules)
 import { ReactComponent as ImageIcon } from "../../assets/image_white_outline.svg";
->>>>>>> 70d4f30 (add file upload logic to courses be and fe):frontend/src/components/admin/EditModuleModal.tsx
 
 export interface EditModuleModalProps {
   onClose: () => void;
@@ -73,46 +39,23 @@ const EditModuleModal = ({
   const [title, setTitle] = useState(module?.title ?? "");
   const [isPublished, setVisibility] = useState(module?.published ?? false);
   const [description, setDescription] = useState(module?.description ?? "");
-<<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
-<<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
   const [invalid, setInvalid] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-<<<<<<< HEAD
-=======
   const [previewImage, setPreviewImage] = useState<string | undefined>();
->>>>>>> 529613f (remove fileName from modules)
 
   const [updateCourse] = useMutation<CourseResponse>(
-=======
-  const [previewImage, setPreviewImage] = useState<File | null>(null);
-=======
-  const [previewImage, setPreviewImage] = useState<string | undefined>();
-<<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
->>>>>>> 4b65eff (set preview image before updating course):frontend/src/components/admin/EditModuleModal.tsx
-=======
-  const [imageFile, setImageFile] = useState<string | undefined>();
->>>>>>> 4b06be6 (display uploaded image on modal):frontend/src/components/admin/EditModuleModal.tsx
-  const [updateCourse] = useMutation<{ updateCourse: CourseResponse }>(
->>>>>>> 70d4f30 (add file upload logic to courses be and fe):frontend/src/components/admin/EditModuleModal.tsx
     UPDATE_COURSE,
     refetchQueries,
   );
   const [uploadImage] = useMutation(UPLOAD_IMAGE);
-
   const [isHover, setIsHover] = useState<boolean>();
-<<<<<<< HEAD
-
-<<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
-  const onUpdateModule = () => {
-<<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
-=======
   const resetModal = () => {
     setDescription("");
     setTitle("");
     setPreviewImage(undefined);
   };
+
   const onUpdateModule = async () => {
->>>>>>> f1258e9 (display previewimage on module editor)
     if (!title || title.length > MAX_TITLE_CHARACTERS) {
       setInvalid(true);
       // title is mandatory field, do not submit if empty or exceed max char
@@ -123,7 +66,13 @@ const EditModuleModal = ({
       );
       return;
     }
-    const newModule = { ...module, title, description, published: isPublished };
+    const newModule = {
+      ...module,
+      title,
+      description,
+      published: isPublished,
+      previewImage,
+    };
     const [id, course] = formatCourseRequest(newModule);
     updateCourse({
       variables: { id, course },
@@ -133,50 +82,8 @@ const EditModuleModal = ({
       ],
     });
     setInvalid(false);
-=======
-    const newModule = {
-      ...module,
-      title,
-      description,
-      published: isPublished,
-      file: previewImage,
-    };
-    const [id, course] = formatCourseRequest(newModule);
-<<<<<<< HEAD:frontend/src/components/common/EditModuleModal.tsx
-    updateCourse({ variables: { id, course, file: previewImage } });
->>>>>>> 70d4f30 (add file upload logic to courses be and fe):frontend/src/components/admin/EditModuleModal.tsx
-=======
-    updateCourse({ variables: { id, course } });
->>>>>>> 8695160 (file upload for modules not course):frontend/src/components/admin/EditModuleModal.tsx
+    resetModal();
     onClose();
-=======
-  const onUpdateModule = async () => {
-    if (previewImage) {
-      const newModule = {
-        ...module,
-        title,
-        description,
-        published: isPublished,
-        previewImage,
-      };
-
-      const [id, course] = formatCourseRequest(newModule);
-<<<<<<< HEAD
-      updateCourse({ variables: { id, course } });
-=======
-      updateCourse({
-        variables: { id, course },
-        refetchQueries: [
-          { query: COURSES },
-          { query: GET_COURSE, variables: { id } },
-        ],
-      });
-      setInvalid(false);
-      resetModal();
->>>>>>> f1258e9 (display previewimage on module editor)
-      onClose();
-    }
->>>>>>> 0964cb0 (create separate upload module image mutation):frontend/src/components/admin/EditModuleModal.tsx
   };
 
   const fileChanged = async (e: { target: HTMLInputElement }) => {

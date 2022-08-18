@@ -18,7 +18,6 @@ import {
   CourseRequest,
   CourseResponse,
   ModuleRequest,
-  ModuleResponse,
 } from "../../APIClients/types/CourseClientTypes";
 import EditModuleModal from "../common/EditModuleModal";
 import { DELETE_COURSE } from "../../APIClients/mutations/CourseMutations";
