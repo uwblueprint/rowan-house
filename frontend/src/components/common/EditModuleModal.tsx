@@ -127,6 +127,7 @@ const EditModuleModal = ({
               background: "black",
               opacity: 0.9,
             }}
+            cursor="pointer"
             onClick={openFileBrowser}
           >
             <Flex

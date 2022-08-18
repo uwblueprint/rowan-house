@@ -29,7 +29,7 @@ export interface CourseResponseDTO {
   previewImage: string;
   private: boolean;
   modules: (Module | null)[];
-  fileName: string;
+  fileName?: string; // CHECK WITH JULIAN
 }
 
 export interface UploadModuleImage {

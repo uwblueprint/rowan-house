@@ -205,7 +205,7 @@ class CourseService implements ICourseService {
     filePath: string,
     fileContentType: string,
   ): Promise<UploadModuleImage> {
-    const fileName = filePath ? uuid() : ""; // is this really necessary idk
+    const fileName = filePath ? uuid() : "";
     try {
       await this.storageService.createFile(fileName, filePath, fileContentType);
     } catch (error: unknown) {
