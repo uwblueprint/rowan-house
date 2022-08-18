@@ -1,10 +1,4 @@
-import {
-  Select,
-  FormControl,
-  FormLabel,
-  Input,
-  Heading,
-} from "@chakra-ui/react";
+import { Select, FormControl, FormLabel, Input, Box } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
 import { HeadingBlockState } from "../../../../types/ContentBlockTypes";
 import { Modal } from "../../../common/Modal";
@@ -13,6 +7,7 @@ import {
   EditContentModalProps,
   ValidHeadingSizes,
 } from "../../../../types/ModuleEditorTypes";
+import CustomHeading from "../../../common/CustomHeading";
 
 const EditHeadingModal = ({
   block,
@@ -20,10 +15,8 @@ const EditHeadingModal = ({
   isOpen,
   onClose,
 }: EditContentModalProps<HeadingBlockState>): React.ReactElement => {
-  const [text, setText] = useState(block.content.text ?? "why");
-  const [size, setSize] = useState(
-    block.content.size ?? ValidHeadingSizes.heading1,
-  );
+  const [text, setText] = useState(block.content.text);
+  const [size, setSize] = useState(block.content.size);
   const [invalid, setInvalid] = useState(false);
   const context = useContext(EditorContext);
   if (!context) return <></>;
@@ -89,9 +82,11 @@ const EditHeadingModal = ({
             Heading 3 ({ValidHeadingSizes.heading3})
           </option>
           <option value={ValidHeadingSizes.heading4}>
-            Heading 4({ValidHeadingSizes.heading4})
+            Heading 4 ({ValidHeadingSizes.heading4})
           </option>
         </Select>
+      </FormControl>
+      <FormControl isInvalid={invalid} isRequired>
         <FormLabel
           htmlFor="displayText"
           variant="caption-md"
@@ -110,25 +105,13 @@ const EditHeadingModal = ({
             setText(newText.target.value);
           }}
         />
-        <FormLabel
-          htmlFor="preview"
-          variant="caption-md"
-          marginTop="2vh"
-          marginBottom="1vh"
-        >
-          Preview
-        </FormLabel>
-        <Heading
-          type="preview"
-          fontSize={size}
-          borderWidth="1px" // CHECK THIS WITH JULIAN AS WELL
-          borderRadius="5px"
-          align="center"
-          padding="3vh 0"
-        >
-          {text || "Heading"}
-        </Heading>
       </FormControl>
+      <FormLabel variant="caption-md" marginTop="2vh" marginBottom="1vh">
+        Preview
+      </FormLabel>
+      <Box borderWidth="1px" borderRadius="5px" align="center" padding="3vh 0">
+        <CustomHeading size={size} text={text} />
+      </Box>
     </Modal>
   );
 };

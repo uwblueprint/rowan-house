@@ -1,6 +1,5 @@
-import { Heading } from "@chakra-ui/react";
 import React from "react";
-
+import CustomHeading from "../CustomHeading";
 import {
   ContentBlockProps,
   HeadingBlockState,
@@ -9,7 +8,7 @@ import {
 const HeadingBlock = ({
   block: { content },
 }: ContentBlockProps<HeadingBlockState>): React.ReactElement => {
-  return <Heading fontSize={content.size}>{content.text}</Heading>;
+  return <CustomHeading size={content.size} text={content.text} />;
 };
 
 export default HeadingBlock;
