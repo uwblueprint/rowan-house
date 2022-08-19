@@ -4,7 +4,13 @@ import { ContentType } from "../APIClients/types/LessonClientTypes";
 export const ContentTypeCategories = ["Layout", "Basic", "Media"];
 
 export type ColumnBlockState = ContentBlockStateType<"column">;
-export type HeadingBlockState = ContentBlockStateType<"heading">;
+export type HeadingBlockState = ContentBlockStateType<
+  "heading",
+  {
+    size: string;
+    text: string;
+  }
+>;
 export type TextBlockState = ContentBlockStateType<
   "text",
   {

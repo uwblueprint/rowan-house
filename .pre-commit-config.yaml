@@ -3,7 +3,7 @@ repos:
     hooks:
     -   id: felint
         name: Lint frontend files
-        files: ^frontend/.*\.[jt]sx?$
+        files: ^frontend/src/.*\.[jt]sx?$
         types: [file]
         language: system
         entry: ./scripts/lint.sh felint

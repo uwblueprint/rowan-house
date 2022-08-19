@@ -3,11 +3,13 @@ import { gql } from "apollo-server-express";
 const lessonType = gql`
   type Content {
     link: String
+    size: String
     text: String
   }
 
   input ContentInput {
     link: String
+    size: String
     text: String
   }
 
