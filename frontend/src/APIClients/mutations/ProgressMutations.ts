@@ -25,6 +25,5 @@ export const MARK_MODULE_AS_COMPLETED = gql`
 export const MARK_LESSON_AS_COMPLETED = gql`
   mutation MarkLessonAsCompleted($userId: ID!, $lessonId: ID!) {
     markLessonAsCompletedForUser(userId: $userId, lessonId: $lessonId)
-    number
   }
 `;

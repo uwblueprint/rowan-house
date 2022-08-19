@@ -1,11 +1,19 @@
-import React, { useEffect, useReducer, useRef, useState } from "react";
+import React, {
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+  useContext,
+} from "react";
 import { useParams } from "react-router-dom";
 import { Center, Box, Flex, IconButton, Spinner } from "@chakra-ui/react";
 import { ChevronRightIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import { DropResult, DragDropContext } from "react-beautiful-dnd";
-import { useQuery, useLazyQuery } from "@apollo/client";
+import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
 import { GET_COURSE } from "../../APIClients/queries/CourseQueries";
 import GET_LESSONS from "../../APIClients/queries/LessonQueries";
+import { MARK_LESSON_AS_COMPLETED } from "../../APIClients/mutations/ProgressMutations";
+import { GET_LESSON_PROGRESS } from "../../APIClients/queries/ProgressQueries";
 
 import {
   EditorContextAction,
@@ -14,6 +22,7 @@ import {
 } from "../../types/ModuleEditorTypes";
 import EditorContextReducer from "../../reducers/ModuleEditorContextReducer";
 import EditorContext from "../../contexts/ModuleEditorContext";
+import AuthContext from "../../contexts/AuthContext";
 import SideBar from "./SideBar";
 import LessonViewer from "./LessonViewer";
 import ModuleCompleted from "./ModuleCompleted";
@@ -67,7 +76,7 @@ const ModuleViewer = ({
   }: ModuleEditorParams = useParams();
   const moduleIndex = Number(moduleIndexString);
   const [completed, setCompleted] = useURLSearchFlag("completed");
-
+  const { authenticatedUser } = useContext(AuthContext);
   const [state, dispatch] = useReducer(EditorContextReducer, null);
   const [showSideBar, setShowSideBar] = useState<boolean>(true);
   const { data: courseData } = useQuery(GET_COURSE, {
@@ -76,6 +85,11 @@ const ModuleViewer = ({
     },
   });
   const [getLessons, { data: lessonData }] = useLazyQuery(GET_LESSONS);
+  const [getLessonProgress, { data: lessonProgressData }] = useLazyQuery(
+    GET_LESSON_PROGRESS,
+  );
+
+  const [updateLessonProgress] = useMutation(MARK_LESSON_AS_COMPLETED);
 
   useEffect(() => {
     if (courseData) {
@@ -90,9 +104,25 @@ const ModuleViewer = ({
     if (courseData && lessonData) {
       const lessonsObj: LessonsType = {};
 
+      getLessonProgress({
+        variables: {
+          userId: authenticatedUser?.id,
+          lessonIds: courseData.course.modules[moduleIndex].lessons,
+        },
+      });
+      console.log(lessonProgressData);
+      const lastCompletedLessonId = lessonProgressData
+        ? lessonProgressData.lessonProgress.slice(-1)[0].lessonId
+        : 0; // get last completed element
+
+      const { lessons } = courseData.course.modules[moduleIndex];
+      const lastCompletedLessonIndex = lessons.indexOf(lastCompletedLessonId);
+      console.log(lessons);
+      console.log("LAST COMPLETED", lessons[lastCompletedLessonIndex]);
       lessonData.lessons.forEach((lesson: LessonResponse) => {
         lessonsObj[lesson.id] = formatLessonResponse(lesson);
       });
+      console.log(completed);
       dispatch({
         type: "init",
         value: {
@@ -100,12 +130,24 @@ const ModuleViewer = ({
           lessons: lessonsObj,
           focusedLesson: completed
             ? null
-            : courseData.course.modules[moduleIndex].lessons[0],
+            : lessons[lastCompletedLessonIndex + 1],
           hasChanged: {},
         },
       });
+      dispatch({
+        type: "set-focus",
+        value: completed ? null : lessons[lastCompletedLessonIndex + 1],
+      });
     }
-  }, [courseData, moduleIndex, lessonData, completed]);
+  }, [
+    courseData,
+    moduleIndex,
+    lessonData,
+    completed,
+    lessonProgressData,
+    getLessonProgress,
+    authenticatedUser?.id,
+  ]);
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -161,10 +203,15 @@ const ModuleViewer = ({
                   <LessonViewer
                     editable={editable}
                     onLessonCompleted={(lessonId) => {
-                      // TODO save progress on backend
-
                       const { lessons } = state.course.modules[moduleIndex];
                       const lessonIndex = lessons.indexOf(lessonId);
+                      // save progress on backend
+                      updateLessonProgress({
+                        variables: {
+                          userId: authenticatedUser?.id,
+                          lessonId,
+                        },
+                      });
                       if (lessonIndex === lessons.length - 1) {
                         setCompleted(true);
                         dispatch({ type: "set-focus", value: null });

@@ -18,6 +18,7 @@ import {
   MANAGE_COURSES_PAGE,
 } from "../../constants/Routes";
 import EditorContext from "../../contexts/ModuleEditorContext";
+import AuthContext from "../../contexts/AuthContext";
 import {
   EditorChangeStatuses,
   EditorContextType,
@@ -29,6 +30,7 @@ import {
   DELETE_LESSON,
 } from "../../APIClients/mutations/LessonMutations";
 import { UPDATE_COURSE } from "../../APIClients/mutations/CourseMutations";
+import { GET_LESSON_PROGRESS } from "../../APIClients/queries/ProgressQueries";
 import {
   LessonRequest,
   LessonResponse,
@@ -62,6 +64,7 @@ const Sidebar = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const context: EditorContextType = useContext(EditorContext);
+  const { authenticatedUser } = useContext(AuthContext);
 
   const { data: courseData, error } = useQuery<{ course: CourseResponse }>(
     GET_COURSE,
@@ -89,6 +92,15 @@ const Sidebar = ({
 
   if (!context) return <></>;
   const { state, dispatch } = context;
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const { data: lessonProgressData } = useQuery(GET_LESSON_PROGRESS, {
+      variables: {
+        userId: authenticatedUser?.id,
+        lessonIds: Object.keys(state.lessons),
+      },
+    });
+  
 
   const formatCourseRequest = (
     newModule?: ModuleRequest,

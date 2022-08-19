@@ -3,12 +3,15 @@ import { AddIcon } from "@chakra-ui/icons";
 import React, { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 
+import { useQuery } from "@apollo/client";
 import EditorContext from "../../contexts/ModuleEditorContext";
 import { ModuleEditorParams } from "../../types/ModuleEditorTypes";
 import { Modal } from "../common/Modal";
 import { TextInput } from "../common/TextInput";
 
 import LessonItem from "./LessonItem";
+import { GET_LESSON_PROGRESS } from "../../APIClients/queries/ProgressQueries";
+import AuthContext from "../../contexts/AuthContext";
 
 const SideBarModuleOverview = ({
   editable,
@@ -27,8 +30,11 @@ const SideBarModuleOverview = ({
 
   if (!context) return <></>;
   const { state, dispatch } = context;
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { authenticatedUser } = useContext(AuthContext);
 
   const { lessons, course, focusedLesson } = state;
+  console.log("FOCUSED LESSON,", focusedLesson);
   const module = course.modules[moduleID];
 
   const orderedLessons = module.lessons.map((id) => lessons[id]);
@@ -41,6 +47,14 @@ const SideBarModuleOverview = ({
     setErrorMessage("");
     setIsInvalid(false);
   };
+  console.log(Object.keys(state.lessons));
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { data: lessonProgressData } = useQuery(GET_LESSON_PROGRESS, {
+    variables: {
+      userId: authenticatedUser?.id,
+      lessonIds: Object.keys(state.lessons),
+    },
+  });
 
   const createLesson = (lessonTitle: string) => {
     if (title) {
@@ -70,6 +84,7 @@ const SideBarModuleOverview = ({
           isFocused={
             focusedLesson !== null && state.lessons[focusedLesson] === lesson
           }
+          isComplete={lessonProgressData.lessonProgress.find(lesson.id) !== -1}
           key={lesson.id}
           setFocus={() => {
             onLessonSelected();

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, IconButton, Flex } from "@chakra-ui/react";
-import { DeleteIcon, EditIcon, LockIcon } from "@chakra-ui/icons";
+import { DeleteIcon, EditIcon, LockIcon, CheckCircleIcon } from "@chakra-ui/icons";
 import { ReactComponent as DragHandleIconSvg } from "../../assets/DragHandle.svg";
 
 interface OptionsProps {
@@ -8,6 +8,7 @@ interface OptionsProps {
   text: string;
   isFocused: boolean;
   setFocus: () => void;
+  isComplete: boolean;
 }
 
 const LessonItem = ({
@@ -15,6 +16,7 @@ const LessonItem = ({
   text = "",
   isFocused,
   setFocus,
+  isComplete,
 }: OptionsProps): React.ReactElement => {
   const [isHovered, setIsHovered] = useState(false);
 
