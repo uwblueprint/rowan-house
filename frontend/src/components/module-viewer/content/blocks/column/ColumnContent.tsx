@@ -47,7 +47,7 @@ const ColumnContent = ({
   const deleteColumn = () => {
     const content = {
       [side]: null,
-    } as ColumnBlockState["content"];
+    };
     dispatch({
       type: "update-block",
       value: { index, content },
@@ -58,7 +58,7 @@ const ColumnContent = ({
   const editColumn = <T extends ContentBlockState>(
     sideUpdates: T["content"],
   ) => {
-    const content = {
+    const content: Partial<ColumnBlockState["content"]> = {
       [side]: {
         ...block,
         content: {
@@ -66,7 +66,7 @@ const ColumnContent = ({
           ...sideUpdates,
         },
       },
-    } as ColumnBlockState["content"];
+    };
     dispatch({
       type: "update-block",
       value: { index, content },
@@ -74,23 +74,23 @@ const ColumnContent = ({
     onEditModalClose();
   };
 
-  if (editable && block === null) {
-    return (
-      <Droppable droppableId={`${columnID} ${side} column"`}>
-        {(provided) => (
-          <Box
-            ref={provided.innerRef}
-            borderWidth="3px"
-            borderColor="grey.200"
-            margin="1rem"
-            width="100%"
-            minHeight="20rem"
-          />
-        )}
-      </Droppable>
-    );
-  }
-  if (editable && block !== null) {
+  if (editable) {
+    if (block === null) {
+      return (
+        <Droppable droppableId={`${columnID} ${side} COLUMN"`}>
+          {(provided) => (
+            <Box
+              ref={provided.innerRef}
+              borderWidth="3px"
+              borderColor="grey.200"
+              margin="1rem"
+              width="100%"
+              minHeight="20rem"
+            />
+          )}
+        </Droppable>
+      );
+    }
     return (
       <Box
         borderWidth="3px"

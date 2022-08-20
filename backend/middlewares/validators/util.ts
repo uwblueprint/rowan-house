@@ -75,11 +75,14 @@ export const validateContent = (content: ContentBlock): boolean => {
   switch (content.type) {
     case "button": {
       const button = content as ButtonBlock;
-      return (button.content.link != null && button.content.text != null);
+      return button.content.link != null && button.content.text != null;
     }
     case "column": {
       const column = content as ColumnBlock;
-      return (validateContent(column.content.left) && validateContent(column.content.right));
+      return (
+        validateContent(column.content.left) &&
+        validateContent(column.content.right)
+      );
     }
     case "text": {
       const text = content as TextBlock;
@@ -96,10 +99,6 @@ export const validateContent = (content: ContentBlock): boolean => {
     case "heading": {
       const heading = content as HeadingBlock;
       return heading.content.size != null && heading.content.text != null;
-    }
-    case "button": {
-      const button = content as ButtonBlock;
-      return (button.content.link != null && button.content.text != null);
     }
     default: {
       return false;

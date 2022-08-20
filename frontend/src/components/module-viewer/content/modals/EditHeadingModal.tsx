@@ -1,8 +1,7 @@
 import { Select, FormControl, FormLabel, Input, Box } from "@chakra-ui/react";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { HeadingBlockState } from "../../../../types/ContentBlockTypes";
 import { Modal } from "../../../common/Modal";
-import EditorContext from "../../../../contexts/ModuleEditorContext";
 import {
   EditContentModalProps,
   ValidHeadingSizes,
@@ -11,47 +10,30 @@ import CustomHeading from "../../../common/CustomHeading";
 
 const EditHeadingModal = ({
   block,
-  index,
   isOpen,
   onClose,
+  onSave,
 }: EditContentModalProps<HeadingBlockState>): React.ReactElement => {
   const [text, setText] = useState(block.content.text);
   const [size, setSize] = useState(block.content.size);
   const [invalid, setInvalid] = useState(false);
-  const context = useContext(EditorContext);
-  if (!context) return <></>;
-  const { dispatch } = context;
 
-  const onSave = () => {
+  const onConfirm = () => {
     if (!(size && text)) {
       setInvalid(true);
       return;
     }
-    const newBlock = {
-      ...block,
-      content: {
-        ...block.content,
-        text,
-        size,
-      },
-    };
-
-    dispatch({
-      type: "update-block",
-      value: {
-        index,
-        block: newBlock,
-      },
+    onSave({
+      text,
+      size,
     });
-
-    onClose();
   };
 
   return (
     <Modal
       size="xl"
       header="Heading"
-      onConfirm={onSave}
+      onConfirm={onConfirm}
       onCancel={onClose}
       isOpen={isOpen}
     >

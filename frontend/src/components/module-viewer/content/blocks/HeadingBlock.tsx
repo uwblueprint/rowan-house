@@ -1,9 +1,9 @@
 import React from "react";
-import CustomHeading from "../CustomHeading";
+import CustomHeading from "../../../common/CustomHeading";
 import {
   ContentBlockProps,
   HeadingBlockState,
-} from "../../../types/ContentBlockTypes";
+} from "../../../../types/ContentBlockTypes";
 
 const HeadingBlock = ({
   block: { content },

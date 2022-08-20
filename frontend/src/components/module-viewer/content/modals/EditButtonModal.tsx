@@ -19,7 +19,7 @@ const EditButtonModal = ({
   const [text, setText] = useState(block.content.text ?? "");
 
   const onConfirm = () => {
-    if (link !== "" && text !== "") {
+    if (link && text) {
       onSave({
         link,
         text,
@@ -29,7 +29,7 @@ const EditButtonModal = ({
 
   // Append the prefix if it does not exist
   const setLinkSafely = (str: string) => {
-    const newLink = str.includes("https://") ? str : `https://${str}`;
+    const newLink = str.includes("://") ? str : `https://${str}`;
     setLink(newLink);
   };
 
@@ -64,7 +64,7 @@ const EditButtonModal = ({
               type: ContentTypeEnum.BUTTON,
               id: "",
               content: {
-                text: text.length ? text : "Text",
+                text: text || "Text",
                 link,
               },
             }}

@@ -43,7 +43,7 @@ const onDragEnd = (
     return;
   }
 
-  if (destination.droppableId.includes("column")) {
+  if (destination.droppableId.includes("COLUMN")) {
     const [columnID, columnSide] = destination.droppableId.split(" ");
     if (columnSide !== "left" && columnSide !== "right") {
       throw Error(`Received column component with unknown side: ${columnSide}`);

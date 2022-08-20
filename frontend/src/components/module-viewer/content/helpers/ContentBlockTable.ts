@@ -1,9 +1,16 @@
-import { ButtonBlock, TextBlock, ImageBlock, VideoBlock } from "../blocks";
+import {
+  ButtonBlock,
+  HeadingBlock,
+  TextBlock,
+  ImageBlock,
+  VideoBlock,
+} from "../blocks";
 import {
   EditButtonModal,
   EditTextModal,
   EditImageModal,
   EditVideoModal,
+  EditHeadingModal,
 } from "../modals";
 import {
   ContentBlockModals,
@@ -19,7 +26,10 @@ export default (
 ): [ContentBlocks, ContentBlockModals] => {
   const defaults = {
     column: Empty,
-    heading: Empty,
+    heading: {
+      renderBlock: HeadingBlock,
+      renderEditModal: EditHeadingModal,
+    },
     text: {
       renderBlock: TextBlock,
       renderEditModal: EditTextModal,
