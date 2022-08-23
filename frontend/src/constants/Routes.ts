@@ -6,6 +6,8 @@ export const LOGOUT_PAGE = "/logout";
 
 export const SIGNUP_PAGE = "/signup";
 
+export const FORGOT_PASSWORD_PAGE = "/forgotpassword";
+
 export const EDIT_TEAM_PAGE = "/edit-team";
 
 export const DISPLAY_ENTITY_PAGE = "/entity";

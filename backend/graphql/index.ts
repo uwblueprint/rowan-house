@@ -115,7 +115,7 @@ const graphQLMiddlewares = {
     deleteUserById: authorizedByAdmin(),
     deleteUserByEmail: authorizedByAdmin(),
     logout: isAuthorizedByUserId("userId"),
-    resetPassword: isAuthorizedByEmail("email"),
+    resetPassword: publicRoute,
     createLesson: authorizedByAdmin(),
     updateLesson: authorizedByAdmin(),
     deleteLesson: authorizedByAdmin(),

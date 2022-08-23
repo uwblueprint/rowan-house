@@ -21,13 +21,18 @@ import {
   Input,
   Center,
   Spinner,
+  Alert,
+  AlertDescription,
 } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import RHSLogo from "../../assets/RHSlogo.png";
 import BackgroundImage from "../../assets/signuppage.jpg";
 
 import authAPIClient from "../../APIClients/AuthAPIClient";
-import { LOGIN } from "../../APIClients/mutations/AuthMutations";
+import {
+  LOGIN,
+  RESET_PASSWORD,
+} from "../../APIClients/mutations/AuthMutations";
 import {
   MANAGE_COURSES_PAGE,
   SIGNUP_PAGE,
@@ -42,6 +47,12 @@ enum LoginState {
   ForgetPassword,
 }
 
+enum ResetEmailState {
+  NotSent,
+  SentSuccess,
+  SentFailed,
+}
+
 const Login = (): React.ReactElement => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
   const [email, setEmail] = useState("");
@@ -49,6 +60,11 @@ const Login = (): React.ReactElement => {
   const [loginState, setLoginState] = useState(LoginState.EnterEmail);
   const [loginFail, setLoginFail] = useState(false);
   const [invalidEmail, setInvalidEmail] = useState(false);
+  const [sendingResetEmail, setSendingResetEmail] = useState(false);
+  const [resetEmail, setResetEmail] = useState(ResetEmailState.NotSent);
+  const [sendResetPasswordLink] = useMutation<{ sent: boolean }>(
+    RESET_PASSWORD,
+  );
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const forgetPasswordRef = useRef<HTMLInputElement>(null);
@@ -89,7 +105,21 @@ const Login = (): React.ReactElement => {
         }
         break;
       case LoginState.ForgetPassword:
-        // implement send forget password link
+        if (!email?.length) {
+          setInvalidEmail(true);
+          return;
+        }
+        setSendingResetEmail(true);
+        try {
+          await sendResetPasswordLink({
+            variables: { email },
+          });
+          setResetEmail(ResetEmailState.SentSuccess);
+        } catch (error: unknown) {
+          setResetEmail(ResetEmailState.SentFailed);
+        } finally {
+          setSendingResetEmail(false);
+        }
         break;
       default:
         throw new Error("Unexpected login state");
@@ -112,6 +142,31 @@ const Login = (): React.ReactElement => {
         return setLoginState(LoginState.EnterPassword);
       default:
         throw new Error("Unexpected Error");
+    }
+  };
+  const getResetEmailText = (): React.ReactElement => {
+    switch (resetEmail) {
+      case ResetEmailState.NotSent:
+        return <></>;
+      case ResetEmailState.SentFailed:
+        return (
+          <Alert status="error">
+            <AlertDescription>
+              Failed to send reset password email. Please try again.
+            </AlertDescription>
+          </Alert>
+        );
+      case ResetEmailState.SentSuccess:
+        return (
+          <Alert status="success">
+            <AlertDescription>
+              Reset password email sent! Please wait up to 5 minutes for it to
+              send.
+            </AlertDescription>
+          </Alert>
+        );
+      default:
+        return <></>;
     }
   };
 
@@ -194,6 +249,16 @@ const Login = (): React.ReactElement => {
                 Sign up
               </Button>
             </Center>
+            <Center paddingTop="1vh">
+              <Button
+                variant="link"
+                color="brand.royal"
+                onClick={() => setLoginState(LoginState.ForgetPassword)}
+                textDecorationLine="underline"
+              >
+                Forgot your password?
+              </Button>
+            </Center>
           </Box>
         );
       case LoginState.EnterPassword:
@@ -273,9 +338,16 @@ const Login = (): React.ReactElement => {
       case LoginState.ForgetPassword:
         return (
           <Box>
+            <Box marginBottom="1vh" width="100%">
+              {getResetEmailText()}
+            </Box>
             <Text variant="display-sm-sb">Forgot your password?</Text>
             <Box display="flex" marginTop="3vh">
-              <Button onClick={() => onBackClick(loginState)} variant="link">
+              <Button
+                onClick={() => onBackClick(loginState)}
+                variant="link"
+                disabled={sendingResetEmail}
+              >
                 <ArrowBackIcon color="brand.royal" />
                 <Text variant="button" color="brand.royal">
                   Back
@@ -302,12 +374,15 @@ const Login = (): React.ReactElement => {
               width="full"
               onClick={onLogInClick}
               marginBottom="2vh"
+              isLoading={sendingResetEmail}
+              disabled={resetEmail === ResetEmailState.SentSuccess}
             >
-              Continue
+              Send Reset Password Email
             </Button>
             <Center>
               Remembered your password?&nbsp;
               <Button
+                disabled={sendingResetEmail}
                 variant="link"
                 color="brand.royal"
                 textDecorationLine="underline"
