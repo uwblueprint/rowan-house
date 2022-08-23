@@ -5,7 +5,6 @@ import { applyMiddleware } from "graphql-middleware";
 import { merge } from "lodash";
 
 import {
-  isAuthorizedByEmail,
   isAuthorizedByRole,
   isAuthorizedByUserId,
   idNotSameAsActiveUser,

@@ -90,7 +90,11 @@ class AuthService implements IAuthService {
       <br><br>
       <a href=${resetLink}>Reset Password</a>`;
 
-      await this.emailService.sendEmail(email, "Your Password Reset Link", emailBody);
+      await this.emailService.sendEmail(
+        email,
+        "Your Password Reset Link",
+        emailBody,
+      );
     } catch (error) {
       Logger.error(
         `Failed to generate password reset link for user with email ${email}`,
