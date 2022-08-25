@@ -1,5 +1,5 @@
 import React from "react";
-import CustomHeading from "../../../common/CustomHeading";
+import CustomHeading from "./CustomHeading";
 import {
   ContentBlockProps,
   HeadingBlockState,

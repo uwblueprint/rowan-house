@@ -1,4 +1,4 @@
-import { Select, FormControl, FormLabel, Input, Box } from "@chakra-ui/react";
+import { Select, FormControl, FormLabel, Input } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { HeadingBlockState } from "../../../../types/ContentBlockTypes";
 import { Modal } from "../../../common/Modal";
@@ -6,7 +6,8 @@ import {
   EditContentModalProps,
   ValidHeadingSizes,
 } from "../../../../types/ModuleEditorTypes";
-import CustomHeading from "../../../common/CustomHeading";
+import CustomHeading from "../blocks/CustomHeading";
+import BlockPreview from "./BlockPreview";
 
 const EditHeadingModal = ({
   block,
@@ -88,12 +89,9 @@ const EditHeadingModal = ({
           }}
         />
       </FormControl>
-      <FormLabel variant="caption-md" marginTop="2vh" marginBottom="1vh">
-        Preview
-      </FormLabel>
-      <Box borderWidth="1px" borderRadius="5px" align="center" padding="3vh 0">
+      <BlockPreview>
         <CustomHeading size={size} text={text} />
-      </Box>
+      </BlockPreview>
     </Modal>
   );
 };

@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid } from "@chakra-ui/react";
+import { Box, Grid } from "@chakra-ui/react";
 
 import {
   ContentBlockProps,
@@ -24,18 +24,20 @@ const ColumnBlock = ({
     if (!content[side]) return <></>;
     // If only one column has content, render w/ full width
     return (
-      <ColumnContent
-        block={content[side]}
-        columnID={id}
-        index={index}
-        side={side}
-        editable={editable}
-      />
+      <Box padding="2rem">
+        <ColumnContent
+          block={content[side]}
+          columnID={id}
+          index={index}
+          side={side}
+          editable={editable}
+        />
+      </Box>
     );
   }
 
   return (
-    <Grid templateColumns="repeat(2, 1fr)" gap="1rem" w="100%">
+    <Grid templateColumns="repeat(2, 1fr)" gap="1rem" w="100%" padding="2rem">
       <ColumnContent
         block={content.left}
         columnID={id}

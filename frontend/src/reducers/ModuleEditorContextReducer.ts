@@ -140,7 +140,7 @@ const deleteLesson = (
   return newState;
 };
 
-const createContent = (blockID: string): ContentBlockState => {
+export const createContent = (blockID: string): ContentBlockState => {
   switch (blockID) {
     case ContentTypeEnum.BUTTON.id:
       return {

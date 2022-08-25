@@ -5,6 +5,7 @@ import { Modal } from "../../../common/Modal";
 import VideoPlayer from "../../../common/VideoPlayer";
 import { TextInput } from "../../../common/TextInput";
 import { EditContentModalProps } from "../../../../types/ModuleEditorTypes";
+import BlockPreview from "./BlockPreview";
 
 interface InvalidLinkProps {
   link: string;
@@ -61,7 +62,7 @@ const EditVideoModal = ({
           }}
           isInvalid={invalid}
         />
-        <Text variant="sm">Preview</Text>
+        <BlockPreview />
         <Box display={invalid ? "initial" : "none"}>
           <InvalidLinkPreview link={link} />
         </Box>

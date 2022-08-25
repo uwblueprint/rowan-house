@@ -1,20 +1,15 @@
 import React from "react";
 
-import { Button } from "@chakra-ui/react";
-
 import {
   ContentBlockProps,
   ButtonBlockState,
 } from "../../../../types/ContentBlockTypes";
+import CustomButton from "./CustomButton";
 
 const ButtonBlock = ({
   block: { content },
 }: ContentBlockProps<ButtonBlockState>): React.ReactElement => {
-  return (
-    <a href={content.link} target="_blank" rel="noreferrer">
-      <Button>{content.text}</Button>
-    </a>
-  );
+  return <CustomButton text={content.text} link={content.link} />;
 };
 
 export default ButtonBlock;

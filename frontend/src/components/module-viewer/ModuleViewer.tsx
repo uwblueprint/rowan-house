@@ -29,7 +29,7 @@ import Banner from "../learner/Banner";
 import { LessonResponse } from "../../APIClients/types/LessonClientTypes";
 import { formatLessonResponse } from "../../utils/lessonUtils";
 import { useURLSearchFlag } from "../../hooks/useURLSearch";
-import { ColumnBlockValidChildren } from "../../types/ContentBlockTypes";
+import { ColumnBlockInvalidChildren } from "../../types/ContentBlockTypes";
 
 // Copy drag implementation based on https://github.com/atlassian/react-beautiful-dnd/issues/216#issuecomment-423708497
 const onDragEnd = (
@@ -50,7 +50,7 @@ const onDragEnd = (
     }
     // If the block is not meant to go into the column, show an error and cancel the drag
     const [blockType] = result.draggableId.split(" ");
-    if (!ColumnBlockValidChildren.includes(blockType)) {
+    if (ColumnBlockInvalidChildren.includes(blockType)) {
       toast({
         title: "Invalid component",
         description: "This component cannot be used in a column layout",

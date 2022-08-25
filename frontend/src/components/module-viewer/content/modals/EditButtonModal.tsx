@@ -1,13 +1,11 @@
-import { Center, Text, VStack } from "@chakra-ui/react";
+import { VStack } from "@chakra-ui/react";
 import React, { useState } from "react";
-import {
-  ButtonBlockState,
-  ContentTypeEnum,
-} from "../../../../types/ContentBlockTypes";
+import { ButtonBlockState } from "../../../../types/ContentBlockTypes";
 import { Modal } from "../../../common/Modal";
 import { TextInput } from "../../../common/TextInput";
 import { EditContentModalProps } from "../../../../types/ModuleEditorTypes";
-import { ButtonBlock } from "../blocks";
+import BlockPreview from "./BlockPreview";
+import CustomButton from "../blocks/CustomButton";
 
 const EditButtonModal = ({
   block,
@@ -55,21 +53,9 @@ const EditButtonModal = ({
           onChange={setLinkSafely}
           isInvalid={link === ""}
         />
-        <Text variant="sm" marginTop="1rem">
-          Preview
-        </Text>
-        <Center borderWidth="1px" borderRadius="6px" padding="4rem">
-          <ButtonBlock
-            block={{
-              type: ContentTypeEnum.BUTTON,
-              id: "",
-              content: {
-                text: text || "Text",
-                link,
-              },
-            }}
-          />
-        </Center>
+        <BlockPreview>
+          <CustomButton link={link} text={text} />
+        </BlockPreview>
       </VStack>
     </Modal>
   );

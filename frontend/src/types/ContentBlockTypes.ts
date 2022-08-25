@@ -45,7 +45,8 @@ export type ColumnBlockState = ContentBlockStateType<
     right: null | ContentBlockState;
   }
 >;
-export type ColumnBlockParam = "left" | "right"; // TODO: Better method ?
+export const ColumnBlockParamList = ["left", "right"] as const;
+export type ColumnBlockParam = typeof ColumnBlockParamList[number];
 
 export type ContentBlockState = RequireAllContentTypesArePresent<
   | HeadingBlockState
@@ -146,11 +147,9 @@ export class ContentTypeEnum {
   }
 }
 
-export const ColumnBlockValidChildren = [
-  ContentTypeEnum.BUTTON.id,
-  ContentTypeEnum.HEADING.id,
-  ContentTypeEnum.TEXT.id,
-  ContentTypeEnum.IMAGE.id,
+export const ColumnBlockInvalidChildren = [
+  ContentTypeEnum.AUDIO.id,
+  ContentTypeEnum.COLUMN.id,
   ContentTypeEnum.VIDEO.id,
 ];
 

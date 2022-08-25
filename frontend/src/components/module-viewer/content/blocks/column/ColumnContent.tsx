@@ -113,7 +113,7 @@ const ColumnContent = ({
                 onEditClick={onEditModalOpen}
                 onDeleteClick={onDeleteModalOpen}
               />
-              <Center w="100%" padding=".2rem">
+              <Center w="100%" padding="4px">
                 {CONTENT_BLOCKS.render({ block, index, editable })}
               </Center>
             </Flex>
@@ -136,7 +136,7 @@ const ColumnContent = ({
   }
   // If not editable, return just content block
   return (
-    <Center w="100%" padding=".2rem">
+    <Center w="100%" padding="4px">
       {block && CONTENT_BLOCKS.render({ block, index, editable })}
     </Center>
   );
