@@ -1,4 +1,6 @@
 import {
+  ButtonBlock,
+  ColumnBlock,
   ContentBlock,
   HeadingBlock,
   ImageBlock,
@@ -71,6 +73,18 @@ export const validateContent = (content: ContentBlock): boolean => {
   if (!content.type) return false;
 
   switch (content.type) {
+    case "button": {
+      const button = content as ButtonBlock;
+      return button.content.link != null && button.content.text != null;
+    }
+    case "column": {
+      const column = content as ColumnBlock;
+      return (
+        (column.content.left === null ||
+          validateContent(column.content.left)) &&
+        (column.content.right === null || validateContent(column.content.right))
+      );
+    }
     case "text": {
       const text = content as TextBlock;
       return text.content.text != null;

@@ -7,7 +7,12 @@ import {
   EditorChangeStatuses,
   ValidHeadingSizes,
 } from "../types/ModuleEditorTypes";
-import { ContentBlockState, ContentTypeEnum } from "../types/ContentBlockTypes";
+import {
+  ColumnBlockParam,
+  ContentBlockState,
+  ContentStateOverride,
+  ContentTypeEnum,
+} from "../types/ContentBlockTypes";
 
 /* eslint-disable no-console */
 
@@ -135,6 +140,65 @@ const deleteLesson = (
   return newState;
 };
 
+export const createContent = (blockID: string): ContentBlockState => {
+  switch (blockID) {
+    case ContentTypeEnum.BUTTON.id:
+      return {
+        type: ContentTypeEnum.BUTTON,
+        id: uuid(),
+        content: {
+          link: "https://rowanhouse.ca",
+          text: "Click Here",
+        },
+      };
+    case ContentTypeEnum.COLUMN.id:
+      return {
+        type: ContentTypeEnum.COLUMN,
+        id: uuid(),
+        content: {
+          left: null,
+          right: null,
+        },
+      };
+    case ContentTypeEnum.TEXT.id:
+      return {
+        type: ContentTypeEnum.TEXT,
+        id: uuid(),
+        content: {
+          text: "Hello!",
+        },
+      };
+    case ContentTypeEnum.IMAGE.id:
+      return {
+        type: ContentTypeEnum.IMAGE,
+        id: uuid(),
+        content: {
+          link:
+            "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
+        },
+      };
+    case ContentTypeEnum.VIDEO.id:
+      return {
+        type: ContentTypeEnum.VIDEO,
+        id: uuid(),
+        content: {
+          link: "",
+        },
+      };
+    case ContentTypeEnum.HEADING.id:
+      return {
+        type: ContentTypeEnum.HEADING,
+        id: uuid(),
+        content: {
+          text: "",
+          size: ValidHeadingSizes.heading1,
+        },
+      };
+    default:
+      throw Error("Invalid block id");
+  }
+};
+
 const createLessonContentBlock = (
   state: EditorStateType,
   blockID: string,
@@ -148,50 +212,8 @@ const createLessonContentBlock = (
     index <= state.lessons[id].content.length,
     "Content block index exceeds content length",
   );
+  const block = createContent(blockID);
 
-  let block: ContentBlockState | null;
-  switch (blockID) {
-    case ContentTypeEnum.TEXT.id:
-      block = {
-        type: ContentTypeEnum.TEXT,
-        id: uuid(),
-        content: {
-          text: "Hello!",
-        },
-      };
-      break;
-    case ContentTypeEnum.IMAGE.id:
-      block = {
-        type: ContentTypeEnum.IMAGE,
-        id: uuid(),
-        content: {
-          link:
-            "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
-        },
-      };
-      break;
-    case ContentTypeEnum.VIDEO.id:
-      block = {
-        type: ContentTypeEnum.VIDEO,
-        id: uuid(),
-        content: {
-          link: "",
-        },
-      };
-      break;
-    case ContentTypeEnum.HEADING.id:
-      block = {
-        type: ContentTypeEnum.HEADING,
-        id: uuid(),
-        content: {
-          text: "",
-          size: ValidHeadingSizes.heading1,
-        },
-      };
-      break;
-    default:
-      throw Error("Invalid block id");
-  }
   // Create new lesson
   const newContent = [...state.lessons[id].content];
   newContent.splice(index, 0, block);
@@ -237,7 +259,7 @@ const reorderLessonContentBlocks = (
 const updateLessonContentBlock = (
   state: EditorStateType,
   index: number,
-  block: ContentBlockState,
+  content: ContentStateOverride,
 ): EditorStateType => {
   const id = state.focusedLesson;
   if (!id || !Object.keys(state.lessons).includes(id)) return state;
@@ -248,6 +270,12 @@ const updateLessonContentBlock = (
     "Content block index exceeds content length",
   );
   const newState = { ...state };
+  // Retrieve the current block and replace its contents
+  const block = newState.lessons[id].content[index];
+  block.content = {
+    ...block.content,
+    ...content,
+  };
   newState.lessons[id].content[index] = block;
   // Update to let the state know things have changed
   newState.hasChanged = updateChangeStatus(state.hasChanged, id, "UPDATE");
@@ -267,6 +295,62 @@ const deleteLessonContentBlock = (
   );
   const newState = { ...state };
   newState.lessons[id].content.splice(index, 1);
+  // Update to let the state know things have changed
+  newState.hasChanged = updateChangeStatus(state.hasChanged, id, "UPDATE");
+  return newState;
+};
+
+const addContentBlockToColumn = (
+  state: EditorStateType,
+  blockID: string,
+  columnID: string,
+  columnSide: ColumnBlockParam,
+): EditorStateType => {
+  const id = state.focusedLesson;
+  if (!id || !Object.keys(state.lessons).includes(id)) return state;
+
+  // Find column index by ID
+  const columnIndex = state.lessons[id].content.findIndex(
+    (block) => block.id === columnID,
+  );
+  // Add new block to the state
+  const newState = { ...state };
+  const columnBlock = newState.lessons[id].content[columnIndex];
+  if (!("left" in columnBlock.content) || !("right" in columnBlock.content)) {
+    throw Error(
+      "Column ID matches component, but component is not of type 'column'",
+    );
+  }
+  columnBlock.content[columnSide] = createContent(blockID);
+  // Update to let the state know things have changed
+  newState.hasChanged = updateChangeStatus(state.hasChanged, id, "UPDATE");
+  return newState;
+};
+
+const moveContentBlockToColumn = (
+  state: EditorStateType,
+  index: number,
+  columnID: string,
+  columnSide: ColumnBlockParam,
+): EditorStateType => {
+  const id = state.focusedLesson;
+  if (!id || !Object.keys(state.lessons).includes(id)) return state;
+
+  // Find column index by ID
+  const columnIndex = state.lessons[id].content.findIndex(
+    (block) => block.id === columnID,
+  );
+  // Add new block to the state
+  const newState = { ...state };
+  const columnBlock = newState.lessons[id].content[columnIndex];
+  if (!("left" in columnBlock.content) || !("right" in columnBlock.content)) {
+    throw Error(
+      "Column ID matches component, but component is not of type 'column'",
+    );
+  }
+  // Parse block out of the lesson and add it to the column
+  const [block] = newState.lessons[id].content.splice(index, 1);
+  columnBlock.content[columnSide] = block;
   // Update to let the state know things have changed
   newState.hasChanged = updateChangeStatus(state.hasChanged, id, "UPDATE");
   return newState;
@@ -321,10 +405,24 @@ export default function EditorContextReducer(
       return updateLessonContentBlock(
         state,
         action.value.index,
-        action.value.block,
+        action.value.content,
       );
     case "delete-block":
       return deleteLessonContentBlock(state, action.value);
+    case "create-block-in-column":
+      return addContentBlockToColumn(
+        state,
+        action.value.blockID,
+        action.value.columnID,
+        action.value.columnSide,
+      );
+    case "move-block-to-column":
+      return moveContentBlockToColumn(
+        state,
+        action.value.index,
+        action.value.columnID,
+        action.value.columnSide,
+      );
     default:
       return state;
   }

@@ -3,7 +3,7 @@ import React from "react";
 import {
   ContentBlockProps,
   ImageBlockState,
-} from "../../../types/ContentBlockTypes";
+} from "../../../../types/ContentBlockTypes";
 
 const ImageBlock = ({
   block: { content },

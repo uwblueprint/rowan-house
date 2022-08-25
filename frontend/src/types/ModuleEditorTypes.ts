@@ -1,4 +1,9 @@
-import { ContentBlockState } from "./ContentBlockTypes";
+import {
+  ColumnBlockParam,
+  ContentBlockState,
+  ContentStateOverride,
+  MappedProps,
+} from "./ContentBlockTypes";
 
 export interface LessonType {
   course: string;
@@ -91,11 +96,27 @@ export type EditorContextAction =
     }
   | {
       type: "update-block";
-      value: { index: number; block: ContentBlockState };
+      value: { index: number; content: ContentStateOverride };
     }
   | {
       type: "delete-block";
       value: number;
+    }
+  | {
+      type: "create-block-in-column";
+      value: {
+        blockID: string;
+        columnID: string;
+        columnSide: ColumnBlockParam;
+      };
+    }
+  | {
+      type: "move-block-to-column";
+      value: {
+        index: number;
+        columnID: string;
+        columnSide: ColumnBlockParam;
+      };
     };
 
 export enum ValidHeadingSizes {
@@ -107,14 +128,15 @@ export enum ValidHeadingSizes {
 
 export interface EditContentOptionsMenuProps {
   isVisible: boolean;
-  onEditClick: () => void;
-  onCopyClick: () => void;
-  onDeleteClick: () => void;
+  onEditClick?: () => void;
+  onCopyClick?: () => void;
+  onDeleteClick?: () => void;
 }
 
-export interface EditContentModalProps<BlockType extends ContentBlockState> {
-  onClose: () => void;
+export interface EditContentModalProps<
+  BlockType extends ContentBlockState = ContentBlockState
+> extends MappedProps<BlockType> {
   isOpen: boolean;
-  block: BlockType;
-  index: number;
+  onClose: () => void;
+  onSave: <T extends BlockType>(newBlock: T["content"]) => void;
 }

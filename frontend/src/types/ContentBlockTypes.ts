@@ -3,7 +3,6 @@ import { ContentType } from "../APIClients/types/LessonClientTypes";
 
 export const ContentTypeCategories = ["Layout", "Basic", "Media"];
 
-export type ColumnBlockState = ContentBlockStateType<"column">;
 export type HeadingBlockState = ContentBlockStateType<
   "heading",
   {
@@ -18,7 +17,13 @@ export type TextBlockState = ContentBlockStateType<
   }
 >;
 export type LinkBlockState = ContentBlockStateType<"link">;
-export type ButtonBlockState = ContentBlockStateType<"button">;
+export type ButtonBlockState = ContentBlockStateType<
+  "button",
+  {
+    link: string;
+    text: string;
+  }
+>;
 export type ImageBlockState = ContentBlockStateType<
   "image",
   {
@@ -33,8 +38,17 @@ export type VideoBlockState = ContentBlockStateType<
 >;
 export type AudioBlockState = ContentBlockStateType<"audio">;
 
+export type ColumnBlockState = ContentBlockStateType<
+  "column",
+  {
+    left: null | ContentBlockState;
+    right: null | ContentBlockState;
+  }
+>;
+export const ColumnBlockParamList = ["left", "right"] as const;
+export type ColumnBlockParam = typeof ColumnBlockParamList[number];
+
 export type ContentBlockState = RequireAllContentTypesArePresent<
-  | ColumnBlockState
   | HeadingBlockState
   | TextBlockState
   | LinkBlockState
@@ -42,7 +56,10 @@ export type ContentBlockState = RequireAllContentTypesArePresent<
   | ImageBlockState
   | VideoBlockState
   | AudioBlockState
+  | ColumnBlockState
 >;
+
+export type ContentStateOverride = Partial<ContentBlockState["content"]>;
 
 export class ContentTypeEnum {
   private static CLIENT_TYPES: { [t in ContentType]?: ContentTypeEnum } = {};
@@ -130,6 +147,11 @@ export class ContentTypeEnum {
   }
 }
 
+export const ColumnBlockInvalidChildren = [
+  ContentTypeEnum.AUDIO.id,
+  ContentTypeEnum.COLUMN.id,
+];
+
 export interface ContentBlockStateType<
   ClientType extends ContentType,
   BlockStateType = never
@@ -144,8 +166,17 @@ export type ContentBlockTypeToState<Type extends ContentType> = Extract<
   { ["type"]: { ["clientType"]: Type } }
 >;
 
-export interface ContentBlockProps<BlockType extends ContentBlockState> {
+export interface MappedProps<
+  BlockType extends ContentBlockState = ContentBlockState
+> {
   block: BlockType;
+}
+
+export interface ContentBlockProps<
+  BlockType extends ContentBlockState = ContentBlockState
+> extends MappedProps<BlockType> {
+  index: number;
+  editable?: boolean;
 }
 
 // Custom logic to make sure there aren't duplicated types.
