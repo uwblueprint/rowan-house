@@ -32,15 +32,6 @@ module.exports = {
     "react/jsx-props-no-spreading": "off",
     "jsx-a11y/click-events-have-key-events": "off",
     "jsx-a11y/no-static-element-interactions": "off",
-    "import/extensions": [
-      "error",
-      "ignorePackages",
-      {
-        js: "never",
-        ts: "never",
-        tsx: "never",
-      },
-    ],
   },
   ignorePatterns: ["build/*"],
 };

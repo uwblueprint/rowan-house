@@ -150,7 +150,6 @@ export class ContentTypeEnum {
 export const ColumnBlockInvalidChildren = [
   ContentTypeEnum.AUDIO.id,
   ContentTypeEnum.COLUMN.id,
-  ContentTypeEnum.VIDEO.id,
 ];
 
 export interface ContentBlockStateType<
@@ -176,7 +175,7 @@ export interface MappedProps<
 export interface ContentBlockProps<
   BlockType extends ContentBlockState = ContentBlockState
 > extends MappedProps<BlockType> {
-  index?: number;
+  index: number;
   editable?: boolean;
 }
 

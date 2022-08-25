@@ -48,7 +48,7 @@ const ContentBlock = ({
     onClose: onDeleteModalClose,
   } = useDisclosure();
   const context = useContext(EditorContext);
-  const isColumn = block.type.clientType !== "column";
+  const isColumn = block.type.clientType === "column";
 
   if (!context) return <></>;
   const { dispatch } = context;
@@ -94,12 +94,12 @@ const ContentBlock = ({
               <Box opacity={isHovered ? 1 : 0} {...provided.dragHandleProps}>
                 <DragHandleIconSvg />
               </Box>
-              <Center w="100%" padding={isColumn ? "0" : "2rem"}>
+              <Center w="100%" padding="2rem">
                 {CONTENT_BLOCKS.render({ block, index, editable })}
               </Center>
               <EditContentOptionsMenu
                 isVisible={isHovered}
-                onEditClick={isColumn ? onEditModalOpen : undefined}
+                onEditClick={isColumn ? undefined : onEditModalOpen}
                 onCopyClick={() => {}}
                 onDeleteClick={onDeleteModalOpen}
               />

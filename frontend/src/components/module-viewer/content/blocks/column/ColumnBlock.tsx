@@ -12,10 +12,6 @@ const ColumnBlock = ({
   index,
   editable,
 }: ContentBlockProps<ColumnBlockState>): React.ReactElement => {
-  if (index === undefined) {
-    throw Error("Index passed to column component was undefined");
-  }
-
   // If we are on the learner's side and one of the columns is empty
   if (!editable && (content.left === null || content.right === null)) {
     // Figure out which column has content, if any
