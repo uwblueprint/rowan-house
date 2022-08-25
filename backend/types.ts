@@ -17,7 +17,7 @@ export interface ButtonBlock extends ContentBlock {
 }
 
 export interface ColumnBlock extends ContentBlock {
-  content: { left: ContentBlock; right: ContentBlock };
+  content: { left: ContentBlock | null; right: ContentBlock | null };
 }
 
 export interface TextBlock extends ContentBlock {

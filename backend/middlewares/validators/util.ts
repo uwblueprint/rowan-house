@@ -80,8 +80,9 @@ export const validateContent = (content: ContentBlock): boolean => {
     case "column": {
       const column = content as ColumnBlock;
       return (
-        validateContent(column.content.left) &&
-        validateContent(column.content.right)
+        (column.content.left === null ||
+          validateContent(column.content.left)) &&
+        (column.content.right === null || validateContent(column.content.right))
       );
     }
     case "text": {

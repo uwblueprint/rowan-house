@@ -11,11 +11,7 @@ const GET_LESSONS = gql`
       image
       content {
         type
-        content {
-          link
-          text
-          size
-        }
+        content
       }
     }
   }

@@ -11,11 +11,7 @@ export const CREATE_LESSON = gql`
       image
       content {
         type
-        content {
-          size
-          link
-          text
-        }
+        content
       }
     }
   }
@@ -32,11 +28,7 @@ export const UPDATE_LESSON = gql`
       image
       content {
         type
-        content {
-          size
-          link
-          text
-        }
+        content
       }
     }
   }
