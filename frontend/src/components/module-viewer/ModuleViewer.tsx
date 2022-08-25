@@ -1,9 +1,15 @@
-import React, { useEffect, useReducer, useRef, useState } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import { useParams } from "react-router-dom";
 import { Center, Box, Flex, IconButton, Spinner } from "@chakra-ui/react";
 import { ChevronRightIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import { DropResult, DragDropContext } from "react-beautiful-dnd";
-import { useQuery, useLazyQuery } from "@apollo/client";
+import { useMutation, useQuery, useLazyQuery } from "@apollo/client";
 import { GET_COURSE } from "../../APIClients/queries/CourseQueries";
 import GET_LESSONS from "../../APIClients/queries/LessonQueries";
 
@@ -21,6 +27,12 @@ import Banner from "../learner/Banner";
 import { LessonResponse } from "../../APIClients/types/LessonClientTypes";
 import { formatLessonResponse } from "../../utils/lessonUtils";
 import { useURLSearchFlag } from "../../hooks/useURLSearch";
+import {
+  MARK_MODULE_AS_STARTED,
+  MARK_MODULE_AS_COMPLETED,
+  MARK_LESSON_AS_COMPLETED,
+} from "../../APIClients/mutations/ProgressMutations";
+import AuthContext from "../../contexts/AuthContext";
 
 // Copy drag implementation based on https://github.com/atlassian/react-beautiful-dnd/issues/216#issuecomment-423708497
 const onDragEnd = (
@@ -66,6 +78,7 @@ const ModuleViewer = ({
     moduleIndex: moduleIndexString,
   }: ModuleEditorParams = useParams();
   const moduleIndex = Number(moduleIndexString);
+  const { authenticatedUser } = useContext(AuthContext);
   const [completed, setCompleted] = useURLSearchFlag("completed");
 
   const [state, dispatch] = useReducer(EditorContextReducer, null);
@@ -76,6 +89,22 @@ const ModuleViewer = ({
     },
   });
   const [getLessons, { data: lessonData }] = useLazyQuery(GET_LESSONS);
+  const [markModuleAsCompletedForUser] = useMutation(MARK_MODULE_AS_COMPLETED);
+  const [markLessonAsCompletedForUser] = useMutation(MARK_LESSON_AS_COMPLETED);
+  const [markModuleAsStartedForUser] = useMutation(MARK_MODULE_AS_STARTED);
+
+  useEffect(() => {
+    if (!editable) {
+      markModuleAsStartedForUser({
+        variables: {
+          userId: authenticatedUser?.id,
+          courseId: courseID,
+          moduleIndex,
+        },
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [courseID, moduleIndex]);
 
   useEffect(() => {
     if (courseData) {
@@ -167,8 +196,21 @@ const ModuleViewer = ({
                       const lessonIndex = lessons.indexOf(lessonId);
                       if (lessonIndex === lessons.length - 1) {
                         setCompleted(true);
+                        markModuleAsCompletedForUser({
+                          variables: {
+                            userId: authenticatedUser?.id,
+                            courseId: courseID,
+                            moduleIndex,
+                          },
+                        });
                         dispatch({ type: "set-focus", value: null });
                       } else if (lessonIndex !== -1) {
+                        markLessonAsCompletedForUser({
+                          variables: {
+                            userId: authenticatedUser?.id,
+                            lessonId,
+                          },
+                        });
                         dispatch({
                           type: "set-focus",
                           value: lessons[lessonIndex + 1],

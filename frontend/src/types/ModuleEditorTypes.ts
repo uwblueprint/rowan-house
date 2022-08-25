@@ -22,6 +22,11 @@ export interface ModuleType {
   lessons: string[];
 }
 
+export interface ModuleProgressType {
+  startedAt: Date;
+  completedAt: Date;
+}
+
 export interface CourseType {
   id: string;
   title: string;
