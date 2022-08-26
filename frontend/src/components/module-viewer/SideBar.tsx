@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
   Box,
@@ -11,7 +11,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { ChevronLeftIcon, EditIcon } from "@chakra-ui/icons";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery, useLazyQuery } from "@apollo/client";
 import { ReactComponent as SaveIcon } from "../../assets/Save.svg";
 import {
   COURSE_OVERVIEW_BASE_ROUTE,
@@ -23,6 +23,7 @@ import {
   EditorContextType,
   ModuleEditorParams,
 } from "../../types/ModuleEditorTypes";
+import { LessonProgressResponse } from "../../APIClients/types/ProgressClientTypes";
 import {
   CREATE_LESSON,
   UPDATE_LESSON,
@@ -45,6 +46,8 @@ import EditorTabs from "./EditorTabs";
 import ModuleOverview from "./SideBarModuleOverview";
 import RouterLink from "../common/RouterLink";
 import { GET_COURSE } from "../../APIClients/queries/CourseQueries";
+import { GET_LESSON_PROGRESS } from "../../APIClients/queries/ProgressQueries";
+import AuthContext, { AuthContextType } from "../../contexts/AuthContext";
 
 const Sidebar = ({
   editable,
@@ -62,6 +65,8 @@ const Sidebar = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const context: EditorContextType = useContext(EditorContext);
+
+  const authContext: AuthContextType = useContext(AuthContext);
 
   const { data: courseData, error } = useQuery<{ course: CourseResponse }>(
     GET_COURSE,
@@ -87,7 +92,18 @@ const Sidebar = ({
   );
   const [deleteLesson] = useMutation(DELETE_LESSON);
 
-  if (!context) return <></>;
+  const [getProgressData, progressData] = useLazyQuery(GET_LESSON_PROGRESS);
+
+  useEffect(() => {
+    getProgressData({
+      variables: {
+        userId: authContext?.authenticatedUser?.id,
+        lessonIds: context?.state.lessons || [],
+      },
+    });
+  }, []);
+  
+  if (!context || !authContext) return <></>;
   const { state, dispatch } = context;
 
   const formatCourseRequest = (
