@@ -6,6 +6,7 @@ export type ContentType =
   | "text"
   | "image"
   | "video"
+  | "match"
   | "heading";
 export interface ContentBlock {
   type: ContentType;
@@ -18,6 +19,10 @@ export interface ButtonBlock extends ContentBlock {
 
 export interface ColumnBlock extends ContentBlock {
   content: { left: ContentBlock | null; right: ContentBlock | null };
+}
+
+export interface MatchBlock extends ContentBlock {
+  content: { link: string; text: string };
 }
 
 export interface TextBlock extends ContentBlock {

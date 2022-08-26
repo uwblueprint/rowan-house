@@ -5,6 +5,7 @@ import { ContentTypeEnum } from "../../types/ContentBlockTypes";
 import { ReactComponent as ImageIcon } from "../../assets/image.svg";
 import { ReactComponent as ColumnIcon } from "../../assets/column.svg";
 import { ReactComponent as HeadingIcon } from "../../assets/heading.svg";
+import { ReactComponent as MatchIcon } from "../../assets/match.svg";
 import { ReactComponent as ParagraphIcon } from "../../assets/paragraph.svg";
 import { ReactComponent as LinkIcon } from "../../assets/link.svg";
 import { ReactComponent as ButtonIcon } from "../../assets/button.svg";
@@ -25,6 +26,9 @@ const BlockStyle = ({
       break;
     case "heading.svg":
       contentIcon = <HeadingIcon width="fit-content" height="fit-content" />;
+      break;
+    case "match.svg":
+      contentIcon = <MatchIcon width="fit-content" height="fit-content" />;
       break;
     case "text.svg":
       contentIcon = <ParagraphIcon width="fit-content" height="fit-content" />;

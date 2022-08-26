@@ -4,6 +4,7 @@ import {
   TextBlock,
   ImageBlock,
   VideoBlock,
+  MatchBlock
 } from "../blocks";
 import {
   EditButtonModal,
@@ -11,6 +12,7 @@ import {
   EditImageModal,
   EditVideoModal,
   EditHeadingModal,
+  EditMatchModal
 } from "../modals";
 import {
   ContentBlockModals,
@@ -48,6 +50,10 @@ export default (
       renderEditModal: EditVideoModal,
     },
     audio: Empty,
+    match: {
+      renderBlock: MatchBlock,
+      renderEditModal: EditMatchModal,
+    }
   };
   return createContentBlockRenderers({
     ...defaults,

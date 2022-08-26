@@ -4,6 +4,7 @@ import {
   ContentBlock,
   HeadingBlock,
   ImageBlock,
+  MatchBlock,
   TextBlock,
   VideoBlock,
 } from "../../types";
@@ -84,6 +85,10 @@ export const validateContent = (content: ContentBlock): boolean => {
           validateContent(column.content.left)) &&
         (column.content.right === null || validateContent(column.content.right))
       );
+    }
+    case "match": {
+      const match = content as MatchBlock;
+      return match.content.link != null && match.content.text != null;
     }
     case "text": {
       const text = content as TextBlock;

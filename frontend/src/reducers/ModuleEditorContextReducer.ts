@@ -194,6 +194,15 @@ export const createContent = (blockID: string): ContentBlockState => {
           size: ValidHeadingSizes.heading1,
         },
       };
+      case ContentTypeEnum.MATCH.id:
+        return {
+          type: ContentTypeEnum.MATCH,
+          id: uuid(),
+          content: {
+            link: "https://rowanhouse.ca",
+            text: "Click Here",
+          },
+        };
     default:
       throw Error("Invalid block id");
   }

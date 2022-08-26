@@ -13,10 +13,10 @@ const options: Record<string, Array<ContentTypeEnum>> = {
   Basic: [
     ContentTypeEnum.HEADING,
     ContentTypeEnum.TEXT,
-    ContentTypeEnum.LINK,
     ContentTypeEnum.BUTTON,
   ],
-  Media: [ContentTypeEnum.IMAGE, ContentTypeEnum.VIDEO, ContentTypeEnum.AUDIO],
+  Media: [ContentTypeEnum.IMAGE, ContentTypeEnum.VIDEO],
+  Interactive: [ContentTypeEnum.MATCH],
 };
 
 const SideBarContentKiosk = (): React.ReactElement => {
@@ -25,6 +25,7 @@ const SideBarContentKiosk = (): React.ReactElement => {
       Layout: false,
       Basic: false,
       Media: false,
+      Interactive: false,
     },
   );
 
