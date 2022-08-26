@@ -22,7 +22,7 @@ export interface ColumnBlock extends ContentBlock {
 }
 
 export interface MatchBlock extends ContentBlock {
-  content: { link: string; text: string };
+  content: { question: string; matches: [{ prompt: string; answer: string }] };
 }
 
 export interface TextBlock extends ContentBlock {

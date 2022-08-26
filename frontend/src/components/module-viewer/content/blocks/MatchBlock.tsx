@@ -4,13 +4,17 @@ import {
   ContentBlockProps,
   MatchBlockState,
 } from "../../../../types/ContentBlockTypes";
-import CustomButton from "./CustomButton";
 
 const MatchBlock = ({
   block: { content },
-  editable,
+  // editable,
 }: ContentBlockProps<MatchBlockState>): React.ReactElement => {
-  return <CustomButton text={content.text} link={content.link} />;
+  return (
+    <>
+      <p>{content.question}</p>
+      {content.matches.map(({prompt, answer}, i) => <p key={i}>{prompt}: {answer}<br/></p>)}
+    </>
+  );
 };
 
 export default MatchBlock;

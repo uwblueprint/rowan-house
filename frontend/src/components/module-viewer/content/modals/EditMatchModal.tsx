@@ -1,11 +1,9 @@
-import { VStack } from "@chakra-ui/react";
+import { Button, Flex, VStack } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { MatchBlockState } from "../../../../types/ContentBlockTypes";
 import { Modal } from "../../../common/Modal";
 import { TextInput } from "../../../common/TextInput";
 import { EditContentModalProps } from "../../../../types/ModuleEditorTypes";
-import BlockPreview from "./BlockPreview";
-import CustomButton from "../blocks/CustomButton";
 
 const EditMatchModal = ({
   block,
@@ -13,49 +11,62 @@ const EditMatchModal = ({
   onClose,
   onSave,
 }: EditContentModalProps<MatchBlockState>): React.ReactElement => {
-  const [link, setLink] = useState(block.content.link ?? "");
-  const [text, setText] = useState(block.content.text ?? "");
+  const [question, setQuestion] = useState(block.content.question ?? "");
+  const [matches, setMatches] = useState(block.content.matches ?? []);
 
   const onConfirm = () => {
-    if (link && text) {
+    if (matches.length >= 2) {
       onSave({
-        link,
-        text,
+        question,
+        matches,
       });
     }
   };
 
-  // Append the prefix if it does not exist
-  const setLinkSafely = (str: string) => {
-    const newLink = str.includes("://") ? str : `https://${str}`;
-    setLink(newLink);
-  };
+  const setMatch = (i: number, prompt?: string, answer?: string) => {
+    const newMatches = [...matches];
+    if (prompt) newMatches[i] = {...matches[i], prompt};
+    if (answer) newMatches[i] = {...matches[i], answer};
+    setMatches(newMatches);
+  }
+
+  const addMatch = () => {
+    setMatches([...matches, {
+      prompt: "",
+      answer: "",
+    }])
+  }
 
   return (
     <Modal
       size="xl"
-      header="Edit button component"
+      header="Edit matching component"
       onConfirm={onConfirm}
       onCancel={onClose}
       isOpen={isOpen}
-      canSubmit={link !== "" && text !== ""}
+      canSubmit={matches.length >= 2}
     >
       <VStack alignItems="left">
         <TextInput
-          label="Display Text"
-          defaultValue={text}
-          onChange={setText}
-          isInvalid={text === ""}
+          label="Question (optional)"
+          defaultValue={question}
+          onChange={setQuestion}
         />
-        <TextInput
-          label="Link"
-          defaultValue={link}
-          onChange={setLinkSafely}
-          isInvalid={link === ""}
-        />
-        <BlockPreview>
-          <CustomButton link={link} text={text} />
-        </BlockPreview>
+        {matches.map(({prompt, answer}, i) => (
+          <Flex key={i}>
+            <TextInput
+              defaultValue={prompt}
+              onChange={(p) => setMatch(i, p)}
+              isInvalid={prompt === ""}
+            />
+            <TextInput
+              defaultValue={answer}
+              onChange={(a) => setMatch(i, prompt, a)}
+              isInvalid={answer === ""}
+            />
+          </Flex>
+        ))}
+        <Button onClick={addMatch}>Add Match</Button>
       </VStack>
     </Modal>
   );

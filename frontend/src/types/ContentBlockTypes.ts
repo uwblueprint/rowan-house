@@ -40,8 +40,11 @@ export type AudioBlockState = ContentBlockStateType<"audio">;
 export type MatchBlockState = ContentBlockStateType<
   "match",
   {
-    link: string;
-    text: string;
+    question: string;
+    matches: Array<{
+      prompt: string;
+      answer: string;
+    }>;
   }
 >;
 

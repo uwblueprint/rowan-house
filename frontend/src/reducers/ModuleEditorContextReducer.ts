@@ -199,8 +199,8 @@ export const createContent = (blockID: string): ContentBlockState => {
           type: ContentTypeEnum.MATCH,
           id: uuid(),
           content: {
-            link: "https://rowanhouse.ca",
-            text: "Click Here",
+            question: "",
+            matches: [],
           },
         };
     default:

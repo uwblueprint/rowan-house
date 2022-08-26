@@ -88,7 +88,7 @@ export const validateContent = (content: ContentBlock): boolean => {
     }
     case "match": {
       const match = content as MatchBlock;
-      return match.content.link != null && match.content.text != null;
+      return match.content.question != null && match.content.matches.length >= 2;
     }
     case "text": {
       const text = content as TextBlock;
