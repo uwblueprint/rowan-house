@@ -161,7 +161,7 @@ const Login = (): React.ReactElement => {
           <Alert status="success">
             <AlertDescription>
               Reset password email sent! Please wait up to 5 minutes for it to
-              send.
+              arrive in your inbox.
             </AlertDescription>
           </Alert>
         );
