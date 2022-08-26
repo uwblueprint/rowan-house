@@ -1,9 +1,11 @@
-import { Button, Flex, VStack } from "@chakra-ui/react";
+import { Button, FormLabel, Text, VStack, SimpleGrid, Center } from "@chakra-ui/react";
+import { DeleteIcon } from "@chakra-ui/icons";
 import React, { useState } from "react";
+
+import { EditContentModalProps } from "../../../../types/ModuleEditorTypes";
 import { MatchBlockState } from "../../../../types/ContentBlockTypes";
 import { Modal } from "../../../common/Modal";
 import { TextInput } from "../../../common/TextInput";
-import { EditContentModalProps } from "../../../../types/ModuleEditorTypes";
 
 const EditMatchModal = ({
   block,
@@ -23,10 +25,10 @@ const EditMatchModal = ({
     }
   };
 
-  const setMatch = (i: number, prompt?: string, answer?: string) => {
+  const setMatch = ({p, a}: {p?: string, a?: string}, i: number) => {
     const newMatches = [...matches];
-    if (prompt) newMatches[i] = {...matches[i], prompt};
-    if (answer) newMatches[i] = {...matches[i], answer};
+    if (p) newMatches[i] = {...matches[i], prompt: p};
+    if (a) newMatches[i] = {...matches[i], answer: a};
     setMatches(newMatches);
   }
 
@@ -37,10 +39,19 @@ const EditMatchModal = ({
     }])
   }
 
+  const removeMatch = (i: number) => {
+    const newMatches = [...matches];
+    console.log(i);
+    console.log(matches);
+    newMatches.splice(i, 1);
+    console.log(newMatches);
+    setMatches([...newMatches]);
+  } 
+
   return (
     <Modal
+      header="Edit Matching"
       size="xl"
-      header="Edit matching component"
       onConfirm={onConfirm}
       onCancel={onClose}
       isOpen={isOpen}
@@ -49,24 +60,41 @@ const EditMatchModal = ({
       <VStack alignItems="left">
         <TextInput
           label="Question (optional)"
+          placeholder="Insert text here"
           defaultValue={question}
           onChange={setQuestion}
         />
-        {matches.map(({prompt, answer}, i) => (
-          <Flex key={i}>
-            <TextInput
-              defaultValue={prompt}
-              onChange={(p) => setMatch(i, p)}
-              isInvalid={prompt === ""}
-            />
-            <TextInput
-              defaultValue={answer}
-              onChange={(a) => setMatch(i, prompt, a)}
-              isInvalid={answer === ""}
-            />
-          </Flex>
-        ))}
-        <Button onClick={addMatch}>Add Match</Button>
+        <SimpleGrid templateColumns="30px 1fr 1fr 30px" align="center" spacingX={2} spacingY={0}>
+          <div/>
+          <FormLabel fontWeight={400} color="blackAlpha">
+            Prompt
+          </FormLabel>
+          <FormLabel fontWeight={400} color="blackAlpha">
+            Match
+          </FormLabel>
+          <div/>
+          {matches.map(({prompt, answer}, i) => (
+            <>
+              <Center><Text>{i + 1}.</Text></Center>
+              <TextInput
+                defaultValue={prompt}
+                placeholder="Insert text here"
+                onChange={p => setMatch({p}, i)}
+                mb={0}
+              />
+              <TextInput
+                defaultValue={answer}
+                placeholder="Insert text here"
+                onChange={a => setMatch({a}, i)}
+                mb={0}
+              />
+              <Center><Button variant='ghost' onClick={() => removeMatch(i)}>
+                <DeleteIcon/>
+              </Button></Center>
+            </>
+          ))}
+        </SimpleGrid>
+        <Button variant='ghost' onClick={addMatch}>+ Add Match</Button>
       </VStack>
     </Modal>
   );

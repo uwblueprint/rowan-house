@@ -200,7 +200,10 @@ export const createContent = (blockID: string): ContentBlockState => {
           id: uuid(),
           content: {
             question: "",
-            matches: [],
+            matches: [{
+              prompt: "",
+              answer: "",
+            }],
           },
         };
     default:
