@@ -83,12 +83,18 @@ class AuthService implements IAuthService {
       Hello,
       <br><br>
       We have received a password reset request for your account.
-      Please click the following link to reset it.
+      Please click the following link to reset it. If you did not 
+      request to change your password, you can ignore this email 
+      and your password will not be changed.</strong>
       <strong>This link is only valid for 1 hour.</strong>
       <br><br>
       <a href=${resetLink}>Reset Password</a>`;
 
-      this.emailService.sendEmail(email, "Your Password Reset Link", emailBody);
+      await this.emailService.sendEmail(
+        email,
+        "Your Password Reset Link",
+        emailBody,
+      );
     } catch (error) {
       Logger.error(
         `Failed to generate password reset link for user with email ${email}`,
