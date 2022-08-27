@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 import {
@@ -29,6 +29,7 @@ import { ModuleProgressType, ModuleType } from "../../types/ModuleEditorTypes";
 import AuthContext from "../../contexts/AuthContext";
 
 const CourseOverview = (): React.ReactElement => {
+  const [disableCTAButton, setDisableCTAButton] = useState(false);
   const history = useHistory();
   const { courseID }: CourseOverviewParams = useParams();
   const { authenticatedUser } = useContext(AuthContext);
@@ -62,7 +63,7 @@ const CourseOverview = (): React.ReactElement => {
   };
 
   const onCTAClick = () => {
-    let moduleIndex;
+    let moduleIndex = null;
 
     if (
       !courseProgress?.courseProgress?.length ||
@@ -74,14 +75,14 @@ const CourseOverview = (): React.ReactElement => {
       //  Go to first In Progress moduleIndex
       moduleIndex = moduleProgress?.moduleProgress?.findIndex(
         (module: ModuleProgressType) =>
-          module?.startedAt !== null && module?.completedAt === null,
+          module.startedAt !== null && module.completedAt === null,
       );
 
       if (moduleIndex === -1) {
         //  Go to first Not Started moduleIndex (1st Case: Skip Case)
         moduleIndex = moduleProgress?.moduleProgress?.findIndex(
           (module: ModuleProgressType) =>
-            module?.startedAt === null && module?.completedAt === null,
+            module.startedAt === null && module.completedAt === null,
         );
 
         if (moduleIndex === -1) {
@@ -94,7 +95,12 @@ const CourseOverview = (): React.ReactElement => {
         }
       }
     }
-    history.push(`${COURSE_OVERVIEW_BASE_ROUTE}/${courseID}/${moduleIndex}`);
+
+    if(moduleIndex !== null){
+      history.push(`${COURSE_OVERVIEW_BASE_ROUTE}/${courseID}/${moduleIndex}`);
+    }else{
+      setDisableCTAButton(true);
+    }
   };
 
   const getLessonCount = () => {
@@ -184,7 +190,7 @@ const CourseOverview = (): React.ReactElement => {
             alignItems="center"
             padding="24px 24px 0px 24px"
           >
-            <Button width="100%" height="100%" onClick={onCTAClick}>
+            <Button width="100%" height="100%" onClick={onCTAClick} disabled={disableCTAButton}>
               {getButtonText()}
             </Button>
             {!authenticatedUser && (
