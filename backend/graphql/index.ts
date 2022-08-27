@@ -5,7 +5,6 @@ import { applyMiddleware } from "graphql-middleware";
 import { merge } from "lodash";
 
 import {
-  isAuthorizedByEmail,
   isAuthorizedByRole,
   isAuthorizedByUserId,
   idNotSameAsActiveUser,
@@ -115,7 +114,7 @@ const graphQLMiddlewares = {
     deleteUserById: authorizedByAdmin(),
     deleteUserByEmail: authorizedByAdmin(),
     logout: isAuthorizedByUserId("userId"),
-    resetPassword: isAuthorizedByEmail("email"),
+    resetPassword: publicRoute,
     createLesson: authorizedByAdmin(),
     updateLesson: authorizedByAdmin(),
     deleteLesson: authorizedByAdmin(),

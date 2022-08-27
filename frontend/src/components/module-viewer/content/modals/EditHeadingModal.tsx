@@ -1,57 +1,40 @@
-import { Select, FormControl, FormLabel, Input, Box } from "@chakra-ui/react";
-import React, { useContext, useState } from "react";
+import { Select, FormControl, FormLabel, Input } from "@chakra-ui/react";
+import React, { useState } from "react";
 import { HeadingBlockState } from "../../../../types/ContentBlockTypes";
 import { Modal } from "../../../common/Modal";
-import EditorContext from "../../../../contexts/ModuleEditorContext";
 import {
   EditContentModalProps,
   ValidHeadingSizes,
 } from "../../../../types/ModuleEditorTypes";
-import CustomHeading from "../../../common/CustomHeading";
+import CustomHeading from "../blocks/CustomHeading";
+import BlockPreview from "./BlockPreview";
 
 const EditHeadingModal = ({
   block,
-  index,
   isOpen,
   onClose,
+  onSave,
 }: EditContentModalProps<HeadingBlockState>): React.ReactElement => {
   const [text, setText] = useState(block.content.text);
   const [size, setSize] = useState(block.content.size);
   const [invalid, setInvalid] = useState(false);
-  const context = useContext(EditorContext);
-  if (!context) return <></>;
-  const { dispatch } = context;
 
-  const onSave = () => {
+  const onConfirm = () => {
     if (!(size && text)) {
       setInvalid(true);
       return;
     }
-    const newBlock = {
-      ...block,
-      content: {
-        ...block.content,
-        text,
-        size,
-      },
-    };
-
-    dispatch({
-      type: "update-block",
-      value: {
-        index,
-        block: newBlock,
-      },
+    onSave({
+      text,
+      size,
     });
-
-    onClose();
   };
 
   return (
     <Modal
       size="xl"
       header="Heading"
-      onConfirm={onSave}
+      onConfirm={onConfirm}
       onCancel={onClose}
       isOpen={isOpen}
     >
@@ -106,12 +89,9 @@ const EditHeadingModal = ({
           }}
         />
       </FormControl>
-      <FormLabel variant="caption-md" marginTop="2vh" marginBottom="1vh">
-        Preview
-      </FormLabel>
-      <Box borderWidth="1px" borderRadius="5px" align="center" padding="3vh 0">
+      <BlockPreview>
         <CustomHeading size={size} text={text} />
-      </Box>
+      </BlockPreview>
     </Modal>
   );
 };

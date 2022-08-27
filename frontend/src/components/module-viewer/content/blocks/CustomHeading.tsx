@@ -1,11 +1,7 @@
 import React from "react";
 import { Heading } from "@chakra-ui/react";
-import { ValidHeadingSizes } from "../../types/ModuleEditorTypes";
-
-interface HeadingState {
-  size: string;
-  text: string;
-}
+import { ValidHeadingSizes } from "../../../../types/ModuleEditorTypes";
+import { HeadingBlockState } from "../../../../types/ContentBlockTypes";
 
 const sizeToHeadingType = (size: string) => {
   switch (size) {
@@ -22,7 +18,10 @@ const sizeToHeadingType = (size: string) => {
   }
 };
 
-const CustomHeading = ({ size, text }: HeadingState): React.ReactElement => {
+const CustomHeading = ({
+  size,
+  text,
+}: HeadingBlockState["content"]): React.ReactElement => {
   return (
     <Heading as={sizeToHeadingType(size)} fontSize={size}>
       {text}

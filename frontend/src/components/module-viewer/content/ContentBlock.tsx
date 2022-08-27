@@ -1,51 +1,30 @@
-import { Box, Divider, Flex, useDisclosure, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  Divider,
+  Flex,
+  useDisclosure,
+  VStack,
+} from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 
+import EditorContext from "../../../contexts/ModuleEditorContext";
+import RenderComponents from "./helpers/ContentBlockTable";
 import { ContentBlockState } from "../../../types/ContentBlockTypes";
-import {
-  TextBlock,
-  ImageBlock,
-  VideoBlock,
-  HeadingBlock,
-} from "../../common/content";
+
+import ColumnBlock from "./blocks/column/ColumnBlock";
 import DeleteModal from "../../common/DeleteModal";
 import EditContentOptionsMenu from "../EditContentOptionsMenu";
-
 import { ReactComponent as DragHandleIconSvg } from "../../../assets/DragHandle.svg";
-import {
-  EditTextModal,
-  EditImageModal,
-  EditVideoModal,
-  EditHeadingModal,
-} from "./modals";
-import createContentBlockRenderers, {
-  EmptyConfigEntry as Empty,
-} from "../../common/content/ContentBlockRenderer";
+import { EmptyConfigModal } from "./helpers/ContentBlockTableUtils";
 
-import EditorContext from "../../../contexts/ModuleEditorContext";
-
-const [CONTENT_BLOCKS, EDIT_MODALS] = createContentBlockRenderers({
-  column: Empty,
-  heading: {
-    renderBlock: HeadingBlock,
-    renderEditModal: EditHeadingModal,
+// Create content block table, but add column since it defaults to Empty
+const [CONTENT_BLOCKS, EDIT_MODALS] = RenderComponents({
+  column: {
+    renderBlock: ColumnBlock,
+    renderEditModal: EmptyConfigModal,
   },
-  text: {
-    renderBlock: TextBlock,
-    renderEditModal: EditTextModal,
-  },
-  link: Empty,
-  button: Empty,
-  image: {
-    renderBlock: ImageBlock,
-    renderEditModal: EditImageModal,
-  },
-  video: {
-    renderBlock: VideoBlock,
-    renderEditModal: EditVideoModal,
-  },
-  audio: Empty,
 });
 
 const ContentBlock = ({
@@ -69,6 +48,7 @@ const ContentBlock = ({
     onClose: onDeleteModalClose,
   } = useDisclosure();
   const context = useContext(EditorContext);
+  const isColumn = block.type.clientType === "column";
 
   if (!context) return <></>;
   const { dispatch } = context;
@@ -78,65 +58,75 @@ const ContentBlock = ({
       type: "delete-block",
       value: index,
     });
-
     onDeleteModalClose();
   };
 
-  return (
-    <Draggable
-      key={block.id}
-      draggableId={block.id}
-      index={index}
-      isDragDisabled={!editable}
-    >
-      {(provided) => (
-        <VStack
-          width="100%"
-          padding="0.5rem 1rem"
-          spacing={2}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          style={provided.draggableProps.style}
-        >
-          {editable ? (
-            <>
-              <Divider opacity={isHovered ? 1 : 0} />
-              <Flex width="100%" justify="space-between">
-                <Box opacity={isHovered ? 1 : 0} {...provided.dragHandleProps}>
-                  <DragHandleIconSvg />
-                </Box>
-                {CONTENT_BLOCKS.render({ block })}
-                <EditContentOptionsMenu
-                  isVisible={isHovered}
-                  onEditClick={onEditModalOpen}
-                  onCopyClick={() => {}}
-                  onDeleteClick={onDeleteModalOpen}
-                />
-              </Flex>
-              <Divider opacity={isHovered ? 1 : 0} />
-              {EDIT_MODALS.render({
-                isOpen: isEditModalOpen,
-                onClose: onEditModalClose,
-                block,
-                index,
-              })}
-              <DeleteModal
-                name="Content Block"
-                isOpen={isDeleteModalOpen}
-                onConfirm={deleteContentBlock}
-                onCancel={onDeleteModalClose}
+  const editContentBlock = <T extends ContentBlockState>(
+    content: T["content"],
+  ) => {
+    dispatch({
+      type: "update-block",
+      value: { index, content },
+    });
+    onEditModalClose();
+  };
+
+  if (editable) {
+    return (
+      <Draggable
+        key={block.id}
+        draggableId={`${block.type.id} ${block.id}`}
+        index={index}
+      >
+        {(provided) => (
+          <VStack
+            width="100%"
+            padding="0.5rem 1rem"
+            spacing={2}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+            style={provided.draggableProps.style}
+          >
+            <Divider opacity={isHovered ? 1 : 0} />
+            <Flex width="100%" justify="space-between">
+              <Box opacity={isHovered ? 1 : 0} {...provided.dragHandleProps}>
+                <DragHandleIconSvg />
+              </Box>
+              <Center w="100%" padding="2rem">
+                {CONTENT_BLOCKS.render({ block, index, editable })}
+              </Center>
+              <EditContentOptionsMenu
+                isVisible={isHovered}
+                onEditClick={isColumn ? undefined : onEditModalOpen}
+                onCopyClick={() => {}}
+                onDeleteClick={onDeleteModalOpen}
               />
-            </>
-          ) : (
-            <Flex width="100%" justify="center">
-              {CONTENT_BLOCKS.render({ block })}
             </Flex>
-          )}
-        </VStack>
-      )}
-    </Draggable>
+            <Divider opacity={isHovered ? 1 : 0} />
+            {EDIT_MODALS.render({
+              isOpen: isEditModalOpen,
+              onClose: onEditModalClose,
+              block,
+              onSave: editContentBlock,
+            })}
+            <DeleteModal
+              name="Content Block"
+              isOpen={isDeleteModalOpen}
+              onConfirm={deleteContentBlock}
+              onCancel={onDeleteModalClose}
+            />
+          </VStack>
+        )}
+      </Draggable>
+    );
+  }
+
+  return (
+    <Center w="100%" padding={isColumn ? "0" : "2rem"}>
+      {CONTENT_BLOCKS.render({ block, index, editable })}
+    </Center>
   );
 };
 
