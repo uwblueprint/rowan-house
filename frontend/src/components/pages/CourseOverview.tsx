@@ -96,9 +96,9 @@ const CourseOverview = (): React.ReactElement => {
       }
     }
 
-    if(moduleIndex !== null){
+    if (moduleIndex !== null) {
       history.push(`${COURSE_OVERVIEW_BASE_ROUTE}/${courseID}/${moduleIndex}`);
-    }else{
+    } else {
       setDisableCTAButton(true);
     }
   };
@@ -190,7 +190,12 @@ const CourseOverview = (): React.ReactElement => {
             alignItems="center"
             padding="24px 24px 0px 24px"
           >
-            <Button width="100%" height="100%" onClick={onCTAClick} disabled={disableCTAButton}>
+            <Button
+              width="100%"
+              height="100%"
+              onClick={onCTAClick}
+              disabled={disableCTAButton}
+            >
               {getButtonText()}
             </Button>
             {!authenticatedUser && (
