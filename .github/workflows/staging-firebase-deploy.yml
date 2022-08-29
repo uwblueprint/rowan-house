@@ -10,7 +10,6 @@ on:
 
 jobs:
   build_and_deploy:
-    environment: staging
     uses: ./.github/workflows/common-firebase-deploy.yml
     with:
       channelId: live
@@ -20,3 +19,4 @@ jobs:
       repoToken: "${{ secrets.GITHUB_TOKEN }}"
       firebaseServiceAccount: "${{ secrets.DEV_FIREBASE_SVC_ACCOUNT_JSON }}"
       projectId: "${{ secrets.DEV_FIREBASE_PROJECT_ID }}"
+    environment: staging
