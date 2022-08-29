@@ -1,0 +1,15 @@
+name: Deploy frontend to Firebase Hosting
+
+name: Deploy frontend & backend to production
+on: workflow_dispatch
+jobs:
+  build_and_deploy_frontend:
+    uses: ./.github/workflows/common/firebase-deploy.yml
+    with:
+      channelId: live
+    secrets:
+      backendUrl: "${{ secrets.PROD_BACKEND_URL }}"
+      oauthClientId: "${{ secrets.PROD_OAUTH_CLIENT_ID }}"
+      repoToken: "${{ secrets.GITHUB_TOKEN }}"
+      firebaseServiceAccount: "${{ secrets.PROD_FIREBASE_SVC_ACCOUNT_ROWAN_HOUSE_SOCIETY }}"
+      projectId: "${{ secrets.PROD_FIREBASE_PROJECT_ID }}"

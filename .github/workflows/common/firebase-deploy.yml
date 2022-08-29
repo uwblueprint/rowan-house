@@ -1,0 +1,39 @@
+name: Deploy frontend to Firebase Hosting
+
+on:
+  workflow_call:
+    inputs:
+      channelId:
+        required: false
+        default: ""
+        type: string
+    secrets:
+      backendUrl:
+        required: true
+      oauthClientId:
+        required: true
+      repoToken:
+        required: true
+      firebaseServiceAccount:
+        required: true
+      projectId:
+        required: true
+        
+
+defaults:
+  run:
+    working-directory: frontend
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: echo "REACT_APP_BACKEND_URL=${{ secrets.backendUrl }}" > .env
+      - run: echo "REACT_APP_OAUTH_CLIENT_ID=${{ secrets.oauthClientId }}" >> .env
+      - run: rm -rf node_modules && yarn install --frozen-lockfile && yarn build
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          channelId: "${{ inputs.channelId }}"
+          entryPoint: ./frontend
+        secrets: inherit
