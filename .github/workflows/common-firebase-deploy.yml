@@ -40,5 +40,5 @@ jobs:
           channelId: "${{ inputs.channelId }}"
           entryPoint: ./frontend
           repoToken: "${{ secrets.repoToken }}"
-          firebaseServiceAccount: "${{ secrets.firebaseServiceAccount }}"
+          firebaseServiceAccount: "${{ secrets.DEV_FIREBASE_SVC_ACCOUNT_JSON }}"
           projectId: "${{ secrets.projectId }}"
