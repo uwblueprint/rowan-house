@@ -12,6 +12,7 @@ jobs:
     environment: staging
     steps:
       - uses: ./.github/actions/firebase-deploy
+        working-directory: frontend
         with:
           backendUrl: "${{ secrets.DEV_BACKEND_URL }}"
           oauthClientId: "${{ secrets.DEV_OAUTH_CLIENT_ID }}"

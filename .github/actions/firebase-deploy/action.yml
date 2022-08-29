@@ -16,14 +16,9 @@ inputs:
   projectId:
     required: true
 
-defaults:
-  run:
-    working-directory: frontend
-
 runs:
     using: composite
     steps:
-      - uses: actions/checkout@v2
       - run: echo "REACT_APP_BACKEND_URL=${{ inputs.backendUrl }}" > .env
         shell: bash
       - run: echo "REACT_APP_OAUTH_CLIENT_ID=${{ inputs.oauthClientId }}" >> .env
