@@ -15,7 +15,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/firebase-deploy
-        working-directory: frontend
         with:
           channelId: live
           backendUrl: "${{ secrets.DEV_BACKEND_URL }}"
