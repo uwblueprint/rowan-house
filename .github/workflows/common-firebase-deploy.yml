@@ -7,6 +7,9 @@ on:
         required: false
         default: ""
         type: string
+      environment:
+        required: true
+        type: string
     secrets:
       backendUrl:
         required: true
@@ -26,6 +29,7 @@ defaults:
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
+    environment: "${{ inputs.environment }}"
     steps:
       - uses: actions/checkout@v2
       - run: echo "REACT_APP_BACKEND_URL=${{ secrets.backendUrl }}" > .env

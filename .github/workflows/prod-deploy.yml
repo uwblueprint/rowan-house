@@ -2,10 +2,10 @@ name: Deploy frontend and backend to production
 on: workflow_dispatch
 jobs:
   build_and_deploy_frontend:
-    environment: prod
     uses: ./.github/workflows/common-firebase-deploy.yml
     with:
       channelId: live
+      environment: prod
     secrets:
       backendUrl: "${{ secrets.PROD_BACKEND_URL }}"
       oauthClientId: "${{ secrets.PROD_OAUTH_CLIENT_ID }}"
