@@ -7,14 +7,19 @@ inputs:
     type: string
   backendUrl:
     required: true
+    type: string
   oauthClientId:
     required: true
+    type: string
   repoToken:
     required: true
+    type: string
   firebaseServiceAccount:
     required: true
+    type: string
   projectId:
     required: true
+    type: string
 
 runs:
     using: composite

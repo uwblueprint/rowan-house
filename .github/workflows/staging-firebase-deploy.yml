@@ -20,5 +20,5 @@ jobs:
           backendUrl: "${{ secrets.DEV_BACKEND_URL }}"
           oauthClientId: "${{ secrets.DEV_OAUTH_CLIENT_ID }}"
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          firebaseServiceAccount: "${{ secrets.DEV_FIREBASE_SVC_ACCOUNT_JSON }}"
+          firebaseServiceAccount: "x${{ secrets.DEV_FIREBASE_SVC_ACCOUNT_JSON }}"
           projectId: "${{ secrets.DEV_FIREBASE_PROJECT_ID }}"
