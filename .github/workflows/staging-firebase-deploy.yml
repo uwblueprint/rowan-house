@@ -11,7 +11,7 @@ on:
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
-    environment: staging
+    environment: rhs-staging
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/firebase-deploy
@@ -20,5 +20,5 @@ jobs:
           backendUrl: "${{ secrets.DEV_BACKEND_URL }}"
           oauthClientId: "${{ secrets.DEV_OAUTH_CLIENT_ID }}"
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          firebaseServiceAccount: "x${{ secrets.DEV_FIREBASE_SVC_ACCOUNT_JSON }}"
+          firebaseServiceAccount: "${{ secrets.DEV_FIREBASE_SVC_ACCOUNT_JSON }}"
           projectId: "${{ secrets.DEV_FIREBASE_PROJECT_ID }}"

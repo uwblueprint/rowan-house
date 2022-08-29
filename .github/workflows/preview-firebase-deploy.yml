@@ -9,7 +9,7 @@ jobs:
   build_and_preview:
     if: "${{ github.event.pull_request.head.repo.full_name == github.repository && github.base_ref == 'main' }}"
     runs-on: ubuntu-latest
-    environment: staging
+    environment: rhs-staging
     steps:
       - uses: ./.github/actions/firebase-deploy
         with:
