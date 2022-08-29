@@ -1,4 +1,4 @@
-name: "Staging: Deploy frontend to Firebase Hosting"
+name: "Staging: Deploy frontend"
 
 on:
   workflow_dispatch:
