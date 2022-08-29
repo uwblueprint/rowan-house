@@ -10,7 +10,7 @@ on:
 
 jobs:
   build_and_deploy:
-    uses: ./.github/workflows/common/firebase-deploy.yml
+    uses: ./.github/workflows/common-firebase-deploy.yml
     with:
       channelId: live
     secrets:
