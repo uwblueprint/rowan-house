@@ -1,4 +1,4 @@
-name: Deploy frontend to Firebase Hosting preview
+name: "Preview: Deploy frontend to Firebase Hosting"
 
 on:
   pull_request:

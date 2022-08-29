@@ -1,4 +1,4 @@
-name: Deploy frontend to Firebase Hosting
+name: "Staging: Deploy frontend to Firebase Hosting"
 
 on:
   workflow_dispatch:
@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: staging
     steps:
+      - uses: actions/checkout@v2
       - uses: ./.github/actions/common/firebase-deploy
         with:
           channelId: live
