@@ -35,4 +35,6 @@ jobs:
         with:
           channelId: "${{ inputs.channelId }}"
           entryPoint: ./frontend
-        secrets: inherit
+          repoToken: "${{ secrets.repoToken }}"
+          firebaseServiceAccount: "${{ secrets.firebaseServiceAccount }}"
+          projectId: "${{ secrets.projectId }}"
