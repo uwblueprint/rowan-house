@@ -23,9 +23,6 @@ inputs:
     required: true
   mailerUser:
     required: true
-  mailerSender:
-    required: false
-    default: ""
   mailerId:
     required: true
   mailerSecret:
@@ -63,7 +60,6 @@ runs:
           config FIREBASE_SVC_ACCOUNT_PRIVATE_KEY "${{ inputs.firebasePrivateKey }}"
           config FIREBASE_SVC_ACCOUNT_CLIENT_EMAIL "${{ inputs.firebaseEmail }}"
           config MAILER_USER "${{ inputs.mailerUser }}"
-          config MAILER_SENDER "${{ inputs.mailerSender }}"
           config MAILER_CLIENT_ID "${{ inputs.mailerId }}"
           config MAILER_CLIENT_SECRET "${{ inputs.mailerSecret }}"
           config MAILER_REFRESH_TOKEN "${{ inputs.mailerRefreshToken }}"
