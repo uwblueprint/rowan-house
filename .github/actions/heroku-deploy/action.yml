@@ -45,7 +45,7 @@ runs:
           EOF
         shell: bash
       - name: Add Heroku git remote
-        run: heroku git:remote --app $INPUT_APP_NAME
+        run: heroku git:remote --app "${{ inputs.appName }}"
         shell: bash
       - name: Set Heroku config vars
         run: |
