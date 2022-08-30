@@ -70,5 +70,7 @@ runs:
           config MAILER_CLIENT_SECRET MAILER_SECRET
           config MAILER_REFRESH_TOKEN
           heroku config:set PREVIEW_DEPLOY=true -a $INPUT_APP_NAME
+        shell: bash
       - name: Push to Heroku
         run: git subtree push --prefix backend heroku main
+        shell: bash
