@@ -8,10 +8,16 @@ import { mongo } from "./models";
 import schema from "./graphql";
 
 const CORS_ALLOW_LIST = [
+  // Local development
   "http://localhost:3000",
+  // Preview URLs
+  /^https:\/\/rowan-house-society--pr.*\.web\.app$/,
+  // Staging
   "https://rowan-house-society.firebaseapp.com",
   "https://rowan-house-society.web.app",
-  /^https:\/\/rowan-house-society--pr.*\.web\.app$/,
+  // Prod
+  "https://rhs-course-platform.web.app",
+  "https://courses.rowanhouse.ca",
 ];
 
 const CORS_OPTIONS: cors.CorsOptions = {
