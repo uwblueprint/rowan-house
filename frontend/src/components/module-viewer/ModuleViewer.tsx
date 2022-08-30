@@ -42,6 +42,7 @@ import {
 } from "../../APIClients/mutations/ProgressMutations";
 import AuthContext from "../../contexts/AuthContext";
 import { ColumnBlockInvalidChildren } from "../../types/ContentBlockTypes";
+import { GET_LESSON_PROGRESS } from "../../APIClients/queries/ProgressQueries";
 
 // Copy drag implementation based on https://github.com/atlassian/react-beautiful-dnd/issues/216#issuecomment-423708497
 const onDragEnd = (
@@ -242,8 +243,6 @@ const ModuleViewer = ({
                   <LessonViewer
                     editable={editable}
                     onLessonCompleted={(lessonId) => {
-                      // TODO save progress on backend
-
                       const { lessons } = state.course.modules[moduleIndex];
                       const lessonIndex = lessons.indexOf(lessonId);
                       if (lessonIndex === lessons.length - 1) {

@@ -40,43 +40,56 @@ const SideBarModuleOverview = ({
   const { courseID, moduleIndex }: ModuleEditorParams = useParams();
   const moduleID = parseInt(moduleIndex, 10);
   const [selectedLessonIndex, setSelectedLessonIndex] = useState(0);
-  const [progressData, setProgressData] = useState<Array<string>>([]);
-
-  const [getProgressData, { data: progressResponse }] = useLazyQuery(
-    GET_LESSON_PROGRESS,
-  );
+  const [progressData, setProgressData] = useState<Set<string>>(new Set());
+  const [getProgressData] = useLazyQuery(GET_LESSON_PROGRESS);
 
   useEffect(() => {
     // useEffect cannot be async, so declare sync func inside
     const fetchLessons = async () => {
       const lessons = context?.state.lessons;
       if (lessons) {
-        await getProgressData({
+        const res = await getProgressData({
           variables: {
             userId: authContext?.authenticatedUser?.id,
             lessonIds: Object.keys(lessons),
           },
         });
-        if (progressResponse) {
+        const progresses = res?.data.lessonProgress;
+        if (res.data) {
           setProgressData(
-            progressResponse.map(
-              (lesson: LessonProgressResponse) => lesson.lessonId,
+            new Set(
+              progresses.map(
+                (lesson: LessonProgressResponse) => lesson.lessonId,
+              ),
             ),
           );
+          if (context) {
+            // take min in case all lessons have been completed
+            const module = context.state.course.modules[moduleID];
+            const focusId =
+              module.lessons[
+                Math.min(module.lessons.length - 1, progresses.length)
+              ];
+            context.dispatch({
+              type: "set-focus",
+              value: focusId,
+            });
+          }
         }
       }
     };
     fetchLessons();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   if (!context) return <></>;
   const { state, dispatch } = context;
 
   const { lessons, course, focusedLesson } = state;
   const module = course.modules[moduleID];
-
-  const orderedLessons = module.lessons.map((id) => lessons[id]);
   const setFocus = (index: number) =>
     dispatch({ type: "set-focus", value: module.lessons[index] });
+
+  const orderedLessons = module.lessons.map((id) => lessons[id]);
 
   const resetState = () => {
     setTitle("");
@@ -136,9 +149,10 @@ const SideBarModuleOverview = ({
         <LessonItem
           editable={editable}
           text={lesson.title}
-          completed={progressData && progressData.includes(lesson.id || "")}
+          completed={progressData.has(module.lessons[index])}
+          isCurrent={!!focusedLesson && state.lessons[focusedLesson] === lesson}
           isFocused={!!focusedLesson && state.lessons[focusedLesson] === lesson}
-          key={lesson.id}
+          key={module.lessons[index]}
           setFocus={() => {
             onLessonSelected();
             setFocus(index);

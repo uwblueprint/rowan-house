@@ -1,11 +1,21 @@
 import React, { useState, useContext } from "react";
-import { Button, IconButton, Flex, useDisclosure } from "@chakra-ui/react";
+import {
+  Button,
+  IconButton,
+  Flex,
+  useDisclosure,
+  Tooltip,
+  CircularProgress,
+  Circle,
+  SkeletonCircle,
+} from "@chakra-ui/react";
 import {
   EditIcon,
   DeleteIcon,
   LockIcon,
   CheckCircleIcon,
 } from "@chakra-ui/icons";
+import { ReactComponent as UncheckedCheckbox } from "../../assets/uncheckedcheckbox.svg";
 import { ReactComponent as DragHandleIconSvg } from "../../assets/DragHandle.svg";
 import { TextInput } from "../common/TextInput";
 import { Modal } from "../common/Modal";
@@ -15,6 +25,7 @@ interface OptionsProps {
   editable: boolean;
   text: string;
   isFocused: boolean;
+  isCurrent: boolean;
   completed: boolean;
   setFocus: () => void;
   onDeleteClick: () => void;
@@ -24,6 +35,7 @@ const LessonItem = ({
   editable,
   text = "",
   isFocused,
+  isCurrent,
   setFocus,
   onDeleteClick,
   completed,
@@ -62,9 +74,14 @@ const LessonItem = ({
   };
   const showEditButtons = isHovered && editable;
 
+  const locked = !editable && !isCurrent && !completed;
+
   const getIcon = (): React.ReactElement => {
     if (editable) {
       return <DragHandleIconSvg />;
+    }
+    if (isFocused) {
+      return <UncheckedCheckbox />;
     }
     if (completed) {
       return <CheckCircleIcon />;
@@ -73,7 +90,13 @@ const LessonItem = ({
   };
 
   return (
-    <>
+    <Tooltip
+      hasArrow
+      label={
+        locked ? "Complete the previous lesson to unlock the next lesson" : ""
+      }
+      placement="right-end"
+    >
       <Button
         as="div"
         role="button"
@@ -82,6 +105,7 @@ const LessonItem = ({
         justifyContent="center"
         flexDirection="column"
         tabIndex={0}
+        disabled={locked}
         onClick={setFocus}
         variant="unstyled"
         borderLeftColor={isFocused ? "brand.royal" : undefined}
@@ -150,7 +174,7 @@ const LessonItem = ({
           </Flex>
         </Flex>
       </Button>
-    </>
+    </Tooltip>
   );
 };
 

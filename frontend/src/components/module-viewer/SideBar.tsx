@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
 import {
   Box,
@@ -11,7 +11,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { ChevronLeftIcon, EditIcon } from "@chakra-ui/icons";
-import { useMutation, useQuery, useLazyQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { ReactComponent as SaveIcon } from "../../assets/Save.svg";
 import {
   COURSE_OVERVIEW_BASE_ROUTE,
@@ -21,10 +21,8 @@ import EditorContext from "../../contexts/ModuleEditorContext";
 import {
   EditorChangeStatuses,
   EditorContextType,
-  LessonType,
   ModuleEditorParams,
 } from "../../types/ModuleEditorTypes";
-import { LessonProgressResponse } from "../../APIClients/types/ProgressClientTypes";
 import {
   CREATE_LESSON,
   UPDATE_LESSON,
@@ -47,8 +45,6 @@ import EditorTabs from "./EditorTabs";
 import ModuleOverview from "./SideBarModuleOverview";
 import RouterLink from "../common/RouterLink";
 import { GET_COURSE } from "../../APIClients/queries/CourseQueries";
-import { GET_LESSON_PROGRESS } from "../../APIClients/queries/ProgressQueries";
-import AuthContext, { AuthContextType } from "../../contexts/AuthContext";
 
 const Sidebar = ({
   editable,
