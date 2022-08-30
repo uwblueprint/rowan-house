@@ -62,9 +62,12 @@ const VerifyEmailContent = ({
       return <Spinner />;
     case VerifyEmailState.sent:
       return (
-        <Text variant="display-md" paddingBottom="1vw">
-          Verification email has been sent
-        </Text>
+        <VStack>
+          <Text variant="display-md">Verification email has been sent</Text>
+          <Text variant="display-sm">
+            Look out for an email from coursesrowanhouse@gmail.com
+          </Text>
+        </VStack>
       );
     case VerifyEmailState.error:
       return (
