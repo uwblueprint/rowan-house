@@ -6,6 +6,8 @@ jobs:
     environment: rhs-prod
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - uses: ./.github/actions/firebase-deploy
         with:
           channelId: live

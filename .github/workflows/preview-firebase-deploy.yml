@@ -11,6 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: rhs-staging
     steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - uses: ./.github/actions/firebase-deploy
         with:
           backendUrl: "${{ secrets.PREVIEW_BACKEND_URL }}"
