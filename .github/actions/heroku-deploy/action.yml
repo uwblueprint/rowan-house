@@ -50,7 +50,7 @@ runs:
       - name: Set Heroku config vars
         run: |
           config() {
-            heroku config:set "$1" "$2" -a "${{ inputs.appName }}"
+            heroku config:set "$1"="$2" -a "${{ inputs.appName }}"
           }
           config MG_DATABASE_URL "${{ inputs.databaseUrl }}"
           config FIREBASE_WEB_API_KEY "${{ inputs.firebaseApiKey }}"
