@@ -1,6 +1,11 @@
 import React, { useState, useContext } from "react";
 import { Button, IconButton, Flex, useDisclosure } from "@chakra-ui/react";
-import { EditIcon, DeleteIcon, LockIcon } from "@chakra-ui/icons";
+import {
+  EditIcon,
+  DeleteIcon,
+  LockIcon,
+  CheckCircleIcon,
+} from "@chakra-ui/icons";
 import { ReactComponent as DragHandleIconSvg } from "../../assets/DragHandle.svg";
 import { TextInput } from "../common/TextInput";
 import { Modal } from "../common/Modal";
@@ -10,6 +15,7 @@ interface OptionsProps {
   editable: boolean;
   text: string;
   isFocused: boolean;
+  completed: boolean;
   setFocus: () => void;
   onDeleteClick: () => void;
 }
@@ -20,6 +26,7 @@ const LessonItem = ({
   isFocused,
   setFocus,
   onDeleteClick,
+  completed,
 }: OptionsProps): React.ReactElement => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -55,7 +62,15 @@ const LessonItem = ({
   };
   const showEditButtons = isHovered && editable;
 
-  const progressIcon = <LockIcon />;
+  const getIcon = (): React.ReactElement => {
+    if (editable) {
+      return <DragHandleIconSvg />;
+    }
+    if (completed) {
+      return <CheckCircleIcon />;
+    }
+    return <LockIcon />;
+  };
 
   return (
     <>
@@ -87,7 +102,7 @@ const LessonItem = ({
               aria-label="Drag Lesson"
               variant="unstyled"
               size="xs"
-              icon={editable ? <DragHandleIconSvg /> : progressIcon}
+              icon={getIcon()}
             />
             <p style={{ marginLeft: "10px" }}>{text}</p>
           </Flex>

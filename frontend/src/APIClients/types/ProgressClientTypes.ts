@@ -9,5 +9,6 @@ export type ModuleProgressResponse = {
 };
 
 export type LessonProgressResponse = {
+  lessonId: string;
   completedAt?: Date;
 };

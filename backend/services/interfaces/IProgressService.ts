@@ -1,3 +1,4 @@
+import {Types} from "mongoose";
 export interface CourseProgressResponseDTO {
   startedAt?: Date;
   completedAt?: Date;
@@ -9,6 +10,7 @@ export interface ModuleProgressResponseDTO {
 }
 
 export interface LessonProgressResponseDTO {
+  lessonId: Types.ObjectId;
   completedAt?: Date;
 }
 

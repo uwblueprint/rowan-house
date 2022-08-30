@@ -21,6 +21,7 @@ import EditorContext from "../../contexts/ModuleEditorContext";
 import {
   EditorChangeStatuses,
   EditorContextType,
+  LessonType,
   ModuleEditorParams,
 } from "../../types/ModuleEditorTypes";
 import { LessonProgressResponse } from "../../APIClients/types/ProgressClientTypes";
@@ -65,9 +66,6 @@ const Sidebar = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const context: EditorContextType = useContext(EditorContext);
-
-  const authContext: AuthContextType = useContext(AuthContext);
-
   const { data: courseData, error } = useQuery<{ course: CourseResponse }>(
     GET_COURSE,
     { variables: { id: courseID } },
@@ -92,18 +90,7 @@ const Sidebar = ({
   );
   const [deleteLesson] = useMutation(DELETE_LESSON);
 
-  const [getProgressData, progressData] = useLazyQuery(GET_LESSON_PROGRESS);
-
-  useEffect(() => {
-    getProgressData({
-      variables: {
-        userId: authContext?.authenticatedUser?.id,
-        lessonIds: context?.state.lessons || [],
-      },
-    });
-  }, []);
-  
-  if (!context || !authContext) return <></>;
+  if (!context) return <></>;
   const { state, dispatch } = context;
 
   const formatCourseRequest = (

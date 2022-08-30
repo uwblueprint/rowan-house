@@ -80,6 +80,7 @@ class ProgressService implements IProgressService {
         user: userId,
         lesson: { $in: lessonIds },
       });
+      console.log(lessonProgress);
     } catch (error: unknown) {
       Logger.error(
         `Failed to get lesson progress. Reason = ${getErrorMessage(error)}`,
