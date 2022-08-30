@@ -1,3 +1,6 @@
+import { BaseEditor } from "slate";
+import { ReactEditor } from "slate-react";
+
 import {
   ColumnBlockParam,
   ContentBlockState,
@@ -150,3 +153,34 @@ export interface EditContentModalProps<
   onClose: () => void;
   onSave: <T extends BlockType>(newBlock: T["content"]) => void;
 }
+
+export type FormatEnum = "bold" | "italic" | "underline";
+
+export type BlockFormatEnum = "left" | "center" | "right" | "justify";
+
+export type TextEditor = BaseEditor & ReactEditor;
+
+export type CustomText = {
+  text: string;
+  bold?: true;
+  italic?: true;
+  underline?: true;
+};
+
+export type CustomElement = {
+  type: "paragraph";
+  align: BlockFormatEnum;
+  children: CustomText[];
+};
+
+export type LeafPropTypes = {
+  attributes: CustomText;
+  children: React.ReactNode;
+  leaf: CustomText;
+};
+
+export type ElementPropTypes = {
+  attributes: CustomText;
+  children: React.ReactNode;
+  element: CustomElement;
+};
