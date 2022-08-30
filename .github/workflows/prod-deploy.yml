@@ -1,4 +1,4 @@
-name: Deploy frontend and backend to production
+name: Production: Deploy all
 on: workflow_dispatch
 jobs:
   build_and_deploy_frontend:
