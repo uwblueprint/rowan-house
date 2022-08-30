@@ -13,10 +13,11 @@ class EmailService implements IEmailService {
 
   constructor(nodemailerConfig: NodemailerConfig, displayName?: string) {
     this.transporter = nodemailer.createTransport(nodemailerConfig);
+    const sender = process.env.MAILER_SENDER || nodemailerConfig.auth.user;
     if (displayName) {
-      this.sender = `${displayName} <${nodemailerConfig.auth.user}>`;
+      this.sender = `${displayName} <${sender}>`;
     } else {
-      this.sender = nodemailerConfig.auth.user;
+      this.sender = sender;
     }
   }
 

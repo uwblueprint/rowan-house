@@ -36,6 +36,7 @@ jobs:
           firebasePrivateKey: "${{ secrets.PROD_FIREBASE_SVC_ACCOUNT_PRIVATE_KEY }}"
           firebaseEmail: "${{ secrets.PROD_FIREBASE_SVC_ACCOUNT_CLIENT_EMAIL }}"
           mailerUser: "${{ secrets.PROD_MAILER_USER }}"
+          mailerSender: "courses@rowanhouse.ca"
           mailerId: "${{ secrets.PROD_MAILER_CLIENT_ID }}"
           mailerSecret: "${{ secrets.PROD_MAILER_CLIENT_SECRET }}"
           mailerRefreshToken: "${{ secrets.PROD_MAILER_REFRESH_TOKEN }}"
