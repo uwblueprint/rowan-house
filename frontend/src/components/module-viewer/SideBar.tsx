@@ -87,8 +87,8 @@ const Sidebar = ({
   );
   const [deleteLesson] = useMutation(DELETE_LESSON);
 
-  if (!context) return <></>;
   const { state, dispatch } = context;
+  if (!state) return <></>;
 
   const formatCourseRequest = (
     newModule?: ModuleRequest,

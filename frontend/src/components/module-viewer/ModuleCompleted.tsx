@@ -11,9 +11,9 @@ const ModuleCompleted = (): React.ReactElement => {
   const { moduleIndex: moduleIndexString } = useParams<ModuleEditorParams>();
   const moduleIndex = Number(moduleIndexString);
   const context = useContext(EditorContext);
-  if (!context) return <></>;
-
   const { state } = context;
+  if (!state) return <></>;
+
   const { course } = state;
   const module = course.modules[moduleIndex];
 

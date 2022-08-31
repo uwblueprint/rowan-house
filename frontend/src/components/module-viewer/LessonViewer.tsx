@@ -14,9 +14,9 @@ const LessonViewer = ({
   onLessonCompleted: (lessonId: string) => void;
 }): React.ReactElement => {
   const context = useContext(EditorContext);
-  if (!context) return <></>;
-
   const { state } = context;
+  if (!state) return <></>;
+
   const { focusedLesson } = state;
 
   if (focusedLesson) {

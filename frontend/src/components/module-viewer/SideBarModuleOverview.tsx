@@ -36,8 +36,8 @@ const SideBarModuleOverview = ({
   const moduleID = parseInt(moduleIndex, 10);
   const [selectedLessonIndex, setSelectedLessonIndex] = useState(0);
 
-  if (!context) return <></>;
   const { state, dispatch } = context;
+  if (!state) return <></>;
 
   const { lessons, course, focusedLesson } = state;
   const module = course.modules[moduleID];
