@@ -5,9 +5,6 @@ import {
   Flex,
   useDisclosure,
   Tooltip,
-  CircularProgress,
-  Circle,
-  SkeletonCircle,
 } from "@chakra-ui/react";
 import {
   EditIcon,
@@ -80,7 +77,7 @@ const LessonItem = ({
     if (editable) {
       return <DragHandleIconSvg />;
     }
-    if (isFocused) {
+    if (isCurrent) {
       return <UncheckedCheckbox />;
     }
     if (completed) {
@@ -106,7 +103,12 @@ const LessonItem = ({
         flexDirection="column"
         tabIndex={0}
         disabled={locked}
-        onClick={setFocus}
+        onClick={() => {
+          if (locked) {
+            return;
+          }
+          setFocus();
+        }}
         variant="unstyled"
         borderLeftColor={isFocused ? "brand.royal" : undefined}
         borderLeftWidth={isFocused ? "5px" : undefined}

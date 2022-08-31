@@ -1,7 +1,6 @@
-import { useLazyQuery, useQuery } from "@apollo/client";
 import { Button, useDisclosure, VStack } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import EditorContext from "../../contexts/ModuleEditorContext";
@@ -11,9 +10,6 @@ import { TextInput } from "../common/TextInput";
 
 import LessonItem from "./LessonItem";
 import DeleteModal from "../common/DeleteModal";
-import { GET_LESSON_PROGRESS } from "../../APIClients/queries/ProgressQueries";
-import AuthContext, { AuthContextType } from "../../contexts/AuthContext";
-import { LessonProgressResponse } from "../../APIClients/types/ProgressClientTypes";
 
 const SideBarModuleOverview = ({
   editable,
@@ -23,7 +19,6 @@ const SideBarModuleOverview = ({
   onLessonSelected: () => void;
 }): React.ReactElement => {
   const context = useContext(EditorContext);
-  const authContext: AuthContextType = useContext(AuthContext);
   const {
     isOpen: isDeleteOpen,
     onOpen: onDeleteOpen,
@@ -40,51 +35,11 @@ const SideBarModuleOverview = ({
   const { courseID, moduleIndex }: ModuleEditorParams = useParams();
   const moduleID = parseInt(moduleIndex, 10);
   const [selectedLessonIndex, setSelectedLessonIndex] = useState(0);
-  const [progressData, setProgressData] = useState<Set<string>>(new Set());
-  const [getProgressData] = useLazyQuery(GET_LESSON_PROGRESS);
 
-  useEffect(() => {
-    // useEffect cannot be async, so declare sync func inside
-    const fetchLessons = async () => {
-      const lessons = context?.state.lessons;
-      if (lessons) {
-        const res = await getProgressData({
-          variables: {
-            userId: authContext?.authenticatedUser?.id,
-            lessonIds: Object.keys(lessons),
-          },
-        });
-        const progresses = res?.data.lessonProgress;
-        if (res.data) {
-          setProgressData(
-            new Set(
-              progresses.map(
-                (lesson: LessonProgressResponse) => lesson.lessonId,
-              ),
-            ),
-          );
-          if (context) {
-            // take min in case all lessons have been completed
-            const module = context.state.course.modules[moduleID];
-            const focusId =
-              module.lessons[
-                Math.min(module.lessons.length - 1, progresses.length)
-              ];
-            context.dispatch({
-              type: "set-focus",
-              value: focusId,
-            });
-          }
-        }
-      }
-    };
-    fetchLessons();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
   if (!context) return <></>;
   const { state, dispatch } = context;
 
-  const { lessons, course, focusedLesson } = state;
+  const { lessons, course, focusedLesson, completedLessons } = state;
   const module = course.modules[moduleID];
   const setFocus = (index: number) =>
     dispatch({ type: "set-focus", value: module.lessons[index] });
@@ -149,8 +104,13 @@ const SideBarModuleOverview = ({
         <LessonItem
           editable={editable}
           text={lesson.title}
-          completed={progressData.has(module.lessons[index])}
-          isCurrent={!!focusedLesson && state.lessons[focusedLesson] === lesson}
+          completed={
+            !!completedLessons.size &&
+            completedLessons.has(module.lessons[index])
+          }
+          isCurrent={
+            module.lessons[completedLessons.size] === module.lessons[index]
+          }
           isFocused={!!focusedLesson && state.lessons[focusedLesson] === lesson}
           key={module.lessons[index]}
           setFocus={() => {

@@ -1,4 +1,5 @@
-import {Types} from "mongoose";
+import { Types } from "mongoose";
+
 export interface CourseProgressResponseDTO {
   startedAt?: Date;
   completedAt?: Date;
