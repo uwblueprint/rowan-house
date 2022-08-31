@@ -62,9 +62,9 @@ export interface EditorStateType {
 }
 
 export type EditorContextType = {
-  state: EditorStateType;
+  state: EditorStateType | null;
   dispatch: (value: EditorContextAction) => void;
-} | null;
+};
 
 export type EditorContextAction =
   | {
