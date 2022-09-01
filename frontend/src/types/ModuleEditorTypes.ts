@@ -58,6 +58,7 @@ export interface EditorStateType {
   course: CourseType;
   lessons: LessonsType;
   focusedLesson: string | null;
+  completedLessons: Set<string>;
   hasChanged: EditorChangeStatuses;
 }
 
@@ -82,6 +83,10 @@ export type EditorContextAction =
   | {
       type: "update-lesson";
       value: Partial<LessonType>;
+    }
+  | {
+      type: "set-completed-lessons";
+      value: Set<string>;
     }
   | {
       type: "delete-lesson";

@@ -42,6 +42,8 @@ import {
 } from "../../APIClients/mutations/ProgressMutations";
 import AuthContext from "../../contexts/AuthContext";
 import { ColumnBlockInvalidChildren } from "../../types/ContentBlockTypes";
+import { GET_LESSON_PROGRESS } from "../../APIClients/queries/ProgressQueries";
+import { LessonProgressResponse } from "../../APIClients/types/ProgressClientTypes";
 
 // Copy drag implementation based on https://github.com/atlassian/react-beautiful-dnd/issues/216#issuecomment-423708497
 const onDragEnd = (
@@ -137,6 +139,9 @@ const ModuleViewer = ({
     },
   });
   const [getLessons, { data: lessonData }] = useLazyQuery(GET_LESSONS);
+  const [getProgressData, { data: lessonProgressData }] = useLazyQuery(
+    GET_LESSON_PROGRESS,
+  );
   const [markModuleAsCompletedForUser] = useMutation(MARK_MODULE_AS_COMPLETED);
   const [markLessonAsCompletedForUser] = useMutation(MARK_LESSON_AS_COMPLETED);
   const [markModuleAsStartedForUser] = useMutation(MARK_MODULE_AS_STARTED);
@@ -155,12 +160,46 @@ const ModuleViewer = ({
   }, [courseID, moduleIndex]);
 
   useEffect(() => {
-    if (courseData) {
-      // Save to context
-      getLessons({
-        variables: { ids: courseData.course.modules[moduleIndex].lessons },
-      });
-    }
+    const fetchLessons = async () => {
+      const module = courseData?.course.modules[moduleIndex];
+      if (courseData) {
+        // Save to context
+        const { data: lessonRes } = await getLessons({
+          variables: { ids: module.lessons },
+        });
+        const { data: lessonProgressRes } = await getProgressData({
+          variables: {
+            userId: authenticatedUser?.id,
+            lessonIds: lessonRes.lessons.map(
+              (lesson: LessonResponse) => lesson?.id,
+            ),
+          },
+        });
+        const completedLessons =
+          lessonProgressRes?.lessonProgress.filter(
+            (lesson: LessonProgressResponse) => !!lesson.completedAt,
+          ) || [];
+        const completedLessonIds = new Set<string>(
+          completedLessons.map(
+            (lesson: LessonProgressResponse) => lesson.lessonId,
+          ),
+        );
+        dispatch({
+          type: "set-focus",
+          value:
+            module.lessons[
+              Math.min(completedLessonIds.size, lessonRes.lessons.length - 1)
+            ],
+        });
+
+        dispatch({
+          type: "set-completed-lessons",
+          value: completedLessonIds,
+        });
+      }
+    };
+    fetchLessons();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courseData, getLessons, moduleIndex]);
 
   useEffect(() => {
@@ -179,10 +218,11 @@ const ModuleViewer = ({
             ? null
             : courseData.course.modules[moduleIndex].lessons[0],
           hasChanged: {},
+          completedLessons: new Set(),
         },
       });
     }
-  }, [courseData, moduleIndex, lessonData, completed]);
+  }, [courseData, lessonProgressData, moduleIndex, lessonData, completed]);
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -242,8 +282,6 @@ const ModuleViewer = ({
                   <LessonViewer
                     editable={editable}
                     onLessonCompleted={(lessonId) => {
-                      // TODO save progress on backend
-
                       const { lessons } = state.course.modules[moduleIndex];
                       const lessonIndex = lessons.indexOf(lessonId);
                       if (lessonIndex === lessons.length - 1) {
@@ -267,8 +305,13 @@ const ModuleViewer = ({
                           type: "set-focus",
                           value: lessons[lessonIndex + 1],
                         });
+                        const newCompleted = new Set(state.completedLessons);
+                        newCompleted.add(lessonId);
+                        dispatch({
+                          type: "set-completed-lessons",
+                          value: newCompleted,
+                        });
                       }
-
                       // In case the browser doesn't do it automatically.
                       scrollRef.current?.scrollTo(0, 0);
                     }}

@@ -1,7 +1,7 @@
 import { createContext, Dispatch, SetStateAction } from "react";
 import { AuthenticatedUser } from "../types/AuthTypes";
 
-type AuthContextType = {
+export type AuthContextType = {
   authenticatedUser: AuthenticatedUser;
   setAuthenticatedUser: Dispatch<SetStateAction<AuthenticatedUser>>;
 };

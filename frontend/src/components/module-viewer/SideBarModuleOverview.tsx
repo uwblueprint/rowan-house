@@ -39,12 +39,12 @@ const SideBarModuleOverview = ({
   const { state, dispatch } = context;
   if (!state) return <></>;
 
-  const { lessons, course, focusedLesson } = state;
+  const { lessons, course, focusedLesson, completedLessons } = state;
   const module = course.modules[moduleID];
-
-  const orderedLessons = module.lessons.map((id) => lessons[id]);
   const setFocus = (index: number) =>
     dispatch({ type: "set-focus", value: module.lessons[index] });
+
+  const orderedLessons = module.lessons.map((id) => lessons[id]);
 
   const resetState = () => {
     setTitle("");
@@ -104,8 +104,13 @@ const SideBarModuleOverview = ({
         <LessonItem
           editable={editable}
           text={lesson.title}
+          isCompleted={
+            !!completedLessons.size &&
+            completedLessons.has(module.lessons[index])
+          }
+          isCurrent={index === completedLessons.size}
           isFocused={!!focusedLesson && state.lessons[focusedLesson] === lesson}
-          key={lesson.id}
+          key={module.lessons[index]}
           setFocus={() => {
             onLessonSelected();
             setFocus(index);

@@ -372,6 +372,11 @@ export default function EditorContextReducer(
         ...state,
         focusedLesson: action.value,
       };
+    case "set-completed-lessons":
+      return {
+        ...state,
+        completedLessons: action.value,
+      };
     case "create-lesson":
       return createLesson(state, action.value.lesson, action.value.moduleIndex);
     case "update-lesson":

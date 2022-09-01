@@ -62,7 +62,6 @@ const Sidebar = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const context: EditorContextType = useContext(EditorContext);
-
   const { data: courseData, error } = useQuery<{ course: CourseResponse }>(
     GET_COURSE,
     { variables: { id: courseID } },
