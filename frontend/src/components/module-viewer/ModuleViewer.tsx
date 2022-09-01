@@ -175,21 +175,26 @@ const ModuleViewer = ({
             ),
           },
         });
-        const progresses = lessonProgressRes?.lessonProgress || [];
-        const lessons = new Set(
-          progresses.map((lesson: LessonProgressResponse) => lesson.lessonId),
-        ) as Set<string>;
+        const completedLessons =
+          lessonProgressRes?.lessonProgress.filter(
+            (lesson: LessonProgressResponse) => !!lesson.completedAt,
+          ) || [];
+        const completedLessonIds = new Set<string>(
+          completedLessons.map(
+            (lesson: LessonProgressResponse) => lesson.lessonId,
+          ),
+        );
         dispatch({
           type: "set-focus",
           value:
             module.lessons[
-              Math.min(lessons.size, lessonRes.lessons.length - 1)
+              Math.min(completedLessonIds.size, lessonRes.lessons.length - 1)
             ],
         });
 
         dispatch({
           type: "set-completed-lessons",
-          value: lessons,
+          value: completedLessonIds,
         });
       }
     };

@@ -23,7 +23,7 @@ interface OptionsProps {
   text: string;
   isFocused: boolean;
   isCurrent: boolean;
-  completed: boolean;
+  isCompleted?: boolean;
   setFocus: () => void;
   onDeleteClick: () => void;
 }
@@ -35,7 +35,7 @@ const LessonItem = ({
   isCurrent,
   setFocus,
   onDeleteClick,
-  completed,
+  isCompleted = false,
 }: OptionsProps): React.ReactElement => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -71,7 +71,7 @@ const LessonItem = ({
   };
   const showEditButtons = isHovered && editable;
 
-  const locked = !editable && !isCurrent && !completed;
+  const locked = !editable && !isCurrent && !isCompleted;
 
   const getIcon = (): React.ReactElement => {
     if (editable) {
@@ -80,7 +80,7 @@ const LessonItem = ({
     if (isCurrent) {
       return <UncheckedCheckbox />;
     }
-    if (completed) {
+    if (isCompleted) {
       return <CheckCircleIcon />;
     }
     return <LockIcon />;

@@ -104,13 +104,11 @@ const SideBarModuleOverview = ({
         <LessonItem
           editable={editable}
           text={lesson.title}
-          completed={
+          isCompleted={
             !!completedLessons.size &&
             completedLessons.has(module.lessons[index])
           }
-          isCurrent={
-            module.lessons[completedLessons.size] === module.lessons[index]
-          }
+          isCurrent={index === completedLessons.size}
           isFocused={!!focusedLesson && state.lessons[focusedLesson] === lesson}
           key={module.lessons[index]}
           setFocus={() => {
