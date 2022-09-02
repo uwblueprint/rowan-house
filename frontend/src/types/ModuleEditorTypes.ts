@@ -156,7 +156,7 @@ export interface EditContentModalProps<
 
 export type FormatEnum = "bold" | "italic" | "underline";
 
-export type BlockFormatEnum = "left" | "center" | "right" | "justify";
+export type AlignmentFormatEnum = "left" | "center" | "right" | "justify";
 
 export type TextEditor = BaseEditor & ReactEditor;
 
@@ -169,7 +169,7 @@ export type CustomText = {
 
 export type ParagraphElement = {
   type: "paragraph";
-  align?: BlockFormatEnum;
+  align?: AlignmentFormatEnum;
   children: Descendant[];
 };
 

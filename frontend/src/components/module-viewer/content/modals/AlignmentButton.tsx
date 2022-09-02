@@ -4,12 +4,12 @@ import { Editor, Transforms, Element as SlateElement } from "slate";
 import { useSlate } from "slate-react";
 import {
   TextEditor,
-  BlockFormatEnum,
+  AlignmentFormatEnum,
 } from "../../../../types/ModuleEditorTypes";
 
 const TEXT_ALIGN_TYPES = ["left", "center", "right", "justify"];
 
-const isBlockActive = (editor: TextEditor, format: BlockFormatEnum) => {
+const isBlockActive = (editor: TextEditor, format: AlignmentFormatEnum) => {
   const { selection } = editor;
   if (!selection) return false;
 
@@ -27,7 +27,7 @@ const isBlockActive = (editor: TextEditor, format: BlockFormatEnum) => {
   return !!match;
 };
 
-const toggleBlock = (editor: TextEditor, format: BlockFormatEnum) => {
+const toggleBlock = (editor: TextEditor, format: AlignmentFormatEnum) => {
   const isActive = isBlockActive(editor, format);
 
   Transforms.unwrapNodes(editor, {
@@ -43,15 +43,15 @@ const toggleBlock = (editor: TextEditor, format: BlockFormatEnum) => {
   });
 };
 
-type BlockButtonPropsType = {
+type AlignmentButtonPropsType = {
   icon: JSX.Element;
-  format: BlockFormatEnum;
+  format: AlignmentFormatEnum;
 };
 
-const BlockButton = ({
+const AlignmentButton = ({
   icon,
   format,
-}: BlockButtonPropsType): React.ReactElement => {
+}: AlignmentButtonPropsType): React.ReactElement => {
   const editor = useSlate();
   return (
     <IconButton
@@ -69,4 +69,4 @@ const BlockButton = ({
   );
 };
 
-export default BlockButton;
+export default AlignmentButton;

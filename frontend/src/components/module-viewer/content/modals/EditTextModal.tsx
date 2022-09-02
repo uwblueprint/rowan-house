@@ -18,7 +18,7 @@ import {
 import { TextBlockState } from "../../../../types/ContentBlockTypes";
 import { Modal } from "../../../common/Modal";
 import FormatButton, { toggleFormat } from "./FormatButton";
-import BlockButton from "./BlockButton";
+import AlignmentButton from "./AlignmentButton";
 import LinkButton, { wrapLink } from "./LinkButton";
 
 import {
@@ -53,21 +53,24 @@ const Leaf = ({ attributes, children, leaf }: LeafPropTypes) => {
 
 const Element = ({ attributes, children, element }: ElementPropTypes) => {
   switch (element.type) {
-    case "link": {
+    case "link":
       return (
-        <Link {...attributes} color="purple" isExternal href={element.url}>
+        <Link
+          {...attributes}
+          style={{ textDecorationLine: "underline" }}
+          color="purple"
+          isExternal
+          href={element.url}
+        >
           {children}
         </Link>
       );
-    }
-    default: {
-      const style = { textAlign: element.align };
+    default:
       return (
-        <p style={style} {...attributes}>
+        <p style={{ textAlign: element.align }} {...attributes}>
           {children}
         </p>
       );
-    }
   }
 };
 
@@ -149,10 +152,10 @@ const EditTextModal = ({
           <VStack flex="1" w="100%">
             <Box borderWidth="1px" w="100%" padding="0.5rem">
               <HStack spacing={2}>
-                <BlockButton icon={<RiAlignLeft />} format="left" />
-                <BlockButton icon={<RiAlignCenter />} format="center" />
-                <BlockButton icon={<RiAlignRight />} format="right" />
-                <BlockButton icon={<RiAlignJustify />} format="justify" />
+                <AlignmentButton icon={<RiAlignLeft />} format="left" />
+                <AlignmentButton icon={<RiAlignCenter />} format="center" />
+                <AlignmentButton icon={<RiAlignRight />} format="right" />
+                <AlignmentButton icon={<RiAlignJustify />} format="justify" />
                 <Divider orientation="vertical" />
                 <FormatButton icon={<RiBold />} format="bold" />
                 <FormatButton icon={<RiItalic />} format="italic" />

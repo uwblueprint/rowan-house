@@ -32,7 +32,7 @@ const FormatButton = ({
     <IconButton
       variant="ghost"
       colorScheme="purple"
-      aria-label="align left"
+      aria-label={format}
       size="sm"
       icon={icon}
       isActive={isFormatActive(editor, format)}
