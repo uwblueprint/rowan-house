@@ -1,4 +1,4 @@
-import { BaseEditor } from "slate";
+import { BaseEditor, Descendant } from "slate";
 import { ReactEditor } from "slate-react";
 
 import {
@@ -162,25 +162,41 @@ export type TextEditor = BaseEditor & ReactEditor;
 
 export type CustomText = {
   text: string;
-  bold?: true;
-  italic?: true;
-  underline?: true;
+  bold?: boolean;
+  italic?: boolean;
+  underline?: boolean;
 };
 
-export type CustomElement = {
+export type ParagraphElement = {
   type: "paragraph";
-  align: BlockFormatEnum;
-  children: CustomText[];
+  align?: BlockFormatEnum;
+  children: Descendant[];
 };
+
+export type LinkElement = {
+  type: "link";
+  url: string;
+  children: Descendant[];
+};
+
+export type CustomElement = ParagraphElement | LinkElement;
 
 export type LeafPropTypes = {
   attributes: CustomText;
-  children: React.ReactNode;
+  children: Descendant[];
   leaf: CustomText;
 };
 
 export type ElementPropTypes = {
   attributes: CustomText;
-  children: React.ReactNode;
+  children: Descendant[];
   element: CustomElement;
 };
+
+declare module "slate" {
+  interface CustomTypes {
+    Editor: BaseEditor & ReactEditor;
+    Element: CustomElement;
+    Text: CustomText;
+  }
+}

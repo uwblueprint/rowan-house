@@ -17,7 +17,10 @@ const isBlockActive = (editor: TextEditor, format: BlockFormatEnum) => {
     Editor.nodes(editor, {
       at: Editor.unhangRange(editor, selection),
       match: (n) =>
-        !Editor.isEditor(n) && SlateElement.isElement(n) && n.align === format,
+        !Editor.isEditor(n) &&
+        SlateElement.isElement(n) &&
+        n.type === "paragraph" &&
+        n.align === format,
     }),
   );
 
@@ -45,13 +48,16 @@ type BlockButtonPropsType = {
   format: BlockFormatEnum;
 };
 
-const BlockButton = ({ icon, format }: BlockButtonPropsType) => {
+const BlockButton = ({
+  icon,
+  format,
+}: BlockButtonPropsType): React.ReactElement => {
   const editor = useSlate();
   return (
     <IconButton
       variant="ghost"
       colorScheme="purple"
-      aria-label="align left"
+      aria-label={format}
       size="sm"
       icon={icon}
       isActive={isBlockActive(editor, format)}

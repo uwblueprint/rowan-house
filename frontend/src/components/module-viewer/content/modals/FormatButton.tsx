@@ -9,7 +9,7 @@ const isFormatActive = (editor: TextEditor, format: FormatEnum) => {
   return marks ? marks[format] === true : false;
 };
 
-const toggleFormat = (editor: TextEditor, format: FormatEnum) => {
+export const toggleFormat = (editor: TextEditor, format: FormatEnum): void => {
   const isActive = isFormatActive(editor, format);
   if (isActive) {
     Editor.removeMark(editor, format);
@@ -23,7 +23,10 @@ type FormatButtonPropsType = {
   format: FormatEnum;
 };
 
-const FormatButton = ({ icon, format }: FormatButtonPropsType) => {
+const FormatButton = ({
+  icon,
+  format,
+}: FormatButtonPropsType): React.ReactElement => {
   const editor = useSlate();
   return (
     <IconButton
