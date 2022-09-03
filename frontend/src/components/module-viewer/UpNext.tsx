@@ -1,4 +1,5 @@
 import { useLazyQuery } from "@apollo/client";
+import { Heading } from "@chakra-ui/react";
 import React, { useContext, useState, useEffect } from "react";
 import { GET_MODULE_PROGRESS } from "../../APIClients/queries/ProgressQueries";
 import {
@@ -8,7 +9,11 @@ import {
 import AuthContext from "../../contexts/AuthContext";
 import { CourseType } from "../../types/ModuleEditorTypes";
 
-const UpNext = (courseData: CourseType): React.ReactElement => {
+interface UpNextProps {
+  courseData: CourseType;
+}
+
+const UpNext = ({ courseData }: UpNextProps): React.ReactElement => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
 
   const [nextModuleIndex, setNextModuleIndex] = useState<number>();
@@ -55,7 +60,15 @@ const UpNext = (courseData: CourseType): React.ReactElement => {
     }
   }, [moduleProgressData]);
 
-  return <></>;
+  return nextModuleIndex ? (
+    <>
+      <Heading as="h2" size="lg" fontWeight="normal">
+        Up Next
+      </Heading>
+    </>
+  ) : (
+    <></>
+  );
 };
 
 export default UpNext;

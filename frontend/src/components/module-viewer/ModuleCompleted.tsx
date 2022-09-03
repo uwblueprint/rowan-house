@@ -35,10 +35,6 @@ const ModuleCompleted = (): React.ReactElement => {
           .
         </Text>
         <Heading as="h2" size="lg" fontWeight="normal">
-          Up Next
-        </Heading>
-        {/* TODO insert up next panel */}
-        <Heading as="h2" size="lg" fontWeight="normal">
           Course Progress
         </Heading>
         {/* TODO insert course progress section */}
