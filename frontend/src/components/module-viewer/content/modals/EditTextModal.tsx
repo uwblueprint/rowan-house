@@ -61,6 +61,9 @@ const Element = ({ attributes, children, element }: ElementPropTypes) => {
           color="purple"
           isExternal
           href={element.url}
+          onClick={() => {
+            window.open(element.url, "_blank", "noopener,noreferrer");
+          }}
         >
           {children}
         </Link>
