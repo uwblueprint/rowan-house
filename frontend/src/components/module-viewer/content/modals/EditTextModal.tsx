@@ -1,7 +1,7 @@
 import { Box, Flex, VStack, HStack, Divider, Link } from "@chakra-ui/react";
 import React, { useState, useCallback, useMemo } from "react";
-import isHotkey from "is-hotkey";
-import { createEditor } from "slate";
+import isHotkey, { isKeyHotkey } from "is-hotkey";
+import { createEditor, Transforms, Range } from "slate";
 import { Slate, Editable, withReact } from "slate-react";
 import { withHistory } from "slate-history";
 import isUrl from "is-url";
@@ -142,6 +142,31 @@ const EditTextModal = ({
     }
   };
 
+  const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (event) => {
+    const { selection } = editor;
+
+    Object.keys(HOTKEYS).forEach((hotkey) => {
+      if (isHotkey(hotkey, event as React.KeyboardEvent<HTMLElement>)) {
+        event.preventDefault();
+        const format = HOTKEYS[hotkey];
+        toggleFormat(editor, format);
+      }
+    });
+
+    if (selection && Range.isCollapsed(selection)) {
+      const { nativeEvent } = event;
+      if (isKeyHotkey("left", nativeEvent)) {
+        event.preventDefault();
+        Transforms.move(editor, { unit: "offset", reverse: true });
+        return;
+      }
+      if (isKeyHotkey("right", nativeEvent)) {
+        event.preventDefault();
+        Transforms.move(editor, { unit: "offset" });
+      }
+    }
+  };
+
   return (
     <Modal
       size="xl"
@@ -172,20 +197,7 @@ const EditTextModal = ({
                 renderLeaf={renderLeaf}
                 renderElement={renderElement}
                 placeholder="Insert text here"
-                onKeyDown={(event) => {
-                  Object.keys(HOTKEYS).forEach((hotkey) => {
-                    if (
-                      isHotkey(
-                        hotkey,
-                        event as React.KeyboardEvent<HTMLElement>,
-                      )
-                    ) {
-                      event.preventDefault();
-                      const format = HOTKEYS[hotkey];
-                      toggleFormat(editor, format);
-                    }
-                  });
-                }}
+                onKeyDown={onKeyDown}
               />
             </Box>
           </VStack>
