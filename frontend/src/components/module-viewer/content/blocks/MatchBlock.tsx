@@ -10,7 +10,6 @@ import {
   Button,
   SimpleGrid,
   Text,
-  Center,
   VStack,
   Flex,
   Circle,
@@ -55,18 +54,20 @@ const DraggableAnswer = ({
   text,
   index,
   status,
+  isDropDisabled,
 }: {
   id: number;
   text: string;
   index: number;
   status: AnswerStatus;
+  isDropDisabled?: boolean;
 }): React.ReactElement => {
   return (
     <Draggable
       key={id}
       index={index}
       draggableId={`${id}-ANSWER`}
-      isDragDisabled={status !== AnswerStatus.Default}
+      isDragDisabled={isDropDisabled || status !== AnswerStatus.Default}
     >
       {(provided) => (
         <Box
@@ -88,23 +89,28 @@ const DropAreaStyle = ({
   children?: React.ReactElement;
 }): React.ReactElement => {
   return (
-    <Center
+    <SimpleGrid
       w="100%"
-      padding="1rem"
       border="2px"
       borderColor="#E5E7EB"
       borderStyle="dashed"
       borderRadius="4px"
       bg="#F4F4F4"
-      position="relative"
+      columns={1}
     >
-      <Box w="100%" position="absolute">
+      <Box w="100%" gridColumnStart={1} gridRowStart={1} zIndex={2}>
         {children}
       </Box>
-      <Text variant="sm" color="#666">
+      <Text
+        padding="1rem"
+        variant="sm"
+        color="#666"
+        gridColumnStart={1}
+        gridRowStart={1}
+      >
         Drag & Drop Answer Here
       </Text>
-    </Center>
+    </SimpleGrid>
   );
 };
 
@@ -143,44 +149,8 @@ const MatchBlock = ({
     }
   };
 
-  if (editable) {
+  const renderMatchBlock = () => {
     return (
-      <VStack
-        w="80%"
-        padding="2rem"
-        paddingLeft="4rem"
-        paddingRight="4rem"
-        align="left"
-        borderTopColor="brand.royal"
-        borderTopWidth="10px"
-        borderRadius="8px"
-        boxShadow="xl"
-      >
-        <Flex align="center">
-          <MatchIcon />
-          <Text variant="heading">Matching</Text>
-        </Flex>
-        <Text variant="subheading">{content.question}</Text>
-        <SimpleGrid columns={2} gap={2}>
-          {content.matches.map(({ prompt }) => (
-            <>
-              <p>{prompt}</p>
-              <DropAreaStyle />
-            </>
-          ))}
-        </SimpleGrid>
-        <Box w="100%" padding="1rem">
-          {content.matches.map(({ answer }, i) => (
-            <AnswerStyle key={i} text={answer} status={AnswerStatus.Default} />
-          ))}
-        </Box>
-        <Button>Check answer</Button>
-      </VStack>
-    );
-  }
-
-  return (
-    <DragDropContext onDragEnd={onDragEnd}>
       <VStack
         w="80%"
         padding="2rem"
@@ -275,6 +245,7 @@ const MatchBlock = ({
                       index={i}
                       text={answer}
                       status={AnswerStatus.Default}
+                      isDropDisabled={editable}
                     />
                   ),
               )}
@@ -290,6 +261,16 @@ const MatchBlock = ({
           Check answer
         </Button>
       </VStack>
+    );
+  };
+
+  if (editable) {
+    return renderMatchBlock();
+  }
+
+  return (
+    <DragDropContext onDragEnd={onDragEnd}>
+      {renderMatchBlock()}
     </DragDropContext>
   );
 };

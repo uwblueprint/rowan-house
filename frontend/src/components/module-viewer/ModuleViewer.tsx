@@ -53,7 +53,7 @@ const onDragEnd = (
 ) => {
   const { source, destination } = result;
   // dropped outside the list
-  if (!destination) {
+  if (!destination || result.type === "MATCH") {
     return;
   }
 
