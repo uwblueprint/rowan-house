@@ -13,6 +13,7 @@ import {
   Center,
   VStack,
   Flex,
+  Circle,
 } from "@chakra-ui/react";
 import { CheckCircleIcon, SmallCloseIcon } from "@chakra-ui/icons";
 
@@ -211,38 +212,47 @@ const MatchBlock = ({
             return (
               <>
                 <p>{prompt}</p>
-                <VStack w="100%" align="left">
-                  <Droppable
-                    droppableId={`${i}-DROP`}
-                    type="MATCH"
-                    isDropDisabled={pairs[i] !== null}
-                  >
-                    {(provided) => (
-                      <div ref={provided.innerRef}>
-                        <DropAreaStyle>
-                          {pairs[i] !== null ? (
-                            <DraggableAnswer
-                              id={pairs[i]}
-                              key={i}
-                              index={i}
-                              text={content.matches[pairs[i]].answer}
-                              status={status}
-                            />
-                          ) : undefined}
-                        </DropAreaStyle>
-                      </div>
-                    )}
-                  </Droppable>
-                  {isCompleted && (
-                    <Text color={status}>{`Correct Answer: ${answer}`}</Text>
+                <Droppable
+                  droppableId={`${i}-DROP`}
+                  type="MATCH"
+                  isDropDisabled={pairs[i] !== null}
+                >
+                  {(provided) => (
+                    <div ref={provided.innerRef}>
+                      <DropAreaStyle>
+                        {pairs[i] !== null ? (
+                          <DraggableAnswer
+                            id={pairs[i]}
+                            key={i}
+                            index={i}
+                            text={content.matches[pairs[i]].answer}
+                            status={status}
+                          />
+                        ) : undefined}
+                      </DropAreaStyle>
+                    </div>
                   )}
-                </VStack>
+                </Droppable>
                 {isCompleted &&
                   (status === AnswerStatus.Correct ? (
                     <CheckCircleIcon color="text.correct" />
                   ) : (
-                    <SmallCloseIcon color="white" background="text.critical" />
+                    <Circle size="fit-content" bg="text.critical" color="white">
+                      <SmallCloseIcon />
+                    </Circle>
                   ))}
+                {isCompleted && (
+                  <>
+                    <div />
+                    <Text
+                      marginBottom=".5rem"
+                      gridColumn="span 2"
+                      color={
+                        status === AnswerStatus.Correct ? "green.600" : status
+                      }
+                    >{`Correct Answer: ${answer}`}</Text>
+                  </>
+                )}
               </>
             );
           })}
