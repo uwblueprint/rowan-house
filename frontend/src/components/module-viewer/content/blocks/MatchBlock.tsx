@@ -1,48 +1,93 @@
 import React, { useState } from "react";
-import { Box, Button, SimpleGrid, Text, Center, VStack } from "@chakra-ui/react";
-import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
-import { ContentBlockProps, MatchBlockState } from "../../../../types/ContentBlockTypes";
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  DropResult,
+} from "react-beautiful-dnd";
+import {
+  Box,
+  Button,
+  SimpleGrid,
+  Text,
+  Center,
+  VStack,
+  Flex,
+} from "@chakra-ui/react";
+import { CheckCircleIcon, SmallCloseIcon } from "@chakra-ui/icons";
 
-const AnswerStyle = ({text}: {text: string}): React.ReactElement => {
+import {
+  ContentBlockProps,
+  MatchBlockState,
+} from "../../../../types/ContentBlockTypes";
+import { ReactComponent as MatchIcon } from "../../../../assets/match.svg";
+
+enum AnswerStatus {
+  Default = "background.lightgrey",
+  Incorrect = "text.critical",
+  Correct = "text.correct",
+}
+
+const AnswerStyle = ({
+  text,
+  status,
+}: {
+  text: string;
+  status: AnswerStatus;
+}): React.ReactElement => {
   return (
     <Box
       w="100%"
       padding="1rem"
+      background="white"
       border="2px"
-      borderColor="#E5E7EB"
+      borderColor={status}
       borderRadius="4px"
     >
       <p>{text}</p>
     </Box>
   );
-}
+};
 
-const DraggableAnswer = ({id, text, index}: 
-  {id: number; text: string, index: number}
-): React.ReactElement => {
+const DraggableAnswer = ({
+  id,
+  text,
+  index,
+  status,
+}: {
+  id: number;
+  text: string;
+  index: number;
+  status: AnswerStatus;
+}): React.ReactElement => {
   return (
     <Draggable
       key={id}
       index={index}
       draggableId={`${id}-ANSWER`}
+      isDragDisabled={status !== AnswerStatus.Default}
     >
       {(provided) => (
-        <div
+        <Box
+          w="100%"
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          style={provided.draggableProps.style}
         >
-          <AnswerStyle text={text}/>
-        </div>
+          <AnswerStyle text={text} status={status} />
+        </Box>
       )}
     </Draggable>
   );
 };
 
-const DropAreaStyle = (): React.ReactElement => {
+const DropAreaStyle = ({
+  children,
+}: {
+  children?: React.ReactElement;
+}): React.ReactElement => {
   return (
-    <Center 
+    <Center
       w="100%"
       padding="1rem"
       border="2px"
@@ -50,61 +95,82 @@ const DropAreaStyle = (): React.ReactElement => {
       borderStyle="dashed"
       borderRadius="4px"
       bg="#F4F4F4"
+      position="relative"
     >
-      <Text variant="sm" color="#666">Drag & Drop Answer Here</Text>
+      <Box w="100%" position="absolute">
+        {children}
+      </Box>
+      <Text variant="sm" color="#666">
+        Drag & Drop Answer Here
+      </Text>
     </Center>
   );
-}
+};
 
 const MatchBlock = ({
   block: { content },
   editable,
 }: ContentBlockProps<MatchBlockState>): React.ReactElement => {
   const [pairs, setPairs] = useState(Array(content.matches.length).fill(null));
+  const [isCompleted, setCompleted] = useState(false);
 
-  const setAnswer = (index: number | string, newVal: null | number | string) => {
-    const i = typeof index === 'string' ? parseInt(index, 10) : index;
-    const val = typeof newVal === 'string' ? parseInt(newVal, 10) : newVal;
+  const setAnswer = (...args: [number | string, number | string | null][]) => {
     const newPairs = [...pairs];
-    newPairs[i] = val;
+    args.forEach(([index, newVal]) => {
+      const i = typeof index === "string" ? parseInt(index, 10) : index;
+      const val = typeof newVal === "string" ? parseInt(newVal, 10) : newVal;
+      newPairs[i] = val;
+    });
     setPairs(newPairs);
-  }
+  };
 
-  const onDragEnd = ({source, destination, draggableId}: DropResult) => {
+  const onDragEnd = ({ source, destination, draggableId }: DropResult) => {
     if (destination?.droppableId === "POOL") {
       if (source.droppableId === "POOL") return;
       const [index] = source.droppableId.split("-");
-      setAnswer(index, null);
+      setAnswer([index, null]);
     } else if (destination?.droppableId.includes("DROP")) {
-      // TODO: D & D between DROP locations
       const [dropIndex] = destination.droppableId.split("-");
       const [answerIndex] = draggableId.split("-");
-      setAnswer(dropIndex, answerIndex);
-    } else {
-      throw Error(`Invalid destination: ${destination}`);
+      // D & D between DROP locations
+      if (source.droppableId.includes("DROP")) {
+        const [sourceIndex] = source.droppableId.split("-");
+        setAnswer([sourceIndex, null], [dropIndex, answerIndex]);
+      } else {
+        setAnswer([dropIndex, answerIndex]);
+      }
     }
-  }
+  };
 
   if (editable) {
     return (
       <VStack
-        w="100%"
+        w="80%"
         padding="2rem"
-        border="1px"
+        paddingLeft="4rem"
+        paddingRight="4rem"
+        align="left"
+        borderTopColor="brand.royal"
+        borderTopWidth="10px"
+        borderRadius="8px"
+        boxShadow="xl"
       >
-        <h3>Matching</h3>
-        <h3>{content.question}</h3>
+        <Flex align="center">
+          <MatchIcon />
+          <Text variant="heading">Matching</Text>
+        </Flex>
+        <Text variant="subheading">{content.question}</Text>
         <SimpleGrid columns={2} gap={2}>
-          {content.matches.map(({prompt}, i) => (
+          {content.matches.map(({ prompt }) => (
             <>
               <p>{prompt}</p>
-              <DropAreaStyle/>
+              <DropAreaStyle />
             </>
           ))}
         </SimpleGrid>
         <Box w="100%" padding="1rem">
-          {content.matches.map(({answer}, i) => (
-            <AnswerStyle key={i} text={answer} />
+          {content.matches.map(({ answer }, i) => (
+            <AnswerStyle key={i} text={answer} status={AnswerStatus.Default} />
           ))}
         </Box>
         <Button>Check answer</Button>
@@ -117,42 +183,102 @@ const MatchBlock = ({
       <VStack
         w="80%"
         padding="2rem"
-        border="1px"
+        paddingLeft="4rem"
+        paddingRight="4rem"
+        align="left"
+        borderTopColor="brand.royal"
+        borderTopWidth="10px"
+        borderRadius="8px"
+        boxShadow="xl"
       >
-        <h3>Matching</h3>
-        <h3>{content.question}</h3>
-        <SimpleGrid columns={2} gap={2} w="100%">
-          {content.matches.map(({prompt}, i) => (
-            <>
-              <Center w="100%">{prompt}</Center>
-              <Droppable droppableId={`${i}-DROP`} type="MATCH" isDropDisabled={Boolean(pairs[i])}>
-                {(provided) => (
-                  <div ref={provided.innerRef}>
-                    {pairs[i] !== null ? 
-                      <DraggableAnswer
-                        id={pairs[i]}
-                        key={i}
-                        index={i}
-                        text={content.matches[pairs[i]].answer}
-                      /> : <DropAreaStyle/>}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </>
-          ))}
+        <Flex align="center">
+          <MatchIcon />
+          <Text variant="heading">Matching</Text>
+        </Flex>
+        <Text variant="subheading">{content.question}</Text>
+        <SimpleGrid
+          templateColumns={`1fr 50% ${isCompleted ? "30px" : ""}`}
+          alignItems="center"
+          gap={2}
+          w="100%"
+        >
+          {content.matches.map(({ prompt, answer }, i) => {
+            let status = AnswerStatus.Default;
+            if (isCompleted) {
+              status =
+                pairs[i] === i ? AnswerStatus.Correct : AnswerStatus.Incorrect;
+            }
+            return (
+              <>
+                <p>{prompt}</p>
+                <VStack w="100%" align="left">
+                  <Droppable
+                    droppableId={`${i}-DROP`}
+                    type="MATCH"
+                    isDropDisabled={pairs[i] !== null}
+                  >
+                    {(provided) => (
+                      <div ref={provided.innerRef}>
+                        <DropAreaStyle>
+                          {pairs[i] !== null ? (
+                            <DraggableAnswer
+                              id={pairs[i]}
+                              key={i}
+                              index={i}
+                              text={content.matches[pairs[i]].answer}
+                              status={status}
+                            />
+                          ) : undefined}
+                        </DropAreaStyle>
+                      </div>
+                    )}
+                  </Droppable>
+                  {isCompleted && (
+                    <Text color={status}>{`Correct Answer: ${answer}`}</Text>
+                  )}
+                </VStack>
+                {isCompleted &&
+                  (status === AnswerStatus.Correct ? (
+                    <CheckCircleIcon color="text.correct" />
+                  ) : (
+                    <SmallCloseIcon color="white" background="text.critical" />
+                  ))}
+              </>
+            );
+          })}
         </SimpleGrid>
         <Droppable droppableId="POOL" type="MATCH">
           {(provided) => (
-            <SimpleGrid columns={2} gap={2} w="100%" ref={provided.innerRef}>
-              {content.matches.map(({answer}, i) => (
-                !pairs.includes(i) && <DraggableAnswer key={i} id={i} text={answer} index={i}/>
-              ))}
+            <SimpleGrid
+              columns={2}
+              gap={2}
+              w="100%"
+              minH="2rem"
+              ref={provided.innerRef}
+            >
+              {content.matches.map(
+                ({ answer }, i) =>
+                  !pairs.includes(i) && (
+                    <DraggableAnswer
+                      key={i}
+                      id={i}
+                      index={i}
+                      text={answer}
+                      status={AnswerStatus.Default}
+                    />
+                  ),
+              )}
               {provided.placeholder}
             </SimpleGrid>
           )}
         </Droppable>
-        <Button>Check answer</Button>
+        <Button
+          w="fit-content"
+          onClick={() => setCompleted(true)}
+          disabled={pairs.some((x) => x === null)}
+        >
+          Check answer
+        </Button>
       </VStack>
     </DragDropContext>
   );

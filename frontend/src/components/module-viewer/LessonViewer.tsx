@@ -20,22 +20,21 @@ const LessonViewer = ({
 
   const { focusedLesson } = state;
 
-  function renderLessonViewer(lesson: LessonType, provided?: DroppableProvided): React.ReactElement {
+  function renderLessonViewer(
+    lesson: LessonType,
+    provided?: DroppableProvided,
+  ): React.ReactElement {
     if (!focusedLesson) return <></>;
 
     return (
-      <Flex
-        ref={provided?.innerRef}
-        height="100%"
-        direction="column"
-        flex="1"
-      >
+      <Flex ref={provided?.innerRef} height="100%" direction="column" flex="1">
         {lesson?.content.map((block: ContentBlockState, index: number) => (
           <ContentBlock
             editable={editable}
             block={block}
             key={index}
-            index={index} />
+            index={index}
+          />
         ))}
         {!editable && (
           <Flex py="22px" justify="center">
@@ -58,9 +57,7 @@ const LessonViewer = ({
     if (editable) {
       return (
         <Droppable droppableId="EDITOR" isDropDisabled={!editable}>
-          {(provided) => (
-            renderLessonViewer(lesson, provided)
-          )}
+          {(provided) => renderLessonViewer(lesson, provided)}
         </Droppable>
       );
     }

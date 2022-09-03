@@ -4,7 +4,7 @@ import {
   TextBlock,
   ImageBlock,
   VideoBlock,
-  MatchBlock
+  MatchBlock,
 } from "../blocks";
 import {
   EditButtonModal,
@@ -12,7 +12,7 @@ import {
   EditImageModal,
   EditVideoModal,
   EditHeadingModal,
-  EditMatchModal
+  EditMatchModal,
 } from "../modals";
 import {
   ContentBlockModals,
@@ -53,7 +53,7 @@ export default (
     match: {
       renderBlock: MatchBlock,
       renderEditModal: EditMatchModal,
-    }
+    },
   };
   return createContentBlockRenderers({
     ...defaults,

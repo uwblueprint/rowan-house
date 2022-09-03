@@ -1,7 +1,12 @@
 import { v4 as uuid } from "uuid";
 import { ContentType } from "../APIClients/types/LessonClientTypes";
 
-export const ContentTypeCategories = ["Layout", "Basic", "Media", "Interactive"];
+export const ContentTypeCategories = [
+  "Layout",
+  "Basic",
+  "Media",
+  "Interactive",
+];
 
 export type HeadingBlockState = ContentBlockStateType<
   "heading",

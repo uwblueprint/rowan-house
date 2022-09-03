@@ -312,13 +312,13 @@ const ModuleViewer = ({
         </Flex>
       </Flex>
     );
-  }
+  };
 
   if (state) {
     if (state.course.modules[moduleIndex] === undefined) {
       return <p>Module not found!</p>;
     }
-    // Only include Drag Drop Context if the viewer is editable 
+    // Only include Drag Drop Context if the viewer is editable
     if (editable) {
       return (
         <EditorContext.Provider value={{ state, dispatch }}>
@@ -327,15 +327,15 @@ const ModuleViewer = ({
               onDragEnd(dispatch, result, toast)
             }
           >
-            { renderModuleViewer() }
+            {renderModuleViewer()}
           </DragDropContext>
         </EditorContext.Provider>
       );
     }
-  
+
     return (
       <EditorContext.Provider value={{ state, dispatch }}>
-        { renderModuleViewer() }
+        {renderModuleViewer()}
       </EditorContext.Provider>
     );
   }
