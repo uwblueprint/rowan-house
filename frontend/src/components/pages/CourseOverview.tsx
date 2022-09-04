@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 import {
+  Accordion,
   Box,
   Button,
   Center,
@@ -27,6 +28,8 @@ import {
 import { CourseOverviewParams } from "../../types/CourseOverviewTypes";
 import { ModuleProgressType, ModuleType } from "../../types/ModuleEditorTypes";
 import AuthContext from "../../contexts/AuthContext";
+import ModuleDropdown from "../learner/ModuleDropdown";
+import { ModuleResponse } from "../../APIClients/types/CourseClientTypes";
 
 const CourseOverview = (): React.ReactElement => {
   const [disableCTAButton, setDisableCTAButton] = useState(false);
@@ -214,6 +217,17 @@ const CourseOverview = (): React.ReactElement => {
           </Box>
         </Flex>
       </Flex>
+      <VStack w="50%" padding="2rem" align="left">
+        <Text variant="heading">Course Content</Text>
+        <Accordion w="100%" allowToggle>
+          {courseData?.course?.modules.map((module: ModuleResponse, i: number) => (
+            <>
+              <ModuleDropdown module={module} index={i} courseID={courseID} key={i} />
+              <Box h="1rem" />
+            </>
+          ))}
+        </Accordion>
+      </VStack>
     </Flex>
   );
 };

@@ -8,7 +8,7 @@ type StepProps = {
   accentColor?: string;
   index: number;
   label: string | React.ReactNode;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 };
 
 const Step = ({
