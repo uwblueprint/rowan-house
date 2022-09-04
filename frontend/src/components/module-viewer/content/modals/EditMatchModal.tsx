@@ -86,7 +86,7 @@ const EditMatchModal = ({
           </FormLabel>
           <div />
           {matches.map(({ prompt, answer }, i) => (
-            <>
+            <React.Fragment key={i}>
               <Center>
                 <Text>{i + 1}.</Text>
               </Center>
@@ -107,7 +107,7 @@ const EditMatchModal = ({
                   <DeleteIcon />
                 </Button>
               </Center>
-            </>
+            </React.Fragment>
           ))}
         </SimpleGrid>
         <Button variant="ghost" onClick={addMatch}>

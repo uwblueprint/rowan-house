@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   DragDropContext,
   Draggable,
@@ -118,8 +118,14 @@ const MatchBlock = ({
   block: { content },
   editable,
 }: ContentBlockProps<MatchBlockState>): React.ReactElement => {
+  const [answers, setAnswers] = useState(content.matches.map((x) => x.answer));
   const [pairs, setPairs] = useState(Array(content.matches.length).fill(null));
   const [isCompleted, setCompleted] = useState(false);
+
+  // Randomize the order of the answers on load
+  useEffect(() => {
+    setAnswers(answers.sort(() => Math.random() - 0.5));
+  }, []);
 
   const setAnswer = (...args: [number | string, number | string | null][]) => {
     const newPairs = [...pairs];
@@ -177,7 +183,7 @@ const MatchBlock = ({
             let status = AnswerStatus.Default;
             if (isCompleted) {
               status =
-                pairs[i] === i ? AnswerStatus.Correct : AnswerStatus.Incorrect;
+                answers[pairs[i]] === answer ? AnswerStatus.Correct : AnswerStatus.Incorrect;
             }
             return (
               <>
@@ -195,7 +201,7 @@ const MatchBlock = ({
                             id={pairs[i]}
                             key={i}
                             index={i}
-                            text={content.matches[pairs[i]].answer}
+                            text={answers[pairs[i]]}
                             status={status}
                           />
                         ) : undefined}
@@ -236,8 +242,8 @@ const MatchBlock = ({
               minH="2rem"
               ref={provided.innerRef}
             >
-              {content.matches.map(
-                ({ answer }, i) =>
+              {answers.map(
+                (answer, i) =>
                   !pairs.includes(i) && (
                     <DraggableAnswer
                       key={i}
