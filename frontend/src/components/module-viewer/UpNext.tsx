@@ -7,13 +7,13 @@ import {
   ModuleProgressResponse,
 } from "../../APIClients/types/ProgressClientTypes";
 import AuthContext from "../../contexts/AuthContext";
-import { CourseType } from "../../types/ModuleEditorTypes";
+import NextModuleCard from "./NextModuleCard";
 
 interface UpNextProps {
-  courseData: CourseType;
+  courseID: string;
 }
 
-const UpNext = ({ courseData }: UpNextProps): React.ReactElement => {
+const UpNext = ({ courseID }: UpNextProps): React.ReactElement => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
 
   const [nextModuleIndex, setNextModuleIndex] = useState<number>();
@@ -40,16 +40,11 @@ const UpNext = ({ courseData }: UpNextProps): React.ReactElement => {
       getModuleProgress({
         variables: {
           userId: authenticatedUser.id,
-          courseId: courseData.id,
+          courseId: courseID,
         },
       });
     }
-  }, [
-    authenticatedUser,
-    setAuthenticatedUser,
-    getModuleProgress,
-    courseData.id,
-  ]);
+  }, [authenticatedUser, setAuthenticatedUser, getModuleProgress, courseID]);
 
   useEffect(() => {
     if (moduleProgressData) {
@@ -65,6 +60,7 @@ const UpNext = ({ courseData }: UpNextProps): React.ReactElement => {
       <Heading as="h2" size="lg" fontWeight="normal">
         Up Next
       </Heading>
+      <NextModuleCard courseID={courseID} nextModuleIndex={nextModuleIndex} />
     </>
   ) : (
     <></>
