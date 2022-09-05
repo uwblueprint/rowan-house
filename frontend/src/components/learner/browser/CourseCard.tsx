@@ -77,7 +77,7 @@ const CourseCard = ({ course }: CourseCardProps): React.ReactElement => {
           <Spacer />
           <Box>
             <Icon as={DocumentIcon} marginTop="-5px" marginRight="5px" />
-            Modules: {moduleCount} | Lessons: {lessonCount}
+            {moduleCount} Modules • {lessonCount} Lessons
           </Box>
         </Flex>
       </Flex>
