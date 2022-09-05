@@ -39,7 +39,7 @@ const Default = (): React.ReactElement => {
             <CourseCard
               key={course.id}
               course={course}
-              hidden={!!authenticatedUser}
+              hidden={!authenticatedUser}
             />
           ))}
         </SimpleGrid>
