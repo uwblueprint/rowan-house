@@ -5,10 +5,14 @@ import { Button, Flex, Heading, Text, VStack } from "@chakra-ui/react";
 import { ModuleEditorParams } from "../../types/ModuleEditorTypes";
 import EditorContext from "../../contexts/ModuleEditorContext";
 import { HOME_PAGE } from "../../constants/Routes";
+import UpNext from "./UpNext";
 
 const ModuleCompleted = (): React.ReactElement => {
   const history = useHistory();
-  const { moduleIndex: moduleIndexString } = useParams<ModuleEditorParams>();
+  const {
+    courseID,
+    moduleIndex: moduleIndexString,
+  } = useParams<ModuleEditorParams>();
   const moduleIndex = Number(moduleIndexString);
   const context = useContext(EditorContext);
   const { state } = context;
@@ -16,7 +20,6 @@ const ModuleCompleted = (): React.ReactElement => {
 
   const { course } = state;
   const module = course.modules[moduleIndex];
-
   return (
     <Flex w="100%" direction="column">
       <VStack align="start" px="154px" pt="20px" spacing="20px">
@@ -34,10 +37,11 @@ const ModuleCompleted = (): React.ReactElement => {
           </Text>
           .
         </Text>
-        <Heading as="h2" size="lg" fontWeight="normal">
-          Up Next
-        </Heading>
-        {/* TODO insert up next panel */}
+        <UpNext
+          courseID={courseID}
+          moduleIndex={moduleIndex}
+          modules={course.modules}
+        />
         <Heading as="h2" size="lg" fontWeight="normal">
           Course Progress
         </Heading>
