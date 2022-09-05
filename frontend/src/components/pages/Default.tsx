@@ -36,7 +36,11 @@ const Default = (): React.ReactElement => {
           spacing={5}
         >
           {courses?.map((course: CourseResponse) => (
-            <CourseCard key={course.id} course={course} />
+            <CourseCard
+              key={course.id}
+              course={course}
+              hidden={!!authenticatedUser}
+            />
           ))}
         </SimpleGrid>
       </VStack>

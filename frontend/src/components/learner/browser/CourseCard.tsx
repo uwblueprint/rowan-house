@@ -16,8 +16,13 @@ import { CourseResponse } from "../../../APIClients/types/CourseClientTypes";
 
 interface CourseCardProps {
   course: CourseResponse;
+  hidden: boolean;
 }
-const CourseCard = ({ course }: CourseCardProps): React.ReactElement => {
+
+const CourseCard = ({
+  course,
+  hidden,
+}: CourseCardProps): React.ReactElement => {
   const [focused, setFocused] = useState<boolean>(false);
   const [hovered, setHovered] = useState<boolean>(false);
   const handleFocus = () => setFocused(true);
@@ -60,7 +65,7 @@ const CourseCard = ({ course }: CourseCardProps): React.ReactElement => {
         <Flex direction="column" padding="24px" flex={1}>
           <Box>
             <Heading as="h3" size="md" marginBottom="6px">
-              {course.title}
+              {hidden ? "Course Title" : course.title}
             </Heading>
           </Box>
           <Box
@@ -72,12 +77,13 @@ const CourseCard = ({ course }: CourseCardProps): React.ReactElement => {
               "-webkit-box-orient": "vertical",
             }}
           >
-            {course.description}
+            {hidden ? "Description..." : course.description}
           </Box>
           <Spacer />
           <Box>
             <Icon as={DocumentIcon} marginTop="-5px" marginRight="5px" />
-            {moduleCount} Modules • {lessonCount} Lessons
+            {hidden ? "N" : moduleCount} Modules • {hidden ? "N" : lessonCount}{" "}
+            Lessons
           </Box>
         </Flex>
       </Flex>
