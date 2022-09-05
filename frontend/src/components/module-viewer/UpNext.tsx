@@ -22,7 +22,7 @@ const UpNext = ({
   moduleIndex,
   modules,
 }: UpNextProps): React.ReactElement => {
-  const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
+  const { authenticatedUser } = useContext(AuthContext);
   const nextModuleIndex = moduleIndex + 1;
 
   const [
@@ -44,7 +44,7 @@ const UpNext = ({
         },
       });
     }
-  }, [authenticatedUser, setAuthenticatedUser, getModuleProgress, courseID]);
+  }, [authenticatedUser, getModuleProgress, courseID]);
 
   useEffect(() => {
     if (
