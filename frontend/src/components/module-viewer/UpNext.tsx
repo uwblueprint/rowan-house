@@ -8,16 +8,23 @@ import {
   ModuleProgressResponse,
 } from "../../APIClients/types/ProgressClientTypes";
 import AuthContext from "../../contexts/AuthContext";
+import { ModuleType } from "../../types/ModuleEditorTypes";
 import NextModuleCard from "./NextModuleCard";
 
 interface UpNextProps {
   courseID: string;
+  moduleIndex: number;
+  modules: ModuleType[];
 }
 
-const UpNext = ({ courseID }: UpNextProps): React.ReactElement => {
+const UpNext = ({
+  courseID,
+  moduleIndex,
+  modules,
+}: UpNextProps): React.ReactElement => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
+  const nextModuleIndex = moduleIndex + 1;
 
-  const [nextModuleIndex, setNextModuleIndex] = useState<number>();
   const [
     nextModuleProgress,
     setNextModuleProgress,
@@ -27,18 +34,6 @@ const UpNext = ({ courseID }: UpNextProps): React.ReactElement => {
     ModuleProgressResponse,
     ModuleProgressRequest
   >(GET_MODULE_PROGRESS);
-
-  const getNextModule = (
-    nextModuleModuleProgressData: ModuleProgressResponse,
-  ): number => {
-    const { moduleProgress } = nextModuleModuleProgressData;
-    for (let i = 0; i < moduleProgress.length; i += 1) {
-      if (!moduleProgress[i].completedAt) {
-        return i;
-      }
-    }
-    return -1;
-  };
 
   useEffect(() => {
     if (authenticatedUser) {
@@ -52,14 +47,21 @@ const UpNext = ({ courseID }: UpNextProps): React.ReactElement => {
   }, [authenticatedUser, setAuthenticatedUser, getModuleProgress, courseID]);
 
   useEffect(() => {
-    if (moduleProgressData) {
-      const index = getNextModule(moduleProgressData);
-      setNextModuleIndex(index);
-      setNextModuleProgress(moduleProgressData.moduleProgress[index]);
+    if (
+      moduleProgressData &&
+      nextModuleIndex < moduleProgressData.moduleProgress.length
+    ) {
+      setNextModuleProgress(moduleProgressData.moduleProgress[nextModuleIndex]);
     }
-  }, [moduleProgressData]);
+  }, [moduleProgressData, nextModuleIndex]);
 
-  if (nextModuleIndex && nextModuleIndex > 0 && nextModuleProgress) {
+  if (nextModuleIndex >= modules.length) {
+    return <></>;
+  }
+
+  // Check if we have verified the current module progress
+  // nextModuleProgress is undefined if next module hasn't been started
+  if (moduleProgressData) {
     return (
       <>
         <Heading as="h2" size="lg" fontWeight="normal">
@@ -69,20 +71,18 @@ const UpNext = ({ courseID }: UpNextProps): React.ReactElement => {
           courseID={courseID}
           nextModuleIndex={nextModuleIndex}
           nextModuleProgress={nextModuleProgress}
+          modules={modules}
         />
       </>
     );
   }
-  if (!nextModuleIndex) {
-    return (
-      <>
-        <Heading as="h2" size="lg" fontWeight="normal">
-          Up Next
-        </Heading>
-        <Spinner size="xl" />
-      </>
-    );
-  }
-  return <></>;
+  return (
+    <>
+      <Heading as="h2" size="lg" fontWeight="normal">
+        Up Next
+      </Heading>
+      <Spinner size="xl" />
+    </>
+  );
 };
 export default UpNext;

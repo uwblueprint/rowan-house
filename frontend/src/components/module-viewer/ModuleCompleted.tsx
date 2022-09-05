@@ -20,7 +20,6 @@ const ModuleCompleted = (): React.ReactElement => {
 
   const { course } = state;
   const module = course.modules[moduleIndex];
-
   return (
     <Flex w="100%" direction="column">
       <VStack align="start" px="154px" pt="20px" spacing="20px">
@@ -38,7 +37,11 @@ const ModuleCompleted = (): React.ReactElement => {
           </Text>
           .
         </Text>
-        <UpNext courseID={courseID} />
+        <UpNext
+          courseID={courseID}
+          moduleIndex={moduleIndex}
+          modules={course.modules}
+        />
         <Heading as="h2" size="lg" fontWeight="normal">
           Course Progress
         </Heading>

@@ -6,14 +6,16 @@ import RouterLink from "../common/RouterLink";
 import { COURSE_OVERVIEW_BASE_ROUTE } from "../../constants/Routes";
 import EditorContext from "../../contexts/ModuleEditorContext";
 import { ModuleProgress } from "../../APIClients/types/ProgressClientTypes";
+import { ModuleType } from "../../types/ModuleEditorTypes";
 
 interface NextModuleStatusProps {
-  nextModuleProgress: ModuleProgress;
+  nextModuleProgress: ModuleProgress | undefined;
 }
 interface NextModuleCardProps {
   courseID: string;
   nextModuleIndex: number;
-  nextModuleProgress: ModuleProgress;
+  nextModuleProgress: ModuleProgress | undefined;
+  modules: ModuleType[];
 }
 
 const NextModuleStatus = ({
@@ -21,14 +23,15 @@ const NextModuleStatus = ({
 }: NextModuleStatusProps): React.ReactElement => {
   let color;
   let text;
-  if (nextModuleProgress.completedAt) {
+  if (nextModuleProgress?.startedAt && nextModuleProgress?.completedAt) {
     color = "brand.royal";
     text = "Complete";
-  } else if (nextModuleProgress.startedAt) {
+  } else if (nextModuleProgress?.startedAt) {
     color = "#2F855A";
     text = "In Progress";
   }
-  return nextModuleProgress.startedAt ? (
+
+  return nextModuleProgress?.startedAt ? (
     <Flex justifyItems="space-around" alignItems="center" marginBottom="0.5em">
       <Flex
         width="1em"
@@ -49,16 +52,11 @@ const NextModuleCard = ({
   courseID,
   nextModuleIndex,
   nextModuleProgress,
+  modules,
 }: NextModuleCardProps): React.ReactElement => {
   const [hovered, setHovered] = useState<boolean>(false);
   const handleMouseEnter = () => setHovered(true);
   const handleMouseLeave = () => setHovered(false);
-  const context = useContext(EditorContext);
-  const { state } = context;
-  if (!state) return <></>;
-  const {
-    course: { modules },
-  } = state;
   const nextModuleData = modules[nextModuleIndex];
 
   return (
@@ -78,6 +76,7 @@ const NextModuleCard = ({
         border="solid"
         borderWidth="0.15em"
         borderColor={hovered ? "brand.royal" : "#F4F4F4"}
+        backgroundColor={hovered ? "rgba(114, 74, 150, 0.05)" : ""}
         padding="1em"
       >
         <Image
