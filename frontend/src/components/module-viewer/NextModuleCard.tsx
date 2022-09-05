@@ -1,10 +1,8 @@
-import React, { useContext, useState } from "react";
-import { Flex, Heading, Image, Text } from "@chakra-ui/react";
+import React, { useState } from "react";
+import { Flex, Heading, Image, Link, Text } from "@chakra-ui/react";
 import { ChevronRightIcon } from "@chakra-ui/icons";
 import { DEFAULT_IMAGE } from "../../constants/DummyData";
-import RouterLink from "../common/RouterLink";
 import { COURSE_OVERVIEW_BASE_ROUTE } from "../../constants/Routes";
-import EditorContext from "../../contexts/ModuleEditorContext";
 import { ModuleProgress } from "../../APIClients/types/ProgressClientTypes";
 import { ModuleType } from "../../types/ModuleEditorTypes";
 
@@ -58,10 +56,9 @@ const NextModuleCard = ({
   const handleMouseEnter = () => setHovered(true);
   const handleMouseLeave = () => setHovered(false);
   const nextModuleData = modules[nextModuleIndex];
-
   return (
-    <RouterLink
-      to={`${COURSE_OVERVIEW_BASE_ROUTE}/${courseID}/${nextModuleIndex}`}
+    <Link
+      href={`${COURSE_OVERVIEW_BASE_ROUTE}/${courseID}/${nextModuleIndex}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       width="67%"
@@ -101,7 +98,7 @@ const NextModuleCard = ({
         </Flex>
         <ChevronRightIcon w={6} h={6} color="brand.royal" />
       </Flex>
-    </RouterLink>
+    </Link>
   );
 };
 
