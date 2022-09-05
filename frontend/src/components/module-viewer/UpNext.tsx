@@ -3,6 +3,7 @@ import { Heading } from "@chakra-ui/react";
 import React, { useContext, useState, useEffect } from "react";
 import { GET_MODULE_PROGRESS } from "../../APIClients/queries/ProgressQueries";
 import {
+  ModuleProgress,
   ModuleProgressRequest,
   ModuleProgressResponse,
 } from "../../APIClients/types/ProgressClientTypes";
@@ -17,6 +18,10 @@ const UpNext = ({ courseID }: UpNextProps): React.ReactElement => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
 
   const [nextModuleIndex, setNextModuleIndex] = useState<number>();
+  const [
+    nextModuleProgress,
+    setNextModuleProgress,
+  ] = useState<ModuleProgress>();
 
   const [getModuleProgress, { data: moduleProgressData }] = useLazyQuery<
     ModuleProgressResponse,
@@ -51,16 +56,21 @@ const UpNext = ({ courseID }: UpNextProps): React.ReactElement => {
       const index = getNextModule(moduleProgressData);
       if (index !== -1) {
         setNextModuleIndex(index);
+        setNextModuleProgress(moduleProgressData.moduleProgress[index]);
       }
     }
   }, [moduleProgressData]);
 
-  return nextModuleIndex ? (
+  return nextModuleIndex && nextModuleIndex > 0 && nextModuleProgress ? (
     <>
       <Heading as="h2" size="lg" fontWeight="normal">
         Up Next
       </Heading>
-      <NextModuleCard courseID={courseID} nextModuleIndex={nextModuleIndex} />
+      <NextModuleCard
+        courseID={courseID}
+        nextModuleIndex={nextModuleIndex}
+        nextModuleProgress={nextModuleProgress}
+      />
     </>
   ) : (
     <></>
