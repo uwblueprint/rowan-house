@@ -1,54 +1,21 @@
 import React, { useContext, useState } from "react";
 import { Flex, Heading, SimpleGrid, VStack } from "@chakra-ui/react";
+import { useQuery } from "@apollo/client";
 import AuthContext from "../../contexts/AuthContext";
 import Banner from "../learner/Banner";
 import CourseTabs, { TAB_NAMES } from "../learner/browser/CourseTabs";
 import CourseCard from "../learner/browser/CourseCard";
-import { CourseType } from "../../types/ModuleEditorTypes";
+import { COURSES } from "../../APIClients/queries/CourseQueries";
+import { CourseResponse } from "../../APIClients/types/CourseClientTypes";
 
 const Default = (): React.ReactElement => {
   const { authenticatedUser } = useContext(AuthContext);
 
   const [selectedTab, setSelectedTab] = useState<string>(TAB_NAMES[0]);
 
-  const courses: Array<CourseType> = [
-    {
-      id: "1",
-      title: "Understanding Abuse",
-      description: "A b c...",
-      image: null,
-      previewImage: null,
-      private: false,
-      modules: [],
-    },
-    {
-      id: "2",
-      title: "Understanding Abuse",
-      description: "A b c...",
-      image: null,
-      previewImage: null,
-      private: false,
-      modules: [],
-    },
-    {
-      id: "3",
-      title: "Understanding Abuse",
-      description: "A b c...",
-      image: null,
-      previewImage: null,
-      private: false,
-      modules: [],
-    },
-    {
-      id: "4",
-      title: "Understanding Abuse",
-      description: "A b c...",
-      image: null,
-      previewImage: null,
-      private: false,
-      modules: [],
-    },
-  ]; // TODO fetch courses
+  const { data } = useQuery<{ courses: Array<CourseResponse> }>(COURSES);
+
+  const { courses } = data ?? { courses: [] };
 
   return (
     <Flex direction="column">
@@ -68,8 +35,8 @@ const Default = (): React.ReactElement => {
           width="100%"
           spacing={5}
         >
-          {courses?.map((course) => (
-            <CourseCard key={course.id} />
+          {courses?.map((course: CourseResponse) => (
+            <CourseCard key={course.id} course={course} />
           ))}
         </SimpleGrid>
       </VStack>
