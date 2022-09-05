@@ -1,5 +1,5 @@
 import { useLazyQuery } from "@apollo/client";
-import { Heading } from "@chakra-ui/react";
+import { Heading, Spinner } from "@chakra-ui/react";
 import React, { useContext, useState, useEffect } from "react";
 import { GET_MODULE_PROGRESS } from "../../APIClients/queries/ProgressQueries";
 import {
@@ -54,27 +54,35 @@ const UpNext = ({ courseID }: UpNextProps): React.ReactElement => {
   useEffect(() => {
     if (moduleProgressData) {
       const index = getNextModule(moduleProgressData);
-      if (index !== -1) {
-        setNextModuleIndex(index);
-        setNextModuleProgress(moduleProgressData.moduleProgress[index]);
-      }
+      setNextModuleIndex(index);
+      setNextModuleProgress(moduleProgressData.moduleProgress[index]);
     }
   }, [moduleProgressData]);
 
-  return nextModuleIndex && nextModuleIndex > 0 && nextModuleProgress ? (
-    <>
-      <Heading as="h2" size="lg" fontWeight="normal">
-        Up Next
-      </Heading>
-      <NextModuleCard
-        courseID={courseID}
-        nextModuleIndex={nextModuleIndex}
-        nextModuleProgress={nextModuleProgress}
-      />
-    </>
-  ) : (
-    <></>
-  );
+  if (nextModuleIndex && nextModuleIndex > 0 && nextModuleProgress) {
+    return (
+      <>
+        <Heading as="h2" size="lg" fontWeight="normal">
+          Up Next
+        </Heading>
+        <NextModuleCard
+          courseID={courseID}
+          nextModuleIndex={nextModuleIndex}
+          nextModuleProgress={nextModuleProgress}
+        />
+      </>
+    );
+  }
+  if (!nextModuleIndex) {
+    return (
+      <>
+        <Heading as="h2" size="lg" fontWeight="normal">
+          Up Next
+        </Heading>
+        <Spinner size="xl" />
+      </>
+    );
+  }
+  return <></>;
 };
-
 export default UpNext;
