@@ -69,12 +69,13 @@ const NextModuleCard = ({
     >
       <Flex
         borderRadius="0.5em"
-        overflow="hidden"
+        overflow="auto"
         position="relative"
         alignItems="center"
         justifyContent="space-around"
         border="solid"
         borderWidth="0.15em"
+        height="calc(100% - 0.125rem)"
         borderColor={hovered ? "brand.royal" : "#F4F4F4"}
         backgroundColor={hovered ? "rgba(114, 74, 150, 0.05)" : ""}
         padding="1em"
@@ -87,7 +88,7 @@ const NextModuleCard = ({
           fit="cover"
           borderRadius="0.15em"
         />
-        <Flex direction="column" padding="24px" flex={1}>
+        <Flex direction="column" padding="2em" flex={1}>
           <NextModuleStatus nextModuleProgress={nextModuleProgress} />
           <Heading
             textOverflow="ellipsis"
@@ -99,7 +100,7 @@ const NextModuleCard = ({
             Module {nextModuleIndex + 1}: {nextModuleData.title}
           </Heading>
         </Flex>
-        <ChevronRightIcon w={6} h={6} color="brand.royal" />
+        <ChevronRightIcon w="2em" h="2em" color="brand.royal" />
       </Flex>
     </Link>
   );
