@@ -117,19 +117,16 @@ const CourseOverview = (): React.ReactElement => {
   };
 
   const getButtonText = () => {
-    let buttonText = "";
-
     if (!authenticatedUser) {
-      buttonText = "Sign up to view course";
-    } else if (!courseProgress?.courseProgress?.length) {
-      buttonText = "Start Course";
-    } else {
-      buttonText = courseProgress?.courseProgress?.[0]?.completedAt
-        ? "View Course"
-        : "Continue learning";
+      return "Sign up to view course";
     }
-
-    return buttonText;
+    if (!courseProgress?.courseProgress?.length) {
+      return "Start Course";
+    }
+    if (courseProgress?.courseProgress?.[0]?.completedAt) {
+      return "View Course";
+    }
+    return "Continue learning";
   };
 
   return (
@@ -221,8 +218,14 @@ const CourseOverview = (): React.ReactElement => {
         <Text variant="heading">Course Content</Text>
         <Accordion w="100%" allowToggle>
           {courseData?.course?.modules.map((module: ModuleResponse, i: number) => (
-            <>
-              <ModuleDropdown module={module} index={i} courseID={courseID} key={i} />
+            module && <>
+              <ModuleDropdown
+                module={module}
+                progress={moduleProgress ? moduleProgress[i] : undefined}
+                index={i}
+                courseID={courseID}
+                key={i}
+              />
               <Box h="1rem" />
             </>
           ))}
