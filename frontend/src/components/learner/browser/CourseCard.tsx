@@ -12,8 +12,12 @@ import { ReactComponent as DocumentIcon } from "../../../assets/document.svg";
 import { DEFAULT_IMAGE } from "../../../constants/DummyData";
 import RouterLink from "../../common/RouterLink";
 import { COURSE_OVERVIEW_BASE_ROUTE } from "../../../constants/Routes";
+import { CourseResponse } from "../../../APIClients/types/CourseClientTypes";
 
-const CourseCard = (): React.ReactElement => {
+interface CourseCardProps {
+  course: CourseResponse;
+}
+const CourseCard = ({ course }: CourseCardProps): React.ReactElement => {
   const [focused, setFocused] = useState<boolean>(false);
   const [hovered, setHovered] = useState<boolean>(false);
   const handleFocus = () => setFocused(true);
@@ -51,7 +55,7 @@ const CourseCard = (): React.ReactElement => {
         <Flex direction="column" padding="24px" flex={1}>
           <Box>
             <Heading as="h3" size="md" marginBottom="6px">
-              insert course title
+              {course.title}
             </Heading>
           </Box>
           <Box
@@ -63,8 +67,7 @@ const CourseCard = (): React.ReactElement => {
               "-webkit-box-orient": "vertical",
             }}
           >
-            Description description description description description
-            description description
+            {course.description}
           </Box>
           <Spacer />
           <Box>
