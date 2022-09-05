@@ -24,7 +24,12 @@ const CourseCard = ({ course }: CourseCardProps): React.ReactElement => {
   const handleBlur = () => setFocused(false);
   const handleMouseEnter = () => setHovered(true);
   const handleMouseLeave = () => setHovered(false);
-
+  const moduleCount = course.modules?.length || 0;
+  const lessonCount =
+    course.modules?.reduce(
+      (currSum, module) => currSum + (module?.lessons?.length || 0),
+      0,
+    ) || 0;
   const expanded = focused || hovered;
 
   return (
@@ -72,7 +77,7 @@ const CourseCard = ({ course }: CourseCardProps): React.ReactElement => {
           <Spacer />
           <Box>
             <Icon as={DocumentIcon} marginTop="-5px" marginRight="5px" />
-            insert course info
+            Modules: {moduleCount} | Lessons: {lessonCount}
           </Box>
         </Flex>
       </Flex>
