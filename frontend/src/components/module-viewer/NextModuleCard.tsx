@@ -16,6 +16,8 @@ interface NextModuleCardProps {
   modules: ModuleType[];
 }
 
+const GREY = "#666666";
+
 const NextModuleStatus = ({
   nextModuleProgress,
 }: NextModuleStatusProps): React.ReactElement => {
@@ -27,9 +29,12 @@ const NextModuleStatus = ({
   } else if (nextModuleProgress?.startedAt) {
     color = "#2F855A";
     text = "In Progress";
+  } else {
+    color = GREY;
+    text = "Not Started";
   }
 
-  return nextModuleProgress?.startedAt ? (
+  return (
     <Flex justifyItems="space-around" alignItems="center" marginBottom="0.5em">
       <Flex
         width="1em"
@@ -41,8 +46,6 @@ const NextModuleStatus = ({
         {text}
       </Text>
     </Flex>
-  ) : (
-    <> </>
   );
 };
 
@@ -90,7 +93,7 @@ const NextModuleCard = ({
             textOverflow="ellipsis"
             overflow="hidden"
             display="-webkit-box"
-            color="#666666"
+            color={GREY}
             size="md"
           >
             Module {nextModuleIndex + 1}: {nextModuleData.title}
