@@ -17,6 +17,7 @@ export interface TextInputProps {
   isInvalid?: boolean;
   defaultValue?: string;
   isRequired?: boolean;
+  mb?: number;
 }
 
 export const TextInput = ({
@@ -28,6 +29,7 @@ export const TextInput = ({
   isInvalid,
   defaultValue = "",
   isRequired = false,
+  ...rest
 }: TextInputProps): React.ReactElement => {
   return (
     <FormControl
@@ -35,6 +37,7 @@ export const TextInput = ({
       isRequired={isRequired}
       isInvalid={isInvalid}
       mb={5}
+      {...rest}
     >
       <FormLabel fontWeight={400} color={isInvalid ? "red.500" : "blackAlpha"}>
         {label}

@@ -53,7 +53,7 @@ const onDragEnd = (
 ) => {
   const { source, destination } = result;
   // dropped outside the list
-  if (!destination) {
+  if (!destination || result.type === "MATCH") {
     return;
   }
 
@@ -226,101 +226,116 @@ const ModuleViewer = ({
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  if (state) {
-    if (state.course.modules[moduleIndex] === undefined) {
-      return <p>Module not found!</p>;
-    }
-
+  const renderModuleViewer = () => {
+    if (!state) return <></>;
     const sideBarIcon = showSideBar ? (
       <ChevronLeftIcon />
     ) : (
       <ChevronRightIcon />
     );
     return (
-      <EditorContext.Provider value={{ state, dispatch }}>
-        <Flex h="100vh">
+      <Flex h="100vh">
+        <Box position="relative">
+          {showSideBar ? (
+            <SideBar
+              editable={editable}
+              onLessonSelected={() => setCompleted(false)}
+            />
+          ) : null}
+          <Flex
+            height="100%"
+            position="absolute"
+            right="-20px"
+            zIndex="1000"
+            align="center"
+            justify="center"
+          >
+            <IconButton
+              aria-label="Show sideBar"
+              borderRadius="0"
+              bg="white"
+              color="black"
+              size="s"
+              w="20px"
+              h="45px"
+              onClick={() => setShowSideBar(!showSideBar)}
+            >
+              {sideBarIcon}
+            </IconButton>
+          </Flex>
+        </Box>
+        <Flex direction="column" flex="1" height="100%">
+          {!editable && <Banner asBlock />}
+          <Box overflow="auto" height="100%" ref={scrollRef}>
+            {completed && !editable ? (
+              <ModuleCompleted />
+            ) : (
+              <LessonViewer
+                editable={editable}
+                onLessonCompleted={(lessonId) => {
+                  const { lessons } = state.course.modules[moduleIndex];
+                  const lessonIndex = lessons.indexOf(lessonId);
+                  if (lessonIndex === lessons.length - 1) {
+                    setCompleted(true);
+                    markModuleAsCompletedForUser({
+                      variables: {
+                        userId: authenticatedUser?.id,
+                        courseId: courseID,
+                        moduleIndex,
+                      },
+                    });
+                    dispatch({ type: "set-focus", value: null });
+                  } else if (lessonIndex !== -1) {
+                    markLessonAsCompletedForUser({
+                      variables: {
+                        userId: authenticatedUser?.id,
+                        lessonId,
+                      },
+                    });
+                    dispatch({
+                      type: "set-focus",
+                      value: lessons[lessonIndex + 1],
+                    });
+                    const newCompleted = new Set(state.completedLessons);
+                    newCompleted.add(lessonId);
+                    dispatch({
+                      type: "set-completed-lessons",
+                      value: newCompleted,
+                    });
+                  }
+                  // In case the browser doesn't do it automatically.
+                  scrollRef.current?.scrollTo(0, 0);
+                }}
+              />
+            )}
+          </Box>
+        </Flex>
+      </Flex>
+    );
+  };
+
+  if (state) {
+    if (state.course.modules[moduleIndex] === undefined) {
+      return <p>Module not found!</p>;
+    }
+    // Only include Drag Drop Context if the viewer is editable
+    if (editable) {
+      return (
+        <EditorContext.Provider value={{ state, dispatch }}>
           <DragDropContext
             onDragEnd={(result: DropResult) =>
               onDragEnd(dispatch, result, toast)
             }
           >
-            <Box position="relative">
-              {showSideBar ? (
-                <SideBar
-                  editable={editable}
-                  onLessonSelected={() => setCompleted(false)}
-                />
-              ) : null}
-              <Flex
-                height="100%"
-                position="absolute"
-                right="-20px"
-                zIndex="1000"
-                align="center"
-                justify="center"
-              >
-                <IconButton
-                  aria-label="Show sideBar"
-                  borderRadius="0"
-                  bg="white"
-                  color="black"
-                  size="s"
-                  w="20px"
-                  h="45px"
-                  onClick={() => setShowSideBar(!showSideBar)}
-                >
-                  {sideBarIcon}
-                </IconButton>
-              </Flex>
-            </Box>
-            <Flex direction="column" flex="1" height="100%">
-              {!editable && <Banner asBlock />}
-              <Box overflow="auto" height="100%" ref={scrollRef}>
-                {completed && !editable ? (
-                  <ModuleCompleted />
-                ) : (
-                  <LessonViewer
-                    editable={editable}
-                    onLessonCompleted={(lessonId) => {
-                      const { lessons } = state.course.modules[moduleIndex];
-                      const lessonIndex = lessons.indexOf(lessonId);
-                      if (lessonIndex === lessons.length - 1) {
-                        setCompleted(true);
-                        markModuleAsCompletedForUser({
-                          variables: {
-                            userId: authenticatedUser?.id,
-                            courseId: courseID,
-                            moduleIndex,
-                          },
-                        });
-                        dispatch({ type: "set-focus", value: null });
-                      } else if (lessonIndex !== -1) {
-                        markLessonAsCompletedForUser({
-                          variables: {
-                            userId: authenticatedUser?.id,
-                            lessonId,
-                          },
-                        });
-                        dispatch({
-                          type: "set-focus",
-                          value: lessons[lessonIndex + 1],
-                        });
-                        const newCompleted = new Set(state.completedLessons);
-                        newCompleted.add(lessonId);
-                        dispatch({
-                          type: "set-completed-lessons",
-                          value: newCompleted,
-                        });
-                      }
-                      // In case the browser doesn't do it automatically.
-                      scrollRef.current?.scrollTo(0, 0);
-                    }}
-                  />
-                )}
-              </Box>
-            </Flex>
+            {renderModuleViewer()}
           </DragDropContext>
-        </Flex>
+        </EditorContext.Provider>
+      );
+    }
+
+    return (
+      <EditorContext.Provider value={{ state, dispatch }}>
+        {renderModuleViewer()}
       </EditorContext.Provider>
     );
   }

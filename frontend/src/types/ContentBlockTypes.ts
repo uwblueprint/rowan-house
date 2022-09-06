@@ -1,7 +1,12 @@
 import { v4 as uuid } from "uuid";
 import { ContentType } from "../APIClients/types/LessonClientTypes";
 
-export const ContentTypeCategories = ["Layout", "Basic", "Media"];
+export const ContentTypeCategories = [
+  "Layout",
+  "Basic",
+  "Media",
+  "Interactive",
+];
 
 export type HeadingBlockState = ContentBlockStateType<
   "heading",
@@ -37,6 +42,16 @@ export type VideoBlockState = ContentBlockStateType<
   }
 >;
 export type AudioBlockState = ContentBlockStateType<"audio">;
+export type MatchBlockState = ContentBlockStateType<
+  "match",
+  {
+    question: string;
+    matches: Array<{
+      prompt: string;
+      answer: string;
+    }>;
+  }
+>;
 
 export type ColumnBlockState = ContentBlockStateType<
   "column",
@@ -56,6 +71,7 @@ export type ContentBlockState = RequireAllContentTypesArePresent<
   | ImageBlockState
   | VideoBlockState
   | AudioBlockState
+  | MatchBlockState
   | ColumnBlockState
 >;
 
@@ -136,6 +152,12 @@ export class ContentTypeEnum {
     "audio",
   );
 
+  static readonly MATCH = ContentTypeEnum.new<"match">(
+    "Matching",
+    "match.svg",
+    "match",
+  );
+
   public readonly id: string;
 
   constructor(
@@ -150,6 +172,7 @@ export class ContentTypeEnum {
 export const ColumnBlockInvalidChildren = [
   ContentTypeEnum.AUDIO.id,
   ContentTypeEnum.COLUMN.id,
+  ContentTypeEnum.MATCH.id,
 ];
 
 export interface ContentBlockStateType<

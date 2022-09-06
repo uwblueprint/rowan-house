@@ -194,6 +194,20 @@ export const createContent = (blockID: string): ContentBlockState => {
           size: ValidHeadingSizes.heading1,
         },
       };
+    case ContentTypeEnum.MATCH.id:
+      return {
+        type: ContentTypeEnum.MATCH,
+        id: uuid(),
+        content: {
+          question: "",
+          matches: [
+            {
+              prompt: "",
+              answer: "",
+            },
+          ],
+        },
+      };
     default:
       throw Error("Invalid block id");
   }
