@@ -4,8 +4,7 @@ import { CourseResponse } from "../APIClients/types/CourseClientTypes";
 import { LessonsType } from "../types/ModuleEditorTypes";
 import { ContentTypeEnum } from "../types/ContentBlockTypes";
 
-export const DEFAULT_IMAGE =
-  "https://res.cloudinary.com/practicaldev/image/fetch/s--JIe3p0M4--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://dev-to-uploads.s3.amazonaws.com/i/093ewdrgyf1kedlhzs51.png";
+export const DEFAULT_IMAGE = "/RHSlogo.png";
 
 /* eslint-disable import/prefer-default-export */
 

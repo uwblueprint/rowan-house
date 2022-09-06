@@ -3,7 +3,6 @@ import { Box, Button, ButtonGroup, Flex, Image } from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
 import * as Routes from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
-import RHSLogo from "../../assets/RHSLogo-horizontal.png";
 import LogoutButton from "../auth/LogoutButton";
 import RouterLink from "../common/RouterLink";
 
@@ -37,7 +36,7 @@ const Banner = ({
         zIndex={999}
       >
         <RouterLink to={Routes.HOME_PAGE}>
-          <Image src={RHSLogo} alt="Rowan House logo" h="18px" />
+          <Image src="/RHSlogo.png" alt="Rowan House logo" h="64px" />
         </RouterLink>
         {authenticatedUser ? (
           <LogoutButton {...softActionButtonProps} />

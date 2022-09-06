@@ -89,6 +89,7 @@ const ModulePreview = ({
           height="160px"
           width="240px"
           borderTopRadius="6px"
+          bg="#222"
         />
       </Link>
       <Flex ml={4} my={2} justify="space-between">
