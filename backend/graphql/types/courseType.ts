@@ -52,6 +52,7 @@ const courseType = gql`
   extend type Query {
     course(id: ID!): CourseResponseDTO!
     courses: [CourseResponseDTO!]!
+    publicCourses: [CourseResponseDTO!]!
   }
 
   extend type Mutation {

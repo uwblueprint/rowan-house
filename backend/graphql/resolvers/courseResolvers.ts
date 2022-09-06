@@ -69,7 +69,10 @@ const courseResolvers = {
       const accessToken = getAccessToken(context.req);
       const role = await authService.getUserRoleByAccessToken(accessToken);
       const attributes = getCourseVisibilityAttributes(role);
-
+      return courseService.getCourses(attributes);
+    },
+    publicCourses: async (): Promise<CourseResponseDTO[]> => {
+      const attributes = getCourseVisibilityAttributes(null);
       return courseService.getCourses(attributes);
     },
   },
