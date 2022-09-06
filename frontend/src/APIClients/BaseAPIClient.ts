@@ -78,7 +78,7 @@ const refreshDirectionalLink = new RetryLink().split(
       "ResetPassword",
       "Login",
       "Signup_Register",
-      "Courses",
+      "PublicCourses",
     ].includes(operation.operationName),
   authFromLocalLink.concat(httpLink),
   accessTokenInjectionLink.concat(httpLink),

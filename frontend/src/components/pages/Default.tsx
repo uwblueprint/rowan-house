@@ -1,21 +1,46 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Flex, Heading, SimpleGrid, VStack } from "@chakra-ui/react";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import AuthContext from "../../contexts/AuthContext";
 import Banner from "../learner/Banner";
 import CourseTabs, { TAB_NAMES } from "../learner/browser/CourseTabs";
 import CourseCard from "../learner/browser/CourseCard";
-import { COURSES } from "../../APIClients/queries/CourseQueries";
+import {
+  COURSES,
+  PUBLIC_COURSES,
+} from "../../APIClients/queries/CourseQueries";
 import { CourseResponse } from "../../APIClients/types/CourseClientTypes";
 
 const Default = (): React.ReactElement => {
   const { authenticatedUser } = useContext(AuthContext);
 
+  const [courses, setCourses] = useState([]);
+
   const [selectedTab, setSelectedTab] = useState<string>(TAB_NAMES[0]);
 
-  const { data } = useQuery<{ courses: Array<CourseResponse> }>(COURSES);
+  const [getAllCourseData, { data: allCourseData }] = useLazyQuery(COURSES);
+  const [getPublicCourseData, { data: publicCourseData }] = useLazyQuery(
+    PUBLIC_COURSES,
+  );
 
-  const { courses } = data ?? { courses: [] };
+  useEffect(() => {
+    const fetchCourseData = async () => {
+      if (authenticatedUser) {
+        const { data } = await getAllCourseData();
+        setCourses(data?.courses);
+      } else {
+        const { data } = await getPublicCourseData();
+        setCourses(data?.publicCourses);
+      }
+    };
+    fetchCourseData();
+  }, [
+    authenticatedUser,
+    getAllCourseData,
+    getPublicCourseData,
+    allCourseData,
+    publicCourseData,
+  ]);
 
   return (
     <Flex direction="column">
@@ -36,11 +61,7 @@ const Default = (): React.ReactElement => {
           spacing={5}
         >
           {courses?.map((course: CourseResponse) => (
-            <CourseCard
-              key={course.id}
-              course={course}
-              hidden={!authenticatedUser}
-            />
+            <CourseCard key={course.id} course={course} />
           ))}
         </SimpleGrid>
       </VStack>

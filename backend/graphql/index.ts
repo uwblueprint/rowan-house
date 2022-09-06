@@ -88,6 +88,7 @@ const graphQLMiddlewares = {
   Query: {
     course: publicRoute,
     courses: publicRoute,
+    publicCourses: publicRoute,
     entity: authorizedByAllRoles(),
     entities: authorizedByAllRoles(),
     userById: authorizedByAdmin(),

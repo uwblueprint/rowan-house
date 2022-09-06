@@ -1,28 +1,16 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Collapse,
-  Flex,
-  Heading,
-  Icon,
-  Image,
-  Spacer,
-} from "@chakra-ui/react";
-import { ReactComponent as DocumentIcon } from "../../../assets/document.svg";
+import { Box, Collapse, Flex, Heading, Image, Spacer } from "@chakra-ui/react";
 import { DEFAULT_IMAGE } from "../../../constants/DummyData";
 import RouterLink from "../../common/RouterLink";
 import { COURSE_OVERVIEW_BASE_ROUTE } from "../../../constants/Routes";
 import { CourseResponse } from "../../../APIClients/types/CourseClientTypes";
+import ModuleLessonCount from "../ModuleLessonCount";
 
 interface CourseCardProps {
   course: CourseResponse;
-  hidden: boolean;
 }
 
-const CourseCard = ({
-  course,
-  hidden,
-}: CourseCardProps): React.ReactElement => {
+const CourseCard = ({ course }: CourseCardProps): React.ReactElement => {
   const [focused, setFocused] = useState<boolean>(false);
   const [hovered, setHovered] = useState<boolean>(false);
   const handleFocus = () => setFocused(true);
@@ -65,7 +53,7 @@ const CourseCard = ({
         <Flex direction="column" padding="24px" flex={1}>
           <Box>
             <Heading as="h3" size="md" marginBottom="6px">
-              {hidden ? "Course Title" : course.title}
+              {course.title}
             </Heading>
           </Box>
           <Box
@@ -77,13 +65,14 @@ const CourseCard = ({
               "-webkit-box-orient": "vertical",
             }}
           >
-            {hidden ? "Description..." : course.description}
+            {course.description}
           </Box>
           <Spacer />
           <Box>
-            <Icon as={DocumentIcon} marginTop="-5px" marginRight="5px" />
-            {hidden ? "N" : moduleCount} Modules • {hidden ? "N" : lessonCount}{" "}
-            Lessons
+            <ModuleLessonCount
+              moduleCount={moduleCount}
+              lessonCount={lessonCount}
+            />
           </Box>
         </Flex>
       </Flex>
