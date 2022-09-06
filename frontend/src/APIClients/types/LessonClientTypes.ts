@@ -31,3 +31,8 @@ export interface LessonResponse {
   image: string | null;
   content: ContentBlockDTO[] | null;
 }
+
+export interface LessonTitleResponse {
+  id: string;
+  title: string;
+}

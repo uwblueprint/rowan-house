@@ -1,5 +1,5 @@
 import { useLazyQuery } from "@apollo/client";
-import { Heading, Spinner } from "@chakra-ui/react";
+import { Spinner, Text } from "@chakra-ui/react";
 import React, { useContext, useState, useEffect } from "react";
 import { GET_MODULE_PROGRESS } from "../../APIClients/queries/ProgressQueries";
 import {
@@ -61,27 +61,19 @@ const UpNext = ({
 
   // Check if we have verified the current module progress
   // nextModuleProgress is undefined if next module hasn't been started
-  if (moduleProgressData) {
-    return (
-      <>
-        <Heading as="h2" size="lg" fontWeight="normal">
-          Up Next
-        </Heading>
+  return (
+    <>
+      <Text variant="heading">Up Next</Text>
+      {moduleProgressData ? (
         <NextModuleCard
           courseID={courseID}
           nextModuleIndex={nextModuleIndex}
           nextModuleProgress={nextModuleProgress}
           modules={modules}
         />
-      </>
-    );
-  }
-  return (
-    <>
-      <Heading as="h2" size="lg" fontWeight="normal">
-        Up Next
-      </Heading>
-      <Spinner size="xl" />
+      ) : (
+        <Spinner size="xl" />
+      )}
     </>
   );
 };

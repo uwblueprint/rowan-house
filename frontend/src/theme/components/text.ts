@@ -29,7 +29,7 @@ const Text = {
     },
     heading: {
       fontWeight: "semibold",
-      fontSize: "20px",
+      fontSize: "24px",
       lineHeight: "150%",
     },
     subheading: {

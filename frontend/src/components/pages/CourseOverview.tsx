@@ -2,7 +2,6 @@ import React, { useContext, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 import {
-  Accordion,
   Box,
   Button,
   Center,
@@ -28,8 +27,7 @@ import {
 import { CourseOverviewParams } from "../../types/CourseOverviewTypes";
 import { ModuleProgressType, ModuleType } from "../../types/ModuleEditorTypes";
 import AuthContext from "../../contexts/AuthContext";
-import ModuleDropdown from "../learner/ModuleDropdown";
-import { ModuleResponse } from "../../APIClients/types/CourseClientTypes";
+import ModuleDropdowns from "../learner/ModuleDropdowns";
 
 const CourseOverview = (): React.ReactElement => {
   const [disableCTAButton, setDisableCTAButton] = useState(false);
@@ -162,7 +160,7 @@ const CourseOverview = (): React.ReactElement => {
         </VStack>
         <Flex
           direction="column"
-          flex="1"
+          width="26rem"
           height={authenticatedUser ? "100%" : "130%"}
           background="white"
           color="text.default"
@@ -214,22 +212,13 @@ const CourseOverview = (): React.ReactElement => {
           </Box>
         </Flex>
       </Flex>
-      <VStack w="50%" padding="2rem" align="left">
+      <VStack w="calc(100% - 28rem)" py="2rem" px="7.5rem" align="left">
         <Text variant="heading">Course Content</Text>
-        <Accordion w="100%" allowToggle>
-          {courseData?.course?.modules.map((module: ModuleResponse, i: number) => (
-            module && <>
-              <ModuleDropdown
-                module={module}
-                progress={moduleProgress ? moduleProgress[i] : undefined}
-                index={i}
-                courseID={courseID}
-                key={i}
-              />
-              <Box h="1rem" />
-            </>
-          ))}
-        </Accordion>
+        <ModuleDropdowns
+          modules={courseData?.course?.modules}
+          progress={moduleProgress}
+          courseID={courseID}
+        />
       </VStack>
     </Flex>
   );
