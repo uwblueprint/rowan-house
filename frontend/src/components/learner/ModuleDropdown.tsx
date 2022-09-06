@@ -72,23 +72,25 @@ const ModuleDropdown = ({
     },
   });
 
-  if (!lessonData) return <></>;
+  if (!lessonData?.lessons || lessonData.lessons.length === 0) return <></>;
   const lessonTitles = lessonData.lessons.reduce<{ [id: string]: string }>(
     (bucket, lesson) => ({ ...bucket, [lesson.id]: lesson.title }),
     {},
   );
 
+  // Calculate how many completed lessons there are
   let latestCompletedLesson = -1;
-  if (lessonProgressData?.lessonProgress) {
-    Object.values(lessonProgressData.lessonProgress).forEach((lesson) => {
-      if (lesson.completedAt) {
-        const i = module?.lessons?.findIndex((id) => id === lesson.lessonId);
-        if (i !== undefined) latestCompletedLesson = i;
-      }
-    });
+  if (lessonProgressData && module.lessons) {
+    latestCompletedLesson = Object.values(lessonProgressData.lessonProgress)
+      .length;
+    if (latestCompletedLesson === module.lessons.length) {
+      latestCompletedLesson = module.lessons.length + 1;
+    } else if (latestCompletedLesson === 0) {
+      latestCompletedLesson = -1;
+    }
   }
 
-  let status = ModuleStatus.Complete;
+  let status = ModuleStatus.NotStarted;
   if (progress?.startedAt) status = ModuleStatus.InProgress;
   if (progress?.completedAt) status = ModuleStatus.Complete;
 
@@ -102,6 +104,9 @@ const ModuleDropdown = ({
     }
     if (!progress) {
       return "Start module";
+    }
+    if (progress.completedAt) {
+      return "View module";
     }
     if (progress.startedAt) {
       return "Continue learning";

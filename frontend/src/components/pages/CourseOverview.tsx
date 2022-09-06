@@ -124,7 +124,10 @@ const CourseOverview = (): React.ReactElement => {
     if (courseProgress?.courseProgress?.[0]?.completedAt) {
       return "View Course";
     }
-    return "Continue learning";
+    if (courseProgress?.courseProgress?.[0]?.startedAt) {
+      return "Continue learning";
+    }
+    return "View Course";
   };
 
   return (

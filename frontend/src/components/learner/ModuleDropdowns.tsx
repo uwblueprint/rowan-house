@@ -16,27 +16,30 @@ const ModuleDropdowns = ({
   progress,
   courseID,
 }: ModuleDropdownsProps): React.ReactElement => {
+  // TODO: Have to filter because course contains deleted modules
   return (
     <Accordion w="100%" allowToggle>
-      {modules?.map(
-        (module: ModuleResponse, i: number) =>
-          module && (
-            <>
-              <ModuleDropdown
-                module={module}
-                progress={
-                  progress?.moduleProgress
-                    ? progress.moduleProgress[i]
-                    : undefined
-                }
-                index={i}
-                courseID={courseID}
-                key={i}
-              />
-              <Box h="1rem" />
-            </>
-          ),
-      )}
+      {modules
+        ?.filter((n) => n)
+        .map(
+          (module: ModuleResponse, i: number) =>
+            module && (
+              <>
+                <ModuleDropdown
+                  module={module}
+                  progress={
+                    progress?.moduleProgress
+                      ? progress.moduleProgress[i]
+                      : undefined
+                  }
+                  index={i}
+                  courseID={courseID}
+                  key={module.id}
+                />
+                <Box h="1rem" key={`${module.id}-spacer`} />
+              </>
+            ),
+        )}
     </Accordion>
   );
 };

@@ -42,7 +42,10 @@ import {
 } from "../../APIClients/mutations/ProgressMutations";
 import AuthContext from "../../contexts/AuthContext";
 import { ColumnBlockInvalidChildren } from "../../types/ContentBlockTypes";
-import { GET_LESSON_PROGRESS } from "../../APIClients/queries/ProgressQueries";
+import {
+  GET_LESSON_PROGRESS,
+  GET_MODULE_PROGRESS,
+} from "../../APIClients/queries/ProgressQueries";
 import { LessonProgressResponse } from "../../APIClients/types/ProgressClientTypes";
 
 // Copy drag implementation based on https://github.com/atlassian/react-beautiful-dnd/issues/216#issuecomment-423708497
@@ -142,9 +145,15 @@ const ModuleViewer = ({
   const [getProgressData, { data: lessonProgressData }] = useLazyQuery(
     GET_LESSON_PROGRESS,
   );
-  const [markModuleAsCompletedForUser] = useMutation(MARK_MODULE_AS_COMPLETED);
-  const [markLessonAsCompletedForUser] = useMutation(MARK_LESSON_AS_COMPLETED);
-  const [markModuleAsStartedForUser] = useMutation(MARK_MODULE_AS_STARTED);
+  const [markModuleAsCompletedForUser] = useMutation(MARK_MODULE_AS_COMPLETED, {
+    refetchQueries: [{ query: GET_MODULE_PROGRESS }],
+  });
+  const [markLessonAsCompletedForUser] = useMutation(MARK_LESSON_AS_COMPLETED, {
+    refetchQueries: [{ query: GET_LESSON_PROGRESS }],
+  });
+  const [markModuleAsStartedForUser] = useMutation(MARK_MODULE_AS_STARTED, {
+    refetchQueries: [{ query: GET_MODULE_PROGRESS }],
+  });
 
   useEffect(() => {
     if (!editable) {
