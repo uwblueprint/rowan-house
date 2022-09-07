@@ -32,7 +32,4 @@ export interface LessonResponse {
   content: ContentBlockDTO[] | null;
 }
 
-export interface LessonTitleResponse {
-  id: string;
-  title: string;
-}
+export type LessonTitlesResponse = string[]; 

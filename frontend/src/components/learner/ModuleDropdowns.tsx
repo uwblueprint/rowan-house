@@ -20,11 +20,11 @@ const ModuleDropdowns = ({
   return (
     <Accordion w="100%" allowToggle>
       {modules
-        ?.filter((n) => n)
+        ?.filter(n => n)
         .map(
           (module: ModuleResponse, i: number) =>
             module && (
-              <>
+              <React.Fragment key={module.id}>
                 <ModuleDropdown
                   module={module}
                   progress={
@@ -34,12 +34,10 @@ const ModuleDropdowns = ({
                   }
                   index={i}
                   courseID={courseID}
-                  key={module.id}
                 />
-                <Box h="1rem" key={`${module.id}-spacer`} />
-              </>
-            ),
-        )}
+                <Box h="1rem" />
+              </React.Fragment>
+            ))}
     </Accordion>
   );
 };

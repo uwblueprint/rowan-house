@@ -34,7 +34,7 @@ const CourseOverview = (): React.ReactElement => {
   const history = useHistory();
   const { courseID }: CourseOverviewParams = useParams();
   const { authenticatedUser } = useContext(AuthContext);
-
+  
   const { data: courseData } = useQuery(GET_COURSE, {
     variables: {
       id: courseID,
@@ -46,6 +46,7 @@ const CourseOverview = (): React.ReactElement => {
       userId: authenticatedUser?.id,
       courseIds: [courseID],
     },
+    skip: !authenticatedUser,
   });
 
   const { data: moduleProgress } = useQuery(GET_MODULE_PROGRESS, {
@@ -53,6 +54,7 @@ const CourseOverview = (): React.ReactElement => {
       userId: authenticatedUser?.id,
       courseId: courseID,
     },
+    skip: !authenticatedUser,
   });
 
   const onReturnToCourseOverviewClick = () => {

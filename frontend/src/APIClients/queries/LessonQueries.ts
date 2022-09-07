@@ -19,10 +19,7 @@ const GET_LESSONS = gql`
 
 export const GET_LESSON_TITLES = gql`
   query GetLessonsTitles($ids: [ID!]!) {
-    lessons(ids: $ids) {
-      id
-      title
-    }
+    lessonTitles(ids: $ids)
   }
 `;
 

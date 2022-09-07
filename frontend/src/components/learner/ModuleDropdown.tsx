@@ -20,11 +20,12 @@ import {
   LessonProgressResponse,
   ModuleProgress,
 } from "../../APIClients/types/ProgressClientTypes";
-import { LessonTitleResponse } from "../../APIClients/types/LessonClientTypes";
+import { LessonTitlesResponse } from "../../APIClients/types/LessonClientTypes";
 
 import { GET_LESSON_PROGRESS } from "../../APIClients/queries/ProgressQueries";
 import { GET_LESSON_TITLES } from "../../APIClients/queries/LessonQueries";
-import { COURSE_OVERVIEW_BASE_ROUTE } from "../../constants/Routes";
+import { COURSE_OVERVIEW_BASE_ROUTE, SIGNUP_PAGE } from "../../constants/Routes";
+import { ReactComponent as HalfComplete } from "../../assets/halfComplete.svg"
 
 import AuthContext from "../../contexts/AuthContext";
 import { Step, Steps } from "../common/steps";
@@ -53,7 +54,7 @@ const ModuleDropdown = ({
 
   const {
     data: lessonData,
-  }: { data?: { lessons: LessonTitleResponse[] } } = useQuery(
+  }: { data?: { lessonTitles: LessonTitlesResponse } } = useQuery(
     GET_LESSON_TITLES,
     {
       variables: {
@@ -61,6 +62,7 @@ const ModuleDropdown = ({
       },
     },
   );
+
   const {
     data: lessonProgressData,
   }: {
@@ -70,13 +72,8 @@ const ModuleDropdown = ({
       userId: authenticatedUser?.id,
       lessonIds: module?.lessons ?? [],
     },
+    skip: !authenticatedUser,
   });
-
-  if (!lessonData?.lessons || lessonData.lessons.length === 0) return <></>;
-  const lessonTitles = lessonData.lessons.reduce<{ [id: string]: string }>(
-    (bucket, lesson) => ({ ...bucket, [lesson.id]: lesson.title }),
-    {},
-  );
 
   // Calculate how many completed lessons there are
   let latestCompletedLesson = -1;
@@ -95,7 +92,10 @@ const ModuleDropdown = ({
   if (progress?.completedAt) status = ModuleStatus.Complete;
 
   const startModule = () => {
-    history.push(`${COURSE_OVERVIEW_BASE_ROUTE}/${courseID}/${index}`);
+    if (authenticatedUser)
+      history.push(`${COURSE_OVERVIEW_BASE_ROUTE}/${courseID}/${index}`);
+    else
+      history.push(SIGNUP_PAGE);
   };
 
   const getButtonText = () => {
@@ -127,28 +127,7 @@ const ModuleDropdown = ({
           >
             <Flex w="100%" align="center">
               <Box w="30px">
-                {status === ModuleStatus.InProgress && (
-                  <svg
-                    width="24"
-                    height="25"
-                    viewBox="0 0 24 25"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M3.00001 12.5C3.00001 7.53125 7.03126 3.5 12 3.5C16.9688 3.5 21 7.53125 21 12.5C21 17.4687 16.9688 21.5 12 21.5C7.03126 21.5 3.00001 17.4687 3.00001 12.5Z"
-                      stroke="#9861C9"
-                      strokeWidth="3"
-                      strokeMiterlimit="10"
-                    />
-                    <path
-                      d="M12 3.5C7.03125 3.5 3 7.53125 3 12.5C3 17.4687 7.03125 21.5 12 21.5"
-                      stroke="#F4F4F4"
-                      strokeWidth="3"
-                      strokeMiterlimit="10"
-                    />
-                  </svg>
-                )}
+                {status === ModuleStatus.InProgress && <HalfComplete />}
                 {status === ModuleStatus.Complete && <CheckCircleIcon />}
               </Box>
               <Text variant="subheading">{`Module ${index + 1}: ${
@@ -174,7 +153,7 @@ const ModuleDropdown = ({
                 <Steps currentStep={latestCompletedLesson}>
                   {module.lessons?.map((id, i) => (
                     <Step
-                      label={`${i + 1}. ${lessonTitles[id]}`}
+                      label={`${i + 1}. ${lessonData?.lessonTitles[i]}`}
                       index={i}
                       key={i}
                     />
