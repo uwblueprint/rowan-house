@@ -27,6 +27,7 @@ import {
 import { CourseOverviewParams } from "../../types/CourseOverviewTypes";
 import { ModuleProgressType, ModuleType } from "../../types/ModuleEditorTypes";
 import AuthContext from "../../contexts/AuthContext";
+import ModuleDropdowns from "../learner/ModuleDropdowns";
 
 const CourseOverview = (): React.ReactElement => {
   const [disableCTAButton, setDisableCTAButton] = useState(false);
@@ -45,6 +46,7 @@ const CourseOverview = (): React.ReactElement => {
       userId: authenticatedUser?.id,
       courseIds: [courseID],
     },
+    skip: !authenticatedUser,
   });
 
   const { data: moduleProgress } = useQuery(GET_MODULE_PROGRESS, {
@@ -52,6 +54,7 @@ const CourseOverview = (): React.ReactElement => {
       userId: authenticatedUser?.id,
       courseId: courseID,
     },
+    skip: !authenticatedUser,
   });
 
   const onReturnToCourseOverviewClick = () => {
@@ -114,19 +117,19 @@ const CourseOverview = (): React.ReactElement => {
   };
 
   const getButtonText = () => {
-    let buttonText = "";
-
     if (!authenticatedUser) {
-      buttonText = "Sign up to view course";
-    } else if (!courseProgress?.courseProgress?.length) {
-      buttonText = "Start Course";
-    } else {
-      buttonText = courseProgress?.courseProgress?.[0]?.completedAt
-        ? "View Course"
-        : "Continue learning";
+      return "Sign up to view course";
     }
-
-    return buttonText;
+    if (!courseProgress?.courseProgress?.length) {
+      return "Start Course";
+    }
+    if (courseProgress?.courseProgress?.[0]?.completedAt) {
+      return "View Course";
+    }
+    if (courseProgress?.courseProgress?.[0]?.startedAt) {
+      return "Continue learning";
+    }
+    return "View Course";
   };
 
   return (
@@ -162,7 +165,7 @@ const CourseOverview = (): React.ReactElement => {
         </VStack>
         <Flex
           direction="column"
-          flex="1"
+          width="26rem"
           height={authenticatedUser ? "100%" : "130%"}
           background="white"
           color="text.default"
@@ -214,6 +217,14 @@ const CourseOverview = (): React.ReactElement => {
           </Box>
         </Flex>
       </Flex>
+      <VStack w="calc(100% - 28rem)" py="2rem" px="7.5rem" align="left">
+        <Text variant="heading">Course Content</Text>
+        <ModuleDropdowns
+          modules={courseData?.course?.modules}
+          progress={moduleProgress}
+          courseID={courseID}
+        />
+      </VStack>
     </Flex>
   );
 };

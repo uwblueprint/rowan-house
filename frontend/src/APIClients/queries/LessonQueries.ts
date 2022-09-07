@@ -17,4 +17,10 @@ const GET_LESSONS = gql`
   }
 `;
 
+export const GET_LESSON_TITLES = gql`
+  query GetLessonsTitles($ids: [ID!]!) {
+    lessonTitles(ids: $ids)
+  }
+`;
+
 export default GET_LESSONS;

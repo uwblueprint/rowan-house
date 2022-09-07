@@ -31,3 +31,5 @@ export interface LessonResponse {
   image: string | null;
   content: ContentBlockDTO[] | null;
 }
+
+export type LessonTitlesResponse = string[];

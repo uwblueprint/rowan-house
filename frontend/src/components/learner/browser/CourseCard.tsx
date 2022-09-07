@@ -27,7 +27,7 @@ const CourseCard = ({ course }: CourseCardProps): React.ReactElement => {
 
   return (
     <RouterLink
-      to={`${COURSE_OVERVIEW_BASE_ROUTE}/123`}
+      to={`${COURSE_OVERVIEW_BASE_ROUTE}/${course.id}`}
       onFocus={handleFocus}
       onBlur={handleBlur}
       onMouseEnter={handleMouseEnter}
