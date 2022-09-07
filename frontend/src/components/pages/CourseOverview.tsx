@@ -34,7 +34,7 @@ const CourseOverview = (): React.ReactElement => {
   const history = useHistory();
   const { courseID }: CourseOverviewParams = useParams();
   const { authenticatedUser } = useContext(AuthContext);
-  
+
   const { data: courseData } = useQuery(GET_COURSE, {
     variables: {
       id: courseID,

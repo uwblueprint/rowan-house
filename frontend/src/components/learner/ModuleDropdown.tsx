@@ -24,8 +24,11 @@ import { LessonTitlesResponse } from "../../APIClients/types/LessonClientTypes";
 
 import { GET_LESSON_PROGRESS } from "../../APIClients/queries/ProgressQueries";
 import { GET_LESSON_TITLES } from "../../APIClients/queries/LessonQueries";
-import { COURSE_OVERVIEW_BASE_ROUTE, SIGNUP_PAGE } from "../../constants/Routes";
-import { ReactComponent as HalfComplete } from "../../assets/halfComplete.svg"
+import {
+  COURSE_OVERVIEW_BASE_ROUTE,
+  SIGNUP_PAGE,
+} from "../../constants/Routes";
+import { ReactComponent as HalfComplete } from "../../assets/halfComplete.svg";
 
 import AuthContext from "../../contexts/AuthContext";
 import { Step, Steps } from "../common/steps";
@@ -94,8 +97,7 @@ const ModuleDropdown = ({
   const startModule = () => {
     if (authenticatedUser)
       history.push(`${COURSE_OVERVIEW_BASE_ROUTE}/${courseID}/${index}`);
-    else
-      history.push(SIGNUP_PAGE);
+    else history.push(SIGNUP_PAGE);
   };
 
   const getButtonText = () => {
@@ -140,7 +142,7 @@ const ModuleDropdown = ({
           </AccordionButton>
           <Box
             border="1px"
-            borderBottomRadius="6px"
+            borderBottomRadius={isExpanded ? "6px" : 0}
             borderColor={isExpanded ? "brand.royal" : "background.lightgrey"}
             bg={isExpanded ? "#F9F7FB" : "white"}
           >

@@ -20,7 +20,7 @@ const ModuleDropdowns = ({
   return (
     <Accordion w="100%" allowToggle>
       {modules
-        ?.filter(n => n)
+        ?.filter((n) => n)
         .map(
           (module: ModuleResponse, i: number) =>
             module && (
@@ -37,7 +37,8 @@ const ModuleDropdowns = ({
                 />
                 <Box h="1rem" />
               </React.Fragment>
-            ))}
+            ),
+        )}
     </Accordion>
   );
 };
