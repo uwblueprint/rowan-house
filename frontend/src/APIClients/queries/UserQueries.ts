@@ -19,3 +19,9 @@ export const GET_EMAIL_VERIFIED_BY_EMAIL = gql`
     emailVerifiedByEmail(email: $email)
   }
 `;
+
+export const GET_USER_COUNT_BY_TOWN = gql`
+  query GetUserCountByTown($startDate: String, $endDate: String) {
+    userCountByTown(startDate: $startDate, endDate: $endDate)
+  }
+`;
