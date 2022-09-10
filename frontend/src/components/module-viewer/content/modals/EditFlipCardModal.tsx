@@ -50,7 +50,7 @@ const EditFlipCardModal = ({
 
   return (
     <Modal
-      header="Edit FlipCarding"
+      header="Edit Flip Cards"
       size="xl"
       onConfirm={onConfirm}
       onCancel={onClose}
