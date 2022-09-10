@@ -208,6 +208,14 @@ export const createContent = (blockID: string): ContentBlockState => {
           ],
         },
       };
+    case ContentTypeEnum.FLIPCARD.id:
+      return {
+        type: ContentTypeEnum.FLIPCARD,
+        id: uuid(),
+        content: {
+          cards: [],
+        },
+      };
     default:
       throw Error("Invalid block id");
   }

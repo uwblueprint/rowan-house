@@ -16,7 +16,7 @@ const options: Record<string, Array<ContentTypeEnum>> = {
     ContentTypeEnum.BUTTON,
   ],
   Media: [ContentTypeEnum.IMAGE, ContentTypeEnum.VIDEO],
-  Interactive: [ContentTypeEnum.MATCH],
+  Interactive: [ContentTypeEnum.MATCH, ContentTypeEnum.FLIPCARD],
 };
 
 const SideBarContentKiosk = (): React.ReactElement => {

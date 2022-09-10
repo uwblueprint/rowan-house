@@ -48,6 +48,9 @@ const BlockStyle = ({
     case "audio.svg":
       contentIcon = <AudioIcon width="fit-content" height="fit-content" />;
       break;
+    case "cards.svg":
+      contentIcon = <ParagraphIcon width="fit-content" height="fit-content" />;
+      break;
     default:
       contentIcon = <ImageIcon />;
   }

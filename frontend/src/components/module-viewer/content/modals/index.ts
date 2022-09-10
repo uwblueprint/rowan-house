@@ -4,6 +4,7 @@ import EditTextModal from "./EditTextModal";
 import EditVideoModal from "./EditVideoModal";
 import EditHeadingModal from "./EditHeadingModal";
 import EditMatchModal from "./EditMatchModal";
+import EditFlipCardModal from "./EditFlipCardModal";
 
 export {
   EditButtonModal,
@@ -12,4 +13,5 @@ export {
   EditImageModal,
   EditVideoModal,
   EditMatchModal,
+  EditFlipCardModal,
 };

@@ -2,6 +2,7 @@ import {
   ButtonBlock,
   ColumnBlock,
   ContentBlock,
+  FlipCardBlock,
   HeadingBlock,
   ImageBlock,
   MatchBlock,
@@ -89,8 +90,12 @@ export const validateContent = (content: ContentBlock): boolean => {
     case "match": {
       const match = content as MatchBlock;
       return (
-        match.content.question != null && match.content.matches.length >= 2
+        match.content.question !== null && match.content.matches.length >= 2
       );
+    }
+    case "cards": {
+      const flipCard = content as FlipCardBlock;
+      return flipCard.content.cards !== null && flipCard.content.cards.length >= 1;
     }
     case "text": {
       const text = content as TextBlock;
