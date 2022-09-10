@@ -213,7 +213,12 @@ export const createContent = (blockID: string): ContentBlockState => {
         type: ContentTypeEnum.FLIPCARD,
         id: uuid(),
         content: {
-          cards: [],
+          cards: [
+            {
+              front: "",
+              back: "",
+            },
+          ],
         },
       };
     default:
