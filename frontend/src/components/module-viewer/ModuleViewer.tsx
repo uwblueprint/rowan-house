@@ -295,24 +295,24 @@ const ModuleViewer = ({
                     });
                     dispatch({ type: "set-focus", value: null });
                   } else if (lessonIndex !== -1) {
-                    markLessonAsCompletedForUser({
-                      variables: {
-                        userId: authenticatedUser?.id,
-                        lessonId,
-                      },
-                    });
                     dispatch({
                       type: "set-focus",
                       value: lessons[lessonIndex + 1],
                     });
-                    const newCompleted = new Set(state.completedLessons);
-                    newCompleted.add(lessonId);
-                    dispatch({
-                      type: "set-completed-lessons",
-                      value: newCompleted,
-                    });
                   }
                   // In case the browser doesn't do it automatically.
+                  markLessonAsCompletedForUser({
+                    variables: {
+                      userId: authenticatedUser?.id,
+                      lessonId,
+                    },
+                  });
+                  const newCompleted = new Set(state.completedLessons);
+                  newCompleted.add(lessonId);
+                  dispatch({
+                    type: "set-completed-lessons",
+                    value: newCompleted,
+                  });
                   scrollRef.current?.scrollTo(0, 0);
                 }}
               />
