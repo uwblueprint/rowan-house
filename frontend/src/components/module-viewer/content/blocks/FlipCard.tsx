@@ -14,6 +14,7 @@ const FlipBlock = ({
     <Center className="card-container">
       <SimpleGrid
         w="100%"
+        maxW="400px"
         minH="10rem"
         padding="2rem"
         borderTopColor="brand.royal"

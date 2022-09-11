@@ -1,16 +1,14 @@
 import {
-  Button,
-  FormLabel,
-  Text,
   VStack,
-  Center,
   Tabs,
   TabList,
   TabPanels,
   Tab,
   TabPanel,
+  Circle,
+  HStack,
 } from "@chakra-ui/react";
-import { DeleteIcon } from "@chakra-ui/icons";
+import { AddIcon, SmallCloseIcon } from "@chakra-ui/icons";
 import React, { useState } from "react";
 
 import { EditContentModalProps } from "../../../../types/ModuleEditorTypes";
@@ -27,8 +25,10 @@ const EditFlipCardModal = ({
   const [cards, setCards] = useState<FlipCardBlockState["content"]["cards"]>(
     block.content.cards ?? "",
   );
+  const [tabIndex, setTabIndex] = useState(0);
 
   const addCard = () => {
+    setTabIndex(cards.length);
     setCards([
       ...cards,
       {
@@ -46,6 +46,9 @@ const EditFlipCardModal = ({
   };
 
   const removeCard = (i: number) => {
+    if (tabIndex === cards.length - 1) {
+      setTabIndex(tabIndex - 1);
+    }
     const newCards = [...cards];
     newCards.splice(i, 1);
     setCards([...newCards]);
@@ -66,14 +69,41 @@ const EditFlipCardModal = ({
       isOpen={isOpen}
       canSubmit={cards.length >= 1}
     >
-      <Tabs variant="unstyled">
+      <Tabs
+        variant="soft-rounded"
+        index={tabIndex}
+        onChange={(i) => setTabIndex(i)}
+      >
         <TabList>
-          {cards.map((_, i) => (
-            <Tab key={i}>Card {i + 1}</Tab>
-          ))}
-          <Button variant="ghost" onClick={addCard}>
-            +
-          </Button>
+          <HStack spacing="8px" align="center">
+            {cards.map((_, i) => (
+              <Tab
+                key={i}
+                bg="#F3F3F3"
+                _selected={{
+                  bg: "text.purplegrey",
+                  color: "brand.royal",
+                  borderColor: "brand.royal",
+                  border: "2px",
+                }}
+              >
+                Card {i + 1}
+                {i === tabIndex && cards.length !== 1 && (
+                  <SmallCloseIcon ml="1rem" onClick={() => removeCard(i)} />
+                )}
+              </Tab>
+            ))}
+            {cards.length < 5 && (
+              <Circle
+                _hover={{ cursor: "pointer" }}
+                bg="#F3F3F3"
+                p="8px"
+                onClick={addCard}
+              >
+                <AddIcon />
+              </Circle>
+            )}
+          </HStack>
         </TabList>
 
         <TabPanels>
@@ -81,11 +111,13 @@ const EditFlipCardModal = ({
             <TabPanel key={i}>
               <VStack alignItems="left">
                 <TextInput
+                  label="Front Text"
                   defaultValue={front}
                   placeholder="Insert text here"
                   onChange={(f) => setCard({ f }, i)}
                 />
                 <TextInput
+                  label="Back Text"
                   defaultValue={back}
                   placeholder="Insert text here"
                   onChange={(b) => setCard({ b }, i)}
