@@ -28,7 +28,7 @@ export interface MatchBlock extends ContentBlock {
 }
 
 export interface FlipCardBlock extends ContentBlock {
-  content: { cards: { front: string, back: string }[] };
+  content: { cards: { front: string; back: string }[] };
 }
 
 export interface TextBlock extends ContentBlock {

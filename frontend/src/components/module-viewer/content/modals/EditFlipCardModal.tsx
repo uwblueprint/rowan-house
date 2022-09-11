@@ -4,7 +4,11 @@ import {
   Text,
   VStack,
   Center,
-  Tabs, TabList, TabPanels, Tab, TabPanel
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
 } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
 import React, { useState } from "react";
@@ -20,14 +24,19 @@ const EditFlipCardModal = ({
   onClose,
   onSave,
 }: EditContentModalProps<FlipCardBlockState>): React.ReactElement => {
-  const [cards, setCards] = useState<FlipCardBlockState['content']['cards']>(block.content.cards ?? "");
+  const [cards, setCards] = useState<FlipCardBlockState["content"]["cards"]>(
+    block.content.cards ?? "",
+  );
 
   const addCard = () => {
-    setCards([...cards, {
-      front: "",
-      back: ""
-    }]);
-  }
+    setCards([
+      ...cards,
+      {
+        front: "",
+        back: "",
+      },
+    ]);
+  };
 
   const setCard = ({ f, b }: { f?: string; b?: string }, i: number) => {
     const newCards = [...cards];
@@ -57,14 +66,18 @@ const EditFlipCardModal = ({
       isOpen={isOpen}
       canSubmit={cards.length >= 1}
     >
-      <Tabs>
+      <Tabs variant="unstyled">
         <TabList>
-          {cards.map((_, i) => <Tab key={i}>Card {i + 1}</Tab>)}
-          <Button variant="ghost" onClick={addCard}>+</Button>
+          {cards.map((_, i) => (
+            <Tab key={i}>Card {i + 1}</Tab>
+          ))}
+          <Button variant="ghost" onClick={addCard}>
+            +
+          </Button>
         </TabList>
 
         <TabPanels>
-          {cards.map(({front, back}, i) => 
+          {cards.map(({ front, back }, i) => (
             <TabPanel key={i}>
               <VStack alignItems="left">
                 <TextInput
@@ -79,7 +92,7 @@ const EditFlipCardModal = ({
                 />
               </VStack>
             </TabPanel>
-          )}
+          ))}
         </TabPanels>
       </Tabs>
     </Modal>

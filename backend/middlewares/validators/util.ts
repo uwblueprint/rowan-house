@@ -95,7 +95,9 @@ export const validateContent = (content: ContentBlock): boolean => {
     }
     case "cards": {
       const flipCard = content as FlipCardBlock;
-      return flipCard.content.cards !== null && flipCard.content.cards.length >= 1;
+      return (
+        flipCard.content.cards !== null && flipCard.content.cards.length >= 1
+      );
     }
     case "text": {
       const text = content as TextBlock;

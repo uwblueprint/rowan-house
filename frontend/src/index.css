@@ -27,27 +27,22 @@ code {
 
 /* Used only for the flip card component */
 .card-container {
-  perspective: 700px;
-  z-index: 1;
+  perspective: 500px;
 }
 .card {
   transition: all 0.6s ease;
   transform-style: preserve-3d;
-  position: relative;
 }
 .card-flipped {
   transform: rotateY(180deg);
 }
-
 .front,
 .back {
   width: 100%;
-  height: 100%;
-  position: absolute;
   backface-visibility: hidden;
-  left: 0px; /* same as border */
+  grid-column-start: 1;
+  grid-row-start: 1;
 }
-
 .back {
   transform: rotateY(180deg);
 }
