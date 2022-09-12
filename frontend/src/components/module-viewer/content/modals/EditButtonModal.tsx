@@ -10,7 +10,7 @@ import CustomButton from "../blocks/CustomButton";
 const EditButtonModal = ({
   block,
   isOpen,
-  onClose,
+  onCancel,
   onSave,
 }: EditContentModalProps<ButtonBlockState>): React.ReactElement => {
   const [link, setLink] = useState(block.content.link ?? "");
@@ -36,7 +36,7 @@ const EditButtonModal = ({
       size="xl"
       header="Edit button component"
       onConfirm={onConfirm}
-      onCancel={onClose}
+      onCancel={onCancel}
       isOpen={isOpen}
       canSubmit={link !== "" && text !== ""}
     >

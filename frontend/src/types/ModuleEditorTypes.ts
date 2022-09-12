@@ -59,6 +59,7 @@ export interface EditorStateType {
   lessons: LessonsType;
   focusedLesson: string | null;
   completedLessons: Set<string>;
+  newBlock: null | ContentBlockState["id"];
   hasChanged: EditorChangeStatuses;
 }
 
@@ -98,7 +99,10 @@ export type EditorContextAction =
     }
   | {
       type: "create-block";
-      value: { index: number; blockID: string };
+      value: { blockID: string; index: number };
+    }
+  | {
+      type: "confirm-block";
     }
   | {
       type: "reorder-blocks";
@@ -147,6 +151,6 @@ export interface EditContentModalProps<
   BlockType extends ContentBlockState = ContentBlockState
 > extends MappedProps<BlockType> {
   isOpen: boolean;
-  onClose: () => void;
+  onCancel: () => void;
   onSave: <T extends BlockType>(newBlock: T["content"]) => void;
 }

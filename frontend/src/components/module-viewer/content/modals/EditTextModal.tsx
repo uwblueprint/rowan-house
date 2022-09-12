@@ -9,7 +9,7 @@ import { EditContentModalProps } from "../../../../types/ModuleEditorTypes";
 const EditTextModal = ({
   block,
   isOpen,
-  onClose,
+  onCancel,
   onSave,
 }: EditContentModalProps<TextBlockState>): React.ReactElement => {
   const [text, setText] = useState(block.content.text ?? "");
@@ -28,7 +28,7 @@ const EditTextModal = ({
       size="xl"
       header="Edit Text Component"
       onConfirm={onConfirm}
-      onCancel={onClose}
+      onCancel={onCancel}
       isOpen={isOpen}
     >
       <Flex>
