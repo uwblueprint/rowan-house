@@ -7,6 +7,7 @@ export type ContentType =
   | "image"
   | "video"
   | "match"
+  | "cards"
   | "audio";
 export interface ContentBlockDTO {
   type: ContentType;

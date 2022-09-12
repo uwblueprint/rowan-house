@@ -52,6 +52,15 @@ export type MatchBlockState = ContentBlockStateType<
     }>;
   }
 >;
+export type FlipCardBlockState = ContentBlockStateType<
+  "cards",
+  {
+    cards: Array<{
+      front: string;
+      back: string;
+    }>;
+  }
+>;
 
 export type ColumnBlockState = ContentBlockStateType<
   "column",
@@ -72,6 +81,7 @@ export type ContentBlockState = RequireAllContentTypesArePresent<
   | VideoBlockState
   | AudioBlockState
   | MatchBlockState
+  | FlipCardBlockState
   | ColumnBlockState
 >;
 
@@ -156,6 +166,12 @@ export class ContentTypeEnum {
     "Matching",
     "match.svg",
     "match",
+  );
+
+  static readonly FLIPCARD = ContentTypeEnum.new<"cards">(
+    "Flip Cards",
+    "cards.svg",
+    "cards",
   );
 
   public readonly id: string;

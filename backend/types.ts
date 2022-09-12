@@ -7,7 +7,9 @@ export type ContentType =
   | "image"
   | "video"
   | "match"
+  | "cards"
   | "heading";
+
 export interface ContentBlock {
   type: ContentType;
   content: Record<string, unknown>;
@@ -23,6 +25,10 @@ export interface ColumnBlock extends ContentBlock {
 
 export interface MatchBlock extends ContentBlock {
   content: { question: string; matches: [{ prompt: string; answer: string }] };
+}
+
+export interface FlipCardBlock extends ContentBlock {
+  content: { cards: { front: string; back: string }[] };
 }
 
 export interface TextBlock extends ContentBlock {

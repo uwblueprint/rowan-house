@@ -4,6 +4,7 @@ import TextBlock from "./TextBlock";
 import VideoBlock from "./VideoBlock";
 import HeadingBlock from "./HeadingBlock";
 import MatchBlock from "./MatchBlock";
+import FlipCardBlock from "./FlipCardBlock";
 
 export {
   ButtonBlock,
@@ -12,4 +13,5 @@ export {
   VideoBlock,
   HeadingBlock,
   MatchBlock,
+  FlipCardBlock,
 };

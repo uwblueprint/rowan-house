@@ -5,6 +5,7 @@ import {
   ImageBlock,
   VideoBlock,
   MatchBlock,
+  FlipCardBlock,
 } from "../blocks";
 import {
   EditButtonModal,
@@ -13,6 +14,7 @@ import {
   EditVideoModal,
   EditHeadingModal,
   EditMatchModal,
+  EditFlipCardModal,
 } from "../modals";
 import {
   ContentBlockModals,
@@ -53,6 +55,10 @@ export default (
     match: {
       renderBlock: MatchBlock,
       renderEditModal: EditMatchModal,
+    },
+    cards: {
+      renderBlock: FlipCardBlock,
+      renderEditModal: EditFlipCardModal,
     },
   };
   return createContentBlockRenderers({

@@ -14,6 +14,7 @@ export default {
   text: {
     default: "#2D3748",
     grey: "#6C6C84",
+    purplegrey: "#E9E1F1",
     correct: "#94D969",
     critical: "#E53E3E",
   },
