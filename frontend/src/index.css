@@ -24,25 +24,3 @@ code {
 .tabScroll::-webkit-scrollbar {
   display: none;
 }
-
-/* Used only for the flip card component */
-.card-container {
-  perspective: 500px;
-}
-.card {
-  transition: all 0.6s ease;
-  transform-style: preserve-3d;
-}
-.card-flipped {
-  transform: rotateY(180deg);
-}
-.front,
-.back {
-  width: 100%;
-  backface-visibility: hidden;
-  grid-column-start: 1;
-  grid-row-start: 1;
-}
-.back {
-  transform: rotateY(180deg);
-}

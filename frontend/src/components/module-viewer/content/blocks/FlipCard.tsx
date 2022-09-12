@@ -10,8 +10,12 @@ const FlipBlock = ({
 }): React.ReactElement => {
   const [flipped, setFlipped] = useState(false);
 
+  const flip = () => {
+    setFlipped((state) => !state);
+  };
+
   return (
-    <Center className="card-container">
+    <Center style={{ perspective: "500px" }}>
       <SimpleGrid
         w="100%"
         maxW="400px"
@@ -22,11 +26,29 @@ const FlipBlock = ({
         borderRadius="4px"
         boxShadow="lg"
         columns={1}
-        className={`card ${flipped ? "card-flipped" : ""}`}
-        onClick={() => setFlipped(!flipped)}
+        transition="all 0.6s ease"
+        transform={flipped ? "rotateY(180deg)" : ""}
+        style={{ transformStyle: "preserve-3d" }}
+        _hover={{ cursor: "pointer" }}
+        onClick={flip}
       >
-        <Center className="front">{front}</Center>
-        <Center className="back">{back}</Center>
+        <Center
+          width="100%"
+          style={{ backfaceVisibility: "hidden" }}
+          gridColumnStart="1"
+          gridRowStart="1"
+        >
+          {front}
+        </Center>
+        <Center
+          width="100%"
+          style={{ backfaceVisibility: "hidden" }}
+          gridColumnStart="1"
+          gridRowStart="1"
+          transform="rotateY(180deg)"
+        >
+          {back}
+        </Center>
       </SimpleGrid>
     </Center>
   );

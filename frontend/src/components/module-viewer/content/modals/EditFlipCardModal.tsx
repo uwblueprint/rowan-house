@@ -28,9 +28,9 @@ const EditFlipCardModal = ({
   const [tabIndex, setTabIndex] = useState(0);
 
   const addCard = () => {
-    setTabIndex(cards.length);
-    setCards([
-      ...cards,
+    setTabIndex(() => cards.length);
+    setCards((state) => [
+      ...state,
       {
         front: "",
         back: "",
@@ -96,7 +96,7 @@ const EditFlipCardModal = ({
             {cards.length < 5 && (
               <Circle
                 _hover={{ cursor: "pointer" }}
-                bg="#F3F3F3"
+                bg="background.light"
                 p="8px"
                 onClick={addCard}
               >
