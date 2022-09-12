@@ -232,7 +232,7 @@ const createLessonContentBlock = (
   index: number,
 ): EditorStateType => {
   const id = state.focusedLesson;
-  if (!id || !Object.keys(state.lessons).includes(id)) return state; //  || !Object.keys(state.lessons).includes(id)
+  if (!id || !Object.keys(state.lessons).includes(id)) return state;
 
   console.assert(index >= 0, "Content block index must be positive");
   console.assert(
@@ -252,6 +252,16 @@ const createLessonContentBlock = (
     [id]: newLesson,
   };
   // Update to let the state know things have changed
+  newState.newBlock = block.id;
+  return newState;
+};
+
+const confirmLessonContentBlock = (state: EditorStateType): EditorStateType => {
+  const id = state.focusedLesson;
+  if (!id || !Object.keys(state.lessons).includes(id)) return state;
+
+  const newState = { ...state };
+  newState.newBlock = null;
   newState.hasChanged = updateChangeStatus(state.hasChanged, id, "UPDATE");
   return newState;
 };
@@ -348,9 +358,10 @@ const addContentBlockToColumn = (
       "Column ID matches component, but component is not of type 'column'",
     );
   }
-  columnBlock.content[columnSide] = createContent(blockID);
+  const newBlock = createContent(blockID);
+  columnBlock.content[columnSide] = newBlock;
   // Update to let the state know things have changed
-  newState.hasChanged = updateChangeStatus(state.hasChanged, id, "UPDATE");
+  newState.newBlock = newBlock.id;
   return newState;
 };
 
@@ -427,6 +438,8 @@ export default function EditorContextReducer(
         action.value.blockID,
         action.value.index,
       );
+    case "confirm-block":
+      return confirmLessonContentBlock(state);
     case "reorder-blocks":
       return reorderLessonContentBlocks(
         state,

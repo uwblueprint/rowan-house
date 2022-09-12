@@ -12,7 +12,7 @@ import BlockPreview from "./BlockPreview";
 const EditHeadingModal = ({
   block,
   isOpen,
-  onClose,
+  onCancel,
   onSave,
 }: EditContentModalProps<HeadingBlockState>): React.ReactElement => {
   const [text, setText] = useState(block.content.text);
@@ -35,7 +35,7 @@ const EditHeadingModal = ({
       size="xl"
       header="Heading"
       onConfirm={onConfirm}
-      onCancel={onClose}
+      onCancel={onCancel}
       isOpen={isOpen}
     >
       <FormControl isInvalid={invalid} isRequired>

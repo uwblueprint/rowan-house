@@ -31,10 +31,12 @@ const ContentBlock = ({
   block,
   index,
   editable = true,
+  isNewBlock = false,
 }: {
   block: ContentBlockState;
   index: number;
   editable?: boolean;
+  isNewBlock?: boolean;
 }): React.ReactElement => {
   const [isHovered, setIsHovered] = useState(false);
   const {
@@ -61,13 +63,24 @@ const ContentBlock = ({
     onDeleteModalClose();
   };
 
-  const editContentBlock = <T extends ContentBlockState>(
-    content: T["content"],
-  ) => {
+  const onSave = <T extends ContentBlockState>(content: T["content"]) => {
     dispatch({
       type: "update-block",
       value: { index, content },
     });
+    if (isNewBlock) {
+      dispatch({ type: "confirm-block" });
+    }
+    onEditModalClose();
+  };
+
+  const onCancel = () => {
+    if (isNewBlock) {
+      dispatch({
+        type: "delete-block",
+        value: index,
+      });
+    }
     onEditModalClose();
   };
 
@@ -106,10 +119,10 @@ const ContentBlock = ({
             </Flex>
             <Divider opacity={isHovered ? 1 : 0} />
             {EDIT_MODALS.render({
-              isOpen: isEditModalOpen,
-              onClose: onEditModalClose,
+              isOpen: editable && (isNewBlock || isEditModalOpen),
               block,
-              onSave: editContentBlock,
+              onCancel,
+              onSave,
             })}
             <DeleteModal
               name="Content Block"

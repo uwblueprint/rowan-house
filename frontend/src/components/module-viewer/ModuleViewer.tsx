@@ -226,6 +226,7 @@ const ModuleViewer = ({
           focusedLesson: completed
             ? null
             : courseData.course.modules[moduleIndex].lessons[0],
+          newBlock: null,
           hasChanged: {},
           completedLessons: new Set(),
         },

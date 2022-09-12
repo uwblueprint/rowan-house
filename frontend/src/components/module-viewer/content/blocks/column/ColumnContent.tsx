@@ -28,6 +28,10 @@ const ColumnContent = ({
   side: ColumnBlockParam;
   editable?: boolean;
 }): React.ReactElement => {
+  const context = useContext(EditorContext);
+  const { state, dispatch } = context;
+  const isNewBlock = state?.newBlock === block?.id;
+
   const [isHovered, setIsHovered] = useState(false);
   const {
     isOpen: isEditModalOpen,
@@ -39,10 +43,6 @@ const ColumnContent = ({
     onOpen: onDeleteModalOpen,
     onClose: onDeleteModalClose,
   } = useDisclosure();
-  const context = useContext(EditorContext);
-
-  if (!context) return <></>;
-  const { dispatch } = context;
 
   const deleteColumn = () => {
     const content = {
@@ -71,6 +71,16 @@ const ColumnContent = ({
       type: "update-block",
       value: { index, content },
     });
+    if (isNewBlock) {
+      dispatch({ type: "confirm-block" });
+    }
+    onEditModalClose();
+  };
+
+  const onCancel = () => {
+    if (isNewBlock) {
+      deleteColumn();
+    }
     onEditModalClose();
   };
 
@@ -118,9 +128,9 @@ const ColumnContent = ({
               </Center>
             </Flex>
             {EDIT_MODALS.render({
-              isOpen: isEditModalOpen,
-              onClose: onEditModalClose,
+              isOpen: editable && (isNewBlock || isEditModalOpen),
               block,
+              onCancel,
               onSave: editColumn,
             })}
             <DeleteModal

@@ -30,7 +30,7 @@ const EditVideoModal = ({
   block,
   isOpen,
   onSave,
-  onClose,
+  onCancel,
 }: EditContentModalProps<VideoBlockState>): React.ReactElement => {
   const [link, setLink] = useState(block.content.link ?? "");
   const [invalid, setInvalid] = useState(true);
@@ -48,7 +48,7 @@ const EditVideoModal = ({
       size="xl"
       header="Edit Video Component"
       onConfirm={onConfirm}
-      onCancel={onClose}
+      onCancel={onCancel}
       isOpen={isOpen}
       canSubmit={!invalid}
     >

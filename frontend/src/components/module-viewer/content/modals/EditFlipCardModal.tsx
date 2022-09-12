@@ -19,7 +19,7 @@ import { TextInput } from "../../../common/TextInput";
 const EditFlipCardModal = ({
   block,
   isOpen,
-  onClose,
+  onCancel,
   onSave,
 }: EditContentModalProps<FlipCardBlockState>): React.ReactElement => {
   const [cards, setCards] = useState<FlipCardBlockState["content"]["cards"]>(
@@ -67,7 +67,7 @@ const EditFlipCardModal = ({
       header="Edit Flip Cards"
       size="xl"
       onConfirm={onConfirm}
-      onCancel={onClose}
+      onCancel={onCancel}
       isOpen={isOpen}
       canSubmit={cards.length >= 1}
     >

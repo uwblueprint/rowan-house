@@ -17,7 +17,7 @@ import { TextInput } from "../../../common/TextInput";
 const EditMatchModal = ({
   block,
   isOpen,
-  onClose,
+  onCancel,
   onSave,
 }: EditContentModalProps<MatchBlockState>): React.ReactElement => {
   const [question, setQuestion] = useState(block.content.question ?? "");
@@ -60,7 +60,7 @@ const EditMatchModal = ({
       header="Edit Matching"
       size="xl"
       onConfirm={onConfirm}
-      onCancel={onClose}
+      onCancel={onCancel}
       isOpen={isOpen}
       canSubmit={matches.length >= 2}
     >

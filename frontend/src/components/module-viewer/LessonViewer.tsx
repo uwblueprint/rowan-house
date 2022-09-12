@@ -34,6 +34,7 @@ const LessonViewer = ({
             block={block}
             key={index}
             index={index}
+            isNewBlock={block.id === state?.newBlock}
           />
         ))}
         {!editable && (
