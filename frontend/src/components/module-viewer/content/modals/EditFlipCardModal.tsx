@@ -28,14 +28,16 @@ const EditFlipCardModal = ({
   const [tabIndex, setTabIndex] = useState(0);
 
   const addCard = () => {
-    setTabIndex(() => cards.length);
-    setCards((state) => [
-      ...state,
-      {
-        front: "",
-        back: "",
-      },
-    ]);
+    setCards((state) => {
+      setTabIndex(state.length);
+      return [
+        ...state,
+        {
+          front: "",
+          back: "",
+        },
+      ];
+    });
   };
 
   const setCard = ({ f, b }: { f?: string; b?: string }, i: number) => {
