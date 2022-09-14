@@ -13,11 +13,8 @@ import {
 
 export interface ModalProps {
   isOpen: boolean;
-  // eslint-disable-next-line @typescript-eslint/ban-types
   onCancel: () => void;
-  // eslint-disable-next-line @typescript-eslint/ban-types
   onDontSave: () => void;
-  // eslint-disable-next-line @typescript-eslint/ban-types
   onSave: () => void;
 }
 
@@ -36,7 +33,7 @@ export const SaveModal = ({
         <ModalBody>
           <Text>
             Are you sure you want to leave with unsaved changes? The new edits
-            will be list.
+            will be lost.
           </Text>
         </ModalBody>
         <ModalFooter>

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useCallback, useContext, useRef, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import {
   Box,
@@ -71,6 +71,26 @@ const Sidebar = ({
     onOpen: onOpenSaveModal,
     onClose: onCloseSaveModal,
   } = useDisclosure();
+
+  const handlePageLeave = useCallback((e: BeforeUnloadEvent) => {
+    const confirmationMessage = "Some message";
+    e.preventDefault();
+    e.returnValue = confirmationMessage;
+  }, []);
+
+  const cb = useRef<any>(handlePageLeave);
+
+  useEffect(() => {
+    cb.current = handlePageLeave;
+  }, [handlePageLeave]);
+
+  useEffect(() => {
+    const onUnload = (...args: any[]) => cb.current?.(...args);
+
+    window.addEventListener("beforeunload", onUnload);
+
+    return () => window.removeEventListener("beforeunload", onUnload);
+  }, []);
 
   const context: EditorContextType = useContext(EditorContext);
   const { data: courseData, error } = useQuery<{ course: CourseResponse }>(
@@ -151,34 +171,36 @@ const Sidebar = ({
   };
 
   const saveChanges = async (changeObj: EditorChangeStatuses) => {
-    Object.entries(changeObj).forEach(async ([lessonID, action]) => {
-      switch (action) {
-        case "CREATE":
-          // Await required so we can get a new ID
-          await createNewLesson(
-            lessonID,
-            formatLessonRequest(state.lessons[lessonID]),
-          );
-          break;
-        case "UPDATE":
-          updateLesson({
-            variables: {
-              id: lessonID,
-              lesson: formatLessonRequest(state.lessons[lessonID]),
-            },
-          });
-          break;
-        case "DELETE":
-          deleteLesson({ variables: { id: lessonID } });
-          break;
-        // Make compiler happy
-        default:
-          break;
-      }
-      updateCourse({
-        variables: { id: courseID, course: state.course },
-      });
-    });
+    await Promise.all(
+      Object.entries(changeObj).map(async ([lessonID, action]) => {
+        switch (action) {
+          case "CREATE":
+            // Await required so we can get a new ID
+            await createNewLesson(
+              lessonID,
+              formatLessonRequest(state.lessons[lessonID]),
+            );
+            break;
+          case "UPDATE":
+            updateLesson({
+              variables: {
+                id: lessonID,
+                lesson: formatLessonRequest(state.lessons[lessonID]),
+              },
+            });
+            break;
+          case "DELETE":
+            deleteLesson({ variables: { id: lessonID } });
+            break;
+          // Make compiler happy
+          default:
+            break;
+        }
+        updateCourse({
+          variables: { id: courseID, course: state.course },
+        });
+      }),
+    );
     state.hasChanged = {};
   };
 
@@ -265,8 +287,8 @@ const Sidebar = ({
           </Flex>
           <SaveModal
             isOpen={isOpenSaveModal}
-            onSave={() => {
-              saveChanges(state.hasChanged);
+            onSave={async () => {
+              await saveChanges(state.hasChanged);
               onCoursePageRoute();
             }}
             onDontSave={onCoursePageRoute}
