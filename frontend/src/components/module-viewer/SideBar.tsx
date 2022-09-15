@@ -76,16 +76,17 @@ const Sidebar = ({
     const confirmationMessage = "Some message";
     e.preventDefault();
     e.returnValue = confirmationMessage;
+    return confirmationMessage;
   }, []);
 
-  const cb = useRef<any>(handlePageLeave);
+  const cb = useRef<(e: BeforeUnloadEvent) => string>(handlePageLeave);
 
   useEffect(() => {
     cb.current = handlePageLeave;
   }, [handlePageLeave]);
 
   useEffect(() => {
-    const onUnload = (...args: any[]) => cb.current?.(...args);
+    const onUnload = (e: BeforeUnloadEvent) => cb.current?.(e);
 
     window.addEventListener("beforeunload", onUnload);
 
