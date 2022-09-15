@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { useParams } from "react-router-dom";
+import React, { useCallback, useContext, useRef, useEffect } from "react";
+import { useHistory, useParams } from "react-router-dom";
 import {
   Box,
   Button,
@@ -12,7 +12,6 @@ import {
 } from "@chakra-ui/react";
 import { ChevronLeftIcon, EditIcon } from "@chakra-ui/icons";
 import { useMutation, useQuery } from "@apollo/client";
-import { ReactComponent as SaveIcon } from "../../assets/Save.svg";
 import {
   COURSE_OVERVIEW_BASE_ROUTE,
   MANAGE_COURSES_PAGE,
@@ -43,7 +42,7 @@ import { formatLessonRequest } from "../../utils/lessonUtils";
 import EditModuleModal from "../common/EditModuleModal";
 import EditorTabs from "./EditorTabs";
 import ModuleOverview from "./SideBarModuleOverview";
-import RouterLink from "../common/RouterLink";
+import { SaveModal } from "../common/SaveModal";
 import { GET_COURSE } from "../../APIClients/queries/CourseQueries";
 
 const Sidebar = ({
@@ -59,7 +58,40 @@ const Sidebar = ({
   }: ModuleEditorParams = useParams();
   const moduleIndex = Number(moduleIndexString);
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const history = useHistory();
+
+  const {
+    isOpen: isOpenEditModule,
+    onOpen: onOpenEditModule,
+    onClose: onCloseEditModule,
+  } = useDisclosure();
+
+  const {
+    isOpen: isOpenSaveModal,
+    onOpen: onOpenSaveModal,
+    onClose: onCloseSaveModal,
+  } = useDisclosure();
+
+  const handlePageLeave = useCallback((e: BeforeUnloadEvent) => {
+    const confirmationMessage = "Some message";
+    e.preventDefault();
+    e.returnValue = confirmationMessage;
+    return confirmationMessage;
+  }, []);
+
+  const cb = useRef<(e: BeforeUnloadEvent) => string>(handlePageLeave);
+
+  useEffect(() => {
+    cb.current = handlePageLeave;
+  }, [handlePageLeave]);
+
+  useEffect(() => {
+    const onUnload = (e: BeforeUnloadEvent) => cb.current?.(e);
+
+    window.addEventListener("beforeunload", onUnload);
+
+    return () => window.removeEventListener("beforeunload", onUnload);
+  }, []);
 
   const context: EditorContextType = useContext(EditorContext);
   const { data: courseData, error } = useQuery<{ course: CourseResponse }>(
@@ -140,38 +172,56 @@ const Sidebar = ({
   };
 
   const saveChanges = async (changeObj: EditorChangeStatuses) => {
-    Object.entries(changeObj).forEach(async ([lessonID, action]) => {
-      switch (action) {
-        case "CREATE":
-          // Await required so we can get a new ID
-          await createNewLesson(
-            lessonID,
-            formatLessonRequest(state.lessons[lessonID]),
-          );
-          break;
-        case "UPDATE":
-          updateLesson({
-            variables: {
-              id: lessonID,
-              lesson: formatLessonRequest(state.lessons[lessonID]),
-            },
-          });
-          break;
-        case "DELETE":
-          deleteLesson({ variables: { id: lessonID } });
-          break;
-        // Make compiler happy
-        default:
-          break;
-      }
-      updateCourse({
-        variables: { id: courseID, course: state.course },
-      });
-    });
+    await Promise.all(
+      Object.entries(changeObj).map(async ([lessonID, action]) => {
+        switch (action) {
+          case "CREATE":
+            // Await required so we can get a new ID
+            await createNewLesson(
+              lessonID,
+              formatLessonRequest(state.lessons[lessonID]),
+            );
+            break;
+          case "UPDATE":
+            updateLesson({
+              variables: {
+                id: lessonID,
+                lesson: formatLessonRequest(state.lessons[lessonID]),
+              },
+            });
+            break;
+          case "DELETE":
+            deleteLesson({ variables: { id: lessonID } });
+            break;
+          // Make compiler happy
+          default:
+            break;
+        }
+        updateCourse({
+          variables: { id: courseID, course: state.course },
+        });
+      }),
+    );
     state.hasChanged = {};
   };
 
   const module = courseData?.course?.modules?.[moduleIndex] as ModuleResponse;
+
+  const onCoursePageRoute = () => {
+    history.push(
+      editable
+        ? MANAGE_COURSES_PAGE
+        : `${COURSE_OVERVIEW_BASE_ROUTE}/${courseID}`,
+    );
+  };
+
+  const onReturnToCoursePageClick = () => {
+    if (Object.values(state.hasChanged).length) {
+      onOpenSaveModal();
+    } else {
+      onCoursePageRoute();
+    }
+  };
 
   return (
     <>
@@ -199,20 +249,17 @@ const Sidebar = ({
                 p="35px"
               >
                 <HStack justify="space-between" align="start">
-                  <RouterLink
-                    to={
-                      editable
-                        ? MANAGE_COURSES_PAGE
-                        : `${COURSE_OVERVIEW_BASE_ROUTE}/${courseID}`
-                    }
-                  >
-                    <ChevronLeftIcon color="white" h={6} w={6} />
-                  </RouterLink>
+                  <Button
+                    variant="md"
+                    leftIcon={<ChevronLeftIcon color="white" h={6} w={6} />}
+                    onClick={onReturnToCoursePageClick}
+                    backgroundColor="transparent"
+                  />
                   {editable && (
                     <Button
                       variant="md"
                       leftIcon={<EditIcon color="white" h={5} w={5} />}
-                      onClick={onOpen}
+                      onClick={onOpenEditModule}
                       backgroundColor="transparent"
                     />
                   )}
@@ -231,23 +278,6 @@ const Sidebar = ({
               <>
                 <EditorTabs onLessonSelected={onLessonSelected} />
                 <Spacer />
-                {Object.values(state.hasChanged).length ? (
-                  <Button
-                    bg="#5FCA89"
-                    color="white"
-                    leftIcon={<SaveIcon />}
-                    borderRadius="0"
-                    pl="35px"
-                    width="100%"
-                    h="55px"
-                    justifyContent="left"
-                    onClick={() => saveChanges(state.hasChanged)}
-                  >
-                    Save Changes
-                  </Button>
-                ) : (
-                  <></>
-                )}
               </>
             ) : (
               <ModuleOverview
@@ -256,10 +286,19 @@ const Sidebar = ({
               />
             )}
           </Flex>
+          <SaveModal
+            isOpen={isOpenSaveModal}
+            onSave={async () => {
+              await saveChanges(state.hasChanged);
+              onCoursePageRoute();
+            }}
+            onDontSave={onCoursePageRoute}
+            onCancel={onCloseSaveModal}
+          />
           <EditModuleModal
             module={module}
-            isOpen={isOpen}
-            onClose={onClose}
+            isOpen={isOpenEditModule}
+            onClose={onCloseEditModule}
             formatCourseRequest={formatCourseRequest}
           />
         </Box>
