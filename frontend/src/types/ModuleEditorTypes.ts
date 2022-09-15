@@ -1,3 +1,6 @@
+import { BaseEditor, Descendant } from "slate";
+import { ReactEditor } from "slate-react";
+
 import {
   ColumnBlockParam,
   ContentBlockState,
@@ -153,4 +156,51 @@ export interface EditContentModalProps<
   isOpen: boolean;
   onCancel: () => void;
   onSave: <T extends BlockType>(newBlock: T["content"]) => void;
+}
+
+export type FormatEnum = "bold" | "italic" | "underline";
+
+export type AlignmentFormatEnum = "left" | "center" | "right" | "justify";
+
+export type TextEditor = BaseEditor & ReactEditor;
+
+export type CustomText = {
+  text: string;
+  bold?: boolean;
+  italic?: boolean;
+  underline?: boolean;
+};
+
+export type ParagraphElement = {
+  type: "paragraph";
+  align?: AlignmentFormatEnum;
+  children: Descendant[];
+};
+
+export type LinkElement = {
+  type: "link";
+  url: string;
+  children: Descendant[];
+};
+
+export type CustomElement = ParagraphElement | LinkElement;
+
+export type LeafPropTypes = {
+  attributes: CustomText;
+  children: Descendant[];
+  leaf: CustomText;
+};
+
+export type ElementPropTypes = {
+  attributes: CustomText;
+  children: Descendant[];
+  element: CustomElement;
+};
+
+declare module "slate" {
+  interface CustomTypes {
+    Editor: BaseEditor & ReactEditor;
+    Element: CustomElement;
+    Text: CustomText;
+  }
 }
