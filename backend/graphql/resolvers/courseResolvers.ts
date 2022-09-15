@@ -1,18 +1,15 @@
-import { AuthenticationError, ExpressContext } from "apollo-server-express";
-import fs from "fs";
+import { ExpressContext } from "apollo-server-express";
 import { FileUpload } from "graphql-upload";
-/* eslint-disable-next-line import/no-extraneous-dependencies */
-import { ReadStream } from "fs-capacitor";
-import multer from "multer";
 import FileStorageService from "../../services/implementations/fileStorageService";
+import ImageUploadService from "../../services/implementations/imageUploadService";
 import CourseService from "../../services/implementations/courseService";
 import {
   CreateCourseRequestDTO,
   UpdateCourseRequestDTO,
   CourseResponseDTO,
   ICourseService,
-  UploadModuleImage,
 } from "../../services/interfaces/ICourseService";
+import { UploadedImage } from "../../services/interfaces/IImageUploadService";
 import { getAccessToken } from "../../middlewares/auth";
 import IAuthService from "../../services/interfaces/authService";
 import AuthService from "../../services/implementations/authService";
@@ -24,30 +21,17 @@ import IUserService from "../../services/interfaces/userService";
 import { Role } from "../../types";
 import { CourseVisibilityAttributes } from "../../models/course.model";
 import { assertNever } from "../../utilities/errorUtils";
-import {
-  getFileTypeValidationError,
-  validateImageFileType,
-} from "../../middlewares/validators/util";
 
 const defaultBucket = process.env.FIREBASE_STORAGE_DEFAULT_BUCKET || "";
 const fileStorageService = new FileStorageService(defaultBucket);
-const courseService: ICourseService = new CourseService(fileStorageService);
+const imageUploadService = new ImageUploadService(
+  "moduleImages",
+  fileStorageService,
+);
+const courseService: ICourseService = new CourseService();
 const userService: IUserService = new UserService();
 const emailService: IEmailService = new EmailService(nodemailerConfig);
 const authService: IAuthService = new AuthService(userService, emailService);
-
-multer({ dest: "moduleImages/" });
-
-const writeFile = (readStream: ReadStream, filePath: string): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    const out = fs.createWriteStream(filePath);
-    readStream.pipe(out);
-    out.on("finish", () => {
-      resolve();
-    });
-    out.on("error", (err: Error) => reject(err));
-  });
-};
 
 const getCourseVisibilityAttributes = (
   role: Role | null,
@@ -101,14 +85,20 @@ const courseResolvers = {
       const attributes = getCourseVisibilityAttributes(null);
       return courseService.getCourses(attributes);
     },
+    moduleImage: async (
+      _parent: undefined,
+      { path }: { path: string },
+      context: ExpressContext,
+    ): Promise<string> => {
+      return imageUploadService.download(path);
+    },
   },
   Mutation: {
     createCourse: async (
       _parent: undefined,
       { course }: { course: CreateCourseRequestDTO },
     ): Promise<CourseResponseDTO> => {
-      const newCourse = await courseService.createCourse(course);
-      return newCourse;
+      return courseService.createCourse(course);
     },
     updateCourse: async (
       _parent: undefined,
@@ -122,32 +112,11 @@ const courseResolvers = {
     ): Promise<string> => {
       return courseService.deleteCourse(id);
     },
-
     uploadModuleImage: async (
       _req: undefined,
       { file }: { file: Promise<FileUpload> },
-    ): Promise<UploadModuleImage> => {
-      let filePath = "";
-      let fileContentType = "";
-      if (file) {
-        const { createReadStream, mimetype, filename } = await file;
-        const uploadDir = "moduleImages";
-        filePath = `${uploadDir}/${filename}`;
-        fileContentType = mimetype;
-        if (!validateImageFileType(fileContentType)) {
-          throw new Error(getFileTypeValidationError(fileContentType));
-        }
-        await writeFile(createReadStream(), filePath);
-      }
-      const uploadedModuleImage = await courseService.uploadModuleImage(
-        filePath,
-        fileContentType,
-      );
-
-      if (filePath) {
-        fs.unlinkSync(filePath);
-      }
-      return uploadedModuleImage;
+    ): Promise<UploadedImage> => {
+      return imageUploadService.upload(file);
     },
   },
 };

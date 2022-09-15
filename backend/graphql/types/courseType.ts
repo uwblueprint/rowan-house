@@ -32,8 +32,8 @@ const courseType = gql`
   }
 
   type ModuleImageResponseDTO {
-    previewImage: String
-    filePath: String
+    image: String
+    path: String
   }
   input CreateCourseRequestDTO {
     title: String!
@@ -57,7 +57,7 @@ const courseType = gql`
     course(id: ID!): CourseResponseDTO!
     courses: [CourseResponseDTO!]!
     publicCourses: [CourseResponseDTO!]!
-    moduleImage(fileName: String!): String!
+    moduleImage(path: String!): String!
   }
 
   extend type Mutation {

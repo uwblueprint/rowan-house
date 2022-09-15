@@ -16,7 +16,6 @@ export interface ModuleResponse {
   previewImage?: string | null;
   published?: boolean;
   lessons?: string[] | null;
-  fileName?: string;
 }
 
 export interface CourseRequest {

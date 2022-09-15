@@ -72,6 +72,15 @@ const Sidebar = ({
     { variables: { id: courseID } },
   );
 
+  const module = courseData?.course?.modules?.[moduleIndex] as ModuleResponse;
+  useQuery(GET_MODULE_IMAGE, {
+    skip: !module?.image,
+    variables: { path: module?.image },
+    onCompleted: (data) => {
+      setPreviewImage(data.moduleImage);
+    },
+  });
+
   const [updateCourse] = useMutation<{ updateCourse: CourseResponse }>(
     UPDATE_COURSE,
     {
@@ -175,18 +184,6 @@ const Sidebar = ({
     });
     state.hasChanged = {};
   };
-
-  const module = courseData?.course?.modules?.[moduleIndex] as ModuleResponse;
-
-  if (module.fileName) {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useQuery(GET_MODULE_IMAGE, {
-      variables: { fileName: module.fileName },
-      onCompleted: (data) => {
-        setPreviewImage(data.moduleImage);
-      },
-    });
-  }
 
   return (
     <>

@@ -17,8 +17,6 @@ export interface UpdateCourseRequestDTO {
   previewImage: string;
   private: boolean;
   modules: (Module | null)[];
-  filePath: string;
-  fileContentType: string;
 }
 
 export interface CourseResponseDTO {
@@ -29,12 +27,6 @@ export interface CourseResponseDTO {
   previewImage: string;
   private: boolean;
   modules: (Module | null)[];
-  fileName?: string; // CHECK WITH JULIAN
-}
-
-export interface UploadModuleImage {
-  previewImage: string;
-  filePath: string;
 }
 
 export interface ICourseService {
@@ -59,14 +51,6 @@ export interface ICourseService {
   getCourses(
     queryConditions: CourseVisibilityAttributes,
   ): Promise<CourseResponseDTO[]>;
-
-  /**
-   * gets signed url for module image
-   * @param fileName
-   * @returns returns signed URL for module image
-   * @throws Error if retrieval fails
-   */
-  getModuleImage(fileName: string): Promise<string>;
 
   /**
    * create an Course with the fields given in the DTO, return created Course
@@ -95,15 +79,4 @@ export interface ICourseService {
    * @throws Error if deletion fails
    */
   deleteCourse(id: string): Promise<string>;
-
-  /**
-   * upload module image
-   * @param file  id
-   * @returns the preview image and file path of the module image uploaded
-   * @throws Error if upload fails
-   */
-  uploadModuleImage(
-    filePath: string,
-    fileContentType: string,
-  ): Promise<UploadModuleImage>;
 }

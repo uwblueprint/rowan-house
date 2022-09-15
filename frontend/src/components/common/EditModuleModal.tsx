@@ -42,6 +42,9 @@ const EditModuleModal = ({
   const [invalid, setInvalid] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [previewImage, setPreviewImage] = useState<string | undefined>();
+  const [previewImagePath, setPreviewImagePath] = useState<
+    string | undefined
+  >();
 
   const [updateCourse] = useMutation<CourseResponse>(
     UPDATE_COURSE,
@@ -71,6 +74,7 @@ const EditModuleModal = ({
       title,
       description,
       published: isPublished,
+      image: previewImagePath,
       previewImage,
     };
     const [id, course] = formatCourseRequest(newModule);
@@ -96,8 +100,10 @@ const EditModuleModal = ({
         const imageUploadResult = await uploadImage({
           variables: { file: e.target.files[0] },
         });
+        console.log(imageUploadResult);
         const result = imageUploadResult.data.uploadModuleImage ?? null;
-        setPreviewImage(result?.previewImage ?? undefined);
+        setPreviewImage(result?.image ?? undefined);
+        setPreviewImagePath(result?.path ?? undefined);
       }
     }
   };

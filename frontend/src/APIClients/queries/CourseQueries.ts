@@ -67,7 +67,7 @@ export const GET_COURSE = gql`
 `;
 
 export const GET_MODULE_IMAGE = gql`
-  query GetModuleImage($fileName: String!) {
-    moduleImage(fileName: $fileName)
+  query GetModuleImage($path: String!) {
+    moduleImage(path: $path)
   }
 `;
