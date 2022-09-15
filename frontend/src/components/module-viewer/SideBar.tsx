@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { ChevronLeftIcon, EditIcon } from "@chakra-ui/icons";
 import { useMutation, useQuery } from "@apollo/client";
+import { ReactComponent as SaveIcon } from "../../assets/Save.svg";
 import {
   COURSE_OVERVIEW_BASE_ROUTE,
   MANAGE_COURSES_PAGE,
@@ -72,27 +73,6 @@ const Sidebar = ({
     onClose: onCloseSaveModal,
   } = useDisclosure();
 
-  const handlePageLeave = useCallback((e: BeforeUnloadEvent) => {
-    const confirmationMessage = "Some message";
-    e.preventDefault();
-    e.returnValue = confirmationMessage;
-    return confirmationMessage;
-  }, []);
-
-  const cb = useRef<(e: BeforeUnloadEvent) => string>(handlePageLeave);
-
-  useEffect(() => {
-    cb.current = handlePageLeave;
-  }, [handlePageLeave]);
-
-  useEffect(() => {
-    const onUnload = (e: BeforeUnloadEvent) => cb.current?.(e);
-
-    window.addEventListener("beforeunload", onUnload);
-
-    return () => window.removeEventListener("beforeunload", onUnload);
-  }, []);
-
   const context: EditorContextType = useContext(EditorContext);
   const { data: courseData, error } = useQuery<{ course: CourseResponse }>(
     GET_COURSE,
@@ -119,6 +99,33 @@ const Sidebar = ({
   const [deleteLesson] = useMutation(DELETE_LESSON);
 
   const { state, dispatch } = context;
+
+  const handlePageLeave = useCallback((e: BeforeUnloadEvent) => {
+    if (!state?.hasChanged || !Object.values(state.hasChanged).length) {
+      return undefined;
+    }
+    const confirmationMessage = "Some message";
+    e.preventDefault();
+    e.returnValue = confirmationMessage;
+    return confirmationMessage;
+  }, []);
+
+  const cb = useRef<(e: BeforeUnloadEvent) => string | undefined>(
+    handlePageLeave,
+  );
+
+  useEffect(() => {
+    cb.current = handlePageLeave;
+  }, [handlePageLeave]);
+
+  useEffect(() => {
+    const onUnload = (e: BeforeUnloadEvent) => cb.current?.(e);
+
+    window.addEventListener("beforeunload", onUnload);
+
+    return () => window.removeEventListener("beforeunload", onUnload);
+  }, []);
+
   if (!state) return <></>;
 
   const formatCourseRequest = (
@@ -278,6 +285,23 @@ const Sidebar = ({
               <>
                 <EditorTabs onLessonSelected={onLessonSelected} />
                 <Spacer />
+                {Object.values(state.hasChanged).length ? (
+                  <Button
+                    bg="#5FCA89"
+                    color="white"
+                    leftIcon={<SaveIcon />}
+                    borderRadius="0"
+                    pl="35px"
+                    width="100%"
+                    h="55px"
+                    justifyContent="left"
+                    onClick={() => saveChanges(state.hasChanged)}
+                  >
+                    Save Changes
+                  </Button>
+                ) : (
+                  <></>
+                )}
               </>
             ) : (
               <ModuleOverview
