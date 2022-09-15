@@ -1,6 +1,7 @@
 export type CourseProgressResponse = {
   startedAt?: Date;
   completedAt?: Date;
+  courseId: string;
 };
 
 export type LessonProgressResponse = {
