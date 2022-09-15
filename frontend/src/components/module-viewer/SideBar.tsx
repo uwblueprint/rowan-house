@@ -100,15 +100,18 @@ const Sidebar = ({
 
   const { state, dispatch } = context;
 
-  const handlePageLeave = useCallback((e: BeforeUnloadEvent) => {
-    if (!state?.hasChanged || !Object.values(state.hasChanged).length) {
-      return undefined;
-    }
-    const confirmationMessage = "Some message";
-    e.preventDefault();
-    e.returnValue = confirmationMessage;
-    return confirmationMessage;
-  }, []);
+  const handlePageLeave = useCallback(
+    (e: BeforeUnloadEvent) => {
+      if (!state?.hasChanged || !Object.values(state.hasChanged).length) {
+        return undefined;
+      }
+      const confirmationMessage = "Some message";
+      e.preventDefault();
+      e.returnValue = confirmationMessage;
+      return confirmationMessage;
+    },
+    [state],
+  );
 
   const cb = useRef<(e: BeforeUnloadEvent) => string | undefined>(
     handlePageLeave,
