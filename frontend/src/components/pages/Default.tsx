@@ -11,7 +11,6 @@ import {
 } from "../../APIClients/queries/CourseQueries";
 import { CourseResponse } from "../../APIClients/types/CourseClientTypes";
 import { GET_COURSE_PROGRESS } from "../../APIClients/queries/ProgressQueries";
-import { CourseType } from "../../types/ModuleEditorTypes";
 import { CourseProgressResponse } from "../../APIClients/types/ProgressClientTypes";
 
 const Default = (): React.ReactElement => {
@@ -20,8 +19,8 @@ const Default = (): React.ReactElement => {
   const [courses, setCourses] = useState([]);
 
   const [courseProgresses, setCourseProgresses] = useState<
-    Array<CourseProgressResponse>
-  >([]);
+    Map<string, string>
+  >();
 
   const [selectedTab, setSelectedTab] = useState<string>(TAB_NAMES[0]);
 
@@ -46,7 +45,19 @@ const Default = (): React.ReactElement => {
               data?.courses?.map((course: CourseResponse) => course.id) || [],
           },
         });
-        setCourseProgresses(progresses.courseProgress);
+        const progress: Map<string, string> = new Map();
+        if (progresses?.courseProgress) {
+          progresses.courseProgress.forEach(
+            (course: CourseProgressResponse) => {
+              if (course.completedAt) {
+                progress.set(course?.courseId, "Complete");
+              } else if (course.startedAt) {
+                progress.set(course?.courseId, "In Progress");
+              }
+            },
+          );
+        }
+        setCourseProgresses(progress);
       } else {
         const { data } = await getPublicCourseData();
         setCourses(data?.publicCourses);
@@ -64,32 +75,13 @@ const Default = (): React.ReactElement => {
   ]);
 
   const checkFilter = (tab_name: string, courseId: string): boolean => {
-    if (tab_name === "All Courses") {
+    if (tab_name === "All Courses" || !courseProgresses) {
       return true;
     }
-    if (!courseProgresses) {
+    if (tab_name === "Not Started" && !courseProgresses.has(courseId)) {
       return true;
     }
-    const courseObj = courseProgresses.find(
-      (course) => course.courseId === courseId,
-    );
-    if (!courseObj) {
-      if (tab_name === "Not Started") {
-        return true;
-      }
-      return false;
-    }
-
-    switch (tab_name) {
-      case "Complete":
-        return !!courseObj.completedAt;
-      case "In Progress":
-        return !!courseObj.startedAt && !courseObj.completedAt;
-      case "Not Started":
-        return !courseObj.startedAt;
-      default:
-        return true;
-    }
+    return courseProgresses.get(courseId) === tab_name;
   };
 
   return (
@@ -114,7 +106,7 @@ const Default = (): React.ReactElement => {
             if (checkFilter(selectedTab, course.id)) {
               return <CourseCard key={course.id} course={course} />;
             }
-            return <></>;
+            return null;
           })}
         </SimpleGrid>
       </VStack>
