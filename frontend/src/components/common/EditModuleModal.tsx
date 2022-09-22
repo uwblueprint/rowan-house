@@ -1,4 +1,4 @@
-import { Box, Flex, VStack, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, VStack, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { TextInput } from "./TextInput";
@@ -100,7 +100,6 @@ const EditModuleModal = ({
         const imageUploadResult = await uploadImage({
           variables: { file: e.target.files[0] },
         });
-        console.log(imageUploadResult);
         const result = imageUploadResult.data.uploadModuleImage ?? null;
         setPreviewImage(result?.image ?? undefined);
         setPreviewImagePath(result?.path ?? undefined);

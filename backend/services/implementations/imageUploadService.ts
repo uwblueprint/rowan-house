@@ -57,8 +57,8 @@ class ImageUploadService implements IImageUploadService {
     }
   }
 
-  async download(fileName: string): Promise<string> {
-    return this.storageService.getFile(fileName, 60);
+  async download(filePath: string): Promise<string> {
+    return this.storageService.getFile(filePath);
   }
 
   async storeImage(
