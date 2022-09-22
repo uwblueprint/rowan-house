@@ -104,7 +104,13 @@ const Default = (): React.ReactElement => {
         >
           {courses?.map((course: CourseResponse) => {
             if (checkFilter(selectedTab, course.id)) {
-              return <CourseCard key={course.id} course={course} />;
+              let status = null;
+              if (courseProgresses) {
+                status = courseProgresses?.get(course.id) || "Not Started";
+              }
+              return (
+                <CourseCard key={course.id} course={course} status={status} />
+              );
             }
             return null;
           })}

@@ -1,16 +1,33 @@
 import React, { useState } from "react";
-import { Box, Collapse, Flex, Heading, Image, Spacer } from "@chakra-ui/react";
+import {
+  Box,
+  Collapse,
+  Flex,
+  Heading,
+  Image,
+  Spacer,
+  Tag,
+  TagLabel,
+  TagLeftIcon,
+} from "@chakra-ui/react";
 import { DEFAULT_IMAGE } from "../../../constants/DummyData";
 import RouterLink from "../../common/RouterLink";
 import { COURSE_OVERVIEW_BASE_ROUTE } from "../../../constants/Routes";
 import { CourseResponse } from "../../../APIClients/types/CourseClientTypes";
 import ModuleLessonCount from "../ModuleLessonCount";
+import { ReactComponent as StatusCompleteIcon } from "../../../assets/statuscomplete.svg";
+import { ReactComponent as StatusInProgressIcon } from "../../../assets/statusinprogress.svg";
+import { ReactComponent as StatusNotStartedIcon } from "../../../assets/statusnotstarted.svg";
 
 interface CourseCardProps {
   course: CourseResponse;
+  status: string | null;
 }
 
-const CourseCard = ({ course }: CourseCardProps): React.ReactElement => {
+const CourseCard = ({
+  course,
+  status,
+}: CourseCardProps): React.ReactElement => {
   const [focused, setFocused] = useState<boolean>(false);
   const [hovered, setHovered] = useState<boolean>(false);
   const handleFocus = () => setFocused(true);
@@ -24,6 +41,52 @@ const CourseCard = ({ course }: CourseCardProps): React.ReactElement => {
       0,
     ) || 0;
   const expanded = focused || hovered;
+
+  const StatusTag = () => {
+    if (!status) {
+      return null;
+    }
+    if (status === "In Progress") {
+      return (
+        <Tag
+          size="md"
+          position="absolute"
+          top="15px"
+          left="5px"
+          background="white"
+        >
+          <TagLeftIcon boxSize="12px" as={StatusInProgressIcon} />
+          <TagLabel color="green">In Progress</TagLabel>
+        </Tag>
+      );
+    }
+    if (status === "Complete") {
+      return (
+        <Tag
+          size="md"
+          position="absolute"
+          top="15px"
+          left="5px"
+          background="white"
+        >
+          <TagLeftIcon boxSize="12px" as={StatusCompleteIcon} />
+          <TagLabel color="purple">Completed</TagLabel>
+        </Tag>
+      );
+    }
+    return (
+      <Tag
+        size="md"
+        position="absolute"
+        top="15px"
+        left="5px"
+        background="white"
+      >
+        <TagLeftIcon boxSize="12px" as={StatusNotStartedIcon} />
+        <TagLabel color="gray">Not Started</TagLabel>
+      </Tag>
+    );
+  };
 
   return (
     <RouterLink
@@ -40,6 +103,7 @@ const CourseCard = ({ course }: CourseCardProps): React.ReactElement => {
         height="300px"
         borderRadius="8px"
         overflow="hidden"
+        position="relative"
       >
         <Collapse startingHeight="120px" endingHeight="105px" in={expanded}>
           <Image
@@ -49,6 +113,7 @@ const CourseCard = ({ course }: CourseCardProps): React.ReactElement => {
             height="100%"
             fit="cover"
           />
+          <StatusTag />
         </Collapse>
         <Flex direction="column" padding="24px" flex={1}>
           <Box>
