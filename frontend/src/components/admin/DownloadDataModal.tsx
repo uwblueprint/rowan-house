@@ -9,28 +9,61 @@ import {
   Select,
   Input,
 } from "@chakra-ui/react";
-import { UserCountForTown } from "../../APIClients/types/UserClientTypes";
 import { Modal } from "../common/Modal";
 import { GET_USER_COUNT_BY_TOWN } from "../../APIClients/queries/UserQueries";
+import { downloadCSV } from "../../utils/CSVUtils";
 
-const DatePicker = ({ label }: { label: string }): React.ReactElement => {
+type DatePickerProps = {
+  label: string;
+  day: string;
+  setDate: (date: string) => void;
+};
+
+const DatePicker = ({
+  label,
+  day,
+  setDate,
+}: DatePickerProps): React.ReactElement => {
+  enum Months {
+    January = "01",
+    February = "02",
+    March = "03",
+    April = "04",
+    May = "05",
+    June = "06",
+    July = "07",
+    August = "08",
+    September = "09",
+    October = "10",
+    November = "11",
+    December = "12",
+  }
+
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
+  const [invalidYear, setInvalidYear] = useState(false);
 
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
+  const updateDate = () => {
+    if (month !== "" && year !== "") {
+      setDate(`${year}/${Months[month as keyof typeof Months]}/${day}`);
+    }
+  };
+
+  const handleYearInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputYear = event.target.value;
+    setYear(inputYear);
+    setInvalidYear(!Number.isInteger(Number(inputYear)));
+    if (!invalidYear) {
+      updateDate();
+    }
+  };
+
+  const handleMonthInput = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const inputMonth = event.target.value;
+    setMonth(inputMonth);
+    updateDate();
+  };
+
   return (
     <Stack direction="column">
       <Text>{label}</Text>
@@ -39,18 +72,19 @@ const DatePicker = ({ label }: { label: string }): React.ReactElement => {
           placeholder="Month"
           size="sm"
           value={month}
-          onChange={(event) => setMonth(event.target.value)}
+          onChange={handleMonthInput}
         >
-          {months.map((m) => (
+          {Object.keys(Months).map((m) => (
             <option key={m} value={m}>
               {m}
             </option>
           ))}
         </Select>
         <Input
+          isInvalid={invalidYear}
           placeholder="Year"
           value={year}
-          onChange={(event) => setYear(event.target.value)}
+          onChange={handleYearInput}
           size="sm"
         />
       </Stack>
@@ -71,16 +105,24 @@ const DownloadDataModal = ({
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-  const { data, loading, error } = useQuery<{
-    userCounts: Array<UserCountForTown>;
-  }>(GET_USER_COUNT_BY_TOWN, {
+  const { data: counts } = useQuery(GET_USER_COUNT_BY_TOWN, {
     variables: { startDate, endDate },
   });
-  const { userCounts } = data ?? { userCounts: [] };
 
   const onDownloadConfirm = () => {
-    console.log(userCounts);
-    // download as CSV
+    const startDS = new Date(startDate);
+    const endDS = new Date(endDate);
+    if (startDS > endDS) {
+      console.log("date range invalid");
+      return;
+    }
+    if (counts) {
+      const csvString = counts.userCountByTown
+        .replaceAll(/{|}/g, "")
+        .replaceAll(",", "\n")
+        .replaceAll(":", ",");
+      downloadCSV(csvString, "user_counts_export.csv");
+    }
   };
 
   return (
@@ -94,17 +136,17 @@ const DownloadDataModal = ({
       <RadioGroup onChange={setTimeframe} value={timeframe}>
         <Stack orientation="vertical">
           <Box borderWidth="1px" w="100%" padding="0.5rem" marginBottom="5px">
-            <Radio spacing="1rem" value="1">
+            <Radio spacing="1rem" value="1" w="100%">
               <Text as="b">Download all data</Text>
             </Radio>
           </Box>
           <Box borderWidth="1px" w="100%" padding="0.5rem" marginBottom="5px">
-            <Radio spacing="1rem" value="2">
+            <Radio spacing="1rem" value="2" w="100%">
               <Text as="b">Download from selected range</Text>
             </Radio>
             <Stack direction="row" marginLeft="2rem" marginTop="0.5rem">
-              <DatePicker label="Start Date" />
-              <DatePicker label="End Date" />
+              <DatePicker label="Start Date" day="01" setDate={setStartDate} />
+              <DatePicker label="End Date" day="31" setDate={setEndDate} />
             </Stack>
           </Box>
         </Stack>

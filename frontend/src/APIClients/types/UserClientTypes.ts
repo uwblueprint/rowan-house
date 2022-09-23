@@ -16,8 +16,3 @@ export type UserResponse = {
   town: string;
   role: Role;
 };
-
-export type UserCountForTown = {
-  town: string;
-  count: number;
-};
