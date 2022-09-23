@@ -42,11 +42,11 @@ const CourseCard = ({
     ) || 0;
   const expanded = focused || hovered;
 
-  const StatusTag = () => {
-    if (!status) {
+  const StatusTag = (courseProgress: string | null) => {
+    if (!courseProgress) {
       return null;
     }
-    if (status === "In Progress") {
+    if (courseProgress === "In Progress") {
       return (
         <Tag
           size="md"
@@ -60,7 +60,7 @@ const CourseCard = ({
         </Tag>
       );
     }
-    if (status === "Complete") {
+    if (courseProgress === "Complete") {
       return (
         <Tag
           size="md"
@@ -113,7 +113,7 @@ const CourseCard = ({
             height="100%"
             fit="cover"
           />
-          <StatusTag />
+          {StatusTag(status)}
         </Collapse>
         <Flex direction="column" padding="24px" flex={1}>
           <Box>
