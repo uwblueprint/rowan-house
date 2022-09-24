@@ -24,6 +24,46 @@ interface CourseCardProps {
   status: string | null;
 }
 
+const StatusTag = (courseProgress: string | null) => {
+  if (!courseProgress) {
+    return null;
+  }
+  if (courseProgress === "In Progress") {
+    return (
+      <Tag
+        size="md"
+        position="absolute"
+        top="15px"
+        left="5px"
+        background="white"
+      >
+        <TagLeftIcon boxSize="12px" as={StatusInProgressIcon} />
+        <TagLabel color="green">In Progress</TagLabel>
+      </Tag>
+    );
+  }
+  if (courseProgress === "Complete") {
+    return (
+      <Tag
+        size="md"
+        position="absolute"
+        top="15px"
+        left="5px"
+        background="white"
+      >
+        <TagLeftIcon boxSize="12px" as={StatusCompleteIcon} />
+        <TagLabel color="purple">Completed</TagLabel>
+      </Tag>
+    );
+  }
+  return (
+    <Tag size="md" position="absolute" top="15px" left="5px" background="white">
+      <TagLeftIcon boxSize="12px" as={StatusNotStartedIcon} />
+      <TagLabel color="gray">Not Started</TagLabel>
+    </Tag>
+  );
+};
+
 const CourseCard = ({
   course,
   status,
@@ -41,52 +81,6 @@ const CourseCard = ({
       0,
     ) || 0;
   const expanded = focused || hovered;
-
-  const StatusTag = (courseProgress: string | null) => {
-    if (!courseProgress) {
-      return null;
-    }
-    if (courseProgress === "In Progress") {
-      return (
-        <Tag
-          size="md"
-          position="absolute"
-          top="15px"
-          left="5px"
-          background="white"
-        >
-          <TagLeftIcon boxSize="12px" as={StatusInProgressIcon} />
-          <TagLabel color="green">In Progress</TagLabel>
-        </Tag>
-      );
-    }
-    if (courseProgress === "Complete") {
-      return (
-        <Tag
-          size="md"
-          position="absolute"
-          top="15px"
-          left="5px"
-          background="white"
-        >
-          <TagLeftIcon boxSize="12px" as={StatusCompleteIcon} />
-          <TagLabel color="purple">Completed</TagLabel>
-        </Tag>
-      );
-    }
-    return (
-      <Tag
-        size="md"
-        position="absolute"
-        top="15px"
-        left="5px"
-        background="white"
-      >
-        <TagLeftIcon boxSize="12px" as={StatusNotStartedIcon} />
-        <TagLabel color="gray">Not Started</TagLabel>
-      </Tag>
-    );
-  };
 
   return (
     <RouterLink
