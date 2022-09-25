@@ -47,3 +47,12 @@ export const DELETE_COURSE = gql`
     deleteCourse(id: $id)
   }
 `;
+
+export const UPLOAD_IMAGE = gql`
+  mutation UploadImage($file: Upload) {
+    uploadModuleImage(file: $file) {
+      image
+      path
+    }
+  }
+`;

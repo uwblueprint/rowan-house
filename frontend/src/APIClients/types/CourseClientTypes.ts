@@ -36,3 +36,11 @@ export interface CourseResponse {
   modules: (ModuleResponse | null)[] | null;
   private: boolean;
 }
+
+export interface ImageUploadRequest {
+  file: File;
+}
+export type ImageUploadResponse = {
+  previewImage: string;
+  filePath: string;
+};

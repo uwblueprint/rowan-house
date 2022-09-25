@@ -54,13 +54,12 @@ const ModulePreview = ({
   const EDIT_MODULE_ROUTE = buildEditModuleRoute(courseId, index);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [modalType, setModalType] = useState(ModalType.EDIT); // determines which modal is shown when isOpen is true
-
   const [updateCourse] = useMutation<CourseResponse>(
     UPDATE_COURSE,
     refetchQueries,
   );
-  const { title, image, published } = module;
 
+  const { title, previewImage, published } = module;
   const onClick = (type: ModalType) => {
     setModalType(type);
     onOpen();
@@ -84,8 +83,9 @@ const ModulePreview = ({
     >
       <Link href={EDIT_MODULE_ROUTE}>
         <Image
-          src={image || DEFAULT_IMAGE}
+          src={previewImage ?? DEFAULT_IMAGE}
           alt="module-preview"
+          objectFit="cover"
           height="160px"
           width="240px"
           borderTopRadius="6px"

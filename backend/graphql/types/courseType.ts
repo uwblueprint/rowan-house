@@ -31,6 +31,10 @@ const courseType = gql`
     private: Boolean!
   }
 
+  type ModuleImageResponseDTO {
+    image: String
+    path: String
+  }
   input CreateCourseRequestDTO {
     title: String!
     description: String
@@ -53,12 +57,21 @@ const courseType = gql`
     course(id: ID!): CourseResponseDTO!
     courses: [CourseResponseDTO!]!
     publicCourses: [CourseResponseDTO!]!
+    moduleImage(path: String!): String!
   }
 
   extend type Mutation {
-    createCourse(course: CreateCourseRequestDTO!): CourseResponseDTO!
-    updateCourse(id: ID!, course: UpdateCourseRequestDTO!): CourseResponseDTO
+    createCourse(
+      course: CreateCourseRequestDTO!
+      file: Upload
+    ): CourseResponseDTO!
+    updateCourse(
+      id: ID!
+      course: UpdateCourseRequestDTO!
+      file: Upload
+    ): CourseResponseDTO
     deleteCourse(id: ID!): ID
+    uploadModuleImage(file: Upload): ModuleImageResponseDTO
   }
 `;
 

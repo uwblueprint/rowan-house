@@ -20,6 +20,8 @@ const allowableContentTypes = new Set([
   "image/gif",
 ]);
 
+const allowableImageTypes = new Set(["image/jpeg", "image/png", "image/gif"]);
+
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const validatePrimitive = (value: any, type: Type): boolean => {
@@ -127,6 +129,10 @@ export const validateContentList = (contentList: ContentBlock[]): boolean => {
 
 export const validateFileType = (mimetype: string): boolean => {
   return allowableContentTypes.has(mimetype);
+};
+
+export const validateImageFileType = (mimetype: string): boolean => {
+  return allowableImageTypes.has(mimetype);
 };
 
 export const getApiValidationError = (

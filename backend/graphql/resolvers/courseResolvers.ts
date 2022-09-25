@@ -1,4 +1,7 @@
 import { ExpressContext } from "apollo-server-express";
+import { FileUpload } from "graphql-upload";
+import FileStorageService from "../../services/implementations/fileStorageService";
+import ImageUploadService from "../../services/implementations/imageUploadService";
 import CourseService from "../../services/implementations/courseService";
 import {
   CreateCourseRequestDTO,
@@ -6,6 +9,7 @@ import {
   CourseResponseDTO,
   ICourseService,
 } from "../../services/interfaces/ICourseService";
+import { UploadedImage } from "../../services/interfaces/IImageUploadService";
 import { getAccessToken } from "../../middlewares/auth";
 import IAuthService from "../../services/interfaces/authService";
 import AuthService from "../../services/implementations/authService";
@@ -18,6 +22,12 @@ import { Role } from "../../types";
 import { CourseVisibilityAttributes } from "../../models/course.model";
 import { assertNever } from "../../utilities/errorUtils";
 
+const defaultBucket = process.env.FIREBASE_STORAGE_DEFAULT_BUCKET || "";
+const fileStorageService = new FileStorageService(defaultBucket);
+const imageUploadService = new ImageUploadService(
+  "moduleImages",
+  fileStorageService,
+);
 const courseService: ICourseService = new CourseService();
 const userService: IUserService = new UserService();
 const emailService: IEmailService = new EmailService(nodemailerConfig);
@@ -75,14 +85,20 @@ const courseResolvers = {
       const attributes = getCourseVisibilityAttributes(null);
       return courseService.getCourses(attributes);
     },
+    moduleImage: async (
+      _parent: undefined,
+      { path }: { path: string },
+      context: ExpressContext,
+    ): Promise<string> => {
+      return imageUploadService.download(path);
+    },
   },
   Mutation: {
     createCourse: async (
       _parent: undefined,
       { course }: { course: CreateCourseRequestDTO },
     ): Promise<CourseResponseDTO> => {
-      const newCourse = await courseService.createCourse(course);
-      return newCourse;
+      return courseService.createCourse(course);
     },
     updateCourse: async (
       _parent: undefined,
@@ -95,6 +111,12 @@ const courseResolvers = {
       { id }: { id: string },
     ): Promise<string> => {
       return courseService.deleteCourse(id);
+    },
+    uploadModuleImage: async (
+      _req: undefined,
+      { file }: { file: Promise<FileUpload> },
+    ): Promise<UploadedImage> => {
+      return imageUploadService.upload(file);
     },
   },
 };

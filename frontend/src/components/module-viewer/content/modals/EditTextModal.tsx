@@ -192,6 +192,8 @@ const EditTextModal = ({
                 <LinkButton />
               </HStack>
             </Box>
+            {/* TODO use invalid to display an error */}
+            {invalid && null}
             <Box borderWidth="1px" w="100%" h="150px" padding="1rem">
               <Editable
                 renderLeaf={renderLeaf}
