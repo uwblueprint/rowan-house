@@ -1,7 +1,7 @@
-import { Box, Flex, VStack, HStack, Divider, Link } from "@chakra-ui/react";
-import React, { useState, useCallback, useMemo } from "react";
+import { Box, Flex, VStack, HStack, Divider } from "@chakra-ui/react";
+import React, { useState, useCallback, useMemo, useEffect } from "react";
 import isHotkey, { isKeyHotkey } from "is-hotkey";
-import { createEditor, Transforms, Range } from "slate";
+import { createEditor, Transforms, Range, Descendant } from "slate";
 import { Slate, Editable, withReact } from "slate-react";
 import { withHistory } from "slate-history";
 import isUrl from "is-url";
@@ -23,12 +23,11 @@ import LinkButton, { wrapLink } from "./LinkButton";
 
 import {
   EditContentModalProps,
-  CustomElement,
+  SlateElement,
   TextEditor,
-  LeafPropTypes,
-  ElementPropTypes,
   FormatEnum,
 } from "../../../../types/ModuleEditorTypes";
+import { TextElement, TextLeaf } from "../blocks/TextBlock";
 
 const HOTKEYS: Record<string, FormatEnum> = {
   "mod+b": "bold",
@@ -36,48 +35,7 @@ const HOTKEYS: Record<string, FormatEnum> = {
   "mod+u": "underline",
 };
 
-const Leaf = ({ attributes, children, leaf }: LeafPropTypes) => {
-  return (
-    <span
-      {...attributes}
-      style={{
-        fontWeight: leaf.bold ? "bold" : "normal",
-        fontStyle: leaf.italic ? "italic" : "normal",
-        textDecorationLine: leaf.underline ? "underline" : "none",
-      }}
-    >
-      {children}
-    </span>
-  );
-};
-
-const Element = ({ attributes, children, element }: ElementPropTypes) => {
-  switch (element.type) {
-    case "link":
-      return (
-        <Link
-          {...attributes}
-          style={{ textDecorationLine: "underline" }}
-          color="purple"
-          isExternal
-          href={element.url}
-          onClick={() => {
-            window.open(element.url, "_blank", "noopener,noreferrer");
-          }}
-        >
-          {children}
-        </Link>
-      );
-    default:
-      return (
-        <p style={{ textAlign: element.align }} {...attributes}>
-          {children}
-        </p>
-      );
-  }
-};
-
-const initialValue: Array<CustomElement> = [
+const initialValue: Array<SlateElement> = [
   {
     type: "paragraph",
     align: "left",
@@ -85,11 +43,23 @@ const initialValue: Array<CustomElement> = [
   },
 ];
 
+const parseTextBlock = (block: TextBlockState): Array<SlateElement> => {
+  if (!block.content.text.length) {
+    return initialValue;
+  }
+  try {
+    return JSON.parse(block.content.text);
+  } catch (error) {
+    console.log("Failed to parse text in EditTextModal:", error);
+    return initialValue;
+  }
+}
+
 /* eslint-disable no-param-reassign */
 const withInlines = (editor: TextEditor) => {
   const { insertData, insertText, isInline } = editor;
 
-  editor.isInline = (element: CustomElement) =>
+  editor.isInline = (element: SlateElement) =>
     ["link"].includes(element.type) || isInline(element);
 
   editor.insertText = (text) => {
@@ -124,22 +94,16 @@ const EditTextModal = ({
     () => withInlines(withHistory(withReact(createEditor()))),
     [],
   );
-  const [text, setText] = useState(block.content.text ?? "");
-  const [invalid, setInvalid] = useState(false);
+  const [text, setText] = useState<SlateElement[]>(parseTextBlock(block));
 
   const renderLeaf = useCallback((props) => {
-    return <Leaf {...props} />;
+    return <TextLeaf {...props} />;
   }, []);
 
-  const renderElement = useCallback((props) => <Element {...props} />, []);
+  const renderElement = useCallback((props) => <TextElement {...props} />, []);
 
   const onConfirm = () => {
-    if (!text) {
-      setInvalid(true);
-    } else {
-      onSave({ text });
-      setText(text);
-    }
+    onSave({ text: JSON.stringify(text ?? []) });
   };
 
   const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (event) => {
@@ -167,6 +131,11 @@ const EditTextModal = ({
     }
   };
 
+  // Reset state whenever modal opens/closes
+  useEffect(() => {
+    setText(parseTextBlock(block));
+  }, [isOpen]);
+
   return (
     <Modal
       size="xl"
@@ -174,9 +143,14 @@ const EditTextModal = ({
       onConfirm={onConfirm}
       onCancel={onCancel}
       isOpen={isOpen}
+      canSubmit={Boolean(text.length)}
     >
       <Flex>
-        <Slate editor={editor} value={initialValue}>
+        <Slate
+          editor={editor}
+          value={text}
+          onChange={(val) => setText(val as SlateElement[])}
+        >
           <VStack flex="1" w="100%">
             <Box borderWidth="1px" w="100%" padding="0.5rem">
               <HStack spacing={2}>
@@ -192,8 +166,6 @@ const EditTextModal = ({
                 <LinkButton />
               </HStack>
             </Box>
-            {/* TODO use invalid to display an error */}
-            {invalid && null}
             <Box borderWidth="1px" w="100%" h="150px" padding="1rem">
               <Editable
                 renderLeaf={renderLeaf}

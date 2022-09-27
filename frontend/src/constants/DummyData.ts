@@ -77,7 +77,13 @@ export const dummyLessons: LessonsType = {
         type: ContentTypeEnum.TEXT,
         id: uuid(),
         content: {
-          text: "Hello!",
+          text: `[
+            {
+              type: "paragraph",
+              align: "left",
+              children: [{ text: "" }],
+            },
+          ]`,
         },
       },
       {
@@ -92,7 +98,13 @@ export const dummyLessons: LessonsType = {
         type: ContentTypeEnum.TEXT,
         id: uuid(),
         content: {
-          text: "Yup!",
+          text: `[
+            {
+              type: "paragraph",
+              align: "left",
+              children: [{ text: "" }],
+            },
+          ]`,
         },
       },
     ],
@@ -108,7 +120,13 @@ export const dummyLessons: LessonsType = {
         type: ContentTypeEnum.TEXT,
         id: uuid(),
         content: {
-          text: "Welcome to lesson 2!",
+          text: `[
+            {
+              type: "paragraph",
+              align: "left",
+              children: [{ text: "" }],
+            },
+          ]`,
         },
       },
     ],

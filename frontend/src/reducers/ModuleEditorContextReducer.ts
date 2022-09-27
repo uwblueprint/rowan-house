@@ -165,7 +165,7 @@ export const createContent = (blockID: string): ContentBlockState => {
         type: ContentTypeEnum.TEXT,
         id: uuid(),
         content: {
-          text: "Hello!",
+          text: "",
         },
       };
     case ContentTypeEnum.IMAGE.id:
