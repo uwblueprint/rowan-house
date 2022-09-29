@@ -152,6 +152,7 @@ const EditTextModal = ({
                 renderElement={renderElement}
                 placeholder="Insert text here"
                 onKeyDown={onKeyDown}
+                autoFocus
               />
             </Box>
           </VStack>
