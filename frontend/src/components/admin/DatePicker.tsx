@@ -3,14 +3,20 @@ import { Text, Stack, Select, Input } from "@chakra-ui/react";
 
 type DatePickerProps = {
   label: string;
-  day: string;
-  setDate: (date: string) => void;
+  month: string;
+  year: string;
+  setMonth: (month: string) => void;
+  setYear: (year: string) => void;
+  invalid?: boolean;
 };
 
 const DatePicker = ({
   label,
-  day,
-  setDate,
+  month,
+  year,
+  setMonth,
+  setYear,
+  invalid,
 }: DatePickerProps): React.ReactElement => {
   enum Months {
     January = "01",
@@ -27,29 +33,12 @@ const DatePicker = ({
     December = "12",
   }
 
-  const [month, setMonth] = useState("");
-  const [year, setYear] = useState("");
-  const [invalidYear, setInvalidYear] = useState(false);
-
-  const updateDate = () => {
-    if (month !== "" && year !== "") {
-      setDate(`${year}/${Months[month as keyof typeof Months]}/${day}`);
-    }
-  };
-
   const handleYearInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const inputYear = event.target.value;
-    setYear(inputYear);
-    setInvalidYear(!Number.isInteger(Number(inputYear)));
-    if (!invalidYear) {
-      updateDate();
-    }
+    setYear(event.target.value.replace(/\D/g, ""));
   };
 
   const handleMonthInput = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const inputMonth = event.target.value;
-    setMonth(inputMonth);
-    updateDate();
+    setMonth(Months[event.target.value as keyof typeof Months]);
   };
 
   return (
@@ -58,8 +47,9 @@ const DatePicker = ({
       <Stack direction="row">
         <Select
           placeholder="Month"
+          isInvalid={invalid}
           size="sm"
-          value={month}
+          value={Object.keys(Months)[Number(month) - 1]}
           onChange={handleMonthInput}
         >
           {Object.keys(Months).map((m) => (
@@ -69,7 +59,7 @@ const DatePicker = ({
           ))}
         </Select>
         <Input
-          isInvalid={invalidYear}
+          isInvalid={invalid}
           placeholder="Year"
           value={year}
           onChange={handleYearInput}
