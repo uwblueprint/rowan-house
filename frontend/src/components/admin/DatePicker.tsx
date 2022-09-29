@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Text, Stack, Select, Input } from "@chakra-ui/react";
 
 type DatePickerProps = {

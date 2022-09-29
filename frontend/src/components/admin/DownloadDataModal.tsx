@@ -22,11 +22,6 @@ const DownloadDataModal = ({
   const [endYear, setEndYear] = useState("");
   const [getCounts, { loading, error, data }] = useLazyQuery(
     GET_USER_COUNT_BY_TOWN,
-    {
-      onCompleted: () => {
-        console.log(data);
-      },
-    },
   );
   const [downloadEnabled, setDownloadEnabled] = useState(true);
   const [rangeInvalid, setRangeInvalid] = useState(false);
@@ -62,13 +57,15 @@ const DownloadDataModal = ({
   const onDownloadConfirm = async () => {
     const startDS = new Date(Number(startYear), Number(startMonth) - 1, 1);
     const endDS = new Date(Number(endYear), Number(endMonth), 0);
-    const startDate = startDS.toLocaleDateString("en-ZA");
-    const endDate = endDS.toLocaleDateString("en-ZA");
+    let startDate = startDS.toLocaleDateString("en-ZA");
+    let endDate = endDS.toLocaleDateString("en-ZA");
 
-    const something = await getCounts({ variables: { startDate, endDate } });
-    console.log(something);
-
-    const csvString = data?.userCountByTown
+    if (radioOption === "1") {
+      startDate = "";
+      endDate = "";
+    }
+    const counts = await getCounts({ variables: { startDate, endDate } });
+    const csvString = counts.data.userCountByTown
       .replaceAll(/{|}/g, "")
       .replaceAll(",", "\n")
       .replaceAll(":", ",");
