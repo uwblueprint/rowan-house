@@ -1,7 +1,7 @@
 import { Box, Flex, VStack, HStack, Divider } from "@chakra-ui/react";
 import React, { useState, useCallback, useMemo, useEffect } from "react";
 import isHotkey, { isKeyHotkey } from "is-hotkey";
-import { createEditor, Transforms, Range, Descendant } from "slate";
+import { createEditor, Transforms, Range } from "slate";
 import { Slate, Editable, withReact } from "slate-react";
 import { withHistory } from "slate-history";
 import isUrl from "is-url";
@@ -27,33 +27,13 @@ import {
   TextEditor,
   FormatEnum,
 } from "../../../../types/ModuleEditorTypes";
-import { TextElement, TextLeaf } from "../blocks/TextBlock";
+import { TextElement, TextLeaf, parseTextBlock } from "../blocks/TextBlock";
 
 const HOTKEYS: Record<string, FormatEnum> = {
   "mod+b": "bold",
   "mod+i": "italic",
   "mod+u": "underline",
 };
-
-const initialValue: Array<SlateElement> = [
-  {
-    type: "paragraph",
-    align: "left",
-    children: [{ text: "" }],
-  },
-];
-
-const parseTextBlock = (block: TextBlockState): Array<SlateElement> => {
-  if (!block.content.text.length) {
-    return initialValue;
-  }
-  try {
-    return JSON.parse(block.content.text);
-  } catch (error) {
-    console.log("Failed to parse text in EditTextModal:", error);
-    return initialValue;
-  }
-}
 
 /* eslint-disable no-param-reassign */
 const withInlines = (editor: TextEditor) => {
@@ -85,7 +65,7 @@ const withInlines = (editor: TextEditor) => {
 /* eslint-enable no-param-reassign */
 
 const EditTextModal = ({
-  block,
+  block: { content },
   isOpen,
   onCancel,
   onSave,
@@ -94,7 +74,7 @@ const EditTextModal = ({
     () => withInlines(withHistory(withReact(createEditor()))),
     [],
   );
-  const [text, setText] = useState<SlateElement[]>(parseTextBlock(block));
+  const [text, setText] = useState<SlateElement[]>(parseTextBlock(content));
 
   const renderLeaf = useCallback((props) => {
     return <TextLeaf {...props} />;
@@ -133,8 +113,8 @@ const EditTextModal = ({
 
   // Reset state whenever modal opens/closes
   useEffect(() => {
-    setText(parseTextBlock(block));
-  }, [isOpen]);
+    setText(parseTextBlock(content));
+  }, [isOpen, content]);
 
   return (
     <Modal

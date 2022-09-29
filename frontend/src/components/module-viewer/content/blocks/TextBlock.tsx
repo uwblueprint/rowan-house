@@ -7,9 +7,17 @@ import {
   ContentBlockProps,
   TextBlockState,
 } from "../../../../types/ContentBlockTypes";
-import { ElementPropTypes, LeafPropTypes } from "../../../../types/ModuleEditorTypes";
+import {
+  ElementPropTypes,
+  LeafPropTypes,
+  SlateElement,
+} from "../../../../types/ModuleEditorTypes";
 
-export const TextLeaf = ({ attributes, children, leaf }: LeafPropTypes) => {
+export const TextLeaf = ({
+  attributes,
+  children,
+  leaf,
+}: LeafPropTypes): React.ReactElement => {
   return (
     <span
       {...attributes}
@@ -24,7 +32,11 @@ export const TextLeaf = ({ attributes, children, leaf }: LeafPropTypes) => {
   );
 };
 
-export const TextElement = ({ attributes, children, element }: ElementPropTypes) => {
+export const TextElement = ({
+  attributes,
+  children,
+  element,
+}: ElementPropTypes): React.ReactElement => {
   switch (element.type) {
     case "link":
       return (
@@ -50,11 +62,34 @@ export const TextElement = ({ attributes, children, element }: ElementPropTypes)
   }
 };
 
+const initialValue: Array<SlateElement> = [
+  {
+    type: "paragraph",
+    align: "left",
+    children: [{ text: "" }],
+  },
+];
+
+export const parseTextBlock = (
+  content: TextBlockState["content"],
+): Array<SlateElement> => {
+  if (!content.text.length) {
+    return initialValue;
+  }
+  try {
+    return JSON.parse(content.text);
+  } catch (error) {
+    /* eslint-disable-next-line no-console */
+    console.log("Failed to parse text in EditTextModal:", error);
+    return initialValue;
+  }
+};
+
 const TextBlock = ({
   block: { content },
 }: ContentBlockProps<TextBlockState>): React.ReactElement => {
   const editor = createEditor();
-  
+
   const renderLeaf = useCallback((props) => {
     return <TextLeaf {...props} />;
   }, []);
@@ -63,10 +98,7 @@ const TextBlock = ({
   if (!content.text.length) return <></>;
 
   return (
-    <Slate
-      editor={editor}
-      value={JSON.parse(content.text)}
-    >
+    <Slate editor={editor} value={parseTextBlock(content)} key={content.text}>
       <Box w="100%">
         <Editable
           contentEditable={false}
