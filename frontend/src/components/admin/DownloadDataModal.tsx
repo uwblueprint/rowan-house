@@ -20,9 +20,7 @@ const DownloadDataModal = ({
   const [startYear, setStartYear] = useState("");
   const [endMonth, setEndMonth] = useState("");
   const [endYear, setEndYear] = useState("");
-  const [getCounts, { loading, error, data }] = useLazyQuery(
-    GET_USER_COUNT_BY_TOWN,
-  );
+  const [getCounts, { loading }] = useLazyQuery(GET_USER_COUNT_BY_TOWN);
   const [downloadEnabled, setDownloadEnabled] = useState(true);
   const [rangeInvalid, setRangeInvalid] = useState(false);
 
@@ -52,7 +50,7 @@ const DownloadDataModal = ({
       setDownloadEnabled(true);
       setRangeInvalid(false);
     }
-  });
+  }, [radioOption, startMonth, startYear, endMonth, endYear]);
 
   const onDownloadConfirm = async () => {
     const startDS = new Date(Number(startYear), Number(startMonth) - 1, 1);
