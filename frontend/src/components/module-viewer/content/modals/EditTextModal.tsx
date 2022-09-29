@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import { Box, Flex, VStack, HStack, Divider } from "@chakra-ui/react";
 import React, { useState, useMemo, useEffect } from "react";
+=======
+import { Box, Flex, VStack, HStack, Divider, Link } from "@chakra-ui/react";
+import React, { useState, useCallback, useMemo, useEffect } from "react";
+>>>>>>> d04ef39 (Modal cancellation, match block rendering)
 import isHotkey, { isKeyHotkey } from "is-hotkey";
 import { createEditor, Transforms, Range } from "slate";
 import { Slate, Editable, withReact } from "slate-react";
@@ -77,6 +82,10 @@ const EditTextModal = ({
   const [text, setText] = useState<SlateElement[]>(() =>
     parseTextBlock(content),
   );
+
+  useEffect(() => {
+    setText(content.text);
+  }, [isOpen, content]);
 
   const onConfirm = () => {
     onSave({ text: JSON.stringify(text ?? []) });

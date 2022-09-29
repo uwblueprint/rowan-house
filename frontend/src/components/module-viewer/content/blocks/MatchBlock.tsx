@@ -124,9 +124,13 @@ const MatchBlock = ({
 
   // Randomize the order of the answers on load
   useEffect(() => {
-    setAnswers(answers.sort(() => Math.random() - 0.5));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    let newAnswers = content.matches.map((x) => x.answer);
+    if (!editable) {
+      newAnswers = newAnswers.sort(() => Math.random() - 0.5);
+    }
+    setAnswers(newAnswers);
+    setPairs(Array(content.matches.length).fill(null));
+  }, [content, editable]);
 
   const setAnswer = (...args: [number | string, number | string | null][]) => {
     const newPairs = [...pairs];

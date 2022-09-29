@@ -9,7 +9,7 @@ import {
   HStack,
 } from "@chakra-ui/react";
 import { AddIcon, SmallCloseIcon } from "@chakra-ui/icons";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { EditContentModalProps } from "../../../../types/ModuleEditorTypes";
 import { FlipCardBlockState } from "../../../../types/ContentBlockTypes";
@@ -17,15 +17,19 @@ import { Modal } from "../../../common/Modal";
 import { TextInput } from "../../../common/TextInput";
 
 const EditFlipCardModal = ({
-  block,
+  block: { content },
   isOpen,
   onCancel,
   onSave,
 }: EditContentModalProps<FlipCardBlockState>): React.ReactElement => {
   const [cards, setCards] = useState<FlipCardBlockState["content"]["cards"]>(
-    block.content.cards ?? "",
+    content.cards ?? [],
   );
   const [tabIndex, setTabIndex] = useState(0);
+
+  useEffect(() => {
+    setCards(content.cards);
+  }, [isOpen, content]);
 
   const addCard = () => {
     setCards((state) => {

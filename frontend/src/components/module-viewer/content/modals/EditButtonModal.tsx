@@ -1,5 +1,5 @@
 import { VStack } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ButtonBlockState } from "../../../../types/ContentBlockTypes";
 import { Modal } from "../../../common/Modal";
 import { TextInput } from "../../../common/TextInput";
@@ -8,13 +8,18 @@ import BlockPreview from "./BlockPreview";
 import CustomButton from "../blocks/CustomButton";
 
 const EditButtonModal = ({
-  block,
+  block: { content },
   isOpen,
   onCancel,
   onSave,
 }: EditContentModalProps<ButtonBlockState>): React.ReactElement => {
-  const [link, setLink] = useState(block.content.link ?? "");
-  const [text, setText] = useState(block.content.text ?? "");
+  const [link, setLink] = useState(content.link ?? "");
+  const [text, setText] = useState(content.text ?? "");
+
+  useEffect(() => {
+    setLink(content.link);
+    setText(content.text);
+  }, [isOpen, content]);
 
   const onConfirm = () => {
     if (link && text) {

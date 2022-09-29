@@ -1,5 +1,5 @@
 import { Box, Flex, Text, VStack } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { VideoBlockState } from "../../../../types/ContentBlockTypes";
 import { Modal } from "../../../common/Modal";
 import VideoPlayer from "../../../common/VideoPlayer";
@@ -27,13 +27,17 @@ const InvalidLinkPreview = ({ link }: InvalidLinkProps): React.ReactElement => {
 };
 
 const EditVideoModal = ({
-  block,
+  block: { content },
   isOpen,
   onSave,
   onCancel,
 }: EditContentModalProps<VideoBlockState>): React.ReactElement => {
-  const [link, setLink] = useState(block.content.link ?? "");
+  const [link, setLink] = useState(content.link ?? "");
   const [invalid, setInvalid] = useState(true);
+
+  useEffect(() => {
+    setLink(content.link);
+  }, [isOpen, content]);
 
   const onConfirm = () => {
     if (!link) {

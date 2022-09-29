@@ -1,5 +1,5 @@
 import { Select, FormControl, FormLabel, Input } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { HeadingBlockState } from "../../../../types/ContentBlockTypes";
 import { Modal } from "../../../common/Modal";
 import {
@@ -10,14 +10,19 @@ import CustomHeading from "../blocks/CustomHeading";
 import BlockPreview from "./BlockPreview";
 
 const EditHeadingModal = ({
-  block,
+  block: { content },
   isOpen,
   onCancel,
   onSave,
 }: EditContentModalProps<HeadingBlockState>): React.ReactElement => {
-  const [text, setText] = useState(block.content.text);
-  const [size, setSize] = useState(block.content.size);
+  const [text, setText] = useState(content.text);
+  const [size, setSize] = useState(content.size);
   const [invalid, setInvalid] = useState(false);
+
+  useEffect(() => {
+    setText(content.text);
+    setSize(content.size);
+  }, [isOpen, content]);
 
   const onConfirm = () => {
     if (!(size && text)) {
