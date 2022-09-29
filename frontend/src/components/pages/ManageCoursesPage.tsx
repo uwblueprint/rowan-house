@@ -29,9 +29,9 @@ const ManageCoursesPage = (): React.ReactElement => {
     if (!courses.length) {
       return <h1>There are no courses.</h1>;
     }
-    return courses.map((course) => (
-      <CoursePreview key={course.id} course={course} />
-    ));
+    return courses
+      .map((course) => <CoursePreview key={course.id} course={course} />)
+      .reverse();
   };
 
   if (error) return <p>Error! {error.message}</p>;
