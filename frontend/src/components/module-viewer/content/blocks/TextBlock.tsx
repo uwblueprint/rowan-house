@@ -1,23 +1,24 @@
-import React, { useCallback } from "react";
+import React from "react";
 import { createEditor } from "slate";
-import { Editable, Slate } from "slate-react";
+import {
+  Editable,
+  Slate,
+  RenderLeafProps,
+  RenderElementProps,
+} from "slate-react";
 import { Box, Link } from "@chakra-ui/react";
 
 import {
   ContentBlockProps,
   TextBlockState,
 } from "../../../../types/ContentBlockTypes";
-import {
-  ElementPropTypes,
-  LeafPropTypes,
-  SlateElement,
-} from "../../../../types/ModuleEditorTypes";
+import { SlateElement } from "../../../../types/ModuleEditorTypes";
 
 export const TextLeaf = ({
   attributes,
   children,
   leaf,
-}: LeafPropTypes): React.ReactElement => {
+}: RenderLeafProps): React.ReactElement => {
   return (
     <span
       {...attributes}
@@ -36,7 +37,7 @@ export const TextElement = ({
   attributes,
   children,
   element,
-}: ElementPropTypes): React.ReactElement => {
+}: RenderElementProps): React.ReactElement => {
   switch (element.type) {
     case "link":
       return (
@@ -90,11 +91,6 @@ const TextBlock = ({
 }: ContentBlockProps<TextBlockState>): React.ReactElement => {
   const editor = createEditor();
 
-  const renderLeaf = useCallback((props) => {
-    return <TextLeaf {...props} />;
-  }, []);
-  const renderElement = useCallback((props) => <TextElement {...props} />, []);
-
   if (!content.text.length) return <></>;
 
   return (
@@ -102,8 +98,8 @@ const TextBlock = ({
       <Box w="100%">
         <Editable
           contentEditable={false}
-          renderLeaf={renderLeaf}
-          renderElement={renderElement}
+          renderLeaf={TextLeaf}
+          renderElement={TextElement}
         />
       </Box>
     </Slate>

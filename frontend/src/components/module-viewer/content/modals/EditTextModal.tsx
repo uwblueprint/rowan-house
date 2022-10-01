@@ -1,5 +1,5 @@
 import { Box, Flex, VStack, HStack, Divider } from "@chakra-ui/react";
-import React, { useState, useCallback, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import isHotkey, { isKeyHotkey } from "is-hotkey";
 import { createEditor, Transforms, Range } from "slate";
 import { Slate, Editable, withReact } from "slate-react";
@@ -74,13 +74,9 @@ const EditTextModal = ({
     () => withInlines(withHistory(withReact(createEditor()))),
     [],
   );
-  const [text, setText] = useState<SlateElement[]>(parseTextBlock(content));
-
-  const renderLeaf = useCallback((props) => {
-    return <TextLeaf {...props} />;
-  }, []);
-
-  const renderElement = useCallback((props) => <TextElement {...props} />, []);
+  const [text, setText] = useState<SlateElement[]>(() =>
+    parseTextBlock(content),
+  );
 
   const onConfirm = () => {
     onSave({ text: JSON.stringify(text ?? []) });
@@ -148,8 +144,8 @@ const EditTextModal = ({
             </Box>
             <Box borderWidth="1px" w="100%" h="150px" padding="1rem">
               <Editable
-                renderLeaf={renderLeaf}
-                renderElement={renderElement}
+                renderLeaf={TextLeaf}
+                renderElement={TextElement}
                 placeholder="Insert text here"
                 onKeyDown={onKeyDown}
                 autoFocus

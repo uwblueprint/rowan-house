@@ -185,18 +185,6 @@ export type LinkElement = {
 
 export type SlateElement = ParagraphElement | LinkElement;
 
-export type LeafPropTypes = {
-  attributes: CustomText;
-  children: Descendant[];
-  leaf: CustomText;
-};
-
-export type ElementPropTypes = {
-  attributes: CustomText;
-  children: Descendant[];
-  element: SlateElement;
-};
-
 declare module "slate" {
   interface CustomTypes {
     Editor: BaseEditor & ReactEditor;
