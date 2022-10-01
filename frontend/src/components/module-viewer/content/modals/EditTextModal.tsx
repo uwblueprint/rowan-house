@@ -1,5 +1,5 @@
-import { Box, Flex, VStack, HStack, Divider, Link } from "@chakra-ui/react";
-import React, { useState, useCallback, useMemo } from "react";
+import { Box, Flex, VStack, HStack, Divider } from "@chakra-ui/react";
+import React, { useState, useMemo, useEffect } from "react";
 import isHotkey, { isKeyHotkey } from "is-hotkey";
 import { createEditor, Transforms, Range } from "slate";
 import { Slate, Editable, withReact } from "slate-react";
@@ -23,12 +23,11 @@ import LinkButton, { wrapLink } from "./LinkButton";
 
 import {
   EditContentModalProps,
-  CustomElement,
+  SlateElement,
   TextEditor,
-  LeafPropTypes,
-  ElementPropTypes,
   FormatEnum,
 } from "../../../../types/ModuleEditorTypes";
+import { TextElement, TextLeaf, parseTextBlock } from "../blocks/TextBlock";
 
 const HOTKEYS: Record<string, FormatEnum> = {
   "mod+b": "bold",
@@ -36,60 +35,11 @@ const HOTKEYS: Record<string, FormatEnum> = {
   "mod+u": "underline",
 };
 
-const Leaf = ({ attributes, children, leaf }: LeafPropTypes) => {
-  return (
-    <span
-      {...attributes}
-      style={{
-        fontWeight: leaf.bold ? "bold" : "normal",
-        fontStyle: leaf.italic ? "italic" : "normal",
-        textDecorationLine: leaf.underline ? "underline" : "none",
-      }}
-    >
-      {children}
-    </span>
-  );
-};
-
-const Element = ({ attributes, children, element }: ElementPropTypes) => {
-  switch (element.type) {
-    case "link":
-      return (
-        <Link
-          {...attributes}
-          style={{ textDecorationLine: "underline" }}
-          color="purple"
-          isExternal
-          href={element.url}
-          onClick={() => {
-            window.open(element.url, "_blank", "noopener,noreferrer");
-          }}
-        >
-          {children}
-        </Link>
-      );
-    default:
-      return (
-        <p style={{ textAlign: element.align }} {...attributes}>
-          {children}
-        </p>
-      );
-  }
-};
-
-const initialValue: Array<CustomElement> = [
-  {
-    type: "paragraph",
-    align: "left",
-    children: [{ text: "" }],
-  },
-];
-
 /* eslint-disable no-param-reassign */
 const withInlines = (editor: TextEditor) => {
   const { insertData, insertText, isInline } = editor;
 
-  editor.isInline = (element: CustomElement) =>
+  editor.isInline = (element: SlateElement) =>
     ["link"].includes(element.type) || isInline(element);
 
   editor.insertText = (text) => {
@@ -115,7 +65,7 @@ const withInlines = (editor: TextEditor) => {
 /* eslint-enable no-param-reassign */
 
 const EditTextModal = ({
-  block,
+  block: { content },
   isOpen,
   onCancel,
   onSave,
@@ -124,22 +74,12 @@ const EditTextModal = ({
     () => withInlines(withHistory(withReact(createEditor()))),
     [],
   );
-  const [text, setText] = useState(block.content.text ?? "");
-  const [invalid, setInvalid] = useState(false);
-
-  const renderLeaf = useCallback((props) => {
-    return <Leaf {...props} />;
-  }, []);
-
-  const renderElement = useCallback((props) => <Element {...props} />, []);
+  const [text, setText] = useState<SlateElement[]>(() =>
+    parseTextBlock(content),
+  );
 
   const onConfirm = () => {
-    if (!text) {
-      setInvalid(true);
-    } else {
-      onSave({ text });
-      setText(text);
-    }
+    onSave({ text: JSON.stringify(text ?? []) });
   };
 
   const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (event) => {
@@ -167,6 +107,11 @@ const EditTextModal = ({
     }
   };
 
+  // Reset state whenever modal opens/closes
+  useEffect(() => {
+    setText(parseTextBlock(content));
+  }, [isOpen, content]);
+
   return (
     <Modal
       size="xl"
@@ -174,9 +119,14 @@ const EditTextModal = ({
       onConfirm={onConfirm}
       onCancel={onCancel}
       isOpen={isOpen}
+      canSubmit={Boolean(text.length)}
     >
       <Flex>
-        <Slate editor={editor} value={initialValue}>
+        <Slate
+          editor={editor}
+          value={text}
+          onChange={(val) => setText(val as SlateElement[])}
+        >
           <VStack flex="1" w="100%">
             <Box borderWidth="1px" w="100%" padding="0.5rem">
               <HStack spacing={2}>
@@ -192,14 +142,13 @@ const EditTextModal = ({
                 <LinkButton />
               </HStack>
             </Box>
-            {/* TODO use invalid to display an error */}
-            {invalid && null}
             <Box borderWidth="1px" w="100%" h="150px" padding="1rem">
               <Editable
-                renderLeaf={renderLeaf}
-                renderElement={renderElement}
+                renderLeaf={TextLeaf}
+                renderElement={TextElement}
                 placeholder="Insert text here"
                 onKeyDown={onKeyDown}
+                autoFocus
               />
             </Box>
           </VStack>
