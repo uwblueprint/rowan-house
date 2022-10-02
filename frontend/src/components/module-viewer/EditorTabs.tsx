@@ -45,7 +45,7 @@ const EditorTabs = ({
       <TabPanel
         p="0"
         pb="200px"
-        height="100%"
+        height="80%"
         overflowY="auto"
         className="tabScroll"
       >
