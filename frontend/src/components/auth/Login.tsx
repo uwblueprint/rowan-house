@@ -406,7 +406,7 @@ const Login = (): React.ReactElement => {
           {getLoginForm(loginState)}
         </VStack>
       </Center>
-      <Image width="50vw" objectFit="cover" src={BackgroundImage} />
+      <Image maxH="100vh" w="50vw" objectFit="cover" src={BackgroundImage} />
     </Flex>
   );
 };
