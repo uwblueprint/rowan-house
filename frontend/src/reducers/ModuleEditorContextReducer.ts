@@ -221,6 +221,19 @@ export const createContent = (blockID: string): ContentBlockState => {
           ],
         },
       };
+    case ContentTypeEnum.QUIZ.id:
+      return {
+        type: ContentTypeEnum.QUIZ,
+        id: uuid(),
+        content: {
+          question: "",
+          type: "MC",
+          choices: [{
+            answer: "",
+            correct: false
+          }],
+        },
+      };
     default:
       throw Error("Invalid block id");
   }

@@ -61,6 +61,17 @@ export type FlipCardBlockState = ContentBlockStateType<
     }>;
   }
 >;
+export type QuizBlockState = ContentBlockStateType<
+  "quiz",
+  {
+    question: string;
+    type: "MS" | "MC";
+    choices: Array<{
+      answer: string;
+      correct: boolean;
+    }>;
+  }
+>;
 
 export type ColumnBlockState = ContentBlockStateType<
   "column",
@@ -82,6 +93,7 @@ export type ContentBlockState = RequireAllContentTypesArePresent<
   | AudioBlockState
   | MatchBlockState
   | FlipCardBlockState
+  | QuizBlockState
   | ColumnBlockState
 >;
 
@@ -172,6 +184,12 @@ export class ContentTypeEnum {
     "Flip Cards",
     "cards.svg",
     "cards",
+  );
+
+  static readonly QUIZ = ContentTypeEnum.new<"quiz">(
+    "Quiz",
+    "cards.svg",
+    "quiz",
   );
 
   public readonly id: string;
