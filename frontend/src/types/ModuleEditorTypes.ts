@@ -134,6 +134,9 @@ export type EditorContextAction =
         columnID: string;
         columnSide: ColumnBlockParam;
       };
+    }
+  | {
+      type: "clear-change-log";
     };
 
 export enum ValidHeadingSizes {

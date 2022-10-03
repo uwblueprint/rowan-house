@@ -394,6 +394,12 @@ const moveContentBlockToColumn = (
   return newState;
 };
 
+const clearChangeLog = (state: EditorStateType): EditorStateType => {
+  const newState = { ...state };
+  newState.hasChanged = {};
+  return newState;
+};
+
 // Using tools such as immer might help with this process.
 export default function EditorContextReducer(
   state: EditorStateType | null,
@@ -468,6 +474,8 @@ export default function EditorContextReducer(
         action.value.columnID,
         action.value.columnSide,
       );
+    case "clear-change-log":
+      return clearChangeLog(state);
     default:
       return state;
   }
