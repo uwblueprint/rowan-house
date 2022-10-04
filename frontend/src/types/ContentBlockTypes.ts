@@ -188,7 +188,7 @@ export class ContentTypeEnum {
 
   static readonly QUIZ = ContentTypeEnum.new<"quiz">(
     "Quiz",
-    "cards.svg",
+    "quiz.svg",
     "quiz",
   );
 

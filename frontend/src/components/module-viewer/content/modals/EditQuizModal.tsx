@@ -146,7 +146,6 @@ const EditQuizModal = ({
                 defaultValue={answer}
                 placeholder="Enter choice"
                 onChange={(a) => setAnswer(a, i)}
-                key={answer}
                 mb={0}
               />
               <Center>

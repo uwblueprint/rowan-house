@@ -1,5 +1,6 @@
 import React from "react";
 import { Box } from "@chakra-ui/react";
+import { EditIcon } from "@chakra-ui/icons";
 import { Draggable, DraggableProvided } from "react-beautiful-dnd";
 import { ContentTypeEnum } from "../../types/ContentBlockTypes";
 import { ReactComponent as ImageIcon } from "../../assets/image.svg";
@@ -12,6 +13,7 @@ import { ReactComponent as ButtonIcon } from "../../assets/button.svg";
 import { ReactComponent as VideoIcon } from "../../assets/video.svg";
 import { ReactComponent as AudioIcon } from "../../assets/audio.svg";
 import { ReactComponent as FlipCardIcon } from "../../assets/flipcard.svg";
+
 
 const BlockStyle = ({
   content,
@@ -51,6 +53,9 @@ const BlockStyle = ({
       break;
     case "cards.svg":
       contentIcon = <FlipCardIcon width="fit-content" height="fit-content" />;
+      break;
+    case "quiz.svg":
+      contentIcon = <EditIcon width="fit-content" height="fit-content" />;
       break;
     default:
       contentIcon = <ImageIcon />;
