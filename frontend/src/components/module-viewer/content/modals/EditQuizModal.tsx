@@ -1,43 +1,70 @@
 import {
   Button,
   FormLabel,
-  Text,
+  Select,
   VStack,
   SimpleGrid,
   Center,
 } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
-import React, { useState } from "react";
+import React, { useState, ChangeEvent } from "react";
 
 import { EditContentModalProps } from "../../../../types/ModuleEditorTypes";
 import { QuizBlockState } from "../../../../types/ContentBlockTypes";
 import { Modal } from "../../../common/Modal";
 import { TextInput } from "../../../common/TextInput";
-import { SwitchInput } from "../../../common/SwitchInput";
 
 const EditQuizModal = ({
-  block,
+  block: { content },
   isOpen,
   onCancel,
   onSave,
 }: EditContentModalProps<QuizBlockState>): React.ReactElement => {
-  const [question, setQuestion] = useState(block.content.question ?? "");
-  const [choices, setChoices] = useState(block.content.choices ?? []);
+  const [question, setQuestion] = useState(content.question ?? "");
+  const [quizType, setQuizType] = useState(content.type ?? "MC");
+  const [choices, setChoices] = useState(content.choices ?? []);
+
+  const findCorrectAnswers = () => {
+    const correctAnswers: number[] = [];
+    choices.forEach(({ correct }, i) => {
+      if (correct) correctAnswers.push(i);
+    });
+    return correctAnswers;
+  };
+
+  const canSubmit =
+    question.length > 0 &&
+    choices.length >= 2 &&
+    (quizType === "MS" || quizType === "MC") &&
+    choices.find((v) => v.correct) !== undefined;
 
   const onConfirm = () => {
-    if (choices.length >= 2) {
+    if (canSubmit) {
       onSave({
-        type: "MS",
+        type: quizType,
         question,
         choices,
       });
     }
   };
 
-  const setChoice = ({ a, c }: { a?: string; c?: boolean }, i: number) => {
+  const setAnswer = (answer: string, i: number) => {
     const newChoices = [...choices];
-    if (a) newChoices[i] = { ...choices[i], answer: a };
-    if (c) newChoices[i] = { ...choices[i], correct: c };
+    newChoices[i] = { ...choices[i], answer };
+    setChoices(newChoices);
+  };
+
+  const setCorrect = (
+    isCorrect: boolean,
+    i: number,
+    { onlyOneCorrect = false },
+  ) => {
+    let newChoices = [...choices];
+    // Ensure only one answer is correct for MC
+    if (onlyOneCorrect && isCorrect) {
+      newChoices = newChoices.map(({ answer }) => ({ answer, correct: false }));
+    }
+    newChoices[i] = { ...choices[i], correct: isCorrect };
     setChoices(newChoices);
   };
 
@@ -57,6 +84,18 @@ const EditQuizModal = ({
     setChoices([...newChoices]);
   };
 
+  const setQuizTypeSafely = (e: ChangeEvent<HTMLSelectElement>) => {
+    const type = e.target.value;
+    if (type === "MS" || type === "MC") {
+      setQuizType(type);
+    } else {
+      throw Error(`"type" attribute in Quiz received unknown value: ${type}`);
+    }
+    if (type === "MC" && findCorrectAnswers()[0]) {
+      setCorrect(true, findCorrectAnswers()[0], { onlyOneCorrect: true });
+    }
+  };
+
   return (
     <Modal
       header="Edit Quiz"
@@ -64,39 +103,50 @@ const EditQuizModal = ({
       onConfirm={onConfirm}
       onCancel={onCancel}
       isOpen={isOpen}
-      canSubmit={choices.length >= 2}
+      canSubmit={canSubmit}
     >
       <VStack alignItems="left">
         <TextInput
-          label="Question (optional)"
+          label="Question"
           placeholder="Insert text here"
           defaultValue={question}
           onChange={setQuestion}
+          mb={0}
         />
+        <FormLabel fontWeight={400} color="blackAlpha">
+          Type
+        </FormLabel>
+        <Select value={quizType} onChange={setQuizTypeSafely}>
+          <option value="MC">Single select</option>
+          <option value="MS">Multiple select</option>
+        </Select>
         <FormLabel fontWeight={400} color="blackAlpha">
           Answer choice
         </FormLabel>
         <SimpleGrid
-          templateColumns="30px 40px 1fr 30px"
+          templateColumns="20px 1fr 30px"
           align="center"
           spacingX={2}
           spacingY={0}
         >
           {choices.map(({ answer, correct }, i) => (
             <React.Fragment key={i}>
-              <Center>
-                <Text>{i + 1}.</Text>
-              </Center>
-              <SwitchInput
-                isEnabled={correct}
-                enabledName=""
-                disabledName=""
-                onChange={(c) => setChoice({ c }, i)}
-              />
+              <div
+                className="container"
+                onClick={() =>
+                  setCorrect(!correct, i, { onlyOneCorrect: quizType === "MC" })
+                }
+              >
+                <input type="checkbox" checked={correct} onChange={() => {}} />
+                <span
+                  className={`checkmark ${quizType === "MC" ? "rounded" : ""}`}
+                />
+              </div>
               <TextInput
                 defaultValue={answer}
                 placeholder="Enter choice"
-                onChange={(a) => setChoice({ a }, i)}
+                onChange={(a) => setAnswer(a, i)}
+                key={answer}
                 mb={0}
               />
               <Center>

@@ -228,10 +228,16 @@ export const createContent = (blockID: string): ContentBlockState => {
         content: {
           question: "",
           type: "MC",
-          choices: [{
-            answer: "",
-            correct: false
-          }],
+          choices: [
+            {
+              answer: "",
+              correct: false,
+            },
+            {
+              answer: "",
+              correct: false,
+            },
+          ],
         },
       };
     default:

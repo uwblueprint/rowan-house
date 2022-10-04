@@ -11,7 +11,7 @@ const QuizBlock = ({
   return (
     <>
       <p>{content.question}</p>
-      {content.choices.map(({answer, correct}) => (
+      {content.choices.map(({ answer, correct }) => (
         <p key={answer}>
           {answer}
           {correct}
