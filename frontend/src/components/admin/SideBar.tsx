@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
 import { Flex, Text, Image, Button } from "@chakra-ui/react";
 import { ReactComponent as CoursesIcon } from "../../assets/Courses.svg";
@@ -7,6 +7,7 @@ import RHSLogo from "../../assets/RHSLogo-white.png";
 import { AdminPage, SidebarProps } from "../../types/AdminDashboardTypes";
 import LogoutButton from "../auth/LogoutButton";
 import { MANAGE_COURSES_PAGE, MANAGE_USERS_PAGE } from "../../constants/Routes";
+import AuthContext from "../../contexts/AuthContext";
 
 interface PageTabProps {
   pageName: string;
@@ -45,6 +46,7 @@ const PageTab = ({
 
 const Sidebar = ({ currentPage }: SidebarProps): React.ReactElement => {
   const history = useHistory();
+  const { authenticatedUser } = useContext(AuthContext);
 
   const getTabColor = (tab: AdminPage) =>
     tab === currentPage ? "brand.purple" : "brand.royal";
@@ -96,7 +98,9 @@ const Sidebar = ({ currentPage }: SidebarProps): React.ReactElement => {
             <Text variant="caption" opacity="0.7">
               Admin
             </Text>
-            <Text variant="body-bold">Jane Doe</Text>
+            <Text variant="body-bold">
+              {authenticatedUser?.firstName} {authenticatedUser?.lastName}
+            </Text>
           </Flex>
           <LogoutButton />
         </Flex>

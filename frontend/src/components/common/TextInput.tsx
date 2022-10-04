@@ -15,6 +15,7 @@ export interface TextInputProps {
   errorMessage?: string;
   helperText?: string;
   isInvalid?: boolean;
+  value?: string;
   defaultValue?: string;
   isRequired?: boolean;
   mb?: number;
@@ -27,6 +28,7 @@ export const TextInput = ({
   errorMessage,
   helperText,
   isInvalid,
+  value,
   defaultValue = "",
   isRequired = false,
   ...rest
@@ -45,9 +47,10 @@ export const TextInput = ({
       <Input
         type={label}
         placeholder={placeholder}
+        defaultValue={defaultValue}
         errorBorderColor="red.600"
         onChange={(e) => onChange(e.target.value)}
-        defaultValue={defaultValue}
+        value={value}
       />
       {errorMessage && (
         <FormErrorMessage>

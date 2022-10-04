@@ -7,7 +7,7 @@ import {
   Center,
 } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { EditContentModalProps } from "../../../../types/ModuleEditorTypes";
 import { MatchBlockState } from "../../../../types/ContentBlockTypes";
@@ -15,13 +15,18 @@ import { Modal } from "../../../common/Modal";
 import { TextInput } from "../../../common/TextInput";
 
 const EditMatchModal = ({
-  block,
+  block: { content },
   isOpen,
   onCancel,
   onSave,
 }: EditContentModalProps<MatchBlockState>): React.ReactElement => {
-  const [question, setQuestion] = useState(block.content.question ?? "");
-  const [matches, setMatches] = useState(block.content.matches ?? []);
+  const [question, setQuestion] = useState(content.question ?? "");
+  const [matches, setMatches] = useState(content.matches ?? []);
+
+  useEffect(() => {
+    setQuestion(content.question);
+    setMatches(content.matches);
+  }, [isOpen, content]);
 
   const onConfirm = () => {
     if (matches.length >= 2) {
@@ -91,13 +96,13 @@ const EditMatchModal = ({
                 <Text>{i + 1}.</Text>
               </Center>
               <TextInput
-                defaultValue={prompt}
+                value={prompt}
                 placeholder="Insert text here"
                 onChange={(p) => setMatch({ p }, i)}
                 mb={0}
               />
               <TextInput
-                defaultValue={answer}
+                value={answer}
                 placeholder="Insert text here"
                 onChange={(a) => setMatch({ a }, i)}
                 mb={0}

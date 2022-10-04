@@ -3,6 +3,8 @@ import {
   Button,
   IconButton,
   Flex,
+  Spacer,
+  Text,
   useDisclosure,
   Tooltip,
 } from "@chakra-ui/react";
@@ -13,7 +15,6 @@ import {
   CheckCircleIcon,
 } from "@chakra-ui/icons";
 import { ReactComponent as UncheckedCheckbox } from "../../assets/uncheckedcheckbox.svg";
-import { ReactComponent as DragHandleIconSvg } from "../../assets/DragHandle.svg";
 import { TextInput } from "../common/TextInput";
 import { Modal } from "../common/Modal";
 import EditorContext from "../../contexts/ModuleEditorContext";
@@ -69,13 +70,12 @@ const LessonItem = ({
       setIsInvalid(true);
     }
   };
-  const showEditButtons = isHovered && editable;
 
   const locked = !editable && !isCurrent && !isCompleted;
 
   const getIcon = (): React.ReactElement => {
     if (editable) {
-      return <DragHandleIconSvg />;
+      return <></>;
     }
     if (isCurrent) {
       return <UncheckedCheckbox />;
@@ -101,6 +101,10 @@ const LessonItem = ({
         alignItems="space-between"
         justifyContent="center"
         flexDirection="column"
+        style={{
+          whiteSpace: "normal",
+          wordWrap: "break-word",
+        }}
         tabIndex={0}
         disabled={locked}
         onClick={() => {
@@ -117,63 +121,67 @@ const LessonItem = ({
         textAlign="left"
         pl={isFocused ? "6px" : "10px"}
         minH="55px"
+        h="min-content"
         w="100%"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
         <Flex align="center" justify="space-between" pr="8px">
-          <Flex align="center">
+          {!editable && (
             <IconButton
-              visibility={!editable || isHovered ? "visible" : "hidden"}
+              visibility={isHovered ? "visible" : "hidden"}
               aria-label="Drag Lesson"
               variant="unstyled"
               size="xs"
               icon={getIcon()}
             />
-            <p style={{ marginLeft: "10px" }}>{text}</p>
-          </Flex>
-          <Flex align="center" pb="5px">
-            <IconButton
-              visibility={showEditButtons ? "visible" : "hidden"}
-              aria-label="Edit Lesson"
-              variant="unstyled"
-              fontSize="18px"
-              size="sm"
-              icon={<EditIcon />}
-              onClick={onOpen}
-            />
-
-            <Modal
-              header="Edit lesson title"
-              isOpen={isOpen}
-              onConfirm={() => updateLessonName(title)}
-              onCancel={() => {
-                resetState();
-                onClose();
-              }}
-            >
-              <TextInput
-                placeholder="New lesson name"
-                onChange={(currTitle) => {
-                  setTitle(currTitle);
-                  setIsInvalid(false);
-                }}
-                errorMessage={errorMessage}
-                isInvalid={isInvalid}
-                defaultValue={text}
+          )}
+          <Text marginLeft="10px">{text}</Text>
+          <Spacer />
+          {editable && (
+            <>
+              <IconButton
+                visibility={isHovered ? "visible" : "hidden"}
+                aria-label="Edit Lesson"
+                variant="unstyled"
+                fontSize="18px"
+                size="sm"
+                icon={<EditIcon />}
+                onClick={onOpen}
               />
-            </Modal>
 
-            <IconButton
-              visibility={showEditButtons ? "visible" : "hidden"}
-              aria-label="Delete Lesson"
-              variant="unstyled"
-              fontSize="18px"
-              size="sm"
-              onClick={onDeleteClick}
-              icon={<DeleteIcon />}
-            />
-          </Flex>
+              <Modal
+                header="Edit lesson title"
+                isOpen={isOpen}
+                onConfirm={() => updateLessonName(title)}
+                onCancel={() => {
+                  resetState();
+                  onClose();
+                }}
+              >
+                <TextInput
+                  placeholder="New lesson name"
+                  onChange={(currTitle) => {
+                    setTitle(currTitle);
+                    setIsInvalid(false);
+                  }}
+                  errorMessage={errorMessage}
+                  isInvalid={isInvalid}
+                  defaultValue={text}
+                />
+              </Modal>
+
+              <IconButton
+                visibility={isHovered ? "visible" : "hidden"}
+                aria-label="Delete Lesson"
+                variant="unstyled"
+                fontSize="18px"
+                size="sm"
+                onClick={onDeleteClick}
+                icon={<DeleteIcon />}
+              />
+            </>
+          )}
         </Flex>
       </Button>
     </Tooltip>

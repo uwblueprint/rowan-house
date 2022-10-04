@@ -78,6 +78,10 @@ const EditTextModal = ({
     parseTextBlock(content),
   );
 
+  useEffect(() => {
+    setText(parseTextBlock(content));
+  }, [isOpen, content]);
+
   const onConfirm = () => {
     onSave({ text: JSON.stringify(text ?? []) });
   };

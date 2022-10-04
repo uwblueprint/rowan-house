@@ -25,7 +25,6 @@ import {
 } from "../../constants/Routes";
 import EditorContext from "../../contexts/ModuleEditorContext";
 import {
-  EditorChangeStatuses,
   EditorContextType,
   ModuleEditorParams,
 } from "../../types/ModuleEditorTypes";
@@ -201,9 +200,9 @@ const Sidebar = ({
     });
   };
 
-  const saveChanges = async (changeObj: EditorChangeStatuses) => {
+  const saveChanges = async () => {
     await Promise.all(
-      Object.entries(changeObj).map(async ([lessonID, action]) => {
+      Object.entries(state.hasChanged).map(async ([lessonID, action]) => {
         switch (action) {
           case "CREATE":
             // Await required so we can get a new ID
@@ -232,7 +231,7 @@ const Sidebar = ({
         });
       }),
     );
-    state.hasChanged = {};
+    dispatch({ type: "clear-change-log" });
   };
 
   const onCoursePageRoute = () => {
@@ -316,7 +315,7 @@ const Sidebar = ({
                     width="100%"
                     h="55px"
                     justifyContent="left"
-                    onClick={() => saveChanges(state.hasChanged)}
+                    onClick={saveChanges}
                   >
                     Save Changes
                   </Button>
@@ -334,7 +333,7 @@ const Sidebar = ({
           <SaveModal
             isOpen={isOpenSaveModal}
             onSave={async () => {
-              await saveChanges(state.hasChanged);
+              await saveChanges();
               onCoursePageRoute();
             }}
             onDontSave={onCoursePageRoute}
