@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, Stack, Select, Input } from "@chakra-ui/react";
+import { Stack, Select, Input, FormControl, FormLabel } from "@chakra-ui/react";
 
 type DatePickerProps = {
   label: string;
@@ -42,31 +42,34 @@ const DatePicker = ({
   };
 
   return (
-    <Stack direction="column">
-      <Text>{label}</Text>
-      <Stack direction="row">
-        <Select
-          placeholder="Month"
-          isInvalid={invalid}
-          size="sm"
-          value={Object.keys(Months)[Number(month) - 1]}
-          onChange={handleMonthInput}
-        >
-          {Object.keys(Months).map((m) => (
-            <option key={m} value={m}>
-              {m}
-            </option>
-          ))}
-        </Select>
-        <Input
-          isInvalid={invalid}
-          placeholder="Year"
-          value={year}
-          onChange={handleYearInput}
-          size="sm"
-        />
+    <FormControl>
+      <Stack direction="column">
+        <FormLabel>{label}</FormLabel>
+        <Stack direction="row">
+          <Select
+            placeholder="Month"
+            isInvalid={invalid}
+            size="sm"
+            value={Object.keys(Months)[Number(month) - 1]}
+            onChange={handleMonthInput}
+          >
+            {Object.keys(Months).map((m) => (
+              <option key={m} value={m}>
+                {m}
+              </option>
+            ))}
+          </Select>
+          <Input
+            isInvalid={invalid}
+            placeholder="Year"
+            value={year}
+            inputMode="numeric"
+            onChange={handleYearInput}
+            size="sm"
+          />
+        </Stack>
       </Stack>
-    </Stack>
+    </FormControl>
   );
 };
 

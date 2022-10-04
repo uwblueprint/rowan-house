@@ -80,7 +80,8 @@ const DownloadDataModal = ({
     <Modal
       size="2xl"
       header="Pick timeframe to download data"
-      confirmText={loading ? "Downloading..." : "Download"}
+      confirmText="Download"
+      confirmIsLoading={loading}
       canSubmit={downloadEnabled && !rangeInvalid}
       onConfirm={onDownloadConfirm}
       onCancel={() => {

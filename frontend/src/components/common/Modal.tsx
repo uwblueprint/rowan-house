@@ -22,6 +22,7 @@ export interface ModalProps {
   bodyText?: string;
   cancelText?: string;
   confirmText?: string;
+  confirmIsLoading?: boolean;
   spreadButtons?: boolean;
   canSubmit?: boolean;
   size?: string;
@@ -36,6 +37,7 @@ export const Modal = ({
   bodyText,
   cancelText = "Cancel",
   confirmText = "Confirm",
+  confirmIsLoading,
   spreadButtons = false,
   canSubmit = true,
   children,
@@ -52,7 +54,12 @@ export const Modal = ({
           {children}
         </ModalBody>
         <ModalFooter>
-          <Button disabled={!canSubmit} onClick={onConfirm} mr="1rem">
+          <Button
+            disabled={!canSubmit}
+            onClick={onConfirm}
+            isLoading={confirmIsLoading}
+            mr="1rem"
+          >
             {confirmText}
           </Button>
           {spreadButtons && <Spacer />}
