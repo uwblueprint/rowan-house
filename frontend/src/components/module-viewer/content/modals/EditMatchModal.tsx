@@ -96,13 +96,13 @@ const EditMatchModal = ({
                 <Text>{i + 1}.</Text>
               </Center>
               <TextInput
-                defaultValue={prompt}
+                value={prompt}
                 placeholder="Insert text here"
                 onChange={(p) => setMatch({ p }, i)}
                 mb={0}
               />
               <TextInput
-                defaultValue={answer}
+                value={answer}
                 placeholder="Insert text here"
                 onChange={(a) => setMatch({ a }, i)}
                 mb={0}
