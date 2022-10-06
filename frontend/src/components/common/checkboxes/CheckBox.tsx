@@ -13,14 +13,9 @@ const CheckBox = ({
   radio = false,
 }: CheckBoxParams): React.ReactElement => {
   return (
-    <div
-      className="container"
-      onClick={onClick}
-    >
+    <div className="container" onClick={onClick}>
       <input type="checkbox" checked={status} onChange={() => {}} />
-      <span
-        className={`checkmark ${radio ? "rounded" : ""}`}
-      />
+      <span className={`checkmark ${radio ? "rounded" : ""}`} />
     </div>
   );
 };

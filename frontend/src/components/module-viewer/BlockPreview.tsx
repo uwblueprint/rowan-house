@@ -14,7 +14,6 @@ import { ReactComponent as VideoIcon } from "../../assets/video.svg";
 import { ReactComponent as AudioIcon } from "../../assets/audio.svg";
 import { ReactComponent as FlipCardIcon } from "../../assets/flipcard.svg";
 
-
 const BlockStyle = ({
   content,
   className,

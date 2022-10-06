@@ -18,6 +18,7 @@ export interface TextInputProps {
   value?: string;
   defaultValue?: string;
   isRequired?: boolean;
+  flex?: number;
   mb?: number;
 }
 

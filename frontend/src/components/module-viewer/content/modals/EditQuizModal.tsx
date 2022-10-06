@@ -3,8 +3,7 @@ import {
   FormLabel,
   Select,
   VStack,
-  SimpleGrid,
-  Center,
+  Flex,
 } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
 import React, { useState, ChangeEvent } from "react";
@@ -13,7 +12,7 @@ import { EditContentModalProps } from "../../../../types/ModuleEditorTypes";
 import { QuizBlockState } from "../../../../types/ContentBlockTypes";
 import { Modal } from "../../../common/Modal";
 import { TextInput } from "../../../common/TextInput";
-import CheckBox from "../../../common/CheckBox";
+import { CheckBoxes } from "../../../common/checkboxes";
 
 const EditQuizModal = ({
   block: { content },
@@ -24,14 +23,6 @@ const EditQuizModal = ({
   const [question, setQuestion] = useState(content.question ?? "");
   const [quizType, setQuizType] = useState(content.type ?? "MC");
   const [choices, setChoices] = useState(content.choices ?? []);
-
-  const findCorrectAnswers = () => {
-    const correctAnswers: number[] = [];
-    choices.forEach(({ correct }, i) => {
-      if (correct) correctAnswers.push(i);
-    });
-    return correctAnswers;
-  };
 
   const canSubmit =
     question.length > 0 &&
@@ -55,17 +46,11 @@ const EditQuizModal = ({
     setChoices(newChoices);
   };
 
-  const setCorrect = (
-    isCorrect: boolean,
-    i: number,
-    { onlyOneCorrect = false },
-  ) => {
-    let newChoices = [...choices];
-    // Ensure only one answer is correct for MC
-    if (onlyOneCorrect && isCorrect) {
-      newChoices = newChoices.map(({ answer }) => ({ answer, correct: false }));
-    }
-    newChoices[i] = { ...choices[i], correct: isCorrect };
+  const setCorrect = (statuses: boolean[]) => {
+    const newChoices = [...choices];
+    statuses.forEach((status, i) => {
+      newChoices[i] = { ...choices[i], correct: status };
+    });
     setChoices(newChoices);
   };
 
@@ -91,9 +76,6 @@ const EditQuizModal = ({
       setQuizType(type);
     } else {
       throw Error(`"type" attribute in Quiz received unknown value: ${type}`);
-    }
-    if (type === "MC" && findCorrectAnswers()[0]) {
-      setCorrect(true, findCorrectAnswers()[0], { onlyOneCorrect: true });
     }
   };
 
@@ -124,35 +106,26 @@ const EditQuizModal = ({
         <FormLabel fontWeight={400} color="blackAlpha">
           Answer choice
         </FormLabel>
-        <SimpleGrid
-          templateColumns="20px 1fr 30px"
-          align="center"
-          spacingX={2}
-          spacingY={0}
+        <CheckBoxes
+          statuses={choices.map(({ correct }) => correct)}
+          setStatus={setCorrect}
+          multiSelect={quizType === "MS"}
         >
-          {choices.map(({ answer, correct }, i) => (
-            <React.Fragment key={i}>
-              <CheckBox 
-                status={correct}
-                radio={quizType === "MC"}
-                onClick={() =>
-                  setCorrect(!correct, i, { onlyOneCorrect: quizType === "MC" })
-                }
-              />
+          {choices.map(({ answer }, i) => (
+            <Flex justify="center" key={i}>
               <TextInput
                 defaultValue={answer}
                 placeholder="Enter choice"
                 onChange={(a) => setAnswer(a, i)}
+                flex={1}
                 mb={0}
               />
-              <Center>
-                <Button variant="ghost" onClick={() => removeChoice(i)}>
-                  <DeleteIcon />
-                </Button>
-              </Center>
-            </React.Fragment>
+              <Button variant="ghost" onClick={() => removeChoice(i)}>
+                <DeleteIcon />
+              </Button>
+            </Flex>
           ))}
-        </SimpleGrid>
+        </CheckBoxes>
         <Button variant="ghost" onClick={addQuiz}>
           + Add choice
         </Button>
