@@ -13,6 +13,7 @@ import { EditContentModalProps } from "../../../../types/ModuleEditorTypes";
 import { QuizBlockState } from "../../../../types/ContentBlockTypes";
 import { Modal } from "../../../common/Modal";
 import { TextInput } from "../../../common/TextInput";
+import CheckBox from "../../../common/CheckBox";
 
 const EditQuizModal = ({
   block: { content },
@@ -131,17 +132,13 @@ const EditQuizModal = ({
         >
           {choices.map(({ answer, correct }, i) => (
             <React.Fragment key={i}>
-              <div
-                className="container"
+              <CheckBox 
+                status={correct}
+                radio={quizType === "MC"}
                 onClick={() =>
                   setCorrect(!correct, i, { onlyOneCorrect: quizType === "MC" })
                 }
-              >
-                <input type="checkbox" checked={correct} onChange={() => {}} />
-                <span
-                  className={`checkmark ${quizType === "MC" ? "rounded" : ""}`}
-                />
-              </div>
+              />
               <TextInput
                 defaultValue={answer}
                 placeholder="Enter choice"
