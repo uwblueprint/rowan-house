@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { SimpleGrid, Box } from "@chakra-ui/react";
+import { SimpleGrid, Box, Center } from "@chakra-ui/react";
 
 import CheckBox from "./CheckBox";
 
@@ -52,14 +52,16 @@ const CheckBoxes = ({
   }
 
   return (
-    <SimpleGrid templateColumns="30px 1fr" justify="center">
+    <SimpleGrid templateColumns="30px 1fr" spacingY={2}>
       {children.map((child, i) => (
         <>
-          <CheckBox
-            status={statuses[i]}
-            radio={!multiSelect}
-            onClick={() => onClick(i)}
-          />
+          <Center>
+            <CheckBox
+              status={statuses[i]}
+              radio={!multiSelect}
+              onClick={() => onClick(i)}
+            />
+          </Center>
           <Box>{child}</Box>
         </>
       ))}

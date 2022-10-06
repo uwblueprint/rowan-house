@@ -5,17 +5,25 @@ interface CheckBoxParams {
   onClick: () => void;
   status: boolean;
   radio?: boolean;
+  size?: string;
 }
 
 const CheckBox = ({
   onClick,
   status = false,
   radio = false,
+  size = "22px",
 }: CheckBoxParams): React.ReactElement => {
   return (
     <div className="container" onClick={onClick}>
       <input type="checkbox" checked={status} onChange={() => {}} />
-      <span className={`checkmark ${radio ? "rounded" : ""}`} />
+      <span
+        style={{
+          height: size,
+          width: size,
+        }}
+        className={`checkmark ${radio ? "rounded" : ""}`}
+      />
     </div>
   );
 };

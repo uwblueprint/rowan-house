@@ -1,26 +1,27 @@
 /* Used only for Quiz component */
 /* The container */
 .container {
-  display: block;
-  position: relative;
+  display: grid;
   cursor: pointer;
-  font-size: 22px;
+  padding: 0;
+  width: fit-content;
+  height: fit-content;
+  align-content: center;
+  justify-content: center;
 }
 
 /* Hide the browser's default checkbox */
 .container input {
-  position: absolute;
+  grid-column-start: 1;
+  grid-row-start: 1;
   height: 0;
   width: 0;
 }
 
 /* Create a custom checkbox */
 .checkmark {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 22px;
-  width: 22px;
+  grid-column-start: 1;
+  grid-row-start: 1;
   background-color: #ddd;
 }
 .rounded {
@@ -40,7 +41,10 @@
 /* Create the checkmark/indicator (hidden when not checked) */
 .checkmark:after {
   content: "";
-  position: absolute;
+  grid-column-start: 1;
+  grid-row-start: 1;
+  margin-left: 35%;
+  margin-top: 15%;
   display: none;
 }
 
@@ -51,10 +55,8 @@
 
 /* Style the checkmark/indicator */
 .container .checkmark:after {
-  left: 9px;
-  top: 5px;
-  width: 5px;
-  height: 10px;
+  width: 30%;
+  height: 60%;
   border: solid white;
   border-width: 0 3px 3px 0;
   -webkit-transform: rotate(45deg);

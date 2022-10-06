@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Flex, Text, VStack } from "@chakra-ui/react";
+import { Flex, Text, VStack, Button } from "@chakra-ui/react";
 
 import {
   ContentBlockProps,
@@ -10,9 +10,10 @@ import { CheckBoxes } from "../../../common/checkboxes";
 const QuizBlock = ({
   block: { content },
 }: ContentBlockProps<QuizBlockState>): React.ReactElement => {
-  const [guesses, setGuesses] = useState(
+  const [guesses, setGuesses] = useState<boolean[]>(
     Array(content.choices.length).fill(false),
   );
+  const [isCompleted, setCompleted] = useState(false);
 
   useEffect(() => {
     setGuesses(Array(content.choices.length).fill(false));
@@ -43,6 +44,13 @@ const QuizBlock = ({
           <Text key={i}>{answer}</Text>
         ))}
       </CheckBoxes>
+      <Button
+        w="fit-content"
+        onClick={() => setCompleted(true)}
+        disabled={!guesses.some((g) => g)}
+      >
+        Check answer
+      </Button>
     </VStack>
   );
 };

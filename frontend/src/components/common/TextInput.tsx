@@ -42,9 +42,9 @@ export const TextInput = ({
       mb={5}
       {...rest}
     >
-      <FormLabel fontWeight={400} color={isInvalid ? "red.500" : "blackAlpha"}>
+      {label && <FormLabel fontWeight={400} color={isInvalid ? "red.500" : "blackAlpha"}>
         {label}
-      </FormLabel>
+      </FormLabel>}
       <Input
         type={label}
         placeholder={placeholder}
