@@ -22,20 +22,10 @@
 .checkmark {
   grid-column-start: 1;
   grid-row-start: 1;
-  background-color: #ddd;
+  border-radius: 2px;
 }
 .rounded {
   clip-path: circle(50% at 50% 50%);
-}
-
-/* On mouse-over, add a grey background color */
-.container:hover input ~ .checkmark {
-  background-color: #ccc;
-}
-
-/* When the checkbox is checked, add a blue background */
-.container input:checked ~ .checkmark {
-  background-color: #94D969;
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */

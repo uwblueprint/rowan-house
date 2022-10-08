@@ -1,26 +1,36 @@
 import React from "react";
 import "./CheckBox.css";
 
-interface CheckBoxParams {
-  onClick: () => void;
-  status: boolean;
-  radio?: boolean;
+export interface CheckBoxStyleParams {
   size?: string;
+  selectedColor?: string;
+  unselectedColor?: string;
+  disabled?: boolean;
+}
+
+interface CheckBoxParams extends CheckBoxStyleParams {
+  onClick: () => void;
+  isSelected: boolean;
+  radio?: boolean;
 }
 
 const CheckBox = ({
   onClick,
-  status = false,
+  isSelected = false,
   radio = false,
   size = "22px",
+  selectedColor = "#94D969",
+  unselectedColor = "#ddd",
+  disabled = false,
 }: CheckBoxParams): React.ReactElement => {
   return (
-    <div className="container" onClick={onClick}>
-      <input type="checkbox" checked={status} onChange={() => {}} />
+    <div className="container" onClick={disabled ? undefined : onClick}>
+      <input type="checkbox" checked={isSelected} onChange={() => {}} />
       <span
         style={{
           height: size,
           width: size,
+          backgroundColor: isSelected ? selectedColor : unselectedColor,
         }}
         className={`checkmark ${radio ? "rounded" : ""}`}
       />

@@ -1,10 +1,4 @@
-import {
-  Button,
-  FormLabel,
-  Select,
-  VStack,
-  Flex,
-} from "@chakra-ui/react";
+import { Button, FormLabel, Select, VStack, Flex } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
 import React, { useState, ChangeEvent } from "react";
 
