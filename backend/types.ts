@@ -49,7 +49,11 @@ export interface HeadingBlock extends ContentBlock {
 }
 
 export interface QuizBlock extends ContentBlock {
-  content: { question: string; type: "MS" | "MC"; choices: [{ answer: string; correct: boolean }] };
+  content: {
+    question: string;
+    type: "MS" | "MC";
+    choices: [{ answer: string; correct: boolean }];
+  };
 }
 
 export type Token = {

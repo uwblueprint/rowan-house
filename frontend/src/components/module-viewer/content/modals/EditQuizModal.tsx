@@ -1,6 +1,6 @@
 import { Button, FormLabel, Select, VStack, Flex } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 
 import { EditContentModalProps } from "../../../../types/ModuleEditorTypes";
 import { QuizBlockState } from "../../../../types/ContentBlockTypes";
@@ -17,6 +17,12 @@ const EditQuizModal = ({
   const [question, setQuestion] = useState(content.question ?? "");
   const [quizType, setQuizType] = useState(content.type ?? "MC");
   const [choices, setChoices] = useState(content.choices ?? []);
+
+  useEffect(() => {
+    setQuestion(content.question);
+    setQuizType(content.type);
+    setChoices(content.choices);
+  }, [isOpen, content]);
 
   const canSubmit =
     question.length > 0 &&
@@ -108,7 +114,7 @@ const EditQuizModal = ({
           {choices.map(({ answer }, i) => (
             <Flex justify="center" key={i}>
               <TextInput
-                defaultValue={answer}
+                value={answer}
                 placeholder="Enter choice"
                 onChange={(a) => setAnswer(a, i)}
                 flex={1}

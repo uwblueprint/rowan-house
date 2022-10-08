@@ -104,7 +104,12 @@ export const validateContent = (content: ContentBlock): boolean => {
     }
     case "quiz": {
       const quiz = content as QuizBlock;
-      return quiz.content.question !== null && ["MS", "MC"].includes(quiz.content.type) && quiz.content.choices.length >= 2 && Boolean(quiz.content.choices.find(v => v.correct));
+      return (
+        quiz.content.question !== null &&
+        ["MS", "MC"].includes(quiz.content.type) &&
+        quiz.content.choices.length >= 2 &&
+        Boolean(quiz.content.choices.find((v) => v.correct))
+      );
     }
     case "text": {
       const text = content as TextBlock;
