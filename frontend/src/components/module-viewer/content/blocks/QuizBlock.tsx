@@ -51,9 +51,9 @@ const QuizBlock = ({
     >
       <Flex align="center">
         <QuizIcon />
-        <Text variant="heading">Knowledge Check</Text>
+        <Text pl="8px" variant="heading">Knowledge Check</Text>
       </Flex>
-      <h3>{content.question}</h3>
+      <Text variant="subheading">{content.question}</Text>
       <CheckBoxes
         statuses={guesses}
         setStatus={setGuesses}
