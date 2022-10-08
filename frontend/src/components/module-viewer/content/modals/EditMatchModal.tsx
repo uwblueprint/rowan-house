@@ -39,8 +39,8 @@ const EditMatchModal = ({
 
   const setMatch = ({ p, a }: { p?: string; a?: string }, i: number) => {
     const newMatches = [...matches];
-    if (p) newMatches[i] = { ...matches[i], prompt: p };
-    if (a) newMatches[i] = { ...matches[i], answer: a };
+    if (p !== undefined) newMatches[i] = { ...matches[i], prompt: p };
+    if (a !== undefined) newMatches[i] = { ...matches[i], answer: a };
     setMatches(newMatches);
   };
 
