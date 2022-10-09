@@ -41,9 +41,7 @@ const App = (): React.ReactElement => {
 
   return (
     <ApolloProvider client={client}>
-      <AuthContext.Provider
-        value={{ authenticatedUser, setAuthenticatedUser }}
-      >
+      <AuthContext.Provider value={{ authenticatedUser, setAuthenticatedUser }}>
         <ChakraProvider theme={defaultTheme}>
           <Router>
             <Switch>
@@ -86,11 +84,7 @@ const App = (): React.ReactElement => {
                 path={`${Routes.VERIFY_EMAIL_PAGE}`}
                 component={VerifyEmail}
               />
-              <Route
-                exact
-                path={`${Routes.LOGOUT_PAGE}`}
-                component={Logout}
-              />
+              <Route exact path={`${Routes.LOGOUT_PAGE}`} component={Logout} />
               <Route exact path="*" component={NotFound} />
             </Switch>
           </Router>

@@ -1,6 +1,8 @@
 import { gql } from "apollo-server-express";
 
 const courseType = gql`
+  scalar Upload
+
   type ModuleResponseDTO {
     id: ID!
     title: String!
