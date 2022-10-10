@@ -193,13 +193,15 @@ const ModuleViewer = ({
             (lesson: LessonProgressResponse) => lesson.lessonId,
           ),
         );
-        dispatch({
-          type: "set-focus",
-          value:
-            module.lessons[
-              Math.min(completedLessonIds.size, lessonRes.lessons.length - 1)
-            ],
-        });
+        if (!editable) {
+          dispatch({
+            type: "set-focus",
+            value:
+              module.lessons[
+                Math.min(completedLessonIds.size, lessonRes.lessons.length - 1)
+              ],
+          });
+        }
 
         dispatch({
           type: "set-completed-lessons",
