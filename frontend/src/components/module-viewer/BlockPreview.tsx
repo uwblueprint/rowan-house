@@ -24,40 +24,40 @@ const BlockStyle = ({
   let contentIcon: React.ReactElement;
   switch (content.preview) {
     case "column.svg":
-      contentIcon = <ColumnIcon width="fit-content" height="fit-content" />;
+      contentIcon = <ColumnIcon width="100%" height="100%" />;
       break;
     case "heading.svg":
-      contentIcon = <HeadingIcon width="fit-content" height="fit-content" />;
+      contentIcon = <HeadingIcon width="100%" height="100%" />;
       break;
     case "match.svg":
-      contentIcon = <MatchIcon width="fit-content" height="fit-content" />;
+      contentIcon = <MatchIcon width="100%" height="100%" />;
       break;
     case "text.svg":
-      contentIcon = <ParagraphIcon width="fit-content" height="fit-content" />;
+      contentIcon = <ParagraphIcon width="100%" height="100%" />;
       break;
     case "link.svg":
-      contentIcon = <LinkIcon width="fit-content" height="fit-content" />;
+      contentIcon = <LinkIcon width="100%" height="100%" />;
       break;
     case "button.svg":
-      contentIcon = <ButtonIcon width="fit-content" height="fit-content" />;
+      contentIcon = <ButtonIcon width="100%" height="100%" />;
       break;
     case "image.svg":
-      contentIcon = <ImageIcon width="fit-content" height="fit-content" />;
+      contentIcon = <ImageIcon width="100%" height="100%" />;
       break;
     case "video.svg":
-      contentIcon = <VideoIcon width="fit-content" height="fit-content" />;
+      contentIcon = <VideoIcon width="100%" height="100%" />;
       break;
     case "audio.svg":
-      contentIcon = <AudioIcon width="fit-content" height="fit-content" />;
+      contentIcon = <AudioIcon width="100%" height="100%" />;
       break;
     case "cards.svg":
-      contentIcon = <FlipCardIcon width="fit-content" height="fit-content" />;
+      contentIcon = <FlipCardIcon width="100%" height="100%" />;
       break;
     case "quiz.svg":
       contentIcon = <QuizIcon width="fit-content" height="fit-content" />;
       break;
     default:
-      contentIcon = <ImageIcon />;
+      contentIcon = <ImageIcon width="100%" height="100%" />;
   }
   return (
     <Box textAlign="center" mr="12px">
