@@ -37,6 +37,7 @@ interface ModulePreviewProps {
   module: ModuleResponse;
   courseId: string;
   index: number;
+  coursePreviewImage: string | null;
   formatCourseRequest: (
     index: number,
     module?: ModuleRequest,
@@ -50,6 +51,7 @@ const ModulePreview = ({
   courseId,
   index,
   formatCourseRequest,
+  coursePreviewImage,
 }: ModulePreviewProps): React.ReactElement => {
   const EDIT_MODULE_ROUTE = buildEditModuleRoute(courseId, index);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -83,7 +85,7 @@ const ModulePreview = ({
     >
       <Link href={EDIT_MODULE_ROUTE}>
         <Image
-          src={previewImage ?? DEFAULT_IMAGE}
+          src={previewImage ?? coursePreviewImage ?? DEFAULT_IMAGE}
           alt="module-preview"
           objectFit="cover"
           height="160px"

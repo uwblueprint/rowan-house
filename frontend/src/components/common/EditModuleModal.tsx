@@ -102,7 +102,7 @@ const EditModuleModal = ({
         const imageUploadResult = await uploadImage({
           variables: { file: e.target.files[0] },
         });
-        const result = imageUploadResult.data.uploadModuleImage ?? null;
+        const result = imageUploadResult.data.uploadImage ?? null;
         setPreviewImage(result?.image ?? undefined);
         setPreviewImagePath(result?.path ?? undefined);
       }
