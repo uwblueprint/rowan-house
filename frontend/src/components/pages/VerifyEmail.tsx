@@ -44,8 +44,8 @@ const VerifyEmailContent = ({
       return (
         <>
           <Text variant="display-md" paddingBottom="1vw">
-            Please verify your account from the
-            link we sent to your email address!
+            Please verify your account from the link we sent to your email
+            address!
           </Text>
           <Button
             variant="sm"

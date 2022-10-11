@@ -93,8 +93,8 @@ const CourseCard = ({
       <Flex
         boxShadow="0px 4px 12px rgba(0, 0, 0, 0.1)"
         direction="column"
-        width="240px"
-        height="300px"
+        width="100%"
+        height="350px"
         borderRadius="8px"
         overflow="hidden"
         position="relative"
@@ -120,8 +120,8 @@ const CourseCard = ({
             overflow="hidden"
             display="-webkit-box"
             sx={{
-              "-webkit-line-clamp": expanded ? "3" : "2",
-              "-webkit-box-orient": "vertical",
+              WebkitLineClamp: expanded ? "4" : "3",
+              WebkitBoxOrient: "vertical",
             }}
           >
             {course.description}

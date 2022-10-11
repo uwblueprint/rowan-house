@@ -19,6 +19,10 @@ const overrides = {
   colors,
   fonts,
   fontSizes,
+  breakpoints: {
+    sm: "36em",
+    md: "56em",
+  },
 };
 
 export default extendTheme(overrides);

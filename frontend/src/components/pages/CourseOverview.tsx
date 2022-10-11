@@ -132,16 +132,80 @@ const CourseOverview = (): React.ReactElement => {
     return "View Course";
   };
 
+  const CTABox = ({ smallVersion = false }: { smallVersion?: boolean }) => {
+    const smallDisplay = smallVersion ? "flex" : "none";
+    const largeDisplay = smallVersion ? "none" : "flex";
+    return (
+      <Flex
+        direction="column"
+        width={["100%", "65%", "26rem"]}
+        maxWidth="100%"
+        height={authenticatedUser ? "100%" : "130%"}
+        background="white"
+        color="text.default"
+        boxShadow="0px 5px 13px rgba(0, 0, 0, 0.1);"
+        borderRadius="8px"
+        overflow={["initial", "initial", "hidden"]}
+        position={["initial", "initial", "relative"]}
+        mt={["1em", "3em", "0px"]}
+        top="90px"
+        pb="24px"
+        display={[smallDisplay, smallDisplay, largeDisplay]}
+      >
+        <Box flex="2" maxHeight="75%">
+          <Image
+            src={courseData?.image || DEFAULT_IMAGE}
+            alt="Course Img"
+            width="100%"
+            height="100%"
+            fit="cover"
+          />
+        </Box>
+        <Box
+          flex="1"
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
+          padding="24px 24px 0px 24px"
+        >
+          <Button
+            width="100%"
+            height="100%"
+            onClick={onCTAClick}
+            disabled={disableCTAButton}
+          >
+            {getButtonText()}
+          </Button>
+          {!authenticatedUser && (
+            <Center mt="16px">
+              Already a member?&nbsp;
+              <Button
+                variant="link"
+                color="text.default"
+                onClick={onLogInClick}
+                textDecorationLine="underline"
+              >
+                Log in
+              </Button>
+            </Center>
+          )}
+        </Box>
+      </Flex>
+    );
+  };
+
   return (
-    <Flex direction="column">
+    <Flex direction="column" align={["center", "center", "initial"]}>
       <Banner />
       <Flex
-        px="120px"
+        px={["30px", "120px"]}
         py="20px"
-        height="400px"
+        height={["fit-content", "fit-content", "400px"]}
         background="background.lightgrey"
         color="white"
         align="center"
+        direction={["column", "column", "row"]}
       >
         <VStack flex="2" align="start" spacing={4} pr={6}>
           <Box display="flex">
@@ -163,61 +227,15 @@ const CourseOverview = (): React.ReactElement => {
             lessonCount={getLessonCount()}
           />
         </VStack>
-        <Flex
-          direction="column"
-          width="26rem"
-          height={authenticatedUser ? "100%" : "130%"}
-          background="white"
-          color="text.default"
-          boxShadow="0px 5px 13px rgba(0, 0, 0, 0.1);"
-          borderRadius="8px"
-          overflow="hidden"
-          position="relative"
-          top="90px"
-          pb="24px"
-        >
-          <Box flex="2" maxHeight="75%">
-            <Image
-              src={courseData?.image || DEFAULT_IMAGE}
-              alt="Course Img"
-              width="100%"
-              height="100%"
-              fit="cover"
-            />
-          </Box>
-          <Box
-            flex="1"
-            display="flex"
-            flexDirection="column"
-            justifyContent="center"
-            alignItems="center"
-            padding="24px 24px 0px 24px"
-          >
-            <Button
-              width="100%"
-              height="100%"
-              onClick={onCTAClick}
-              disabled={disableCTAButton}
-            >
-              {getButtonText()}
-            </Button>
-            {!authenticatedUser && (
-              <Center mt="16px">
-                Already a member?&nbsp;
-                <Button
-                  variant="link"
-                  color="text.default"
-                  onClick={onLogInClick}
-                  textDecorationLine="underline"
-                >
-                  Log in
-                </Button>
-              </Center>
-            )}
-          </Box>
-        </Flex>
+        <CTABox />
       </Flex>
-      <VStack w="calc(100% - 28rem)" py="2rem" px="7.5rem" align="left">
+      <CTABox smallVersion />
+      <VStack
+        w={["100%", "100%", "calc(100% - 28rem)"]}
+        py="2rem"
+        px={["30px", "7.5rem"]}
+        align="left"
+      >
         <Text variant="heading">Course Content</Text>
         <ModuleDropdowns
           modules={courseData?.course?.modules}
