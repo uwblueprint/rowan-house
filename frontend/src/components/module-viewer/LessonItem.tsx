@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import {
   Button,
+  Icon,
   IconButton,
   Flex,
   Spacer,
@@ -86,6 +87,19 @@ const LessonItem = ({
     return <LockIcon />;
   };
 
+  const getIconLabel = (): string => {
+    if (editable) {
+      return "";
+    }
+    if (isCurrent) {
+      return "Lesson Status: Current";
+    }
+    if (isCompleted) {
+      return "Lesson Status: Completed";
+    }
+    return "Lesson Status: Locked";
+  };
+
   return (
     <Tooltip
       hasArrow
@@ -119,7 +133,7 @@ const LessonItem = ({
         borderRadius={isFocused ? "0" : undefined}
         bg={isFocused ? "background.light" : undefined}
         textAlign="left"
-        pl={isFocused ? "6px" : "10px"}
+        pl={isFocused ? "6px" : "11px"}
         minH="55px"
         h="min-content"
         w="100%"
@@ -128,13 +142,9 @@ const LessonItem = ({
       >
         <Flex align="center" justify="space-between" pr="8px">
           {!editable && (
-            <IconButton
-              visibility={isHovered ? "visible" : "hidden"}
-              aria-label="Drag Lesson"
-              variant="unstyled"
-              size="xs"
-              icon={getIcon()}
-            />
+            <Icon aria-label={getIconLabel()} viewBox="0 0 20 20">
+              {getIcon()}
+            </Icon>
           )}
           <Text marginLeft="10px">{text}</Text>
           <Spacer />
