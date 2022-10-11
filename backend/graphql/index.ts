@@ -89,7 +89,6 @@ const graphQLMiddlewares = {
     course: publicRoute,
     courses: publicRoute,
     publicCourses: publicRoute,
-    moduleImage: authorizedByAllRoles(),
     entity: authorizedByAllRoles(),
     entities: authorizedByAllRoles(),
     userById: authorizedByAdmin(),

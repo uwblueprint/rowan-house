@@ -55,7 +55,9 @@ const EditModuleModal = ({
   const resetModal = () => {
     setDescription("");
     setTitle("");
+    setErrorMessage("");
     setPreviewImage(undefined);
+    setPreviewImagePath(undefined);
   };
 
   const onUpdateModule = async () => {

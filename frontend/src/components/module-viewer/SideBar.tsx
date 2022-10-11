@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useContext,
-  useRef,
-  useEffect,
-  useState,
-} from "react";
+import React, { useCallback, useContext, useRef, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import {
   Box,
@@ -48,10 +42,7 @@ import { formatLessonRequest } from "../../utils/lessonUtils";
 import EditModuleModal from "../common/EditModuleModal";
 import EditorTabs from "./EditorTabs";
 import ModuleOverview from "./SideBarModuleOverview";
-import {
-  GET_COURSE,
-  GET_MODULE_IMAGE,
-} from "../../APIClients/queries/CourseQueries";
+import { GET_COURSE } from "../../APIClients/queries/CourseQueries";
 import { DEFAULT_IMAGE } from "../../constants/DummyData";
 import { SaveModal } from "../common/SaveModal";
 
@@ -67,7 +58,6 @@ const Sidebar = ({
     courseID,
   }: ModuleEditorParams = useParams();
   const moduleIndex = Number(moduleIndexString);
-  const [previewImage, setPreviewImage] = useState<string | undefined>();
 
   const history = useHistory();
 
@@ -90,13 +80,6 @@ const Sidebar = ({
   );
 
   const module = courseData?.course?.modules?.[moduleIndex] as ModuleResponse;
-  useQuery(GET_MODULE_IMAGE, {
-    skip: !module?.image,
-    variables: { path: module?.image },
-    onCompleted: (data) => {
-      setPreviewImage(data.moduleImage);
-    },
-  });
 
   const [updateCourse] = useMutation<{ updateCourse: CourseResponse }>(
     UPDATE_COURSE,
@@ -267,7 +250,7 @@ const Sidebar = ({
               <Flex
                 h="240px"
                 backgroundPosition="center"
-                backgroundImage={previewImage ?? DEFAULT_IMAGE}
+                backgroundImage={module?.previewImage ?? DEFAULT_IMAGE}
                 backgroundSize="cover"
                 bgRepeat="no-repeat"
                 opacity="1"

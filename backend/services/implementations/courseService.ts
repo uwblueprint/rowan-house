@@ -7,6 +7,7 @@ import {
   CourseResponseDTO,
   ICourseService,
 } from "../interfaces/ICourseService";
+import IImageUploadService from "../interfaces/IImageUploadService";
 import MgCourse, {
   Course,
   CourseVisibilityAttributes,
@@ -34,7 +35,48 @@ const publishedModulesOnlyQuery = [
 ];
 
 class CourseService implements ICourseService {
+  imageService: IImageUploadService;
+
+  constructor(imageService: IImageUploadService) {
+    this.imageService = imageService;
+  }
+
   /* eslint-disable class-methods-use-this */
+  private async hydrateImages(
+    course: CourseResponseDTO,
+  ): Promise<CourseResponseDTO> {
+    const coursePreviewImage = course.image
+      ? await this.imageService.download(course.image)
+      : course.previewImage;
+    const newModules = await Promise.all(
+      course.modules.map(async (module) => {
+        const modulePreviewImage = module?.image
+          ? await this.imageService.download(module.image)
+          : module?.previewImage;
+        return (
+          module && {
+            // eslint-disable-next-line no-underscore-dangle
+            _id: module._id,
+            // eslint-disable-next-line no-underscore-dangle
+            id: module._id,
+            title: module.title,
+            description: module.description,
+            image: module.image,
+            previewImage: modulePreviewImage,
+            published: module.published,
+            lessons: module.lessons,
+          }
+        );
+      }),
+    );
+
+    return {
+      ...course,
+      previewImage: coursePreviewImage,
+      modules: newModules,
+    };
+  }
+
   async getCourse(
     id: string,
     queryConditions: CourseVisibilityAttributes,
@@ -64,7 +106,7 @@ class CourseService implements ICourseService {
 
     if (!course) throw new Error(`Could not find course with id ${id}`);
 
-    return {
+    return this.hydrateImages({
       // eslint-disable-next-line no-underscore-dangle
       id: course._id.toString(),
       title: course.title,
@@ -73,7 +115,7 @@ class CourseService implements ICourseService {
       previewImage: course.previewImage,
       modules: course.modules,
       private: course.private,
-    };
+    });
   }
 
   async getCourses(
@@ -100,18 +142,20 @@ class CourseService implements ICourseService {
 
       if (!courses) throw new Error("Courses query failed");
 
-      return courses.map((course) => {
-        return {
-          // eslint-disable-next-line no-underscore-dangle
-          id: course._id.toString(),
-          title: course.title,
-          description: course.description,
-          image: course.image,
-          previewImage: course.previewImage,
-          modules: course.modules,
-          private: course.private,
-        };
-      });
+      return await Promise.all(
+        courses.map((course) => {
+          return this.hydrateImages({
+            // eslint-disable-next-line no-underscore-dangle
+            id: course._id.toString(),
+            title: course.title,
+            description: course.description,
+            image: course.image,
+            previewImage: course.previewImage,
+            modules: course.modules,
+            private: course.private,
+          });
+        }),
+      );
     } catch (error: unknown) {
       Logger.error(`Failed to get courses. Reason = ${getErrorMessage(error)}`);
       throw error;
@@ -130,7 +174,7 @@ class CourseService implements ICourseService {
       );
       throw error;
     }
-    return {
+    return this.hydrateImages({
       id: newCourse.id,
       title: newCourse.title,
       description: newCourse.description,
@@ -138,7 +182,7 @@ class CourseService implements ICourseService {
       previewImage: newCourse.previewImage,
       modules: newCourse.modules,
       private: newCourse.private,
-    };
+    });
   }
 
   async updateCourse(
@@ -161,7 +205,7 @@ class CourseService implements ICourseService {
       throw error;
     }
 
-    return {
+    return this.hydrateImages({
       id: updatedCourse.id,
       title: updatedCourse.title,
       description: updatedCourse.description,
@@ -169,7 +213,7 @@ class CourseService implements ICourseService {
       previewImage: updatedCourse.previewImage,
       modules: updatedCourse.modules,
       private: updatedCourse.private,
-    };
+    });
   }
 
   async deleteCourse(id: string): Promise<string> {

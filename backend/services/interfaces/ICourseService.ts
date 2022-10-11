@@ -24,7 +24,7 @@ export interface CourseResponseDTO {
   title: string;
   description: string;
   image: string;
-  previewImage: string;
+  previewImage: string | undefined;
   private: boolean;
   modules: (Module | null)[];
 }
