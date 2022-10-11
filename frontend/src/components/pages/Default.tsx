@@ -98,7 +98,7 @@ const Default = (): React.ReactElement => {
           />
         )}
         <SimpleGrid
-          templateColumns="repeat(auto-fit, 240px)"
+          templateColumns="repeat(auto-fit, 280px)"
           width="100%"
           spacing={5}
         >
