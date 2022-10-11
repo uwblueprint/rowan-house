@@ -65,9 +65,3 @@ export const GET_COURSE = gql`
     }
   }
 `;
-
-export const GET_MODULE_IMAGE = gql`
-  query GetModuleImage($path: String!) {
-    moduleImage(path: $path)
-  }
-`;

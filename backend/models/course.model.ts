@@ -5,7 +5,7 @@ export interface Module {
   title: string;
   description: string;
   image: string;
-  previewImage: string;
+  previewImage: string | undefined;
   published: boolean;
   lessons: string[];
 }
@@ -15,7 +15,7 @@ export interface Course extends Document {
   title: string;
   description: string;
   image: string;
-  previewImage: string;
+  previewImage: string | undefined;
   modules: (Module | null)[];
   private: boolean;
 }

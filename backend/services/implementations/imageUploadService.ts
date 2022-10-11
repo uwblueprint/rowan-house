@@ -51,7 +51,7 @@ class ImageUploadService implements IImageUploadService {
       await writeFile(createReadStream(), filePath);
       return await this.storeImage(filePath, fileContentType);
     } finally {
-      if (filePath) {
+      if (filePath && fs.existsSync(filePath)) {
         fs.unlinkSync(filePath);
       }
     }

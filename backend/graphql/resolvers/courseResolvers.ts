@@ -28,7 +28,7 @@ const imageUploadService = new ImageUploadService(
   "moduleImages",
   fileStorageService,
 );
-const courseService: ICourseService = new CourseService();
+const courseService: ICourseService = new CourseService(imageUploadService);
 const userService: IUserService = new UserService();
 const emailService: IEmailService = new EmailService(nodemailerConfig);
 const authService: IAuthService = new AuthService(userService, emailService);
@@ -84,13 +84,6 @@ const courseResolvers = {
     publicCourses: async (): Promise<CourseResponseDTO[]> => {
       const attributes = getCourseVisibilityAttributes(null);
       return courseService.getCourses(attributes);
-    },
-    moduleImage: async (
-      _parent: undefined,
-      { path }: { path: string },
-      context: ExpressContext,
-    ): Promise<string> => {
-      return imageUploadService.download(path);
     },
   },
   Mutation: {
