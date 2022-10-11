@@ -93,7 +93,7 @@ const CourseCard = ({
       <Flex
         boxShadow="0px 4px 12px rgba(0, 0, 0, 0.1)"
         direction="column"
-        width="280px"
+        width="100%"
         height="350px"
         borderRadius="8px"
         overflow="hidden"

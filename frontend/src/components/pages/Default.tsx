@@ -87,7 +87,12 @@ const Default = (): React.ReactElement => {
   return (
     <Flex direction="column">
       <Banner />
-      <VStack align="start" paddingY="80px" paddingX="240px" spacing={5}>
+      <VStack
+        align="start"
+        paddingY="80px"
+        paddingX={["30px", "80px", "240px"]}
+        spacing={5}
+      >
         <Heading as="h2" size="xl">
           Courses
         </Heading>
@@ -98,7 +103,8 @@ const Default = (): React.ReactElement => {
           />
         )}
         <SimpleGrid
-          templateColumns="repeat(auto-fit, 280px)"
+          templateColumns={[null, "repeat(auto-fit, 280px)"]}
+          columns={[1, null]}
           width="100%"
           spacing={5}
         >
