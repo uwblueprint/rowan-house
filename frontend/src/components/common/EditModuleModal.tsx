@@ -1,5 +1,5 @@
+import React, { useRef, useState } from "react";
 import { Box, Flex, VStack, Text } from "@chakra-ui/react";
-import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { TextInput } from "./TextInput";
 import { Modal } from "./Modal";
@@ -18,6 +18,7 @@ import {
 } from "../../APIClients/mutations/CourseMutations";
 import { COURSES, GET_COURSE } from "../../APIClients/queries/CourseQueries";
 import { ReactComponent as ImageIcon } from "../../assets/image_white_outline.svg";
+import ImageUpload from "./ImageUpload";
 
 export interface EditModuleModalProps {
   onClose: () => void;
@@ -42,22 +43,21 @@ const EditModuleModal = ({
   const [invalid, setInvalid] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [previewImage, setPreviewImage] = useState<string | undefined>();
-  const [previewImagePath, setPreviewImagePath] = useState<
-    string | undefined
-  >();
+  const [loading, setLoading] = useState(false);
+  const [canSubmit, setCanSubmit] = useState(true);
 
   const [updateCourse] = useMutation<CourseResponse>(
     UPDATE_COURSE,
     refetchQueries,
   );
   const [uploadImage] = useMutation(UPLOAD_IMAGE);
-  const [isHover, setIsHover] = useState<boolean>();
   const resetModal = () => {
     setDescription("");
     setTitle("");
     setErrorMessage("");
     setPreviewImage(undefined);
-    setPreviewImagePath(undefined);
+    setInvalid(false);
+    setLoading(false);
   };
 
   const onUpdateModule = async () => {
@@ -71,50 +71,30 @@ const EditModuleModal = ({
       );
       return;
     }
+
+    setLoading(true);
+
     const newModule = {
       ...module,
       title,
       description,
       published: isPublished,
-      image: previewImagePath,
-      previewImage,
+      image: previewImage,
     };
     const [id, course] = formatCourseRequest(newModule);
-    updateCourse({
+    await updateCourse({
       variables: { id, course },
       refetchQueries: [
         { query: COURSES },
         { query: GET_COURSE, variables: { id } },
       ],
     });
-    setInvalid(false);
+
     resetModal();
     onClose();
   };
 
-  const fileChanged = async (e: { target: HTMLInputElement }) => {
-    if (e.target.files) {
-      const fileSize = e.target.files[0].size / 1024 / 1024;
-      if (fileSize > 5) {
-        // eslint-disable-next-line no-alert
-        window.alert("Your file exceeds 5MB. Upload a smaller file.");
-      } else {
-        const imageUploadResult = await uploadImage({
-          variables: { file: e.target.files[0] },
-        });
-        const result = imageUploadResult.data.uploadImage ?? null;
-        setPreviewImage(result?.image ?? undefined);
-        setPreviewImagePath(result?.path ?? undefined);
-      }
-    }
-  };
-
-  const inputFile = React.useRef<HTMLInputElement>(null);
-  const openFileBrowser = () => {
-    if (inputFile.current) {
-      inputFile.current.click();
-    }
-  };
+  const initialFocusRef = useRef();
 
   return (
     <Modal
@@ -123,50 +103,22 @@ const EditModuleModal = ({
       onConfirm={onUpdateModule}
       onCancel={onClose}
       isOpen={isOpen}
+      confirmIsLoading={loading}
+      initialFocusRef={initialFocusRef}
+      canSubmit={canSubmit}
     >
       <Flex>
         <VStack flex="1" pr="1rem">
-          <Box
-            borderRadius=".5rem"
-            onMouseEnter={() => setIsHover(true)}
-            onMouseLeave={() => setIsHover(false)}
-            _hover={{
-              background: "black",
-              opacity: 0.9,
+          <ImageUpload
+            uploadImage={async (file) => {
+              setCanSubmit(false);
+              const result = await uploadImage({ variables: { file } });
+              const { image, path } = result.data.uploadModuleImage || {};
+              setPreviewImage(path);
+              setCanSubmit(true);
+              return image;
             }}
-            cursor="pointer"
-            onClick={openFileBrowser}
-          >
-            <Flex
-              backgroundImage={previewImage ?? DEFAULT_IMAGE}
-              backgroundPosition="center"
-              h="214px"
-              w="214px"
-              bgRepeat="no-repeat"
-              direction="column"
-              backgroundSize="cover"
-              opacity="1"
-              justifyContent="center"
-              borderRadius=".5rem"
-              alignItems="center"
-            >
-              <input
-                type="file"
-                style={{ display: "none" }}
-                ref={inputFile}
-                onChange={fileChanged}
-                accept="image/*"
-              />
-              {isHover && (
-                <>
-                  <ImageIcon color="white" style={{ marginBottom: "1rem" }} />
-                  <Text variant="caption" color="white">
-                    Upload image
-                  </Text>
-                </>
-              )}
-            </Flex>
-          </Box>
+          />
           <SwitchInput
             enabledName="Published"
             disabledName="Draft"
@@ -177,6 +129,7 @@ const EditModuleModal = ({
         </VStack>
         <VStack flex="1">
           <TextInput
+            ref={initialFocusRef}
             label="Module Name:"
             defaultValue={title}
             onChange={setTitle}
