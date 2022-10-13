@@ -101,7 +101,7 @@ const CourseCard = ({
       >
         <Collapse startingHeight="120px" endingHeight="105px" in={expanded}>
           <Image
-            src={DEFAULT_IMAGE}
+            src={course.previewImage || DEFAULT_IMAGE}
             alt="course-preview"
             width="100%"
             height="100%"

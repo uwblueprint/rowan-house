@@ -11,6 +11,7 @@ interface NextModuleStatusProps {
 }
 interface NextModuleCardProps {
   courseID: string;
+  courseImage: string | null; // used in case of module image not existing
   nextModuleIndex: number;
   nextModuleProgress: ModuleProgress | undefined;
   modules: ModuleType[];
@@ -54,6 +55,7 @@ const NextModuleCard = ({
   nextModuleIndex,
   nextModuleProgress,
   modules,
+  courseImage,
 }: NextModuleCardProps): React.ReactElement => {
   const [hovered, setHovered] = useState<boolean>(false);
   const handleMouseEnter = () => setHovered(true);
@@ -81,7 +83,7 @@ const NextModuleCard = ({
         padding="1em"
       >
         <Image
-          src={nextModuleData.image || DEFAULT_IMAGE}
+          src={nextModuleData.image ?? courseImage ?? DEFAULT_IMAGE}
           alt="course-preview"
           width="5em"
           height="5em"

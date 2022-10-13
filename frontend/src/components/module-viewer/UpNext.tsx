@@ -13,12 +13,14 @@ import NextModuleCard from "./NextModuleCard";
 
 interface UpNextProps {
   courseID: string;
+  courseImage: string | null; // used in case of moduleImage not existing
   moduleIndex: number;
   modules: ModuleType[];
 }
 
 const UpNext = ({
   courseID,
+  courseImage,
   moduleIndex,
   modules,
 }: UpNextProps): React.ReactElement => {
@@ -67,6 +69,7 @@ const UpNext = ({
       {moduleProgressData ? (
         <NextModuleCard
           courseID={courseID}
+          courseImage={courseImage}
           nextModuleIndex={nextModuleIndex}
           nextModuleProgress={nextModuleProgress}
           modules={modules}

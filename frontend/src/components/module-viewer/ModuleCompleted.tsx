@@ -59,6 +59,7 @@ const ModuleCompleted = (): React.ReactElement => {
         </Text>
         <UpNext
           courseID={courseID}
+          courseImage={courseData?.course?.previewImage}
           moduleIndex={moduleIndex}
           modules={course.modules}
         />
