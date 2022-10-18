@@ -106,7 +106,7 @@ export const validateContent = (content: ContentBlock): boolean => {
       const quiz = content as QuizBlock;
       return (
         quiz.content.question !== null &&
-        ["MS", "MC"].includes(quiz.content.type) &&
+        ["multi-select", "single-select"].includes(quiz.content.type) &&
         quiz.content.choices.length >= 2 &&
         Boolean(quiz.content.choices.find((v) => v.correct))
       );

@@ -65,7 +65,7 @@ export type QuizBlockState = ContentBlockStateType<
   "quiz",
   {
     question: string;
-    type: "MS" | "MC";
+    type: "multi-select" | "single-select";
     choices: Array<{
       answer: string;
       correct: boolean;

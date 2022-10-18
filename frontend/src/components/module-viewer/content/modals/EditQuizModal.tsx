@@ -6,7 +6,7 @@ import { EditContentModalProps } from "../../../../types/ModuleEditorTypes";
 import { QuizBlockState } from "../../../../types/ContentBlockTypes";
 import { Modal } from "../../../common/Modal";
 import { TextInput } from "../../../common/TextInput";
-import { CheckBoxes } from "../../../common/checkboxes";
+import CheckBoxGroup from "../../../common/CheckBoxGroup";
 
 const EditQuizModal = ({
   block: { content },
@@ -15,7 +15,7 @@ const EditQuizModal = ({
   onSave,
 }: EditContentModalProps<QuizBlockState>): React.ReactElement => {
   const [question, setQuestion] = useState(content.question ?? "");
-  const [quizType, setQuizType] = useState(content.type ?? "MC");
+  const [quizType, setQuizType] = useState(content.type ?? "single-select");
   const [choices, setChoices] = useState(content.choices ?? []);
 
   useEffect(() => {
@@ -27,7 +27,7 @@ const EditQuizModal = ({
   const canSubmit =
     question.length > 0 &&
     choices.length >= 2 &&
-    (quizType === "MS" || quizType === "MC") &&
+    (quizType === "multi-select" || quizType === "single-select") &&
     choices.find((v) => v.correct) !== undefined;
 
   const onConfirm = () => {
@@ -72,7 +72,7 @@ const EditQuizModal = ({
 
   const setQuizTypeSafely = (e: ChangeEvent<HTMLSelectElement>) => {
     const type = e.target.value;
-    if (type === "MS" || type === "MC") {
+    if (type === "multi-select" || type === "single-select") {
       setQuizType(type);
     } else {
       throw Error(`"type" attribute in Quiz received unknown value: ${type}`);
@@ -100,16 +100,16 @@ const EditQuizModal = ({
           Type
         </FormLabel>
         <Select value={quizType} onChange={setQuizTypeSafely}>
-          <option value="MC">Single select</option>
-          <option value="MS">Multiple select</option>
+          <option value="single-select">Single select</option>
+          <option value="multi-select">Multiple select</option>
         </Select>
         <FormLabel fontWeight={400} color="blackAlpha">
           Answer choice
         </FormLabel>
-        <CheckBoxes
+        <CheckBoxGroup
           statuses={choices.map(({ correct }) => correct)}
           setStatus={setCorrect}
-          multiSelect={quizType === "MS"}
+          multiSelect={quizType === "multi-select"}
         >
           {choices.map(({ answer }, i) => (
             <Flex justify="center" key={i}>
@@ -125,7 +125,7 @@ const EditQuizModal = ({
               </Button>
             </Flex>
           ))}
-        </CheckBoxes>
+        </CheckBoxGroup>
         <Button variant="ghost" onClick={addQuiz}>
           + Add choice
         </Button>

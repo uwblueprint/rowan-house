@@ -1,28 +1,29 @@
 import React, { useEffect } from "react";
-import { Flex, VStack, Box, Center } from "@chakra-ui/react";
+import { Box, Radio, Checkbox, Stack } from "@chakra-ui/react";
 
-import CheckBox, { CheckBoxStyleParams } from "./CheckBox";
-
-interface CheckBoxesParams extends CheckBoxStyleParams {
+interface CheckBoxGroupParams {
   setStatus: (statuses: boolean[]) => void;
   statuses: boolean[];
   multiSelect?: boolean;
-  padding?: number;
+  spacing?: number;
   borderStyling?: (index: number) => string | undefined;
   backgroundStyling?: (index: number) => string | undefined;
+  selectedColor?: string;
+  disabled?: boolean;
   children: React.ReactElement[];
 }
 
-const CheckBoxes = ({
+const CheckBoxGroup = ({
   setStatus,
   statuses,
   multiSelect = true,
-  padding = 2,
+  spacing = 2,
   borderStyling = () => undefined,
   backgroundStyling = () => undefined,
+  selectedColor = "CBgreen",
+  disabled = false,
   children,
-  ...rest
-}: CheckBoxesParams): React.ReactElement => {
+}: CheckBoxGroupParams): React.ReactElement => {
   const updateCheckBox = (newStatus: boolean, i: number) => {
     let newStatuses = [...statuses];
     // Ensure only one answer is correct for MC
@@ -34,7 +35,7 @@ const CheckBoxes = ({
   };
 
   const onClick = (i: number) => {
-    setStatus(updateCheckBox(!statuses[i], i));
+    if (!disabled) setStatus(updateCheckBox(!statuses[i], i));
   };
 
   // Ensure only one answer is correct for MC
@@ -59,28 +60,38 @@ const CheckBoxes = ({
   }
 
   return (
-    <VStack spacing={1} align="stretch">
+    <Stack direction="column" spacing={2} align="stretch">
       {children.map((child, i) => (
-        <Flex
+        <Stack
+          direction="row"
           key={i}
+          padding={1}
+          align="center"
+          borderRadius="4px"
           border={borderStyling(i)}
           bg={backgroundStyling(i)}
-          borderRadius="4px"
-          padding={1}
+          spacing={spacing}
         >
-          <Center pr={padding}>
-            <CheckBox
-              isSelected={statuses[i]}
-              radio={!multiSelect}
-              onClick={() => onClick(i)}
-              {...rest}
-            />
-          </Center>
+          <Box mt={2}>
+            {multiSelect ? (
+              <Checkbox
+                onChange={() => onClick(i)}
+                isChecked={statuses[i]}
+                colorScheme={selectedColor}
+              />
+            ) : (
+              <Radio
+                onChange={() => onClick(i)}
+                isChecked={statuses[i]}
+                colorScheme={selectedColor}
+              />
+            )}
+          </Box>
           <Box flex={1}>{child}</Box>
-        </Flex>
+        </Stack>
       ))}
-    </VStack>
+    </Stack>
   );
 };
 
-export default CheckBoxes;
+export default CheckBoxGroup;

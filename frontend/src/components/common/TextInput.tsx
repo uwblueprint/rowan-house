@@ -30,7 +30,7 @@ export const TextInput = ({
   helperText,
   isInvalid,
   value,
-  defaultValue = "",
+  defaultValue = undefined,
   isRequired = false,
   ...rest
 }: TextInputProps): React.ReactElement => {

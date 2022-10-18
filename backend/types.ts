@@ -51,7 +51,7 @@ export interface HeadingBlock extends ContentBlock {
 export interface QuizBlock extends ContentBlock {
   content: {
     question: string;
-    type: "MS" | "MC";
+    type: "multi-select" | "single-select";
     choices: [{ answer: string; correct: boolean }];
   };
 }

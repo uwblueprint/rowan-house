@@ -227,7 +227,7 @@ export const createContent = (blockID: string): ContentBlockState => {
         id: uuid(),
         content: {
           question: "",
-          type: "MC",
+          type: "single-select",
           choices: [
             {
               answer: "",

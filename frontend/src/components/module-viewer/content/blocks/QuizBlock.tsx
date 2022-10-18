@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Flex, Text, VStack, Button } from "@chakra-ui/react";
+import { Button, HStack, Text, VStack } from "@chakra-ui/react";
 import { ReactComponent as QuizIcon } from "../../../../assets/quiz.svg";
 
 import {
   ContentBlockProps,
   QuizBlockState,
 } from "../../../../types/ContentBlockTypes";
-import { CheckBoxes } from "../../../common/checkboxes";
+import CheckBoxGroup from "../../../common/CheckBoxGroup";
 
 const QuizBlock = ({
   block: { content },
@@ -49,16 +49,16 @@ const QuizBlock = ({
       borderRadius="8px"
       boxShadow="xl"
     >
-      <Flex align="center">
+      <HStack align="center" spacing={2}>
         <QuizIcon />
-        <Text pl="8px" variant="heading">Knowledge Check</Text>
-      </Flex>
+        <Text variant="heading">Knowledge Check</Text>
+      </HStack>
       <Text variant="subheading">{content.question}</Text>
-      <CheckBoxes
+      <CheckBoxGroup
         statuses={guesses}
         setStatus={setGuesses}
-        multiSelect={content.type === "MS"}
-        selectedColor={isCompleted ? "#724A9688" : "#724A96"}
+        multiSelect={content.type === "multi-select"}
+        selectedColor={isCompleted ? "CBfaded" : "CBroyal"}
         borderStyling={borderStyling}
         backgroundStyling={backgroundStyling}
         disabled={isCompleted}
@@ -66,7 +66,7 @@ const QuizBlock = ({
         {content.choices.map(({ answer }, i) => (
           <Text key={i}>{answer}</Text>
         ))}
-      </CheckBoxes>
+      </CheckBoxGroup>
       {!isCompleted && (
         <Button
           w="fit-content"
