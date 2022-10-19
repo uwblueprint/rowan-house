@@ -1,7 +1,7 @@
 export default {
   brand: {
     royal: "#724A96",
-    purple: "#724A96",
+    purple: "#CC99FF",
     choco: "#DA7635",
     blue: "#9AD4D6",
   },
