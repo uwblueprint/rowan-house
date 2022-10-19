@@ -12,6 +12,7 @@ import { ReactComponent as ButtonIcon } from "../../assets/button.svg";
 import { ReactComponent as VideoIcon } from "../../assets/video.svg";
 import { ReactComponent as AudioIcon } from "../../assets/audio.svg";
 import { ReactComponent as FlipCardIcon } from "../../assets/flipcard.svg";
+import { ReactComponent as QuizIcon } from "../../assets/quiz.svg";
 
 const BlockStyle = ({
   content,
@@ -51,6 +52,9 @@ const BlockStyle = ({
       break;
     case "cards.svg":
       contentIcon = <FlipCardIcon width="fit-content" height="fit-content" />;
+      break;
+    case "quiz.svg":
+      contentIcon = <QuizIcon width="fit-content" height="fit-content" />;
       break;
     default:
       contentIcon = <ImageIcon />;

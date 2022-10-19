@@ -18,6 +18,7 @@ export interface TextInputProps {
   value?: string;
   defaultValue?: string;
   isRequired?: boolean;
+  flex?: number;
   mb?: number;
 }
 
@@ -29,7 +30,7 @@ export const TextInput = ({
   helperText,
   isInvalid,
   value,
-  defaultValue = "",
+  defaultValue = undefined,
   isRequired = false,
   ...rest
 }: TextInputProps): React.ReactElement => {
@@ -41,9 +42,14 @@ export const TextInput = ({
       mb={5}
       {...rest}
     >
-      <FormLabel fontWeight={400} color={isInvalid ? "red.500" : "blackAlpha"}>
-        {label}
-      </FormLabel>
+      {label && (
+        <FormLabel
+          fontWeight={400}
+          color={isInvalid ? "red.500" : "blackAlpha"}
+        >
+          {label}
+        </FormLabel>
+      )}
       <Input
         type={label}
         placeholder={placeholder}

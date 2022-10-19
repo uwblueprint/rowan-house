@@ -8,6 +8,7 @@ export type ContentType =
   | "video"
   | "match"
   | "cards"
+  | "quiz"
   | "heading";
 
 export interface ContentBlock {
@@ -45,6 +46,14 @@ export interface VideoBlock extends ContentBlock {
 
 export interface HeadingBlock extends ContentBlock {
   content: { text: string; size: string };
+}
+
+export interface QuizBlock extends ContentBlock {
+  content: {
+    question: string;
+    type: "multi-select" | "single-select";
+    choices: [{ answer: string; correct: boolean }];
+  };
 }
 
 export type Token = {

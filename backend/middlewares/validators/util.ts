@@ -6,6 +6,7 @@ import {
   HeadingBlock,
   ImageBlock,
   MatchBlock,
+  QuizBlock,
   TextBlock,
   VideoBlock,
 } from "../../types";
@@ -99,6 +100,15 @@ export const validateContent = (content: ContentBlock): boolean => {
       const flipCard = content as FlipCardBlock;
       return (
         flipCard.content.cards !== null && flipCard.content.cards.length >= 1
+      );
+    }
+    case "quiz": {
+      const quiz = content as QuizBlock;
+      return (
+        quiz.content.question !== null &&
+        ["multi-select", "single-select"].includes(quiz.content.type) &&
+        quiz.content.choices.length >= 2 &&
+        Boolean(quiz.content.choices.find((v) => v.correct))
       );
     }
     case "text": {

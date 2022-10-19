@@ -18,4 +18,14 @@ export default {
     correct: "#94D969",
     critical: "#E53E3E",
   },
+  // For Checkboxes since they require the 500s part of a scheme
+  CBgreen: {
+    500: "#94D969",
+  },
+  CBfaded: {
+    500: "#C2C2C2",
+  },
+  CBroyal: {
+    500: "#724A96",
+  },
 };
