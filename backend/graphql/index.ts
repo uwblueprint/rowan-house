@@ -15,8 +15,6 @@ import authResolvers from "./resolvers/authResolvers";
 import authType from "./types/authType";
 import courseResolvers from "./resolvers/courseResolvers";
 import courseType from "./types/courseType";
-import entityResolvers from "./resolvers/entityResolvers";
-import entityType from "./types/entityType";
 import userResolvers from "./resolvers/userResolvers";
 import userType from "./types/userType";
 import lessonResolvers from "./resolvers/lessonResolvers";
@@ -61,7 +59,6 @@ const executableSchema = makeExecutableSchema({
     mutation,
     authType,
     courseType,
-    entityType,
     userType,
     lessonType,
     progressType,
@@ -70,7 +67,6 @@ const executableSchema = makeExecutableSchema({
     scalarTypes,
     authResolvers,
     courseResolvers,
-    entityResolvers,
     userResolvers,
     lessonResolvers,
     progressResolvers,
@@ -89,8 +85,6 @@ const graphQLMiddlewares = {
     course: publicRoute,
     courses: publicRoute,
     publicCourses: publicRoute,
-    entity: authorizedByAllRoles(),
-    entities: authorizedByAllRoles(),
     userById: authorizedByAdmin(),
     userByEmail: authorizedByAdmin(),
     users: authorizedByAdmin(),
@@ -107,9 +101,6 @@ const graphQLMiddlewares = {
     updateCourse: authorizedByAdmin(),
     deleteCourse: authorizedByAdmin(),
     uploadModuleImage: authorizedByAdmin(),
-    createEntity: authorizedByAllRoles(),
-    updateEntity: authorizedByAllRoles(),
-    deleteEntity: authorizedByAllRoles(),
     createUser: authorizedByAdmin(),
     updateUser: authorizedByAdmin(),
     updateUserRole: authorizeRoleChange("id"),
