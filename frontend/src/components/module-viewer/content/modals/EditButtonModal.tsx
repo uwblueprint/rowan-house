@@ -39,7 +39,7 @@ const EditButtonModal = ({
   return (
     <Modal
       size="xl"
-      header="Edit button component"
+      header="Edit Button"
       onConfirm={onConfirm}
       onCancel={onCancel}
       isOpen={isOpen}

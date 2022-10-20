@@ -38,7 +38,7 @@ const EditHeadingModal = ({
   return (
     <Modal
       size="xl"
-      header="Heading"
+      header="Edit Heading"
       onConfirm={onConfirm}
       onCancel={onCancel}
       isOpen={isOpen}

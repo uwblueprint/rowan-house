@@ -1,4 +1,4 @@
-import { Center, SimpleGrid } from "@chakra-ui/react";
+import { Center, SimpleGrid, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
 
 const FlipBlock = ({
@@ -38,7 +38,9 @@ const FlipBlock = ({
           gridColumnStart="1"
           gridRowStart="1"
         >
-          {front}
+          <Text align="center" variant="body">
+            {front}
+          </Text>
         </Center>
         <Center
           width="100%"
@@ -47,7 +49,9 @@ const FlipBlock = ({
           gridRowStart="1"
           transform="rotateY(180deg)"
         >
-          {back}
+          <Text align="center" variant="body">
+            {back}
+          </Text>
         </Center>
       </SimpleGrid>
     </Center>

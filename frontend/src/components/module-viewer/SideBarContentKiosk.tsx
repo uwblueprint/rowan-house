@@ -1,4 +1,4 @@
-import { Container, Flex, Text, HStack, Spacer } from "@chakra-ui/react";
+import { Container, Flex, Text, SimpleGrid, Spacer } from "@chakra-ui/react";
 import React from "react";
 import { Droppable } from "react-beautiful-dnd";
 import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
@@ -40,20 +40,22 @@ const SideBarContentKiosk = (): React.ReactElement => {
           {ContentTypeCategories.map((type, i) => (
             <Container
               key={i}
-              onClick={() =>
-                setHideContent((prevState) => {
-                  const newState = {
-                    ...prevState,
-                  };
-                  newState[type] = !prevState[type];
-                  return newState;
-                })
-              }
               borderTop="1px"
               borderColor="background.grey"
               padding="0.5rem"
             >
-              <Flex>
+              <Flex
+                cursor="pointer"
+                onClick={() =>
+                  setHideContent((prevState) => {
+                    const newState = {
+                      ...prevState,
+                    };
+                    newState[type] = !prevState[type];
+                    return newState;
+                  })
+                }
+              >
                 <Text variant="body-bold">{type}</Text>
                 <Spacer />
                 {hideContent[type] ? (
@@ -63,11 +65,16 @@ const SideBarContentKiosk = (): React.ReactElement => {
                 )}
               </Flex>
               {!hideContent[type] && (
-                <HStack key={i} mb="1rem" wrap="wrap" spacing="0">
+                <SimpleGrid
+                  key={i}
+                  templateColumns="1fr 1fr 1fr"
+                  mb="1rem"
+                  spacing={0.5}
+                >
                   {options[type].map((option, index) => (
                     <BlockPreview content={option} key={index} index={index} />
                   ))}
-                </HStack>
+                </SimpleGrid>
               )}
             </Container>
           ))}

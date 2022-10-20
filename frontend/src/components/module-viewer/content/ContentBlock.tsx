@@ -95,7 +95,7 @@ const ContentBlock = ({
           <VStack
             width="100%"
             padding="0.5rem 1rem"
-            spacing={2}
+            spacing={1}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             ref={provided.innerRef}
@@ -107,7 +107,11 @@ const ContentBlock = ({
               <Box opacity={isHovered ? 1 : 0} {...provided.dragHandleProps}>
                 <DragHandleIconSvg />
               </Box>
-              <Center w="100%" padding="2rem">
+              <Center
+                w="100%"
+                paddingY={isColumn ? 0 : ".5rem"}
+                paddingX={isColumn ? 0 : "2rem"}
+              >
                 {CONTENT_BLOCKS.render({ block, index, editable })}
               </Center>
               <EditContentOptionsMenu
@@ -137,7 +141,11 @@ const ContentBlock = ({
   }
 
   return (
-    <Center w="100%" padding={isColumn ? "0" : "2rem"}>
+    <Center
+      w="100%"
+      paddingY={isColumn ? 0 : "2rem"}
+      paddingX={isColumn ? "5rem" : "5rem"}
+    >
       {CONTENT_BLOCKS.render({ block, index, editable })}
     </Center>
   );

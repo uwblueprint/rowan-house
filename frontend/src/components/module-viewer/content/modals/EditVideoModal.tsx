@@ -50,7 +50,7 @@ const EditVideoModal = ({
   return (
     <Modal
       size="xl"
-      header="Edit Video Component"
+      header="Edit Video"
       onConfirm={onConfirm}
       onCancel={onCancel}
       isOpen={isOpen}
