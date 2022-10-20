@@ -193,7 +193,7 @@ const MatchBlock = ({
                   : AnswerStatus.Incorrect;
             }
             return (
-              <>
+              <React.Fragment key={i}>
                 <p>{prompt}</p>
                 <Droppable
                   droppableId={`${i}-DROP`}
@@ -206,7 +206,6 @@ const MatchBlock = ({
                         {pairs[i] !== null ? (
                           <DraggableAnswer
                             id={pairs[i]}
-                            key={i}
                             index={i}
                             text={answers[pairs[i]]}
                             status={status}
@@ -236,7 +235,7 @@ const MatchBlock = ({
                     >{`Correct Answer: ${answer}`}</Text>
                   </>
                 )}
-              </>
+              </React.Fragment>
             );
           })}
         </SimpleGrid>

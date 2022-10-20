@@ -45,9 +45,7 @@ const SideBarContentKiosk = (): React.ReactElement => {
               padding="0.5rem"
             >
               <Flex
-                _hover={{
-                  cursor: "pointer"
-                }}
+                cursor="pointer"
                 onClick={() =>
                   setHideContent((prevState) => {
                     const newState = {
@@ -71,7 +69,7 @@ const SideBarContentKiosk = (): React.ReactElement => {
                   key={i}
                   templateColumns="1fr 1fr 1fr"
                   mb="1rem"
-                  spacing={.5}
+                  spacing={0.5}
                 >
                   {options[type].map((option, index) => (
                     <BlockPreview content={option} key={index} index={index} />

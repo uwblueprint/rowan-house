@@ -119,7 +119,7 @@ const EditTextModal = ({
   return (
     <Modal
       size="xl"
-      header="Edit Text Component"
+      header="Edit Text"
       onConfirm={onConfirm}
       onCancel={onCancel}
       isOpen={isOpen}
@@ -146,7 +146,7 @@ const EditTextModal = ({
                 <LinkButton />
               </HStack>
             </Box>
-            <Box borderWidth="1px" w="100%" h="150px" padding="1rem">
+            <Box borderWidth="1px" w="100%" minH="150px" padding="1rem">
               <Editable
                 renderLeaf={TextLeaf}
                 renderElement={TextElement}

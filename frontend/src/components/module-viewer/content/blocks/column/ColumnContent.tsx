@@ -113,20 +113,18 @@ const ColumnContent = ({
             width="100%"
             height="100%"
             padding="0.5rem 1rem"
-            spacing={2}
+            alignItems="end"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
           >
-            <Flex width="100%" alignItems="end" direction="column">
-              <EditContentOptionsMenu
-                isVisible={isHovered}
-                onEditClick={onEditModalOpen}
-                onDeleteClick={onDeleteModalOpen}
-              />
-              <Center w="100%" padding="4px">
-                {CONTENT_BLOCKS.render({ block, index, editable })}
-              </Center>
-            </Flex>
+            <EditContentOptionsMenu
+              isVisible={isHovered}
+              onEditClick={onEditModalOpen}
+              onDeleteClick={onDeleteModalOpen}
+            />
+            <Center w="100%" h="100%">
+              {CONTENT_BLOCKS.render({ block, index, editable })}
+            </Center>
             {EDIT_MODALS.render({
               isOpen: editable && (isNewBlock || isEditModalOpen),
               block,

@@ -54,7 +54,7 @@ const BlockStyle = ({
       contentIcon = <FlipCardIcon width="100%" height="100%" />;
       break;
     case "quiz.svg":
-      contentIcon = <QuizIcon width="fit-content" height="fit-content" />;
+      contentIcon = <QuizIcon width="100%" height="100%" />;
       break;
     default:
       contentIcon = <ImageIcon width="100%" height="100%" />;
