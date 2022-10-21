@@ -250,7 +250,11 @@ const Sidebar = ({
               <Flex
                 h="240px"
                 backgroundPosition="center"
-                backgroundImage={module?.previewImage ?? DEFAULT_IMAGE}
+                backgroundImage={
+                  module?.previewImage ??
+                  courseData?.course?.previewImage ??
+                  DEFAULT_IMAGE
+                }
                 backgroundSize="cover"
                 bgRepeat="no-repeat"
                 opacity="1"

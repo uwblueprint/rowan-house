@@ -102,7 +102,7 @@ const courseResolvers = {
     ): Promise<string> => {
       return courseService.deleteCourse(id);
     },
-    uploadModuleImage: async (
+    uploadImage: async (
       _req: undefined,
       { file }: { file: Promise<FileUpload> },
     ): Promise<UploadedImage> => {

@@ -154,7 +154,7 @@ const CourseOverview = (): React.ReactElement => {
       >
         <Box flex="2" maxHeight="75%">
           <Image
-            src={courseData?.image || DEFAULT_IMAGE}
+            src={courseData?.course?.previewImage || DEFAULT_IMAGE}
             alt="Course Img"
             width="100%"
             height="100%"

@@ -72,7 +72,7 @@ const courseType = gql`
       file: Upload
     ): CourseResponseDTO
     deleteCourse(id: ID!): ID
-    uploadModuleImage(file: Upload): ModuleImageResponseDTO
+    uploadImage(file: Upload): ModuleImageResponseDTO
   }
 `;
 

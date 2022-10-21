@@ -124,6 +124,7 @@ const CoursePreview = ({ course }: CoursePreviewProps): React.ReactElement => {
               <ModulePreview
                 key={module.id}
                 courseId={course.id}
+                coursePreviewImage={course.previewImage}
                 module={module}
                 index={index}
                 formatCourseRequest={formatCourseRequest}

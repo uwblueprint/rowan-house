@@ -100,7 +100,7 @@ const graphQLMiddlewares = {
     createCourse: authorizedByAdmin(),
     updateCourse: authorizedByAdmin(),
     deleteCourse: authorizedByAdmin(),
-    uploadModuleImage: authorizedByAdmin(),
+    uploadImage: authorizedByAdmin(),
     createUser: authorizedByAdmin(),
     updateUser: authorizedByAdmin(),
     updateUserRole: authorizeRoleChange("id"),
