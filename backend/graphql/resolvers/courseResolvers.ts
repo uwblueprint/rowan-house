@@ -24,10 +24,7 @@ import { assertNever } from "../../utilities/errorUtils";
 
 const defaultBucket = process.env.FIREBASE_STORAGE_DEFAULT_BUCKET || "";
 const fileStorageService = new FileStorageService(defaultBucket);
-const imageUploadService = new ImageUploadService(
-  "moduleImages",
-  fileStorageService,
-);
+const imageUploadService = new ImageUploadService("images", fileStorageService);
 const courseService: ICourseService = new CourseService(imageUploadService);
 const userService: IUserService = new UserService();
 const emailService: IEmailService = new EmailService(nodemailerConfig);

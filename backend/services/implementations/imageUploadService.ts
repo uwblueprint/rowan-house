@@ -42,6 +42,9 @@ class ImageUploadService implements IImageUploadService {
     let fileContentType = "";
     try {
       const { createReadStream, mimetype } = await file;
+      if (!fs.existsSync(this.uploadDir)) {
+        fs.mkdirSync(this.uploadDir);
+      }
       // We're using uuid() rather than file.filename to avoid conflicts of stored files in Firebase.
       filePath = `${this.uploadDir}/${uuid()}`;
       fileContentType = mimetype;
