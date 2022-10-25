@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import { Button, Flex, Heading, Text, VStack } from "@chakra-ui/react";
+import { Button, Flex, Heading, Text, VStack, Spacer } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
 
 import { ModuleEditorParams } from "../../types/ModuleEditorTypes";
@@ -42,7 +42,12 @@ const ModuleCompleted = (): React.ReactElement => {
   const module = course.modules[moduleIndex];
   return (
     <Flex w="100%" direction="column">
-      <VStack align="start" px="154px" pt="20px" spacing="20px">
+      <VStack
+        align="start"
+        px={["2rem", "2rem", "5rem"]}
+        pt="20px"
+        spacing="20px"
+      >
         <Heading as="h1" size="xl" color="brand.royal">
           Congratulations!
         </Heading>
@@ -75,6 +80,7 @@ const ModuleCompleted = (): React.ReactElement => {
         <Button alignSelf="center" onClick={() => history.push(HOME_PAGE)}>
           Browse Courses
         </Button>
+        <Spacer />
       </VStack>
     </Flex>
   );

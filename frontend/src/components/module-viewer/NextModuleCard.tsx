@@ -66,7 +66,7 @@ const NextModuleCard = ({
       href={`${COURSE_OVERVIEW_BASE_ROUTE}/${courseID}/${nextModuleIndex}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      width="67%"
+      width={["100%", "100%", "67%"]}
       height="10%"
     >
       <Flex
