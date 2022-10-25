@@ -30,7 +30,7 @@ const ImageBlock = ({
       });
       setImage(data?.contentImage);
     })();
-  }, [path]);
+  }, [path, getContentImage]);
   return (
     <Image
       src={image}

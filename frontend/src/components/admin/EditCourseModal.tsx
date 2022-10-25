@@ -1,7 +1,6 @@
-import { Box, Flex, Text, VStack } from "@chakra-ui/react";
+import { Box, Flex, VStack } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { DEFAULT_IMAGE } from "../../constants/DummyData";
 import { TextInput } from "../common/TextInput";
 import { Modal } from "../common/Modal";
 import { SwitchInput } from "../common/SwitchInput";
@@ -13,7 +12,6 @@ import {
   UPLOAD_IMAGE,
 } from "../../APIClients/mutations/CourseMutations";
 import { COURSES } from "../../APIClients/queries/CourseQueries";
-import { ReactComponent as ImageIcon } from "../../assets/image_outline.svg";
 import ImageUpload from "../common/ImageUpload";
 
 export interface EditCourseModalProps {
@@ -32,7 +30,6 @@ const EditCourseModal = ({
   const [title, setTitle] = useState(course?.title ?? "");
   const [description, setDescription] = useState(course?.description ?? "");
   const [isPrivate, setIsPrivate] = useState(course?.private ?? false);
-  const [isHover, setIsHover] = useState<boolean>();
   const [previewImage, setPreviewImage] = useState<string | undefined>();
   const [canSubmit, setCanSubmit] = useState(true);
 
