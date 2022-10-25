@@ -22,50 +22,57 @@ export interface TextInputProps {
   mb?: number;
 }
 
-export const TextInput = ({
-  onChange,
-  label,
-  placeholder,
-  errorMessage,
-  helperText,
-  isInvalid,
-  value,
-  defaultValue = undefined,
-  isRequired = false,
-  ...rest
-}: TextInputProps): React.ReactElement => {
-  return (
-    <FormControl
-      id={label}
-      isRequired={isRequired}
-      isInvalid={isInvalid}
-      mb={5}
-      {...rest}
-    >
-      {label && (
-        <FormLabel
-          fontWeight={400}
-          color={isInvalid ? "red.500" : "blackAlpha"}
-        >
-          {label}
-        </FormLabel>
-      )}
-      <Input
-        type={label}
-        placeholder={placeholder}
-        defaultValue={defaultValue}
-        errorBorderColor="red.600"
-        onChange={(e) => onChange(e.target.value)}
-        value={value}
-      />
-      {errorMessage && (
-        <FormErrorMessage>
-          <WarningIcon mr={2} /> {errorMessage}
-        </FormErrorMessage>
-      )}
-      {helperText && !isInvalid && (
-        <FormHelperText>{helperText}</FormHelperText>
-      )}
-    </FormControl>
-  );
-};
+export const TextInput = React.forwardRef(
+  (
+    {
+      onChange,
+      label,
+      placeholder,
+      errorMessage,
+      helperText,
+      isInvalid,
+      value,
+      defaultValue = "",
+      isRequired = false,
+      ...rest
+    }: TextInputProps,
+    ref: React.Ref<HTMLInputElement>,
+  ): React.ReactElement => {
+    return (
+      <FormControl
+        id={label}
+        isRequired={isRequired}
+        isInvalid={isInvalid}
+        mb={5}
+        {...rest}
+      >
+        {label && (
+          <FormLabel
+            fontWeight={400}
+            color={isInvalid ? "red.500" : "blackAlpha"}
+          >
+            {label}
+          </FormLabel>
+        )}
+        <Input
+          ref={ref}
+          type={label}
+          placeholder={placeholder}
+          defaultValue={defaultValue}
+          errorBorderColor="red.600"
+          onChange={(e) => onChange(e.target.value)}
+          value={value}
+        />
+        {errorMessage && (
+          <FormErrorMessage>
+            <WarningIcon mr={2} /> {errorMessage}
+          </FormErrorMessage>
+        )}
+        {helperText && !isInvalid && (
+          <FormHelperText>{helperText}</FormHelperText>
+        )}
+      </FormControl>
+    );
+  },
+);
+TextInput.displayName = "TextInput";

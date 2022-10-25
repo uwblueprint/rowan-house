@@ -65,3 +65,9 @@ export const GET_COURSE = gql`
     }
   }
 `;
+
+export const GET_CONTENT_IMAGE = gql`
+  query GetContentImage($path: String!) {
+    contentImage(path: $path)
+  }
+`;

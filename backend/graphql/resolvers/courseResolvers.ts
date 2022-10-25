@@ -82,6 +82,12 @@ const courseResolvers = {
       const attributes = getCourseVisibilityAttributes(null);
       return courseService.getCourses(attributes);
     },
+    contentImage: async (
+      _parent: undefined,
+      { path }: { path: string },
+    ): Promise<string> => {
+      return imageUploadService.download(path);
+    },
   },
   Mutation: {
     createCourse: async (

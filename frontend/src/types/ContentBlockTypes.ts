@@ -32,7 +32,9 @@ export type ButtonBlockState = ContentBlockStateType<
 export type ImageBlockState = ContentBlockStateType<
   "image",
   {
-    link: string;
+    path: string;
+    description: string;
+    maxSize?: number;
   }
 >;
 export type VideoBlockState = ContentBlockStateType<

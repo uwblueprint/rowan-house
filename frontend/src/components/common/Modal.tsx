@@ -27,6 +27,7 @@ export interface ModalProps {
   canSubmit?: boolean;
   size?: string;
   children?: React.ReactNode;
+  initialFocusRef?: React.RefObject<HTMLElement>;
 }
 
 export const Modal = ({
@@ -44,7 +45,12 @@ export const Modal = ({
   ...rest
 }: ModalProps): React.ReactElement => {
   return (
-    <ChakraModal isCentered onClose={onCancel} isOpen={isOpen} {...rest}>
+    <ChakraModal
+      isCentered
+      onClose={() => confirmIsLoading || onCancel()}
+      isOpen={isOpen}
+      {...rest}
+    >
       <ModalOverlay />
       <ModalContent>
         {header && <ModalHeader>{header}</ModalHeader>}
@@ -55,7 +61,7 @@ export const Modal = ({
         </ModalBody>
         <ModalFooter>
           <Button
-            disabled={!canSubmit}
+            disabled={!canSubmit || confirmIsLoading}
             onClick={onConfirm}
             isLoading={confirmIsLoading}
             mr="1rem"
@@ -63,7 +69,11 @@ export const Modal = ({
             {confirmText}
           </Button>
           {spreadButtons && <Spacer />}
-          <Button variant="outline" onClick={onCancel}>
+          <Button
+            disabled={confirmIsLoading}
+            variant="outline"
+            onClick={onCancel}
+          >
             {cancelText}
           </Button>
         </ModalFooter>

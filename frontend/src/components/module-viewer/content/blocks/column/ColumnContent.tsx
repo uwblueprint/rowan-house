@@ -1,4 +1,4 @@
-import { Box, Center, Flex, useDisclosure, VStack } from "@chakra-ui/react";
+import { Box, Center, useDisclosure, VStack } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
 import { Droppable } from "react-beautiful-dnd";
 
