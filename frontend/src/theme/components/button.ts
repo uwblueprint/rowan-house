@@ -13,6 +13,9 @@ const Button = {
       lineHeight: "28px",
       // _hover: { bg: "brand.purple" },
       // _active: { bg: "brand.blue" },
+      "&[disabled]": {
+        _hover: { bg: "brand.royal" },
+      },
     },
     md: {
       bg: "brand.royal",

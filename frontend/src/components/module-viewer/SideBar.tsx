@@ -1,4 +1,10 @@
-import React, { useCallback, useContext, useRef, useEffect } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useRef,
+  useEffect,
+  useState,
+} from "react";
 import { useHistory, useParams } from "react-router-dom";
 import {
   Box,
@@ -53,6 +59,7 @@ const Sidebar = ({
   editable: boolean;
   onLessonSelected: () => void;
 }): React.ReactElement => {
+  const [isSaving, setIsSaving] = useState(false);
   const {
     moduleIndex: moduleIndexString,
     courseID,
@@ -184,6 +191,7 @@ const Sidebar = ({
   };
 
   const saveChanges = async () => {
+    setIsSaving(true);
     await Promise.all(
       Object.entries(state.hasChanged).map(async ([lessonID, action]) => {
         switch (action) {
@@ -195,7 +203,7 @@ const Sidebar = ({
             );
             break;
           case "UPDATE":
-            updateLesson({
+            await updateLesson({
               variables: {
                 id: lessonID,
                 lesson: formatLessonRequest(state.lessons[lessonID]),
@@ -203,17 +211,18 @@ const Sidebar = ({
             });
             break;
           case "DELETE":
-            deleteLesson({ variables: { id: lessonID } });
+            await deleteLesson({ variables: { id: lessonID } });
             break;
           // Make compiler happy
           default:
             break;
         }
-        updateCourse({
+        await updateCourse({
           variables: { id: courseID, course: state.course },
         });
       }),
     );
+    setIsSaving(false);
     dispatch({ type: "clear-change-log" });
   };
 
@@ -298,11 +307,17 @@ const Sidebar = ({
                     color="white"
                     leftIcon={<SaveIcon />}
                     borderRadius="0"
-                    pl="35px"
                     width="100%"
                     h="55px"
                     justifyContent="left"
                     onClick={saveChanges}
+                    isLoading={isSaving}
+                    loadingText="Saving..."
+                    sx={{
+                      "&[disabled]": {
+                        _hover: { bg: "#5FCA89" },
+                      },
+                    }}
                   >
                     Save Changes
                   </Button>

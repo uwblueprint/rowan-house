@@ -352,7 +352,11 @@ const deleteLessonContentBlock = (
   const newState = { ...state };
   newState.lessons[id].content.splice(index, 1);
   // Update to let the state know things have changed
-  newState.hasChanged = updateChangeStatus(state.hasChanged, id, "UPDATE");
+  if (newState.newBlock) {
+    newState.newBlock = null;
+  } else {
+    newState.hasChanged = updateChangeStatus(state.hasChanged, id, "UPDATE");
+  }
   return newState;
 };
 
