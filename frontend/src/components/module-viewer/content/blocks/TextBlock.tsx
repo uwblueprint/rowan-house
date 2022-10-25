@@ -96,11 +96,7 @@ const TextBlock = ({
   return (
     <Slate editor={editor} value={parseTextBlock(content)} key={content.text}>
       <Box w="100%">
-        <Editable
-          contentEditable={false}
-          renderLeaf={TextLeaf}
-          renderElement={TextElement}
-        />
+        <Editable readOnly renderLeaf={TextLeaf} renderElement={TextElement} />
       </Box>
     </Slate>
   );
