@@ -39,7 +39,7 @@ const ImageBlock = ({
       maxH={maxSize}
       fit="contain"
       fallback={
-        <Center boxSize={maxSize}>
+        <Center maxW={maxSize} maxH={maxSize}>
           <Spinner />
         </Center>
       }
