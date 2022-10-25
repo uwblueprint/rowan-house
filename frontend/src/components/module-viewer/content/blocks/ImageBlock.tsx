@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLazyQuery } from "@apollo/client";
-import { Image } from "@chakra-ui/react";
+import { Center, Image, Spinner } from "@chakra-ui/react";
 
 import {
   ContentBlockProps,
@@ -14,7 +14,9 @@ const ImageBlock = ({
     content: { path, description, maxSize },
   },
 }: ContentBlockProps<ImageBlockState>): React.ReactElement => {
-  const [image, setImage] = useState<string | undefined>();
+  const [image, setImage] = useState<string | undefined>(
+    path ? undefined : DEFAULT_IMAGE,
+  );
   const [getContentImage] = useLazyQuery(GET_CONTENT_IMAGE);
   useEffect(() => {
     (async () => {
@@ -22,6 +24,7 @@ const ImageBlock = ({
         setImage(DEFAULT_IMAGE);
         return;
       }
+      setImage(undefined);
       const { data } = await getContentImage({
         variables: { path },
       });
@@ -29,7 +32,17 @@ const ImageBlock = ({
     })();
   }, [path]);
   return (
-    <Image src={image} alt={description} boxSize={maxSize} fit="contain" />
+    <Image
+      src={image}
+      alt={description}
+      boxSize={maxSize}
+      fit="contain"
+      fallback={
+        <Center boxSize={maxSize}>
+          <Spinner />
+        </Center>
+      }
+    />
   );
 };
 
