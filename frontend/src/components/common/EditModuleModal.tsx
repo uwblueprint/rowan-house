@@ -116,6 +116,7 @@ const EditModuleModal = ({
               setCanSubmit(true);
               return image;
             }}
+            width="100%"
           />
           <SwitchInput
             enabledName="Published"
