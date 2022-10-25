@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLazyQuery } from "@apollo/client";
+import { Image } from "@chakra-ui/react";
 
 import {
   ContentBlockProps,
@@ -10,7 +11,7 @@ import { DEFAULT_IMAGE } from "../../../../constants/DummyData";
 
 const ImageBlock = ({
   block: {
-    content: { path, description },
+    content: { path, description, maxSize },
   },
 }: ContentBlockProps<ImageBlockState>): React.ReactElement => {
   const [image, setImage] = useState<string | undefined>();
@@ -27,7 +28,9 @@ const ImageBlock = ({
       setImage(data?.contentImage);
     })();
   }, [path]);
-  return <img src={image} alt={description} />;
+  return (
+    <Image src={image} alt={description} boxSize={maxSize} fit="contain" />
+  );
 };
 
 export default ImageBlock;

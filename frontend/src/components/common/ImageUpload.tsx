@@ -7,6 +7,7 @@ import { DEFAULT_IMAGE } from "../../constants/DummyData";
 type ImageUploadProps = {
   uploadImage: (file: File) => Promise<string>;
   width?: string | number;
+  id?: string;
 };
 
 const CHAKRA_TRANSITIONS = {
@@ -16,6 +17,7 @@ const CHAKRA_TRANSITIONS = {
 
 const ImageUpload = ({
   uploadImage,
+  id,
   ...rest
 }: ImageUploadProps): React.ReactElement<ImageUploadProps> => {
   const [previewImage, setPreviewImage] = useState<string | undefined>();
@@ -102,6 +104,7 @@ const ImageUpload = ({
           ref={inputFile}
           onChange={fileChanged}
           accept="image/*"
+          id={id}
         />
         <VStack
           height={loading ? "0" : "100%"}

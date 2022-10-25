@@ -93,6 +93,7 @@ export const dummyLessons: LessonsType = {
           path:
             "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
           description: "A cat",
+          maxSize: 300,
         },
       },
       {

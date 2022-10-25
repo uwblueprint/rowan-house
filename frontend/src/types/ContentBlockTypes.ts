@@ -34,6 +34,7 @@ export type ImageBlockState = ContentBlockStateType<
   {
     path: string;
     description: string;
+    maxSize?: number;
   }
 >;
 export type VideoBlockState = ContentBlockStateType<

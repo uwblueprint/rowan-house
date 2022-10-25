@@ -1,5 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
-import { FormControl, FormLabel, HStack } from "@chakra-ui/react";
+import {
+  FormControl,
+  FormLabel,
+  HStack,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
+  VStack,
+} from "@chakra-ui/react";
 import { useMutation } from "@apollo/client";
 
 import ImageUpload from "../../../common/ImageUpload";
@@ -9,6 +19,8 @@ import { ImageBlockState } from "../../../../types/ContentBlockTypes";
 import { EditContentModalProps } from "../../../../types/ModuleEditorTypes";
 import { UPLOAD_IMAGE } from "../../../../APIClients/mutations/CourseMutations";
 
+const DEFAULT_MAX_SIZE = 250;
+
 const EditImageModal = ({
   block: { content },
   isOpen,
@@ -17,12 +29,14 @@ const EditImageModal = ({
 }: EditContentModalProps<ImageBlockState>): React.ReactElement => {
   const [path, setPath] = useState(content.path);
   const [description, setDescription] = useState(content.description);
+  const [maxSize, setMaxSize] = useState(content.maxSize || DEFAULT_MAX_SIZE);
   const [invalid, setInvalid] = useState(false);
   const [canSubmit, setCanSubmit] = useState(true);
 
   useEffect(() => {
     setPath(content.path);
     setDescription(content.description);
+    setMaxSize(content.maxSize || DEFAULT_MAX_SIZE);
   }, [isOpen, content]);
 
   const onConfirm = () => {
@@ -33,6 +47,7 @@ const EditImageModal = ({
     onSave({
       path,
       description,
+      maxSize,
     });
   };
 
@@ -50,35 +65,59 @@ const EditImageModal = ({
       initialFocusRef={initialFocusRef}
       canSubmit={canSubmit}
     >
-      <HStack align="stretch">
-        <FormControl display="flex" flexDirection="column">
-          <FormLabel fontWeight={400}>Image</FormLabel>
-          <ImageUpload
-            uploadImage={async (file) => {
-              setCanSubmit(false);
-              const result = await uploadImage({ variables: { file } });
-              const { image, path: uploadedPath } =
-                result.data.uploadImage || {};
-              setPath(uploadedPath);
-              setCanSubmit(true);
-              return image;
+      <VStack align="stretch" spacing={5}>
+        <HStack align="stretch">
+          <FormControl display="flex" flexDirection="column">
+            <FormLabel fontWeight={400} htmlFor="uploadContentImage">
+              Image
+            </FormLabel>
+            <ImageUpload
+              uploadImage={async (file) => {
+                setCanSubmit(false);
+                const result = await uploadImage({ variables: { file } });
+                const { image, path: uploadedPath } =
+                  result.data.uploadImage || {};
+                setPath(uploadedPath);
+                setCanSubmit(true);
+                return image;
+              }}
+              width="100%"
+              id="uploadContentImage"
+            />
+          </FormControl>
+          <TextArea
+            ref={initialFocusRef}
+            label="Description"
+            defaultValue={description}
+            isRequired
+            isInvalid={invalid}
+            isFullHeight
+            onChange={(newText) => {
+              setInvalid(!newText);
+              setDescription(newText);
             }}
-            width="100%"
           />
+        </HStack>
+        <FormControl display="flex" flexDirection="column">
+          <FormLabel fontWeight={400} htmlFor="contentImageMaxSize">
+            Size
+          </FormLabel>
+          <NumberInput
+            step={5}
+            min={50}
+            max={750}
+            value={maxSize}
+            onChange={(value) => setMaxSize(+value)}
+            id="contentImageMaxSize"
+          >
+            <NumberInputField />
+            <NumberInputStepper>
+              <NumberIncrementStepper />
+              <NumberDecrementStepper />
+            </NumberInputStepper>
+          </NumberInput>
         </FormControl>
-        <TextArea
-          ref={initialFocusRef}
-          label="Description"
-          defaultValue={description}
-          isRequired
-          isInvalid={invalid}
-          isFullHeight
-          onChange={(newText) => {
-            setInvalid(!newText);
-            setDescription(newText);
-          }}
-        />
-      </HStack>
+      </VStack>
     </Modal>
   );
 };
