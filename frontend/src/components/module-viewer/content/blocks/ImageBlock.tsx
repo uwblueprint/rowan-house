@@ -35,7 +35,8 @@ const ImageBlock = ({
     <Image
       src={image}
       alt={description}
-      boxSize={maxSize}
+      maxW={maxSize}
+      maxH={maxSize}
       fit="contain"
       fallback={
         <Center boxSize={maxSize}>
