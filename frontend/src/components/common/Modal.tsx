@@ -27,6 +27,7 @@ export interface ModalProps {
   canSubmit?: boolean;
   size?: string;
   children?: React.ReactNode;
+  initialFocusRef?: React.RefObject<HTMLElement>;
 }
 
 export const Modal = ({

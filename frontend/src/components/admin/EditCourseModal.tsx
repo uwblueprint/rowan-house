@@ -13,7 +13,7 @@ import {
   UPLOAD_IMAGE,
 } from "../../APIClients/mutations/CourseMutations";
 import { COURSES } from "../../APIClients/queries/CourseQueries";
-import { ReactComponent as ImageIcon } from "../../assets/image_white_outline.svg";
+import { ReactComponent as ImageIcon } from "../../assets/image_outline.svg";
 
 export interface EditCourseModalProps {
   onClose: () => void;

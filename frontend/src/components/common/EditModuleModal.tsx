@@ -1,11 +1,10 @@
 import React, { useRef, useState } from "react";
-import { Box, Flex, VStack, Text } from "@chakra-ui/react";
+import { Flex, VStack } from "@chakra-ui/react";
 import { useMutation } from "@apollo/client";
 import { TextInput } from "./TextInput";
 import { Modal } from "./Modal";
 import { SwitchInput } from "./SwitchInput";
 import { TextArea } from "./TextArea";
-import { DEFAULT_IMAGE } from "../../constants/DummyData";
 import {
   CourseRequest,
   CourseResponse,
@@ -17,7 +16,6 @@ import {
   UPLOAD_IMAGE,
 } from "../../APIClients/mutations/CourseMutations";
 import { COURSES, GET_COURSE } from "../../APIClients/queries/CourseQueries";
-import { ReactComponent as ImageIcon } from "../../assets/image_white_outline.svg";
 import ImageUpload from "./ImageUpload";
 
 export interface EditModuleModalProps {
@@ -94,7 +92,7 @@ const EditModuleModal = ({
     onClose();
   };
 
-  const initialFocusRef = useRef();
+  const initialFocusRef = useRef(null);
 
   return (
     <Modal

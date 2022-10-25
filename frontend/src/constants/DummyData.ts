@@ -90,8 +90,9 @@ export const dummyLessons: LessonsType = {
         type: ContentTypeEnum.IMAGE,
         id: uuid(),
         content: {
-          link:
+          path:
             "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
+          description: "A cat",
         },
       },
       {

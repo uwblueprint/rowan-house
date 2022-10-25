@@ -4,6 +4,11 @@ import { Box, Center, Input, Spinner, Text, VStack } from "@chakra-ui/react";
 import { ReactComponent as ImageIcon } from "../../assets/image_outline.svg";
 import { DEFAULT_IMAGE } from "../../constants/DummyData";
 
+type ImageUploadProps = {
+  uploadImage: (file: File) => Promise<string>;
+  width?: string | number;
+};
+
 const CHAKRA_TRANSITIONS = {
   transitionProperty: "var(--chakra-transition-property-common)",
   transitionDuration: "var(--chakra-transition-duration-normal)",
@@ -11,15 +16,14 @@ const CHAKRA_TRANSITIONS = {
 
 const ImageUpload = ({
   uploadImage,
-}: {
-  uploadImage: (file: File) => Promise<string>;
-}) => {
+  ...rest
+}: ImageUploadProps): React.ReactElement<ImageUploadProps> => {
   const [previewImage, setPreviewImage] = useState<string | undefined>();
   const [hovering, setHovering] = useState(false);
   const [focused, setFocused] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const inputFile = React.useRef<HTMLInputElement>(null);
+  const inputFile = useRef<HTMLInputElement>(null);
   const openFileBrowser = () => {
     if (inputFile.current) {
       inputFile.current.click();
@@ -47,7 +51,7 @@ const ImageUpload = ({
     <Box
       as="button"
       borderWidth="1px"
-      borderColor="gray.300"
+      borderColor="gray.200"
       borderRadius=".5rem"
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
@@ -58,12 +62,26 @@ const ImageUpload = ({
         boxShadow: "0 0 0 1px #3182ce",
         outline: "none",
       }}
+      _hover={{
+        borderColor: "gray.300",
+      }}
       sx={CHAKRA_TRANSITIONS}
       cursor="pointer"
       onClick={openFileBrowser}
-      tabIndex="0"
+      tabIndex={0}
+      h="0"
+      w="214px"
+      pb="100%"
+      position="relative"
+      {...rest}
     >
-      <Box position="relative" h="214px" w="214px">
+      <Box
+        position="absolute"
+        top="0"
+        left="0"
+        h="calc(100% + 1px)"
+        w="calc(100% + 1px)"
+      >
         <Box
           position="absolute"
           top="0"

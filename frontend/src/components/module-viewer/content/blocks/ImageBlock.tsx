@@ -6,9 +6,11 @@ import {
 } from "../../../../types/ContentBlockTypes";
 
 const ImageBlock = ({
-  block: { content },
+  block: {
+    content: { path, description },
+  },
 }: ContentBlockProps<ImageBlockState>): React.ReactElement => {
-  return <img src={content.link} alt="We should put an alt" />;
+  return <img src={path} alt={description} />;
 };
 
 export default ImageBlock;
