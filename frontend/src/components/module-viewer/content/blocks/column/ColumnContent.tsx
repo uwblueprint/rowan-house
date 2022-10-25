@@ -144,7 +144,7 @@ const ColumnContent = ({
   }
   // If not editable, return just content block
   return (
-    <Center w="100%" padding="4px">
+    <Center w="100%" padding={["0", "0", "4px"]}>
       {block && CONTENT_BLOCKS.render({ block, index, editable })}
     </Center>
   );

@@ -144,7 +144,7 @@ const ContentBlock = ({
     <Center
       w="100%"
       paddingY={isColumn ? 0 : "2rem"}
-      paddingX={isColumn ? "5rem" : ["2rem", "2rem", "5rem"]}
+      paddingX={["2rem", "2rem", "5rem"]}
     >
       {CONTENT_BLOCKS.render({ block, index, editable })}
     </Center>
