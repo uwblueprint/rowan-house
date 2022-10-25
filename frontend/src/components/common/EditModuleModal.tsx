@@ -111,7 +111,7 @@ const EditModuleModal = ({
             uploadImage={async (file) => {
               setCanSubmit(false);
               const result = await uploadImage({ variables: { file } });
-              const { image, path } = result.data.uploadModuleImage || {};
+              const { image, path } = result.data.uploadImage || {};
               setPreviewImage(path);
               setCanSubmit(true);
               return image;

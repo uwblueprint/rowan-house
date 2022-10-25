@@ -59,6 +59,7 @@ const courseType = gql`
     course(id: ID!): CourseResponseDTO!
     courses: [CourseResponseDTO!]!
     publicCourses: [CourseResponseDTO!]!
+    contentImage(path: String!): String
   }
 
   extend type Mutation {
