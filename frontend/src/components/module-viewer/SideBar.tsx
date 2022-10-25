@@ -55,9 +55,11 @@ import { SaveModal } from "../common/SaveModal";
 const Sidebar = ({
   editable,
   onLessonSelected,
+  hideSidebar,
 }: {
   editable: boolean;
   onLessonSelected: () => void;
+  hideSidebar: () => void;
 }): React.ReactElement => {
   const [isSaving, setIsSaving] = useState(false);
   const {
@@ -245,7 +247,16 @@ const Sidebar = ({
   return (
     <>
       {module && (
-        <Box w="20vw" minW="300px">
+        <Box
+          w={["100vw", "100vw", "20vw"]}
+          h="100vh"
+          minW={["0px", "0px", "300px"]}
+          position={["absolute", "absolute", "relative"]}
+          top="0px"
+          left="0px"
+          zIndex={1001} // Just want to be on top of the chevron, which is 1000.
+          background="white"
+        >
           <Flex
             position="fixed"
             w="inherit"
@@ -299,7 +310,10 @@ const Sidebar = ({
             </Box>
             {editable ? (
               <>
-                <EditorTabs onLessonSelected={onLessonSelected} />
+                <EditorTabs
+                  onLessonSelected={onLessonSelected}
+                  hideSidebar={hideSidebar}
+                />
                 <Spacer />
                 {Object.values(state.hasChanged).length ? (
                   <Button
@@ -329,6 +343,7 @@ const Sidebar = ({
               <ModuleOverview
                 editable={editable}
                 onLessonSelected={onLessonSelected}
+                hideSidebar={hideSidebar}
               />
             )}
           </Flex>

@@ -6,8 +6,10 @@ import ContentKiosk from "./SideBarContentKiosk";
 
 const EditorTabs = ({
   onLessonSelected,
+  hideSidebar,
 }: {
   onLessonSelected: () => void;
+  hideSidebar: () => void;
 }): React.ReactElement => (
   <Tabs variant="unstyled" height="100%" overflowY="hidden">
     <Box
@@ -49,7 +51,11 @@ const EditorTabs = ({
         overflowY="auto"
         className="tabScroll"
       >
-        <ModuleOverview editable onLessonSelected={onLessonSelected} />
+        <ModuleOverview
+          editable
+          onLessonSelected={onLessonSelected}
+          hideSidebar={hideSidebar}
+        />
       </TabPanel>
       <TabPanel pb="200px" height="100%" overflowY="auto" className="tabScroll">
         <ContentKiosk />
