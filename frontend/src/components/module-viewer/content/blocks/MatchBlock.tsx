@@ -163,10 +163,10 @@ const MatchBlock = ({
   const renderMatchBlock = () => {
     return (
       <VStack
-        w="80%"
-        padding="2rem"
-        paddingLeft="4rem"
-        paddingRight="4rem"
+        w={["100%", "100%", "80%"]}
+        padding={["1rem", "1rem", "2rem"]}
+        paddingLeft={["1rem", "2rem", "4rem"]}
+        paddingRight={["1rem", "2rem", "4rem"]}
         align="left"
         borderTopColor="brand.royal"
         borderTopWidth="10px"
