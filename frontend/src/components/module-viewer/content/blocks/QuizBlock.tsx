@@ -69,7 +69,7 @@ const QuizBlock = ({
       </CheckBoxGroup>
       {!isCompleted && (
         <Button
-          w="fit-content"
+          w={["100%", "fit-content", "fit-content"]}
           onClick={() => setCompleted(true)}
           disabled={!guesses.some((g) => g)}
         >

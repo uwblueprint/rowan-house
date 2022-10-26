@@ -13,6 +13,7 @@ import {
   VStack,
   Flex,
   Circle,
+  Spacer,
 } from "@chakra-ui/react";
 import { CheckCircleIcon, SmallCloseIcon } from "@chakra-ui/icons";
 
@@ -265,8 +266,9 @@ const MatchBlock = ({
             </SimpleGrid>
           )}
         </Droppable>
+        <Spacer />
         <Button
-          w="fit-content"
+          w={["100%", "fit-content", "fit-content"]}
           onClick={() => setCompleted(true)}
           disabled={pairs.some((x) => x === null)}
         >
