@@ -247,7 +247,13 @@ const ModuleViewer = ({
     );
     return (
       <Flex h="100vh">
-        <Box position="relative">
+        <Box
+          position={["absolute", "absolute", "relative"]}
+          top="0"
+          left="0"
+          w={["100%", "100%", "initial"]}
+          h="100%"
+        >
           {showSideBar ? (
             <SideBar
               editable={editable}
@@ -259,7 +265,16 @@ const ModuleViewer = ({
             height="100%"
             position="absolute"
             top="0px"
-            right={["-40px", "-40px", "-20px"]}
+            right={[
+              showSideBar ? "0px" : null,
+              showSideBar ? "0px" : null,
+              "-20px",
+            ]}
+            left={[
+              showSideBar ? null : "0px",
+              showSideBar ? null : "0px",
+              null,
+            ]}
             zIndex={1000}
             align="center"
             justify="center"

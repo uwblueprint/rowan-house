@@ -254,7 +254,7 @@ const Sidebar = ({
           position={["absolute", "absolute", "relative"]}
           top="0px"
           left="0px"
-          zIndex={1001} // Just want to be on top of the chevron, which is 1000.
+          zIndex={[999, 999, 1001]} // Just want to be above/below the chevron, which is 1000.
           background="white"
         >
           <Flex
