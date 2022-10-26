@@ -14,9 +14,11 @@ import DeleteModal from "../common/DeleteModal";
 const SideBarModuleOverview = ({
   editable,
   onLessonSelected,
+  hideSidebar,
 }: {
   editable: boolean;
   onLessonSelected: () => void;
+  hideSidebar: () => void;
 }): React.ReactElement => {
   const context = useContext(EditorContext);
   const {
@@ -116,6 +118,7 @@ const SideBarModuleOverview = ({
             setFocus(index);
           }}
           onDeleteClick={() => onDeleteClick(index)}
+          hideSidebar={hideSidebar}
         />
       ))}
       {editable && (

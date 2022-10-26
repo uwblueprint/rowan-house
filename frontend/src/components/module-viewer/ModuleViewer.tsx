@@ -247,18 +247,35 @@ const ModuleViewer = ({
     );
     return (
       <Flex h="100vh">
-        <Box position="relative">
+        <Box
+          position={["absolute", "absolute", "relative"]}
+          top="0"
+          left="0"
+          w={["100%", "100%", "initial"]}
+          h="100%"
+        >
           {showSideBar ? (
             <SideBar
               editable={editable}
               onLessonSelected={() => setCompleted(false)}
+              hideSidebar={() => setShowSideBar(false)}
             />
           ) : null}
           <Flex
             height="100%"
             position="absolute"
-            right="-20px"
-            zIndex="1000"
+            top="0px"
+            right={[
+              showSideBar ? "0px" : null,
+              showSideBar ? "0px" : null,
+              "-20px",
+            ]}
+            left={[
+              showSideBar ? null : "0px",
+              showSideBar ? null : "0px",
+              null,
+            ]}
+            zIndex={1000}
             align="center"
             justify="center"
           >
@@ -268,8 +285,9 @@ const ModuleViewer = ({
               bg="white"
               color="black"
               size="s"
-              w="20px"
-              h="45px"
+              w={["40px", "40px", "20px"]}
+              h={["90px", "90px", "45px"]}
+              boxShadow="0px 0px 3px rgb(0 0 0 / 20%)"
               onClick={() => setShowSideBar(!showSideBar)}
             >
               {sideBarIcon}

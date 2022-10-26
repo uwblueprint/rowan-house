@@ -143,8 +143,8 @@ const ContentBlock = ({
   return (
     <Center
       w="100%"
-      paddingY={isColumn ? 0 : "2rem"}
-      paddingX={isColumn ? "5rem" : "5rem"}
+      paddingY={isColumn ? 0 : "1rem"}
+      paddingX={["2rem", "2rem", "5rem"]}
     >
       {CONTENT_BLOCKS.render({ block, index, editable })}
     </Center>

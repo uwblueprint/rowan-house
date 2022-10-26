@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   Button,
   Icon,
@@ -8,6 +8,7 @@ import {
   Text,
   useDisclosure,
   Tooltip,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import {
   EditIcon,
@@ -28,6 +29,7 @@ interface OptionsProps {
   isCompleted?: boolean;
   setFocus: () => void;
   onDeleteClick: () => void;
+  hideSidebar: () => void;
 }
 
 const LessonItem = ({
@@ -37,6 +39,7 @@ const LessonItem = ({
   isCurrent,
   setFocus,
   onDeleteClick,
+  hideSidebar,
   isCompleted = false,
 }: OptionsProps): React.ReactElement => {
   const [isHovered, setIsHovered] = useState(false);
@@ -45,6 +48,12 @@ const LessonItem = ({
   const [title, setTitle] = useState(text);
   const [isInvalid, setIsInvalid] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const maybeHideSidebar = useBreakpointValue([
+    hideSidebar,
+    hideSidebar,
+    () => undefined,
+  ]);
 
   const context = useContext(EditorContext);
   if (!context) return <></>;
@@ -126,6 +135,7 @@ const LessonItem = ({
             return;
           }
           setFocus();
+          maybeHideSidebar?.();
         }}
         variant="unstyled"
         borderLeftColor={isFocused ? "brand.royal" : undefined}

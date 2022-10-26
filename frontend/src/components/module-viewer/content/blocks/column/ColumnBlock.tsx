@@ -33,7 +33,12 @@ const ColumnBlock = ({
   }
 
   return (
-    <Grid templateColumns="50% 50%" gap="1rem" w="100%" padding="1rem">
+    <Grid
+      templateColumns={["100%", "100%", "50% 50%"]}
+      gap="1rem"
+      w="100%"
+      padding={["0", "0", "1rem"]}
+    >
       <ColumnContent
         block={content.left}
         columnID={id}

@@ -1,4 +1,4 @@
-import { Center, Spinner } from "@chakra-ui/react";
+import { Center, Box, Spinner } from "@chakra-ui/react";
 import React from "react";
 import ReactPlayer from "react-player";
 
@@ -16,19 +16,24 @@ const VideoPlayer = ({
   onReady,
 }: PlayerConfigProps): React.ReactElement => {
   return (
-    <Center display={error ? "none" : "flex"} width="100%">
-      <ReactPlayer
-        url={url}
-        fallback={<Spinner />}
-        controls
-        config={{
-          youtube: {
-            playerVars: { modestbranding: 1 },
-          },
-        }}
-        onError={onError}
-        onReady={onReady}
-      />
+    <Center display={error ? "none" : "flex"} width="100%" maxWidth="640px">
+      <Box width="100%" position="relative" pt="56.25%">
+        <ReactPlayer
+          url={url}
+          fallback={<Spinner />}
+          controls
+          config={{
+            youtube: {
+              playerVars: { modestbranding: 1 },
+            },
+          }}
+          onError={onError}
+          onReady={onReady}
+          className="lesson-content-react-player"
+          width="100%"
+          height="100%"
+        />
+      </Box>
     </Center>
   );
 };
