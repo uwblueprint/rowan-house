@@ -20,6 +20,7 @@ import {
   VStack,
   Input,
   Center,
+  Show,
   Spinner,
   Alert,
   AlertDescription,
@@ -406,7 +407,9 @@ const Login = (): React.ReactElement => {
           {getLoginForm(loginState)}
         </VStack>
       </Center>
-      <Image maxH="100vh" w="50vw" objectFit="cover" src={BackgroundImage} />
+      <Show above="md">
+        <Image width="50vw" h="100vh" objectFit="cover" src={BackgroundImage} />
+      </Show>
     </Flex>
   );
 };
