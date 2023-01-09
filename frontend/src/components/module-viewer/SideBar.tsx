@@ -14,6 +14,7 @@ import {
   Spacer,
   Text,
   useDisclosure,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import { ChevronLeftIcon, EditIcon } from "@chakra-ui/icons";
@@ -83,31 +84,38 @@ const Sidebar = ({
   } = useDisclosure();
 
   const context: EditorContextType = useContext(EditorContext);
-  const { data: courseData, error } = useQuery<{ course: CourseResponse }>(
-    GET_COURSE,
-    { variables: { id: courseID } },
-  );
+  const { data: courseData, error: queryError } = useQuery<{
+    course: CourseResponse;
+  }>(GET_COURSE, { variables: { id: courseID } });
 
   const module = courseData?.course?.modules?.[moduleIndex] as ModuleResponse;
 
-  const [updateCourse] = useMutation<{ updateCourse: CourseResponse }>(
-    UPDATE_COURSE,
-    {
-      refetchQueries: [
-        {
-          query: GET_COURSE,
-          variables: { id: courseID },
-        },
-      ],
-    },
+  const [updateCourse, { error: updateCourseError }] = useMutation<{
+    updateCourse: CourseResponse;
+  }>(UPDATE_COURSE, {
+    refetchQueries: [
+      {
+        query: GET_COURSE,
+        variables: { id: courseID },
+      },
+    ],
+  });
+  const [updateLesson, { error: updateLessonError }] = useMutation<{
+    updateLesson: LessonResponse;
+  }>(UPDATE_LESSON);
+  const [createLesson, { error: createLessonError }] = useMutation<{
+    createLesson: LessonResponse;
+  }>(CREATE_LESSON);
+  const [deleteLesson, { error: deleteLessonError }] = useMutation(
+    DELETE_LESSON,
   );
-  const [updateLesson] = useMutation<{ updateLesson: LessonResponse }>(
-    UPDATE_LESSON,
-  );
-  const [createLesson] = useMutation<{ createLesson: LessonResponse }>(
-    CREATE_LESSON,
-  );
-  const [deleteLesson] = useMutation(DELETE_LESSON);
+
+  const saveToast = useToast();
+  const mutationError =
+    updateCourseError ||
+    updateLessonError ||
+    createLessonError ||
+    deleteLessonError;
 
   const { state, dispatch } = context;
 
@@ -145,7 +153,7 @@ const Sidebar = ({
   const formatCourseRequest = (
     newModule?: ModuleRequest,
   ): [string, CourseRequest] => {
-    if (!courseData || error)
+    if (!courseData || queryError)
       throw Error(
         "Attempted to edit module when course does not contain modules",
       );
@@ -225,7 +233,23 @@ const Sidebar = ({
       }),
     );
     setIsSaving(false);
-    dispatch({ type: "clear-change-log" });
+
+    if (mutationError) {
+      saveToast({
+        title: "An error occured while saving.",
+        description: `Error: ${mutationError}`,
+        status: "error",
+        isClosable: true,
+      });
+    } else {
+      saveToast({
+        title: "Module saved successfully!",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+      dispatch({ type: "clear-change-log" });
+    }
   };
 
   const onCoursePageRoute = () => {
