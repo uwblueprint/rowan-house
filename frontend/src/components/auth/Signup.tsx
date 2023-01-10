@@ -13,6 +13,7 @@ import {
   Flex,
   VStack,
   Image,
+  Show,
 } from "@chakra-ui/react";
 
 import authAPIClient from "../../APIClients/AuthAPIClient";
@@ -50,7 +51,7 @@ const Signup = (): React.ReactElement => {
       firstName,
       lastName,
       email,
-      town,
+      town.toLowerCase(),
       password,
       register,
     );
@@ -80,7 +81,7 @@ const Signup = (): React.ReactElement => {
   return (
     <Flex>
       <Center flex="1">
-        <VStack marginLeft="30vh" marginRight="30vh">
+        <VStack w="40rem" maxW="100vw" p="0 1rem">
           <Image
             height="13vh"
             marginBottom="2.5vh"
@@ -106,7 +107,7 @@ const Signup = (): React.ReactElement => {
               <Box display="flex">
                 <Input
                   ref={nameRef}
-                  autocomplete="given-name"
+                  autoComplete="given-name"
                   type="text"
                   placeholder="First"
                   value={firstName}
@@ -117,7 +118,7 @@ const Signup = (): React.ReactElement => {
                   marginRight="1vh"
                 />
                 <Input
-                  autocomplete="family-name"
+                  autoComplete="family-name"
                   type="text"
                   placeholder="Last"
                   value={lastName}
@@ -134,7 +135,7 @@ const Signup = (): React.ReactElement => {
               </FormLabel>
               <Input
                 type="email"
-                autocomplete="email"
+                autoComplete="email"
                 value={email}
                 placeholder="you@rowanhouse.ca"
                 onChange={(event: React.FormEvent<HTMLInputElement>) =>
@@ -148,7 +149,7 @@ const Signup = (): React.ReactElement => {
                 City/Town
               </FormLabel>
               <Input
-                autocomplete="address-level2"
+                autoComplete="address-level2"
                 type="text"
                 value={town}
                 placeholder="Shaughnessy"
@@ -168,7 +169,7 @@ const Signup = (): React.ReactElement => {
               <Input
                 type="password"
                 value={password}
-                placeholder="●●●●●●●●"
+                placeholder="Password"
                 onChange={(event: React.FormEvent<HTMLInputElement>) =>
                   setPassword(event.currentTarget.value)
                 }
@@ -185,7 +186,7 @@ const Signup = (): React.ReactElement => {
               <Input
                 type="password"
                 value={currentPassword}
-                placeholder="●●●●●●●●"
+                placeholder="Rewrite your password"
                 onChange={(event: React.FormEvent<HTMLInputElement>) =>
                   setCurrentPassword(event.currentTarget.value)
                 }
@@ -227,7 +228,9 @@ const Signup = (): React.ReactElement => {
           </Box>
         </VStack>
       </Center>
-      <Image width="50vw" objectFit="cover" src={BackgroundImage} />
+      <Show above="md">
+        <Image width="50vw" h="100vh" objectFit="cover" src={BackgroundImage} />
+      </Show>
     </Flex>
   );
 };
