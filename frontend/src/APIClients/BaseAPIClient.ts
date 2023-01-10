@@ -126,9 +126,10 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
       /* eslint-enable no-console */
     });
   }
-  // eslint-disable-next-line no-console
-  if (networkError) console.log("[Network error]", networkError);
-  if (networkError?.message === "Error: Failed to refresh access token!") {
+  // if (networkError?.toString() === "Error: Failed to refresh access token!") {
+  //   window.location.href = "/logout";
+  // }
+  if (networkError) {
     window.location.href = "/logout";
   }
 });
