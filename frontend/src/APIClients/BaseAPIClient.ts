@@ -77,6 +77,7 @@ const refreshDirectionalLink = new RetryLink().split(
       "Refresh",
       "ResetPassword",
       "Login",
+      "Logout",
       "Signup_Register",
       "PublicCourses",
     ].includes(operation.operationName),
