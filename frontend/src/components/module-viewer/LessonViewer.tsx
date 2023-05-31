@@ -27,7 +27,7 @@ const LessonViewer = ({
     if (!focusedLesson) return <></>;
 
     return (
-      <Flex ref={provided?.innerRef} height="100%" direction="column" flex="1">
+      <Flex ref={provided?.innerRef} h="max-content" minH="100%" direction="column" flex="1">
         {lesson?.content.map((block: ContentBlockState, index: number) => (
           <ContentBlock
             editable={editable}
